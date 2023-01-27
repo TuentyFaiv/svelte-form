@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Input, Select } from "@components";
+  import { FileInput, Input, Select } from "@components";
   import { formSignin } from "@schemas/auth";
 
   const { submit } = $formSignin;
@@ -12,6 +12,15 @@
 <form on:submit|preventDefault={onSubmit}>
   <Input name="email" type="email" label={"forms:email"} />
   <Input name="password" type="password" label={"forms:password"} />
+  <FileInput name="avatar" defaultValue="/favicon.png">
+    <svelte:fragment slot="out" let:image>
+      <img src={image.src} alt={image.alt} />
+    </svelte:fragment>
+    <div slot="actions" let:onClear>
+      <button type="button" on:click={onClear}> cancel </button>
+    </div>
+    <p slot="activate">open file</p>
+  </FileInput>
   <Select
     label="Country"
     name="country"
