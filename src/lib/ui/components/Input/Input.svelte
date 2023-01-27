@@ -5,15 +5,16 @@
   import type { InputContext } from "../../../logic/typing/globals.proptypes";
   import type { Input, Props } from "./Input.proptypes";
 
-  import * as styles from "./Input.styles";
+  import * as stylesinternal from "./Input.styles";
 
   export let name: Props["name"];
   export let label: Props["label"];
   export let id: Props["id"] = null;
+  export let icons: Props["icons"] = null;
   export let type: Props["type"] = "text";
   export let context: Props["context"] = "form";
-  export let icons: Props["icons"] = null;
   export let datas: Props["datas"] = {};
+  export let styles: Props["styles"] = {};
   export let t: Props["t"] = (msg) => msg;
 
   let input: Input;
@@ -21,7 +22,7 @@
   let show = false;
 
   const form = getContext<InputContext>(context);
-  const { data, errors, setField, check, setError } = $form;
+  const { data, errors, setField, check } = $form;
 
   function toggleShow() {
     show = !show;
@@ -44,20 +45,19 @@
   }
 
   onDestroy(() => {
-    setError(name);
-    setField(name, undefined, false);
+    setField(name, undefined);
   });
 </script>
 
 <label
   for={id ?? name}
-  class={styles.field}
+  class={styles.field ?? stylesinternal.field}
   data-type={type}
   data-checked={checked}
   {...datasets}
   {title}
 >
-  <p class={styles.paragraph}>
+  <p class={styles.paragraph ?? stylesinternal.paragraph}>
     {label}
     <slot />
     {#if datas.labeltwo}
@@ -66,7 +66,7 @@
   </p>
   {#if type === "textarea"}
     <textarea
-      class={styles.area}
+      class={styles.area ?? stylesinternal.area}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -75,7 +75,7 @@
     />
   {:else if type === "checkbox"}
     <input
-      class={styles.check}
+      class={styles.check ?? stylesinternal.check}
       id={id ?? name}
       type="checkbox"
       bind:this={input}
@@ -87,7 +87,7 @@
     />
   {:else}
     <input
-      class={styles.area}
+      class={styles.input ?? stylesinternal.input}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -99,10 +99,14 @@
     />
   {/if}
   {#if type === "password"}
-    <button type="button" class={styles.show} on:click={toggleShow}>
+    <button
+      type="button"
+      class={styles.show ?? stylesinternal.show}
+      on:click={toggleShow}
+    >
       {#if icons}
         <img
-          class={styles.showIcon}
+          class={styles.icon ?? stylesinternal.icon}
           src={show ? icons.show : icons.hide}
           alt={t("forms:show-hide")}
         />
@@ -112,7 +116,7 @@
     </button>
   {/if}
   {#if $errors[name]}
-    <span class={styles.error} transition:fade|local>
+    <span class={styles.error ?? stylesinternal.error} transition:fade|local>
       {t(`${$errors[name]}`)}
     </span>
   {/if}

@@ -9,6 +9,7 @@ export interface GeneralInputProps {
   id: string | null;
   context: string;
   datas: ObjStrCommon;
+  t(msg: string): string;
 }
 
 export type InputContext = Readable<FormContext>;

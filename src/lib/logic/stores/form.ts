@@ -60,10 +60,24 @@ export function formStore(fields: Fields, ns = "forms") {
   }
 
   async function setField(field: string, value: unknown, validate = true) {
-    data.update((prev) => ({
-      ...prev,
-      [field]: value
-    }));
+    const clear = typeof value === "undefined";
+    data.update((prev) => {
+      const toUpdate = { ...prev };
+      if (clear) {
+        delete toUpdate[field];
+        return toUpdate;
+      }
+
+      return {
+        ...prev,
+        [field]: value
+      };
+    });
+
+    if (clear) {
+      setFieldError(field);
+      return;
+    }
 
     if (!validate) return;
 

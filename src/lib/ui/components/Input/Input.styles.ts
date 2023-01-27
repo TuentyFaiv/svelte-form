@@ -12,6 +12,6 @@ export const input = css``;
 
 export const show = css``;
 
-export const showIcon = css``;
+export const icon = css``;
 
 export const error = css``;
