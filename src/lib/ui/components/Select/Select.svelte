@@ -1,12 +1,14 @@
 <script lang="ts">
   import { getContext, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
+  import { keys } from "../../../logic/utils/keys";
 
   import type { InputContext } from "../../../logic/typing/globals.proptypes";
-  import type { Props, Select } from "./Select.proptypes";
+  import type { Props, Select, Target } from "./Select.proptypes";
 
   import * as stylesinternal from "./Select.styles";
 
+  export let label: Props["label"];
   export let name: Props["name"];
   export let id: Props["id"] = null;
   export let options: Props["options"] = [];
@@ -19,28 +21,64 @@
 
   let container: Select = null;
   let active = false;
-  let value = "";
 
   const form = getContext<InputContext>(context);
   const { errors, setField, data } = $form;
 
-  function handleCloseSelect() {
+  function handleToggle() {
     active = !active;
   }
 
+  function handleChoose(element: HTMLElement) {
+    const option =
+      element.role === "none" && element.tagName === "SPAN"
+        ? element.parentElement ?? element
+        : element;
+    const { value } = option.dataset;
+    if (value) {
+      setField(name, value);
+      onSelect?.(value);
+    }
+    active = false;
+  }
+
   function handleSelect(event: MouseEvent) {
-    const option = event.target as HTMLDivElement;
-    if (!option.dataset.select) {
-      const valueSelected = option.dataset.value;
-      if (valueSelected) {
-        value = valueSelected;
-        setField(name, valueSelected);
-        onSelect?.(valueSelected);
-      }
-      active = false;
-    } else {
-      handleCloseSelect();
+    const element = event.target as Target;
+    const isMenu =
+      element.role === "menu" ||
+      (element.role === "none" && element.parentElement?.role === "menu") ||
+      (element.role === "none" &&
+        (element.parentElement?.role === "presentation" ||
+          element.firstElementChild?.role === "presentation")) ||
+      (element.role === "presentation" &&
+        (element.parentElement?.role === "none" ||
+          element.firstElementChild?.role === "none"));
+    const isOption =
+      (element.role === "none" &&
+        (element.parentElement?.role === "menuitem" ||
+          element.firstElementChild?.role === "menuitem")) ||
+      (element.role === "menuitem" &&
+        (element.parentElement?.role === "none" ||
+          element.firstElementChild?.role === "none"));
+
+    if (isOption) {
+      handleChoose(element);
+    } else if (isMenu) {
+      handleToggle();
       if (container) container.lastElementChild?.scrollTo(0, 0);
+    }
+  }
+
+  function onOpenByKey(event: KeyboardEvent) {
+    if (event.code === keys.enter) {
+      handleToggle();
+    }
+  }
+
+  function onChooseByKey(event: KeyboardEvent) {
+    const element = event.target as HTMLElement;
+    if (event.code === keys.enter) {
+      handleChoose(element);
     }
   }
 
@@ -51,15 +89,12 @@
     }),
     {}
   );
-
   $: showedValue =
-    options.find(
-      ({ value: option }) => option === value || option === $data[name]
-    )?.label || (value !== "" ? value : placeholder);
+    options.find(({ value: option }) => option === $data[name])?.label ||
+    (!!$data[name] ? $data[name] : placeholder);
 
   $: {
-    if (options.length === 1 && value !== options[0].value) {
-      value = options[0].value;
+    if (options.length === 1 && $data[name] !== options[0].value) {
       setField(name, options[0].value);
       onSelect?.(options[0].value);
     }
@@ -70,20 +105,23 @@
   });
 </script>
 
-<label
-  for={id ?? name}
+<div
+  {id}
   class={styles.field ?? stylesinternal.field}
+  role="menu"
+  tabIndex={0}
+  on:click={!datas?.disabled ? handleSelect : undefined}
+  on:keydown={onOpenByKey}
   {...datasets}
 >
+  <p class={styles.paragraph ?? stylesinternal.paragraph} role="none">
+    {label}
+  </p>
   <div
+    role="none"
     class={styles.select ?? stylesinternal.select}
     class:active
-    role="listbox"
-    tabIndex={-1}
-    data-select="true"
     bind:this={container}
-    on:click={!datas?.disabled ? handleSelect : undefined}
-    on:keypress={() => {}}
   >
     <p
       role="presentation"
@@ -92,30 +130,31 @@
     >
       {showedValue}
       {#if $errors[name]}
-        <span class={styles.error ?? stylesinternal.error}
-          >{t(`${$errors[name]}`)}</span
-        >
+        <span class={styles.error ?? stylesinternal.error} role="none">
+          {t(`${$errors[name]}`)}
+        </span>
       {/if}
     </p>
     {#if active}
       <div
+        role="none"
         class={styles.options ?? stylesinternal.options}
-        on:mouseleave={active ? handleCloseSelect : undefined}
+        on:mouseleave|stopPropagation={active ? handleToggle : undefined}
+        on:keydown|stopPropagation={onChooseByKey}
         transition:slide|local={{ delay: 200 }}
-        role="presentation"
       >
         {#each options as option (option.key ?? option.value)}
           <span
-            role="option"
+            role="menuitem"
             aria-selected={!option.disabled}
-            tabindex={-1}
+            tabindex={0}
             data-value={option.value}
             class={styles.option ?? stylesinternal.option}
           >
-            <span role="presentation">{option.label}</span>
+            <span role="none">{option.label}</span>
           </span>
         {/each}
       </div>
     {/if}
   </div>
-</label>
+</div>

@@ -7,6 +7,7 @@ export interface Props extends GeneralInputProps {
   onSelect(value: string): void;
   styles: {
     field?: string;
+    paragraph?: string;
     select?: string;
     value?: string;
     error?: string;
@@ -14,5 +15,7 @@ export interface Props extends GeneralInputProps {
     option?: string;
   }
 }
+
+export type Target = HTMLDivElement | HTMLParagraphElement | HTMLSpanElement;
 
 export type Select = HTMLDivElement | null;

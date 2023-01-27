@@ -14,6 +14,9 @@ export const field = css`
     /* cursor: pointer; */
   }
 `;
+
+export const paragraph = css``;
+
 export const select = css`
   /* width: 100%; */
   &:is(:hover, :focus, :focus-within) {}
@@ -31,9 +34,8 @@ export const select = css`
 
 export const value = css`
   /* position: relative;
-  width: 100%;
-  pointer-events: none;
-  z-index: 0; */
+  width: 100%; */
+  /* z-index: 0; */
   &::after {
     /* position: absolute;
     content: "";
