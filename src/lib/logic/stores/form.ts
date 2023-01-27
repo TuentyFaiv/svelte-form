@@ -2,13 +2,14 @@ import { setContext } from "svelte";
 import { derived, get, readable, writable } from "svelte/store";
 import { object } from "yup";
 import swal from "sweetalert";
-import { toggle } from "@utils/booleans";
-import { fieldsValidation, fieldValidation } from "@utils/validation";
-import { setError, setErrors } from "@utils/errors";
+import { toggle } from "../utils/booleans";
+import { fieldsValidation, fieldValidation } from "../utils/validation";
+import { setError, setErrors } from "../utils/errors";
 
+// eslint-disable-next-line import/order
 import type { Readable } from "svelte/store";
-import type { ActionConfig, Data, Fields, FormContext, Submit, SubmitActions } from "@typing/stores.form";
-import type { Errors } from "@typing/utils.errors";
+import type { ActionConfig, Data, Fields, FormContext, Submit, SubmitActions } from "../typing/stores.form";
+import type { Errors } from "../typing/utils.errors";
 
 export function formStore(fields: Fields, ns = "forms") {
   let form: HTMLFormElement | null = null;
@@ -39,12 +40,12 @@ export function formStore(fields: Fields, ns = "forms") {
     const formData = Object.fromEntries(new FormData(form).entries());
 
     const parsedData: T = Object.keys(formData).reduce((acc, key) => {
-      const isOn = data[key] === "on";
-      const isBoolean = (isOn) || (data[key] === "off");
+      const isOn = formData[key] === "on";
+      const isBoolean = (isOn) || (formData[key] === "off");
 
       return {
         ...acc,
-        [key]: isBoolean ? isOn : data[key]
+        [key]: isBoolean ? isOn : formData[key]
       };
     }, {} as T);
 

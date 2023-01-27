@@ -1,4 +1,4 @@
-import type { GeneralInputProps } from "@typing/globals.proptypes";
+import type { GeneralInputProps } from "../../../logic/typing/globals.proptypes";
 
 export interface Props extends GeneralInputProps {
   t(msg: string): string;

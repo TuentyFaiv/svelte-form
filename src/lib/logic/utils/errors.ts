@@ -1,10 +1,10 @@
 import { ValidationError } from "yup";
 
-import type { ConfigError, ConfigErrors, ConfigShowErrors, Errors } from "@typing/utils.errors";
+import type { ConfigError, ConfigErrors, ConfigShowErrors, Errors } from "../typing/utils.errors";
 
 export function showErrors<T>({ error, errors, ns = "errors", handle }: ConfigShowErrors<T>) {
   if (!(error instanceof ValidationError)) {
-    handle(error);
+    handle?.(error);
   }
   if (error instanceof ValidationError) {
     return error.inner.reduce((acc, err) => ({
