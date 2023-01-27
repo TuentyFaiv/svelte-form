@@ -1,7 +1,28 @@
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+import adapter from '@sveltejs/adapter-auto';
+import { vitePreprocess } from '@sveltejs/kit/vite';
 
-export default {
-  // Consult https://svelte.dev/docs#compile-time-svelte-preprocess
-  // for more information about preprocessors
-  preprocess: vitePreprocess(),
-}
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
+	// for more information about preprocessors
+	preprocess: vitePreprocess(),
+	package: {
+		exports(filepath) {
+			return filepath === "index.ts";
+		}
+	},
+	kit: {
+		adapter: adapter(),
+		alias: {
+			"@components": "src/lib/ui/components/index.ts",
+			"@stores": "src/lib/logic/stores/index.ts",
+			"@typing/*": "src/lib/logic/typing/*",
+			"@utils/*": "src/lib/logic/utils/*",
+			// example code
+			"@containers": "src/ui/containers/index.ts",
+			"@schemas/*": "src/logic/schemas/*"
+		}
+	}
+};
+
+export default config;
