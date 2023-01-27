@@ -7,9 +7,7 @@ const config = {
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
 	package: {
-		exports(filepath) {
-			return filepath === "index.ts";
-		}
+		emitTypes: true
 	},
 	kit: {
 		adapter: adapter(),
