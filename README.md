@@ -47,7 +47,8 @@
   import {
     Input,
     Select,
-    FileInput
+    FileInput,
+    Option
   } from "@tuentyfaiv/svelte-form";
   ```
 - ### Build-in forms

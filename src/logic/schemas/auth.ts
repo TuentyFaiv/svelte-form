@@ -1,6 +1,5 @@
 // import { string, mixed } from "yup";
-import { formStore } from "$lib/logic/stores";
-import { fieldsSignin } from "$lib/logic/schemas/auth";
+import { formStore, fieldsSignin } from "$lib";
 
 // import type { Fields } from "@typing/stores.form";
 
