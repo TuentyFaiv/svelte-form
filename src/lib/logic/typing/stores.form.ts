@@ -11,7 +11,7 @@ export interface StoreConfig {
   styles?: Styles;
 }
 
-interface Styles {
+export interface Styles {
   input: InputStyles;
   fileinput:FileInputStyles;
   select: SelectStyles;
@@ -43,7 +43,7 @@ export interface ActionConfig {
 
 type Submit = (event: SubmitEvent) => Promise<void>;
 
-type Message = (msg: string) => string;
+export type Message = (msg: string) => string;
 
 export type SubmitAction<T> = (values: T) => void;
 

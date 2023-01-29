@@ -11,42 +11,41 @@ export interface GeneralInputProps {
   datas: ObjStrCommon;
 }
 
-export interface SelectStyles {
+interface GeneralStyles {
   field?: string;
+  input?: string;
   label?: string;
+  error?: string;
+}
+
+export interface SelectStyles extends Omit<GeneralStyles, "input"> {
   select?: string;
   value?: string;
-  error?: string;
   options?: string;
   option?: string;
 }
 
-export interface InputStyles {
-  field?: string;
-  label?: string;
+export interface InputStyles extends GeneralStyles {
   area?: string;
   check?: string;
-  input?: string;
   show?: string;
   icon?: string;
-  error?: string;
 }
 
-export interface FileInputStyles {
+export interface FileInputStyles extends Omit<GeneralStyles, "label"> {
   wrapper?: string;
   actions?: string;
-  error?: string;
   retry?: string;
-  field?: string;
-  input?: string;
 }
 
-export interface OptionStyles {
-  field?: string;
-  label?: string;
-  input?: string;
+export interface OptionStyles extends GeneralStyles {
   content?: string;
-  error?: string;
+}
+
+export interface SigninFormStyles {
+  form?: string;
+  box?: string;
+  submit?: string;
 }
 
 export type InputContext = Readable<FormContext>;

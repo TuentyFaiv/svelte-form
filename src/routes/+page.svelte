@@ -1,14 +1,29 @@
 <script lang="ts">
-  import { SigninForm } from "@containers";
+  import { SigninForm } from "$lib/ui/containers";
+  import { Input } from "$lib/ui/components";
+
+  import type { SigninValues } from "$lib/logic/typing/schemas.auth";
+
+  async function onSubmit(values: SigninValues) {
+    console.log({ values });
+  }
 </script>
 
-<h1>Welcome to your library project</h1>
-<p>
-  Create your package using @sveltejs/package and preview/showcase your work
-  with SvelteKit
-</p>
-<p>
-  Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
-</p>
+<h1>Examples</h1>
 
-<SigninForm />
+<div>
+  <h2>Example base</h2>
+  <SigninForm {onSubmit} />
+</div>
+<div>
+  <h2>Example with slot</h2>
+  <SigninForm {onSubmit}>
+    <Input id="email-slot" name="email" label="Email" />
+    <Input
+      id="password-slot"
+      name="password"
+      type="password"
+      label="Password"
+    />
+  </SigninForm>
+</div>
