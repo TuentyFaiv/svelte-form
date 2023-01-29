@@ -1,9 +1,9 @@
 <script lang="ts">
   import { getContext, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
-  import { keys } from "../../../logic/utils/keys";
+  import { keys } from "$lib/logic/utils/keys";
 
-  import type { InputContext } from "../../../logic/typing/globals.proptypes";
+  import type { InputContext } from "$lib/logic/typing/globals.proptypes";
   import type { Props, Select, Target } from "./Select.proptypes";
 
   import * as stylesinternal from "./Select.styles";

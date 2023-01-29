@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getContext, onMount } from "svelte";
 
-  import type { InputContext } from "../../../logic/typing/globals.proptypes";
+  import type { InputContext } from "$lib/logic/typing/globals.proptypes";
   import type { Input, Props } from "./FileInput.proptypes";
 
   import * as stylesinternal from "./FileInput.styles";

@@ -2,7 +2,7 @@
   import { onDestroy, getContext } from "svelte";
   import { fade } from "svelte/transition";
 
-  import type { InputContext } from "../../../logic/typing/globals.proptypes";
+  import type { InputContext } from "$lib/logic/typing/globals.proptypes";
   import type { Input, Props } from "./Input.proptypes";
 
   import * as stylesinternal from "./Input.styles";
