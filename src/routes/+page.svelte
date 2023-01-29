@@ -1,11 +1,7 @@
 <script lang="ts">
-  import { SigninForm, SignupForm } from "$lib/ui/containers";
-  import { Input } from "$lib/ui/components";
+  import { Input, SigninForm, SignupForm } from "$lib";
 
-  import type {
-    SigninValues,
-    SignupValues,
-  } from "$lib/logic/typing/schemas.auth";
+  import type { SigninValues, SignupValues } from "$lib";
 
   async function onSubmitSignin(values: SigninValues) {
     console.log({ values });
