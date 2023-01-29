@@ -8,10 +8,23 @@ import { setError, setErrors } from "../utils/errors";
 
 // eslint-disable-next-line import/order
 import type { Readable } from "svelte/store";
-import type { ActionConfig, Data, Fields, FormContext, Submit, SubmitActions } from "../typing/stores.form";
+import type {
+  ActionConfig,
+  Data,
+  Fields,
+  FormContext,
+  StoreConfig,
+  SubmitAction,
+  SubmitOptions
+} from "../typing/stores.form";
 import type { Errors } from "../typing/utils.errors";
 
-export function formStore(fields: Fields, ns = "forms") {
+export function formStore({
+  fields,
+  styles = { input: {}, option: {}, select: {}, fileinput: {} },
+  ns = "forms",
+  t = (msg) => (msg)
+}: StoreConfig) {
   let form: HTMLFormElement | null = null;
   const sfields: Fields = { ...fields };
   const namespace: string = ns;
@@ -31,7 +44,7 @@ export function formStore(fields: Fields, ns = "forms") {
     setError({ key, error, errors, ns: namespace });
   }
 
-  function setFieldsErrors(error: unknown, handle?: (error?: unknown) => void): void {
+  function setFieldsErrors(error: unknown, handle?: (error: unknown) => void): void {
     setErrors({ error, errors, ns: namespace, handle });
   }
 
@@ -120,13 +133,15 @@ export function formStore(fields: Fields, ns = "forms") {
     loading,
     errors,
     data,
+    styles,
     setError: setFieldError,
     setField,
     check,
-    action
+    action,
+    t
   });
 
-  function submit<T extends Data = Data>(handleData: Submit<T>, { error, finish, contextns = "form" }: SubmitActions = {}) {
+  function submit<T extends Data = Data>(handleData: SubmitAction<T>, { error, finish, contextns = "form" }: SubmitOptions = {}) {
     setContext(contextns, context);
     async function onSubmit(event: SubmitEvent) {
       try {
@@ -139,8 +154,7 @@ export function formStore(fields: Fields, ns = "forms") {
 
         await action({ type: "success" });
       } catch (err) {
-        setFieldsErrors(err);
-        error?.(err);
+        setFieldsErrors(err, error);
       } finally {
         toggleLoading(false);
         finish?.();

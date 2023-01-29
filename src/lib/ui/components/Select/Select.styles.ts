@@ -15,7 +15,7 @@ export const field = css`
   }
 `;
 
-export const paragraph = css``;
+export const label = css``;
 
 export const select = css`
   /* width: 100%; */

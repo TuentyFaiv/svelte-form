@@ -1,14 +1,14 @@
 # Svelte Forms
 
 
-## Steps to install
+### Steps to install
 - `npm install @tuentyfaiv/svelte-form`
 
-## Store 
+### Store 
 - `import { formStore } from "@tuentyfaiv/svelte-form";`
 
-## Components
+### Components
 - `import { Input, Select, FileInput } from "@tuentyfaiv/svelte-form";`
 
-## Types
+### Types
 - `import type { Fields, Data, SelectOption  } from "@tuentyfaiv/svelte-form";`

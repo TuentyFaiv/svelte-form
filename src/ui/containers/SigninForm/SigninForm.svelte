@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileInput, Input, Select } from "@components";
+  import { FileInput, Input, Option, Select } from "@components";
   import { formSignin } from "@schemas/auth";
 
   const { submit } = $formSignin;
@@ -36,5 +36,8 @@
       },
     ]}
   />
+  <Option id="1" value="one" label="Method one" name="method" />
+  <Option id="2" value="two" label="Method two" name="method" />
+  <Option id="3" value="three" label="Method three" name="method" />
   <button type="submit">Submit</button>
 </form>

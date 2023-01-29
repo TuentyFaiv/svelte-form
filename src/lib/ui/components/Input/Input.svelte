@@ -14,15 +14,20 @@
   export let type: Props["type"] = "text";
   export let context: Props["context"] = "form";
   export let datas: Props["datas"] = {};
-  export let styles: Props["styles"] = {};
-  export let t: Props["t"] = (msg) => msg;
 
   let input: Input;
   let checked = false;
   let show = false;
 
   const form = getContext<InputContext>(context);
-  const { data, errors, setField, check } = $form;
+  const {
+    data,
+    errors,
+    styles: { input: styles },
+    setField,
+    check,
+    t,
+  } = $form;
 
   function toggleShow() {
     show = !show;
@@ -57,7 +62,7 @@
   {...datasets}
   {title}
 >
-  <p class={styles.paragraph ?? stylesinternal.paragraph}>
+  <p class={styles.label ?? stylesinternal.label}>
     {label}
     <slot />
     {#if datas.labeltwo}

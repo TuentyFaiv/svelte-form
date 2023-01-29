@@ -8,14 +8,6 @@ export interface Props extends GeneralInputProps {
   defaultValue: string;
   onSelect: null | ((value: File | File[]) => void);
   onRetry: null | VoidFunction;
-  styles: {
-    wrapper?: string;
-    actions?: string;
-    error?: string;
-    retry?: string;
-    field?: string;
-    input?: string;
-  }
 }
 
 export type Input = HTMLInputElement | null;

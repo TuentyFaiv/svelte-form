@@ -17,13 +17,18 @@
   export let defaultValue: Props["defaultValue"] = "";
   export let max: Props["max"] = Infinity;
   export let datas: Props["datas"] = {};
-  export let styles: Props["styles"] = {};
-  export let t: Props["t"] = (msg: string) => msg;
 
   let input: Input;
 
   const form = getContext<InputContext>(context);
-  const { errors, setField, setError, data } = $form;
+  const {
+    data,
+    errors,
+    styles: { fileinput: styles },
+    setField,
+    setError,
+    t,
+  } = $form;
 
   $: file = !!$data[name] ? ($data[name] as File) : null;
   $: files = !!$data[name] ? ($data[name] as File[]) : null;

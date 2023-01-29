@@ -2,7 +2,7 @@ import { css } from "@emotion/css";
 
 export const field = css``;
 
-export const paragraph = css``;
+export const label = css``;
 
 export const area = css``;
 

@@ -7,7 +7,7 @@ export interface ConfigShowErrors<T> {
   error: unknown;
   errors: T;
   ns?: string;
-  handle?(error?: unknown): void;
+  handle?(error: unknown): void;
 }
 
 export type ConfigErrors<T> = ConfigShowErrors<Writable<T>>;

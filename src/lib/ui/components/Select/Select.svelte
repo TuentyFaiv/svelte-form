@@ -15,15 +15,19 @@
   export let placeholder: Props["placeholder"] = "";
   export let context: Props["context"] = "form";
   export let datas: Props["datas"] = {};
-  export let styles: Props["styles"] = {};
-  export let onSelect: Props["onSelect"] = () => {};
-  export let t: Props["t"] = (msg: string) => msg;
+  export let onSelect: Props["onSelect"] = null;
 
   let container: Select = null;
   let active = false;
 
   const form = getContext<InputContext>(context);
-  const { errors, setField, data } = $form;
+  const {
+    data,
+    errors,
+    styles: { select: styles },
+    setField,
+    t,
+  } = $form;
 
   function handleToggle() {
     active = !active;
@@ -114,7 +118,7 @@
   on:keydown={onOpenByKey}
   {...datasets}
 >
-  <p class={styles.paragraph ?? stylesinternal.paragraph} role="none">
+  <p class={styles.label ?? stylesinternal.label} role="none">
     {label}
   </p>
   <div

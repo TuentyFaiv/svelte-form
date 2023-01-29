@@ -5,16 +5,6 @@ export interface Props extends GeneralInputProps {
     show: string;
     hide: string;
   } | null;
-  styles: {
-    field?: string;
-    paragraph?: string;
-    area?: string;
-    check?: string;
-    input?: string;
-    show?: string;
-    icon?: string;
-    error?: string;
-  }
 }
 
 export type Input = HTMLInputElement | HTMLTextAreaElement | null;

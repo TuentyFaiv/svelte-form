@@ -2,6 +2,21 @@ import type { Writable } from "svelte/store";
 import type { AnySchema } from "yup";
 import type { Errors } from "./utils.errors";
 import type { ObjStrCustom } from "./globals.types";
+import type { FileInputStyles, InputStyles, OptionStyles, SelectStyles } from "./globals.proptypes";
+
+export interface StoreConfig {
+  fields: Fields;
+  ns?: string;
+  t?: Message;
+  styles?: Styles;
+}
+
+interface Styles {
+  input: InputStyles;
+  fileinput:FileInputStyles;
+  select: SelectStyles;
+  option: OptionStyles;
+}
 
 export interface FormContext {
   loading: Writable<boolean>;
@@ -11,14 +26,9 @@ export interface FormContext {
   setField(field: string, value: unknown, validate?: boolean): Promise<void>;
   check(event: FocusEvent | Event): Promise<void>;
   action(data?: ActionConfig): Promise<void>;
-  submit<D extends Data = Data>(
-    handleData: Submit<D>,
-    {
-      error,
-      finish,
-      contextns
-    }?: SubmitActions
-  ): (event: SubmitEvent) => Promise<void>;
+  submit<T extends Data = Data>(action: SubmitAction<T>, options?: SubmitOptions): Submit;
+  t: Message;
+  styles: Styles;
 }
 
 export type Data = ObjStrCustom<unknown>;
@@ -31,9 +41,13 @@ export interface ActionConfig {
   type?: "info" | "warning" | "success";
 }
 
-export type Submit<T> = (values: T) => void;
+type Submit = (event: SubmitEvent) => Promise<void>;
 
-export interface SubmitActions {
+type Message = (msg: string) => string;
+
+export type SubmitAction<T> = (values: T) => void;
+
+export interface SubmitOptions {
   error?(error: unknown): void;
   finish?: VoidFunction;
   contextns?: string;
