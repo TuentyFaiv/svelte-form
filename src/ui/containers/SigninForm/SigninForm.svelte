@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileInput, Input, Option, Select } from "@components";
+  import { FileInput, Input, Option, Select } from "$lib/ui/components";
   import { formSignin } from "@schemas/auth";
 
   const { submit } = $formSignin;

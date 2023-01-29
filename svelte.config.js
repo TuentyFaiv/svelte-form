@@ -12,13 +12,12 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			"@components": "src/lib/ui/components/index.ts",
-			"@stores": "src/lib/logic/stores/index.ts",
-			"@typing/*": "src/lib/logic/typing/*",
-			"@utils/*": "src/lib/logic/utils/*",
-			// example code
+			"@stores": "src/logic/stores/index.ts",
+			"@typing/*": "src/logic/typing/*",
+			"@schemas/*": "src/logic/schemas/*",
+			"@utils/*": "src/logic/utils/*",
+			"@components": "src/ui/components/index.ts",
 			"@containers": "src/ui/containers/index.ts",
-			"@schemas/*": "src/logic/schemas/*"
 		}
 	}
 };
