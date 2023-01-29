@@ -42,7 +42,7 @@ export interface OptionStyles extends GeneralStyles {
   content?: string;
 }
 
-export interface SigninFormStyles {
+export interface FormStyles {
   form?: string;
   box?: string;
   submit?: string;

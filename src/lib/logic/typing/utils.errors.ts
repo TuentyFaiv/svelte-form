@@ -7,10 +7,11 @@ export interface ConfigShowErrors<T> {
   error: unknown;
   errors: T;
   ns?: string;
-  handle?(error: unknown): void;
 }
 
-export type ConfigErrors<T> = ConfigShowErrors<Writable<T>>;
+export interface ConfigErrors<T> extends ConfigShowErrors<Writable<T>> {
+  handle?(error: unknown): void;
+}
 
 export interface ConfigError<T> extends Omit<ConfigErrors<T>, "error"> {
   error?: unknown;

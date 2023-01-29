@@ -2,10 +2,27 @@ import { ValidationError } from "yup";
 
 import type { ConfigError, ConfigErrors, ConfigShowErrors, Errors } from "../typing/utils.errors";
 
-export function showErrors<T>({ error, errors, ns = "errors", handle }: ConfigShowErrors<T>) {
-  if (!(error instanceof ValidationError)) {
-    handle?.(error);
+export class FormError extends Error {
+  title: string;
+  date: Date;
+
+  constructor(
+    title = "!Form Error¡",
+    ...params: (string | undefined)[]
+  ) {
+    super(...params);
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, FormError);
+    }
+
+    this.name = "FormError";
+    this.title = title;
+    this.date = new Date();
   }
+}
+
+export function showErrors<T>({ error, errors, ns = "errors" }: ConfigShowErrors<T>) {
   if (error instanceof ValidationError) {
     return error.inner.reduce((acc, err) => ({
       ...acc,
@@ -16,12 +33,17 @@ export function showErrors<T>({ error, errors, ns = "errors", handle }: ConfigSh
 }
 
 export function setErrors<T extends Errors = Errors>({ error, errors, ns = "errors", handle }: ConfigErrors<T>) {
+  if (!(error instanceof ValidationError)) {
+    handle?.(error);
+  }
+  if ((error instanceof FormError)) return;
+
   errors.update((prevErrors) => {
     const resetErrors = Object.keys(prevErrors).reduce((acc, key) => ({
       ...acc,
       [key]: null
     }), prevErrors);
-    const newErrors = showErrors({ error, errors: resetErrors, ns, handle });
+    const newErrors = showErrors({ error, errors: resetErrors, ns });
 
     return newErrors;
   });
