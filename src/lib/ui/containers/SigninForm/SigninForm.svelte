@@ -20,6 +20,7 @@
     select: {},
     fileinput: {},
     signin: {},
+    icons: null,
   };
 
   const store = formStore({
@@ -31,6 +32,7 @@
       fileinput: styles.fileinput,
       option: styles.option,
       select: styles.select,
+      icons: styles.icons,
     },
   });
   const { submit, t: tf } = $store;
