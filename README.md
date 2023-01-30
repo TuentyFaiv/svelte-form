@@ -1,4 +1,4 @@
-# Svelte Forms
+# Svelte Form
 
 `npm install @tuentyfaiv/svelte-form`
 

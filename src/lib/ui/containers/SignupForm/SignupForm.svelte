@@ -24,6 +24,7 @@
     select: {},
     fileinput: {},
     signup: {},
+    icons: null,
   };
 
   const store = formStore({
@@ -35,6 +36,7 @@
       fileinput: styles.fileinput,
       option: styles.option,
       select: styles.select,
+      icons: styles.icons,
     },
   });
   const { submit, setField, setError, t: tf } = $store;
@@ -100,6 +102,6 @@
     </slot>
   </div>
   <button class={styles.signup.submit ?? stylesinternal.submit} type="submit">
-    {tf("forms:submit-signin")}
+    {tf("forms:submit-signup")}
   </button>
 </form>

@@ -21,7 +21,7 @@ import type { Errors } from "../typing/utils.errors";
 
 export function formStore({
   fields,
-  styles = { input: {}, option: {}, select: {}, fileinput: {} },
+  styles = { input: {}, option: {}, select: {}, fileinput: {}, icons: null },
   ns = "forms",
   t = (msg) => (msg)
 }: StoreConfig) {

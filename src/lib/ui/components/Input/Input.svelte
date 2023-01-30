@@ -10,7 +10,6 @@
   export let name: Props["name"];
   export let label: Props["label"];
   export let id: Props["id"] = null;
-  export let icons: Props["icons"] = null;
   export let type: Props["type"] = "text";
   export let context: Props["context"] = "form";
   export let datas: Props["datas"] = {};
@@ -23,7 +22,7 @@
   const {
     data,
     errors,
-    styles: { input: styles },
+    styles: { input: styles, icons },
     setField,
     check,
     t,
@@ -114,6 +113,9 @@
           class={styles.icon ?? stylesinternal.icon}
           src={show ? icons.show : icons.hide}
           alt={t("forms:show-hide")}
+          decoding="async"
+          loading="lazy"
+          role="presentation"
         />
       {:else}
         {t("forms:show-hide")}

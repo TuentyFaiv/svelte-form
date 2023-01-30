@@ -16,6 +16,12 @@ export interface Styles {
   fileinput:FileInputStyles;
   select: SelectStyles;
   option: OptionStyles;
+  icons: Icons | null;
+}
+
+interface Icons {
+  show?: string;
+  hide?: string;
 }
 
 export interface FormContext {
