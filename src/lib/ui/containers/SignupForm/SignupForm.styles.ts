@@ -1,6 +1,6 @@
 import { css } from "@emotion/css";
 
-export const form = css``;
+export const container = css``;
 
 export const box = css``;
 

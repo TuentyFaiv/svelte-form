@@ -14,25 +14,18 @@
   export let context: Props["context"] = undefined;
   export let ns: Props["ns"] = undefined;
   export let t: Props["t"] = undefined;
-  export let styles: Props["styles"] = {
-    input: {},
-    option: {},
-    select: {},
-    fileinput: {},
-    signin: {},
-    icons: null,
-  };
+  export let styles: Props["styles"] = undefined;
 
   const store = formStore({
     fields: fieldsSignin,
     ns,
     t,
     styles: {
-      input: styles.input,
-      fileinput: styles.fileinput,
-      option: styles.option,
-      select: styles.select,
-      icons: styles.icons,
+      input: styles?.input ?? {},
+      fileinput: styles?.fileinput ?? {},
+      option: styles?.option ?? {},
+      select: styles?.select ?? {},
+      icons: styles?.icons ?? null,
     },
   });
   const { submit, t: tf } = $store;
@@ -46,9 +39,9 @@
 
 <form
   on:submit|preventDefault={action}
-  class={styles.signin.form ?? stylesinternal.form}
+  class={styles?.form?.container ?? stylesinternal.container}
 >
-  <div class={styles.signin.box ?? stylesinternal.box}>
+  <div class={styles?.form?.box ?? stylesinternal.box}>
     <slot>
       <Input name="email" type="email" label={tf("forms:email")} {context} />
       <Input
@@ -59,7 +52,7 @@
       />
     </slot>
   </div>
-  <button class={styles.signin.submit ?? stylesinternal.submit} type="submit">
+  <button class={styles?.form?.submit ?? stylesinternal.submit} type="submit">
     {tf("forms:submit-signin")}
   </button>
 </form>

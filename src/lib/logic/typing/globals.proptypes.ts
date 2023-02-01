@@ -1,6 +1,6 @@
 import type { Readable } from "svelte/store";
 import type { ObjStrCommon } from "./globals.types";
-import type { FormContext } from "./stores.form";
+import type { FormContext, Message, Styles, SubmitAction, SubmitOptions } from "./stores.form";
 
 export interface GeneralInputProps {
   type: string;
@@ -42,8 +42,22 @@ export interface OptionStyles extends GeneralStyles {
   content?: string;
 }
 
+export interface GlobalFormProps<T> {
+  onSubmit: SubmitAction<T>;
+  onError: SubmitOptions["error"];
+  onFinish: SubmitOptions["finish"];
+  context: SubmitOptions["contextns"];
+  ns?: string;
+  t?: Message;
+  styles?: Partial<StylesForm>;
+}
+
+export interface StylesForm extends Styles {
+  form: FormStyles;
+}
+
 export interface FormStyles {
-  form?: string;
+  container?: string;
   box?: string;
   submit?: string;
 }
