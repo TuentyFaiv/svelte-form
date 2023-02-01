@@ -25,10 +25,9 @@ jobs:
         run: pnpm install
 
       - name: Build library
-        run: pnpm build
+        run: pnpm build && cd ./package
 
       - name: Publish package
-        run: cd ./package
         run: pnpm publish --access=publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
