@@ -52,11 +52,13 @@ export interface GlobalFormProps<T> {
   styles?: Partial<StylesForm>;
 }
 
+export type FormStyles = GlobalFormProps<unknown>["styles"];
+
 export interface StylesForm extends Styles {
-  form: FormStyles;
+  form: GlobalFormStyles;
 }
 
-export interface FormStyles {
+interface GlobalFormStyles {
   container?: string;
   box?: string;
   submit?: string;

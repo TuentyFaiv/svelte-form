@@ -1,10 +1,11 @@
 <script lang="ts">
   import { Input, SigninForm, SignupForm } from "$lib";
 
-  import type { SigninValues, SignupValues } from "../../package";
+  import type { SigninValues, SignupValues } from "$lib";
+  import type { FormStyles } from "$lib";
 
-  const styles = {
-    signin: {},
+  const styles: FormStyles = {
+    form: {},
     input: {},
     fileinput: {},
     select: {},
