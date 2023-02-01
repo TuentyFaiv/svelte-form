@@ -1,29 +1,16 @@
-name: Check before merge to main
-on:
-  pull_request:
-    branch: master
+name: Review
+on: [pull_request]
 jobs:
-  linter:
+  eslint:
     name: ESLint check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: reviewdog/action-eslint@v1
         with:
-          node-version: '16.x'
-      - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
-      - run: pnpm i
-      - run: pnpm lint
-  svelte:
-    name: Svelte check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-      - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
-      - run: pnpm i
-      - run: pnpm check
+          github_token: ${{ secrest.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          eslint_flags: "src/lib/"

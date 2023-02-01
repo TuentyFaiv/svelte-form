@@ -1,21 +1,34 @@
-name: Publish package to npmjs
-on: release
+name: Publish package
+on: 
+  push:
+    branches:
+      - main
 jobs:
-  build:
-    name: Build and publish
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
-      - run: pnpm i
-      - run: pnpm build
-      - run: cd ./package
-      - run: npm publish --access=publish
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Install deps
+        run: pnpm install
+
+      - name: Build library
+        run: pnpm build
+
+      - name: Publish package
+        run: cd ./package
+        run: pnpm publish --access=publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
