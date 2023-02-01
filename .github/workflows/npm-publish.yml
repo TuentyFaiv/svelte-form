@@ -17,12 +17,13 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
 
-      - uses: pnpm/action-setup@v2
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
         with:
           version: latest
-
-      - name: Install deps
-        run: pnpm install --no-frozen-lockfile
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
 
       - name: Build library
         run: pnpm build && cd ./package
