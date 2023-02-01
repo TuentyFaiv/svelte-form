@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
+          auto-install-peers: true
 
       - name: Install dependencies
         uses: pnpm/action-setup@v2
