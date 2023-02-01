@@ -25,9 +25,9 @@ jobs:
             - args: [--no-frozen-lockfile, --strict-peer-dependencies]
 
       - name: Build library
-        run: pnpm build && cd ./package
+        run: pnpm build
 
       - name: Publish package
-        run: pnpm publish --access=publish
+        run: pnpm publish ./package/ --access=publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
