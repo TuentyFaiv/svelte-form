@@ -22,7 +22,7 @@ jobs:
           version: latest
 
       - name: Install deps
-        run: pnpm install --no-frozen-lockfile"
+        run: pnpm install --no-frozen-lockfile=false
 
       - name: Build library
         run: pnpm build && cd ./package
