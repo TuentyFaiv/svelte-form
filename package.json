@@ -11,7 +11,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
-		"lint": "eslint ."
+		"lint": "eslint src/lib/"
 	},
 	"dependencies": {
 		"@emotion/css": "^11.10.5",
