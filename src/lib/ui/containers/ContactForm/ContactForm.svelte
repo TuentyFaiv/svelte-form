@@ -1,10 +1,10 @@
 <script lang="ts">
   import { formStore } from "$lib/logic/stores";
-  import { fieldsSignin } from "$lib/logic/schemas";
+  import { fieldsContact } from "$lib/logic/schemas";
 
-  import type { Props } from "./SigninForm.proptypes";
+  import type { Props } from "./ContactForm.proptypes";
 
-  import * as stylesinternal from "./SigninForm.styles";
+  import * as stylesinternal from "./ContactForm.styles";
 
   import { Input } from "$lib/ui/components";
 
@@ -17,7 +17,7 @@
   export let styles: Props["styles"] = undefined;
 
   const store = formStore({
-    fields: fieldsSignin,
+    fields: fieldsContact,
     ns,
     t,
     styles: {
@@ -43,13 +43,15 @@
 >
   <div class={styles?.form?.box ?? stylesinternal.box}>
     <slot>
-      <Input name="email" type="email" label={tf("forms:email")} {context} />
       <Input
-        name="password"
-        type="password"
-        label={tf("forms:password")}
+        name="message"
+        type="textarea"
+        label={tf("forms:message")}
         {context}
       />
+      <Input name="name" label={tf("forms:name")} {context} />
+      <Input name="phone" type="tel" label={tf("forms:tel")} {context} />
+      <Input name="email" type="email" label={tf("forms:email")} {context} />
     </slot>
   </div>
   <button class={styles?.form?.submit ?? stylesinternal.submit} type="submit">
