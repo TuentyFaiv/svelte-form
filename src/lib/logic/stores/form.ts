@@ -58,12 +58,12 @@ export function formStore({
     };
 
     const toValidate: T = Object.keys(parsedData).reduce((acc, key) => {
-      const isOn = formData[key] === "on";
-      const isBoolean = (isOn) || (formData[key] === "off");
+      const isOn = parsedData[key] === "on";
+      const isBoolean = (isOn) || (parsedData[key] === "off");
 
       return {
         ...acc,
-        [key]: isBoolean ? isOn : formData[key]
+        [key]: isBoolean ? isOn : parsedData[key]
       };
     }, {} as T);
 
