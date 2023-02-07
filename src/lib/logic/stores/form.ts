@@ -52,7 +52,12 @@ export function formStore({
     form = formToValidate;
     const formData = Object.fromEntries(new FormData(form).entries());
 
-    const parsedData: T = Object.keys(formData).reduce((acc, key) => {
+    const parsedData = {
+      ...formData,
+      ...get(data)
+    };
+
+    const toValidate: T = Object.keys(parsedData).reduce((acc, key) => {
       const isOn = formData[key] === "on";
       const isBoolean = (isOn) || (formData[key] === "off");
 
@@ -61,11 +66,6 @@ export function formStore({
         [key]: isBoolean ? isOn : formData[key]
       };
     }, {} as T);
-
-    const toValidate: T = {
-      ...parsedData,
-      ...get(data)
-    };
 
     await fieldsValidation(toValidate, schema);
 
