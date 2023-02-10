@@ -141,7 +141,15 @@ export function formStore({
     t
   });
 
-  function submit<T extends Data = Data>(handleData: SubmitAction<T>, { error, finish, contextns = "form" }: SubmitOptions = {}) {
+  function submit<T extends Data = Data>(
+    handleData: SubmitAction<T>,
+    {
+      error,
+      finish,
+      contextns = "form",
+      success
+    }: SubmitOptions = {}
+  ) {
     setContext(contextns, context);
     async function onSubmit(event: SubmitEvent) {
       try {
@@ -152,7 +160,11 @@ export function formStore({
 
         await handleData(values);
 
-        await action({ type: "success" });
+        await action({
+          type: "success",
+          title: success?.title,
+          message: success?.message
+        });
       } catch (err) {
         setFieldsErrors(err, error);
       } finally {

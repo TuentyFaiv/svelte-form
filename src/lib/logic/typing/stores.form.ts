@@ -57,4 +57,10 @@ export interface SubmitOptions {
   error?(error: unknown): void;
   finish?: VoidFunction;
   contextns?: string;
+  success?: Success;
+}
+
+interface Success {
+  title: string;
+  message: string;
 }
