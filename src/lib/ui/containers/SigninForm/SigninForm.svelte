@@ -6,12 +6,13 @@
 
   import * as stylesinternal from "./SigninForm.styles";
 
-  import { Input } from "$lib/ui/components";
+  import { Errors, Input } from "$lib/ui/components";
 
   export let onSubmit: Props["onSubmit"];
   export let onError: Props["onError"] = undefined;
   export let onFinish: Props["onFinish"] = undefined;
   export let context: Props["context"] = undefined;
+  export let showErrors: Props["showErrors"] = undefined;
   export let ns: Props["ns"] = undefined;
   export let t: Props["t"] = undefined;
   export let styles: Props["styles"] = undefined;
@@ -55,4 +56,5 @@
   <button class={styles?.form?.submit ?? stylesinternal.submit} type="submit">
     {tf("forms:submit-signin")}
   </button>
+  <Errors {showErrors} {context} />
 </form>

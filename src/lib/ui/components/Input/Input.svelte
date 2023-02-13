@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { onDestroy, getContext } from "svelte";
+  import { getContext, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
+  import { generateDatas } from "$lib/logic/utils/objects";
+  import { keys } from "$lib/logic/utils/keys";
 
   import type { InputContext } from "$lib/logic/typing/globals.proptypes";
   import type { Input, Props } from "./Input.proptypes";
@@ -17,6 +19,7 @@
   let input: Input;
   let checked = false;
   let show = false;
+  let mounted = false;
 
   const form = getContext<InputContext>(context);
   const {
@@ -32,19 +35,21 @@
     show = !show;
   }
 
+  function onChecked(event: KeyboardEvent) {
+    const enter = event.key === keys.enter;
+    if (!mounted) mounted = true;
+    if (enter) {
+      checked = !checked;
+    }
+  }
+
   $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;
 
-  $: datasets = Object.keys(datas).reduce(
-    (acc, key) => ({
-      ...acc,
-      [`data-${key}`]: datas[key],
-    }),
-    {}
-  );
+  $: datasets = generateDatas(datas);
 
   $: {
     if (type === "checkbox") {
-      setField(name, checked, false);
+      setField(name, checked, mounted);
     }
   }
 
@@ -55,13 +60,13 @@
 
 <label
   for={id ?? name}
-  class={styles.field ?? stylesinternal.field}
+  class={styles?.field ?? stylesinternal.field}
   data-type={type}
   data-checked={checked}
   {...datasets}
   {title}
 >
-  <p class={styles.label ?? stylesinternal.label}>
+  <p class={styles?.label ?? stylesinternal.label}>
     {label}
     <slot />
     {#if datas.labeltwo}
@@ -70,7 +75,7 @@
   </p>
   {#if type === "textarea"}
     <textarea
-      class={styles.area ?? stylesinternal.area}
+      class={styles?.area ?? stylesinternal.area}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -79,19 +84,18 @@
     />
   {:else if type === "checkbox"}
     <input
-      class={styles.check ?? stylesinternal.check}
+      class={styles?.check ?? stylesinternal.check}
       id={id ?? name}
       type="checkbox"
       bind:this={input}
-      on:blur={check}
-      on:input={check}
+      on:keydown={onChecked}
       bind:checked
       {name}
       {...$$restProps}
     />
   {:else}
     <input
-      class={styles.input ?? stylesinternal.input}
+      class={styles?.input ?? stylesinternal.input}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -105,12 +109,12 @@
   {#if type === "password"}
     <button
       type="button"
-      class={styles.show ?? stylesinternal.show}
+      class={styles?.show ?? stylesinternal.show}
       on:click={toggleShow}
     >
       {#if icons}
         <img
-          class={styles.icon ?? stylesinternal.icon}
+          class={styles?.icon ?? stylesinternal.icon}
           src={show ? icons.show : icons.hide}
           alt={t("forms:show-hide")}
           decoding="async"
@@ -123,7 +127,7 @@
     </button>
   {/if}
   {#if $errors[name]}
-    <span class={styles.error ?? stylesinternal.error} transition:fade|local>
+    <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
       {t(`${$errors[name]}`)}
     </span>
   {/if}

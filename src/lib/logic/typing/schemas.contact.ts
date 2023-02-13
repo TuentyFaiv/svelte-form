@@ -1,9 +1,9 @@
-import type { Data } from "./stores.form";
+import { object } from "yup";
+import { fieldsContact } from "../schemas";
 
-export interface ContactValues extends Data {
-  email: string;
-  name: string;
-  message?: string;
-  phone: string;
-  phoneCode: string;
-}
+// eslint-disable-next-line import/order
+import type { InferType } from "yup";
+
+const schema = object(fieldsContact);
+
+export type ContactValues = InferType<typeof schema>;

@@ -4,7 +4,7 @@
 
   const { submit } = $formSignin;
 
-  const onSubmit = submit((values) => {
+  const onSubmit = submit(async (values) => {
     console.log({ values });
   });
 </script>

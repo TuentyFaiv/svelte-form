@@ -2,16 +2,18 @@ import { setContext } from "svelte";
 import { derived, get, readable, writable } from "svelte/store";
 import { object } from "yup";
 import swal from "sweetalert";
-import { toggle } from "../utils/booleans";
+import { toggle, transformOnOff } from "../utils/booleans";
 import { fieldsValidation, fieldValidation } from "../utils/validation";
 import { setError, setErrors } from "../utils/errors";
 
+// eslint-disable-next-line import/order
+import type { AnyObject, InferType } from "yup";
 // eslint-disable-next-line import/order
 import type { Readable } from "svelte/store";
 import type {
   ActionConfig,
   Data,
-  Fields,
+  FieldsErrorsConfig,
   FormContext,
   StoreConfig,
   SubmitAction,
@@ -19,16 +21,36 @@ import type {
 } from "../typing/stores.form";
 import type { Errors } from "../typing/utils.errors";
 
-export function formStore({
+export function formStore<TFields extends AnyObject = AnyObject>({
   fields,
-  styles = { input: {}, option: {}, select: {}, fileinput: {}, icons: null },
+  styles = {},
   ns = "forms",
   t = (msg) => (msg)
-}: StoreConfig) {
+}: StoreConfig<TFields>) {
   let form: HTMLFormElement | null = null;
-  const sfields: Fields = { ...fields };
+  const {
+    input = {},
+    option = {},
+    select = {},
+    fileinput = {},
+    errors: errorsStyles = {},
+    icons = null
+  } = styles;
+  const ctxStyles = {
+    input,
+    option,
+    select,
+    fileinput,
+    errors: errorsStyles,
+    icons
+  };
+  const sfields: TFields = { ...fields };
   const namespace: string = ns;
-  const schema = object().shape(sfields);
+  const schema = object(sfields);
+
+  type Values = InferType<typeof schema>;
+  type Fields = keyof Values;
+
   const errors = writable<Errors>(Object.keys(sfields).reduce((acc, err) => ({
     ...acc,
     [err]: null
@@ -40,15 +62,15 @@ export function formStore({
     toggle(loading, value);
   }
 
-  function setFieldError(key: string, error?: unknown): void {
+  function setFieldError(key: Fields, error?: unknown): void {
     setError({ key, error, errors, ns: namespace });
   }
 
-  function setFieldsErrors(error: unknown, handle?: (error: unknown) => void): void {
+  function setFieldsErrors({ error, handle }: FieldsErrorsConfig): void {
     setErrors({ error, errors, ns: namespace, handle });
   }
 
-  async function validation<T extends Data = Data>(formToValidate: HTMLFormElement): Promise<T> {
+  async function validation<T>(formToValidate: HTMLFormElement): Promise<T> {
     form = formToValidate;
     const formData = Object.fromEntries(new FormData(form).entries());
 
@@ -57,33 +79,30 @@ export function formStore({
       ...get(data)
     };
 
-    const toValidate: T = Object.keys(parsedData).reduce((acc, key) => {
-      const isOn = parsedData[key] === "on";
-      const isBoolean = (isOn) || (parsedData[key] === "off");
-
-      return {
-        ...acc,
-        [key]: isBoolean ? isOn : parsedData[key]
-      };
-    }, {} as T);
+    const toValidate: T = Object.keys(parsedData).reduce((acc, key) => ({
+      ...acc,
+      [key]: transformOnOff(parsedData[key])
+    }), {} as T);
 
     await fieldsValidation(toValidate, schema);
 
     return toValidate;
   }
 
-  async function setField(field: string, value: unknown, validate = true) {
+  async function setField(field: Fields, value: unknown, validate = true) {
     const clear = typeof value === "undefined";
+    const key = field as string;
+
     data.update((prev) => {
       const toUpdate = { ...prev };
       if (clear) {
-        delete toUpdate[field];
+        delete toUpdate[key];
         return toUpdate;
       }
 
       return {
         ...prev,
-        [field]: value
+        [key]: transformOnOff(value)
       };
     });
 
@@ -96,7 +115,7 @@ export function formStore({
 
     await fieldValidation({
       event: {
-        name: field,
+        name: key,
         value
       },
       schema: sfields,
@@ -107,10 +126,12 @@ export function formStore({
 
   async function check(event: FocusEvent | Event): Promise<void> {
     const { name, value } = event.target as HTMLInputElement;
+
     data.update((prev) => ({
       ...prev,
-      [name]: value
+      [name]: transformOnOff(value)
     }));
+
     await fieldValidation({
       event,
       schema: sfields,
@@ -129,11 +150,11 @@ export function formStore({
     }
   }
 
-  const context = readable<Omit<FormContext, "submit">>({
+  const context = readable<Omit<FormContext<Values, Fields>, "submit">>({
     loading,
     errors,
     data,
-    styles,
+    styles: ctxStyles,
     setError: setFieldError,
     setField,
     check,
@@ -141,7 +162,7 @@ export function formStore({
     t
   });
 
-  function submit<T extends Data = Data>(
+  function submit<T extends Values = Values>(
     handleData: SubmitAction<T>,
     {
       error,
@@ -166,7 +187,7 @@ export function formStore({
           message: success?.message
         });
       } catch (err) {
-        setFieldsErrors(err, error);
+        setFieldsErrors({ error: err, handle: error });
       } finally {
         toggleLoading(false);
         finish?.();
@@ -176,7 +197,7 @@ export function formStore({
     return onSubmit;
   }
 
-  const contextWithSubmit: Readable<FormContext> = derived(context, ($context) => ({
+  const contextWithSubmit: Readable<FormContext<Values, Fields>> = derived(context, ($context) => ({
     ...$context,
     submit
   }));
