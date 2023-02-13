@@ -1,14 +1,12 @@
 import { string } from "yup";
 import { REGEX_PASSWORD, REGEX_PHONE, REGEX_PHONE_CODE } from "../utils/regex";
 
-import type { Fields } from "../typing/stores.form";
-
-export const fieldsSignin: Fields = {
+export const fieldsSignin = {
   email: string().email("required-email").required("required"),
   password: string().matches(REGEX_PASSWORD, "required-pass").required("required")
 };
 
-export const fieldsSignup: Fields = {
+export const fieldsSignup = {
   ...fieldsSignin,
   firstName: string().required("required"),
   lastName: string().required("required"),

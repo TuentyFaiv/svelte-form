@@ -13,7 +13,7 @@ export interface ConfigErrors<T> extends ConfigShowErrors<Writable<T>> {
   handle?(error: unknown): void;
 }
 
-export interface ConfigError<T> extends Omit<ConfigErrors<T>, "error"> {
+export interface ConfigError<K, T> extends Omit<ConfigErrors<T>, "error"> {
   error?: unknown;
-  key: string;
+  key: K;
 }

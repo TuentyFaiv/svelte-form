@@ -7,3 +7,10 @@ export function toggle(store: Writable<boolean>, custom: unknown) {
     store.update((prev) => !prev);
   }
 }
+
+export function transformOnOff(value: unknown) {
+  const isOn = value === "on";
+  const isBoolean = (isOn) || (value === "off");
+
+  return isBoolean ? isOn : value;
+}

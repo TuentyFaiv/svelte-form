@@ -2,6 +2,7 @@
   import { getContext, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
   import { keys } from "$lib/logic/utils/keys";
+  import { generateDatas } from "$lib/logic/utils/objects";
 
   import type { InputContext } from "$lib/logic/typing/globals.proptypes";
   import type { Props, Select, Target } from "./Select.proptypes";
@@ -86,13 +87,7 @@
     }
   }
 
-  $: datasets = Object.keys(datas).reduce(
-    (acc, key) => ({
-      ...acc,
-      [`data-${key}`]: datas[key],
-    }),
-    {}
-  );
+  $: datasets = generateDatas(datas);
   $: showedValue =
     options.find(({ value: option }) => option === $data[name])?.label ||
     (!!$data[name] ? $data[name] : placeholder);
@@ -111,30 +106,30 @@
 
 <div
   {id}
-  class={styles.field ?? stylesinternal.field}
+  class={styles?.field ?? stylesinternal.field}
   role="menu"
   tabIndex={0}
   on:click={!datas?.disabled ? handleSelect : undefined}
   on:keydown={onOpenByKey}
   {...datasets}
 >
-  <p class={styles.label ?? stylesinternal.label} role="none">
+  <p class={styles?.label ?? stylesinternal.label} role="none">
     {label}
   </p>
   <div
     role="none"
-    class={styles.select ?? stylesinternal.select}
+    class={styles?.select ?? stylesinternal.select}
     class:active
     bind:this={container}
   >
     <p
       role="presentation"
-      class={styles.value ?? stylesinternal.value}
+      class={styles?.value ?? stylesinternal.value}
       data-gradient={showedValue === placeholder}
     >
       {showedValue}
       {#if $errors[name]}
-        <span class={styles.error ?? stylesinternal.error} role="none">
+        <span class={styles?.error ?? stylesinternal.error} role="none">
           {t(`${$errors[name]}`)}
         </span>
       {/if}
@@ -142,7 +137,7 @@
     {#if active}
       <div
         role="none"
-        class={styles.options ?? stylesinternal.options}
+        class={styles?.options ?? stylesinternal.options}
         on:mouseleave|stopPropagation={active ? handleToggle : undefined}
         on:keydown|stopPropagation={onChooseByKey}
         transition:slide|local={{ delay: 200 }}
@@ -153,7 +148,7 @@
             aria-selected={!option.disabled}
             tabindex={0}
             data-value={option.value}
-            class={styles.option ?? stylesinternal.option}
+            class={styles?.option ?? stylesinternal.option}
           >
             <span role="none">{option.label}</span>
           </span>

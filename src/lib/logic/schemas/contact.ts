@@ -1,12 +1,11 @@
-import { string } from "yup";
+import { boolean, string } from "yup";
 import { REGEX_PHONE, REGEX_PHONE_CODE } from "../utils/regex";
 
-import type { Fields } from "../typing/stores.form";
-
-export const fieldsContact: Fields = {
+export const fieldsContact = {
   email: string().email("required-email").required("required"),
   name: string().required("required"),
-  message: string(),
+  message: string().optional(),
   phone: string().matches(REGEX_PHONE, "only-number").required("required"),
-  phoneCode: string().matches(REGEX_PHONE_CODE, "invalid-code").required("required")
+  phoneCode: string().matches(REGEX_PHONE_CODE, "invalid-code").required("required"),
+  terms: boolean().oneOf([true], "required-terms").required("required")
 };

@@ -49,7 +49,7 @@ export function setErrors<T extends Errors = Errors>({ error, errors, ns = "erro
   });
 }
 
-export function setError<T extends Errors = Errors>({ error, errors, key, ns = "errors" }: ConfigError<T>) {
+export function setError<TKey, TErr extends Errors = Errors>({ error, errors, key, ns = "errors" }: ConfigError<TKey, TErr>) {
   let message: string | null = null;
 
   if (error instanceof ValidationError) {
@@ -62,6 +62,6 @@ export function setError<T extends Errors = Errors>({ error, errors, key, ns = "
   }
   errors.update((prevErrors) => ({
     ...prevErrors,
-    [key]: message
+    [key as string]: message
   }));
 }

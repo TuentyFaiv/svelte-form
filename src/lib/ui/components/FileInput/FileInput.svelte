@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getContext, onMount } from "svelte";
+  import { generateDatas } from "$lib/logic/utils/objects";
 
   import type { InputContext } from "$lib/logic/typing/globals.proptypes";
   import type { Input, Props } from "./FileInput.proptypes";
@@ -38,13 +39,7 @@
     alt: file ? file.name : alt ?? name,
   };
 
-  $: datasets = Object.keys(datas).reduce(
-    (acc, key) => ({
-      ...acc,
-      [`data-${key}`]: datas[key],
-    }),
-    {}
-  );
+  $: datasets = generateDatas(datas);
 
   function onSelectFile(event: Event) {
     const { files: filesToUpload } = event.target as HTMLInputElement;
@@ -79,7 +74,7 @@
   });
 </script>
 
-<div class={styles.wrapper ?? stylesinternal.wrapper} {...datasets}>
+<div class={styles?.wrapper ?? stylesinternal.wrapper} {...datasets}>
   {#if $$slots.out}
     <slot {image} name="out" />
   {/if}
@@ -87,13 +82,13 @@
     <slot name="actions" {image} {onClear} />
   {/if}
   {#if $errors[name]}
-    <div class={styles.actions ?? stylesinternal.actions}>
-      <span class={styles.error ?? stylesinternal.error}>
+    <div class={styles?.actions ?? stylesinternal.actions}>
+      <span class={styles?.error ?? stylesinternal.error}>
         {t(`forms:${$errors[name]}`)}
       </span>
       <button
         type="button"
-        class={styles.retry ?? stylesinternal.retry}
+        class={styles?.retry ?? stylesinternal.retry}
         on:click={() => {
           onRetry?.();
           onClear();
@@ -103,14 +98,14 @@
       </button>
     </div>
   {/if}
-  <label for={id ?? name} class={styles.field ?? stylesinternal.field}>
+  <label for={id ?? name} class={styles?.field ?? stylesinternal.field}>
     {#if !$data[name]}
       <slot name="activate" {image} />
     {/if}
     <input
       bind:this={input}
       id={id ?? name}
-      class={styles.input ?? stylesinternal.input}
+      class={styles?.input ?? stylesinternal.input}
       type="file"
       {accept}
       on:change={onSelectFile}

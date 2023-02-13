@@ -1,15 +1,11 @@
-import type { Data } from "./stores.form";
+import { object } from "yup";
+import { fieldsSignin, fieldsSignup } from "../schemas";
 
-export interface SigninValues extends Data {
-  email: string;
-  password: string;
-}
+// eslint-disable-next-line import/order
+import type { InferType } from "yup";
 
-export interface SignupValues extends SigninValues {
-  firstName: string;
-  lastName: string;
-  country: string;
-  phone: string;
-  phoneCode: string;
-  confirmPassword: string
-}
+const schemaSignin = object(fieldsSignin);
+const schemaSignup = object(fieldsSignup);
+
+export type SigninValues = InferType<typeof schemaSignin>;
+export type SignupValues = InferType<typeof schemaSignup>;

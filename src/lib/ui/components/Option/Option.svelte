@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getContext, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
+  import { generateDatas } from "$lib/logic/utils/objects";
 
   import type { InputContext } from "$lib/logic/typing/globals.proptypes";
   import type { Option, Props } from "./Option.proptypes";
@@ -11,6 +12,7 @@
   export let name: Props["name"];
   export let id: Props["id"];
   export let value: Props["value"];
+  export let datas: Props["datas"] = {};
   export let context: Props["context"] = "form";
   export let onSelect: Props["onSelect"] = null;
 
@@ -27,6 +29,7 @@
   } = $form;
 
   $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;
+  $: datasets = generateDatas(datas);
 
   async function onCheck(event: FocusEvent | Event) {
     await check(event);
@@ -40,13 +43,14 @@
 
 <label
   for={id}
-  class={styles.field ?? stylesinternal.field}
+  class={styles?.field ?? stylesinternal.field}
   data-checked={$data[name] === value}
   {title}
+  {...datasets}
 >
-  <p class={styles.label ?? stylesinternal.label}>{label}</p>
+  <p class={styles?.label ?? stylesinternal.label}>{label}</p>
   <input
-    class={styles.input ?? stylesinternal.input}
+    class={styles?.input ?? stylesinternal.input}
     type="radio"
     {id}
     bind:this={input}
@@ -56,11 +60,11 @@
     {value}
     {...$$restProps}
   />
-  <div class={styles.content ?? stylesinternal.content}>
+  <div class={styles?.content ?? stylesinternal.content}>
     <slot />
   </div>
   {#if $errors[name]}
-    <span class={styles.error ?? stylesinternal.error} transition:fade|local>
+    <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
       {t(`${$errors[name]}`)}
     </span>
   {/if}
