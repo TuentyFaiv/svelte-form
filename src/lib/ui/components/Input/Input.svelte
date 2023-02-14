@@ -49,6 +49,7 @@
 
   $: {
     if (type === "checkbox") {
+      if (!mounted && checked) mounted = true;
       setField(name, checked, mounted);
     }
   }
