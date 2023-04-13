@@ -47,7 +47,6 @@
 		"pnpm": ">=7.0.0",
 		"node": ">=16.0.0"
 	},
-	"packageManager": "pnpm@7.26.3",
 	"author": "Tonalli López <contact@tuentyfaiv.com>",
 	"license": "MIT",
 	"repository": {
