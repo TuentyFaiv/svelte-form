@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { formStore } from "$lib/logic/stores";
-  import { fieldsContact } from "$lib/logic/schemas";
+  import { formStore } from "$lib/logic/stores/index.js";
+  import { fieldsContact } from "$lib/logic/schemas/index.js";
 
-  import type { Props } from "./ContactForm.proptypes";
+  import type { Props } from "./ContactForm.proptypes.js";
 
-  import * as stylesinternal from "./ContactForm.styles";
+  import * as stylesinternal from "./ContactForm.styles.js";
 
-  import { Input, Errors } from "$lib/ui/components";
+  import { Input, Errors } from "$lib/ui/components/index.js";
 
   export let onSubmit: Props["onSubmit"];
   export let onError: Props["onError"] = undefined;

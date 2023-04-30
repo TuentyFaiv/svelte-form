@@ -1,8 +1,8 @@
 <script lang="ts">
   import { getContext } from "svelte";
 
-  import type { InputContext } from "$lib/logic/typing/globals.proptypes";
-  import type { Props } from "./Errors.proptypes";
+  import type { InputContext } from "$lib/logic/typing/globals.proptypes.js";
+  import type { Props } from "./Errors.proptypes.js";
 
   export let context: Props["context"] = "form";
   export let showErrors: Props["showErrors"] = undefined;

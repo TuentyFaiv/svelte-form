@@ -1,13 +1,13 @@
 <script lang="ts">
   import { getContext, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
-  import { keys } from "$lib/logic/utils/keys";
-  import { generateDatas } from "$lib/logic/utils/objects";
+  import { keys } from "$lib/logic/utils/keys.js";
+  import { generateDatas } from "$lib/logic/utils/objects.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals.proptypes";
-  import type { Props, Select, Target } from "./Select.proptypes";
+  import type { InputContext } from "$lib/logic/typing/globals.proptypes.js";
+  import type { Props, Select, Target } from "./Select.proptypes.js";
 
-  import * as stylesinternal from "./Select.styles";
+  import * as stylesinternal from "./Select.styles.js";
 
   export let label: Props["label"];
   export let name: Props["name"];
@@ -108,7 +108,7 @@
   {id}
   class={styles?.field ?? stylesinternal.field}
   role="menu"
-  tabIndex={0}
+  tabindex={0}
   on:click={!datas?.disabled ? handleSelect : undefined}
   on:keydown={onOpenByKey}
   {...datasets}

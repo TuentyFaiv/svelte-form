@@ -1,5 +1,5 @@
 import type { AnySchema } from "yup";
-import type { ObjStrCustom } from "./globals.types";
+import type { ObjStrCustom } from "./globals.types.js";
 
 export type FieldValidation<T> = {
   schema: ObjStrCustom<AnySchema>;

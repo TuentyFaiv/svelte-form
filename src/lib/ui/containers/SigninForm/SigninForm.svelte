@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { formStore } from "$lib/logic/stores";
-  import { fieldsSignin } from "$lib/logic/schemas";
+  import { formStore } from "$lib/logic/stores/index.js";
+  import { fieldsSignin } from "$lib/logic/schemas/index.js";
 
-  import type { Props } from "./SigninForm.proptypes";
+  import type { Props } from "./SigninForm.proptypes.js";
 
-  import * as stylesinternal from "./SigninForm.styles";
+  import * as stylesinternal from "./SigninForm.styles.js";
 
-  import { Errors, Input } from "$lib/ui/components";
+  import { Errors, Input } from "$lib/ui/components/index.js";
 
   export let onSubmit: Props["onSubmit"];
   export let onError: Props["onError"] = undefined;

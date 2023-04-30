@@ -1,23 +1,34 @@
 module.exports = {
 	root: true,
+	extends: [
+		'eslint:recommended',
+		"airbnb-base",
+		"airbnb-typescript/base",
+		'plugin:@typescript-eslint/recommended',
+		'plugin:svelte/recommended'
+	],
 	parser: '@typescript-eslint/parser',
-	extends: ["airbnb-base", "airbnb-typescript/base", 'plugin:@typescript-eslint/recommended'],
-	plugins: ['svelte3', '@typescript-eslint'],
+	plugins: ['@typescript-eslint'],
 	ignorePatterns: ['*.cjs'],
-	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
-	settings: {
-		'svelte3/typescript': () => require('typescript')
-	},
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
-		project: "./tsconfig.json"
+		extraFileExtensions: ['.svelte']
 	},
 	env: {
 		browser: true,
 		es2017: true,
 		node: true
 	},
+	overrides: [
+		{
+			files: ['*.svelte'],
+			parser: 'svelte-eslint-parser',
+			parserOptions: {
+				parser: '@typescript-eslint/parser'
+			}
+		}
+	],
 	rules: {
 		"import/extensions": 0,
 		"import/no-extraneous-dependencies": 0,
@@ -32,7 +43,7 @@ module.exports = {
 		"comma-dangle": "off",
 		"@typescript-eslint/comma-dangle": [
 			"error",
-			"never"
+			"always-multiline"
 		],
 		"max-len": [
 			"error",

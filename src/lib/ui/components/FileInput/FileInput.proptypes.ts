@@ -1,4 +1,4 @@
-import type { GeneralInputProps } from "$lib/logic/typing/globals.proptypes";
+import type { GeneralInputProps } from "$lib/logic/typing/globals.proptypes.js";
 
 export interface Props extends GeneralInputProps {
   max: number;

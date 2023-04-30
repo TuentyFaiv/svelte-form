@@ -1,11 +1,11 @@
 import { ObjectSchema } from "yup";
 
 import type { Writable } from "svelte/store";
-import type { FieldValidation } from "../typing/utils.validation";
-import type { Errors } from "../typing/utils.errors";
+import type { FieldValidation } from "../typing/utils.validation.js";
+import type { Errors } from "../typing/utils.errors.js";
 
-import { setError } from "./errors";
-import { transformOnOff } from "./booleans";
+import { setError } from "./errors.js";
+import { transformOnOff } from "./booleans.js";
 
 export async function fieldsValidation<T>(data: T, schema: unknown) {
   if (schema instanceof ObjectSchema) {

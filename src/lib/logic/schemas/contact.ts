@@ -1,5 +1,5 @@
 import { boolean, string } from "yup";
-import { REGEX_PHONE, REGEX_PHONE_CODE } from "../utils/regex";
+import { REGEX_PHONE, REGEX_PHONE_CODE } from "../utils/regex.js";
 
 export const fieldsContact = {
   email: string().email("required-email").required("required"),

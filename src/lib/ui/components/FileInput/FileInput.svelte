@@ -1,11 +1,11 @@
 <script lang="ts">
   import { getContext, onMount } from "svelte";
-  import { generateDatas } from "$lib/logic/utils/objects";
+  import { generateDatas } from "$lib/logic/utils/objects.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals.proptypes";
-  import type { Input, Props } from "./FileInput.proptypes";
+  import type { InputContext } from "$lib/logic/typing/globals.proptypes.js";
+  import type { Input, Props } from "./FileInput.proptypes.js";
 
-  import * as stylesinternal from "./FileInput.styles";
+  import * as stylesinternal from "./FileInput.styles.js";
 
   export let name: Props["name"];
   export let alt: Props["alt"] = null;

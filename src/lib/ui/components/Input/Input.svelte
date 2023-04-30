@@ -1,13 +1,13 @@
 <script lang="ts">
   import { getContext, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
-  import { generateDatas } from "$lib/logic/utils/objects";
-  import { keys } from "$lib/logic/utils/keys";
+  import { generateDatas } from "$lib/logic/utils/objects.js";
+  import { keys } from "$lib/logic/utils/keys.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals.proptypes";
-  import type { Input, Props } from "./Input.proptypes";
+  import type { InputContext } from "$lib/logic/typing/globals.proptypes.js";
+  import type { Input, Props } from "./Input.proptypes.js";
 
-  import * as stylesinternal from "./Input.styles";
+  import * as stylesinternal from "./Input.styles.js";
 
   export let name: Props["name"];
   export let label: Props["label"];

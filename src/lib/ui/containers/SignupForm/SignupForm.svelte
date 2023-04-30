@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { formStore } from "$lib/logic/stores";
-  import { fieldsSignup } from "$lib/logic/schemas";
-  import { countries } from "$lib/logic/utils/countries";
-  import { FormError } from "$lib/logic/utils/errors";
+  import { formStore } from "$lib/logic/stores/index.js";
+  import { fieldsSignup } from "$lib/logic/schemas/index.js";
+  import { countries } from "$lib/logic/utils/countries.js";
+  import { FormError } from "$lib/logic/utils/errors.js";
 
-  import type { SelectOption } from "$lib/logic/typing/globals.interfaces";
-  import type { SignupValues } from "$lib/logic/typing/schemas.auth";
-  import type { Props } from "./SignupForm.proptypes";
+  import type { SelectOption } from "$lib/logic/typing/globals.interfaces.js";
+  import type { SignupValues } from "$lib/logic/typing/schemas.auth.js";
+  import type { Props } from "./SignupForm.proptypes.js";
 
-  import * as stylesinternal from "./SignupForm.styles";
+  import * as stylesinternal from "./SignupForm.styles.js";
 
-  import { Errors, Input, Select } from "$lib/ui/components";
+  import { Errors, Input, Select } from "$lib/ui/components/index.js";
 
   export let onSubmit: Props["onSubmit"];
   export let onError: Props["onError"] = undefined;

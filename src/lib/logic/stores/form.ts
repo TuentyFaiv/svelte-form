@@ -2,9 +2,9 @@ import { setContext } from "svelte";
 import { derived, get, readable, writable } from "svelte/store";
 import { object } from "yup";
 import swal from "sweetalert";
-import { toggle, transformOnOff } from "../utils/booleans";
-import { fieldsValidation, fieldValidation } from "../utils/validation";
-import { setError, setErrors } from "../utils/errors";
+import { toggle, transformOnOff } from "../utils/booleans.js";
+import { fieldsValidation, fieldValidation } from "../utils/validation.js";
+import { setError, setErrors } from "../utils/errors.js";
 
 // eslint-disable-next-line import/order
 import type { AnyObject, InferType } from "yup";
@@ -18,8 +18,8 @@ import type {
   StoreConfig,
   SubmitAction,
   SubmitOptions
-} from "../typing/stores.form";
-import type { Errors } from "../typing/utils.errors";
+} from "../typing/stores.form.js";
+import type { Errors } from "../typing/utils.errors.js";
 
 export function formStore<TFields extends AnyObject = AnyObject>({
   fields,
@@ -142,7 +142,7 @@ export function formStore<TFields extends AnyObject = AnyObject>({
 
   async function action({ title, message, type }: ActionConfig = {}): Promise<void> {
     if (title && message && type) {
-      await swal(title, message, type);
+      await (swal as any)(title, message, type);
     }
     if (form && type === "success") {
       form.reset();

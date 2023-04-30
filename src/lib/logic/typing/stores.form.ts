@@ -1,14 +1,14 @@
 import type { Writable } from "svelte/store";
 import type { AnySchema } from "yup";
-import type { Errors } from "./utils.errors";
-import type { ObjStrCustom } from "./globals.types";
+import type { Errors } from "./utils.errors.js";
+import type { ObjStrCustom } from "./globals.types.js";
 import type {
   ErrorsStyles,
   FileInputStyles,
   InputStyles,
   OptionStyles,
   SelectStyles
-} from "./globals.proptypes";
+} from "./globals.proptypes.js";
 
 export interface StoreConfig<T> {
   fields: T;

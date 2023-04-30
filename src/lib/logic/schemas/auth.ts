@@ -1,5 +1,5 @@
 import { string } from "yup";
-import { REGEX_PASSWORD, REGEX_PHONE, REGEX_PHONE_CODE } from "../utils/regex";
+import { REGEX_PASSWORD, REGEX_PHONE, REGEX_PHONE_CODE } from "../utils/regex.js";
 
 export const fieldsSignin = {
   email: string().email("required-email").required("required"),
