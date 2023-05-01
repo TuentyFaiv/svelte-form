@@ -1,4 +1,4 @@
-import { setContext } from "svelte";
+import { getContext, setContext } from "svelte";
 import { derived, get, readable, writable } from "svelte/store";
 import { object } from "yup";
 import swal from "sweetalert";
@@ -16,6 +16,7 @@ import type {
   FieldsErrorsConfig,
   FormContext,
   StoreConfig,
+  StoreStyles,
   SubmitAction,
   SubmitOptions
 } from "../typing/stores/form.js";
@@ -36,14 +37,14 @@ export function formStore<TFields extends AnyObject = AnyObject>({
     errors: errorsStyles = {},
     icons = null
   } = styles;
-  const ctxStyles = {
+  const ctxStyles = writable<StoreStyles>({
     input,
     option,
     select,
     fileinput,
     errors: errorsStyles,
     icons
-  };
+  });
   const sfields: TFields = { ...fields };
   const namespace: string = ns;
   const schema = object(sfields);
@@ -171,6 +172,43 @@ export function formStore<TFields extends AnyObject = AnyObject>({
       success
     }: SubmitOptions = {}
   ) {
+    const globalStyles = get(getContext<Readable<StoreStyles>>("styles"));
+    if (Object.keys(globalStyles?.input ?? {}).length === 0) {
+      ctxStyles.update((prev) => ({
+        ...prev,
+        input: globalStyles.input
+      }))
+    }
+    if (Object.keys(globalStyles?.option ?? {}).length === 0) {
+      ctxStyles.update((prev) => ({
+        ...prev,
+        option: globalStyles.option
+      }))
+    }
+    if (Object.keys(globalStyles?.select ?? {}).length === 0) {
+      ctxStyles.update((prev) => ({
+        ...prev,
+        select: globalStyles.select
+      }))
+    }
+    if (Object.keys(globalStyles?.fileinput ?? {}).length === 0) {
+      ctxStyles.update((prev) => ({
+        ...prev,
+        fileinput: globalStyles.fileinput
+      }))
+    }
+    if (Object.keys(globalStyles?.errors ?? {}).length === 0) {
+      ctxStyles.update((prev) => ({
+        ...prev,
+        errors: globalStyles.errors
+      }))
+    }
+    if (icons) {
+      ctxStyles.update((prev) => ({
+        ...prev,
+        icons: globalStyles.icons
+      }))
+    }
     setContext(contextns, context);
     async function onSubmit(event: SubmitEvent) {
       try {

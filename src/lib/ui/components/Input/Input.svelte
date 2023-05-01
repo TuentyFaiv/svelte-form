@@ -22,14 +22,8 @@
   let mounted = false;
 
   const form = getContext<InputContext>(context);
-  const {
-    data,
-    errors,
-    styles: { input: styles, icons },
-    setField,
-    check,
-    t,
-  } = $form;
+  const { data, errors, styles: ctxStyles, setField, check, t } = $form;
+  const { input: styles, icons } = $ctxStyles;
 
   function toggleShow() {
     show = !show;

@@ -22,13 +22,8 @@
   let active = false;
 
   const form = getContext<InputContext>(context);
-  const {
-    data,
-    errors,
-    styles: { select: styles },
-    setField,
-    t,
-  } = $form;
+  const { data, errors, styles: ctxStyles, setField, t } = $form;
+  const { select: styles } = $ctxStyles;
 
   function handleToggle() {
     active = !active;

@@ -19,14 +19,8 @@
   let input: Option;
 
   const form = getContext<InputContext>(context);
-  const {
-    data,
-    errors,
-    styles: { option: styles },
-    check,
-    setField,
-    t,
-  } = $form;
+  const { data, errors, styles: ctxStyles, check, setField, t } = $form;
+  const { option: styles } = $ctxStyles;
 
   $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;
   $: datasets = generateDatas(datas);

@@ -27,7 +27,7 @@ export interface FormContext<TVal, TFields> {
   action(data?: ActionConfig): Promise<void>;
   submit<T extends TVal>(action: SubmitAction<T>, options?: SubmitOptions): Submit;
   t: Message;
-  styles: StoreStyles;
+  styles: Writable<StoreStyles>;
 }
 
 export type Data = ObjStrCustom<unknown>;
