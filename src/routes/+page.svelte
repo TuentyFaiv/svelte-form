@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Errors, SigninForm } from "../lib/index.js";
+  import { Errors, SigninForm, SignupForm } from "../lib/index.js";
 </script>
 
 <SigninForm
@@ -7,6 +7,10 @@
     console.log(values);
   }}
   showErrors
->
-  testing
-</SigninForm>
+/>
+<SignupForm
+  onSubmit={async (values) => {
+    console.log(values);
+  }}
+  showErrors
+/>

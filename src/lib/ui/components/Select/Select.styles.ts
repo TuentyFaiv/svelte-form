@@ -3,22 +3,36 @@ import { css } from "@emotion/css";
 // import Icon from "@icons/icon-select.svg";
 
 export const field = css`
-  /* position: relative;
+  position: relative;
   display: block;
+  box-sizing: border-box;
   width: 100%;
-  z-index: 1; */
+  z-index: 1;
   &[data-disabled="true"] {
-    /* pointer-events: none; */
+    pointer-events: none;
   }
   &:hover {
-    /* cursor: pointer; */
+    cursor: pointer;
   }
 `;
 
-export const label = css``;
+export const label = css`
+  display: block;
+  box-sizing: inherit;
+  width: 100%;
+  margin: 0 0 5px;
+  font-size: 16px;
+  font-family: system-ui, sans-serif;
+`;
 
 export const select = css`
-  /* width: 100%; */
+  position: relative;
+  box-sizing: inherit;
+  width: 100%;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  z-index: 0;
   &:is(:hover, :focus, :focus-within) {}
   &:is(:hover, :focus, :focus-within) > p {
     &::after {}
@@ -26,63 +40,93 @@ export const select = css`
   &.active {
     & > p {
       &::after {
-        /* transform: rotateX(180deg); */
+        transform: rotateX(180deg);
       }
     }
   }
 `;
 
 export const value = css`
-  /* position: relative;
-  width: 100%; */
-  /* z-index: 0; */
+  position: relative;
+  box-sizing: inherit;
+  width: 100%;
+  min-height: 14px;
+  margin: 0;
+  font-size: 14px;
+  font-family: system-ui, sans-serif;
+  line-height: 14px;
+  z-index: 0;
   &::after {
-    /* position: absolute;
+    position: absolute;
     content: "";
-    width: 25px;
-    min-width: 25px;
-    height: 25px;
-    min-height: 25px;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    min-height: 24px;
     transition: transform .5s ease;
     will-change: transform;
-    top: 0;
     right: 0;
-    z-index: 0; */
+    bottom: -5px;
+    z-index: 0;
   }
 `;
 
 export const options = css`
-  /* position: absolute;
+  position: absolute;
+  display: flex;
+  box-sizing: inherit;
   width: 100%;
   max-height: 150px;
-  transform: translateX(-50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0 0 4px 4px;
   overflow-y: auto;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  transform: translateX(-50%);
   top: 100%;
   left: 50%;
-  z-index: 0; */
+  z-index: 0;
   &::-webkit-scrollbar {
-    /* width: 10px;
-    background: transparent; */
+    width: 10px;
+    background-color: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    /* width: 10px; */
+    width: 10px;
+    background-color: #ccc;
   }
 `;
 
 export const option = css`
-  /* display: block;
-  width: 100%; */
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  box-sizing: inherit;
+  padding: 5px 10px;
+  font-family: system-ui, sans-serif;
+  line-height: 14px;
   &:hover {
+    background-color: #ccc;
     & > span {
-      /* pointer-events: none; */
+      pointer-events: none;
     }
   }
 `;
 
 export const error = css`
-  /* position: absolute;
+  position: absolute;
   display: block;
-  transform: translateY(-50%);
-  top: 50%;
-  z-index: 0; */
+  padding: 3px 5px;
+  box-sizing: inherit;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-family: system-ui, sans-serif;
+  line-height: 12px;
+  transform: translateY(50%);
+  border-radius: 4px;
+  bottom: 7px;
+  right: 31px;
+  z-index: 0;
 `;

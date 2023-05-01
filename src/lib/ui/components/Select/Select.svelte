@@ -140,7 +140,7 @@
         {#each options as option (option.key ?? option.value)}
           <span
             role="menuitem"
-            aria-selected={!option.disabled}
+            aria-disabled={!option.disabled}
             tabindex={0}
             data-value={option.value}
             class={styles?.option ?? stylesinternal.option}

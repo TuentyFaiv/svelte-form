@@ -4,6 +4,8 @@
   import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Props } from "./Errors.proptypes.js";
 
+  import * as stylesinternal from "./Errors.styles.js";
+
   export let context: Props["context"] = "form";
   export let showErrors: Props["showErrors"] = undefined;
 
@@ -16,10 +18,10 @@
 </script>
 
 {#if show}
-  <ul class={styles?.list}>
+  <ul class={styles?.list ?? stylesinternal.list}>
     {#each Object.keys($errors) as error (error)}
       {#if $errors[error] !== null}
-        <li class={styles?.item}>
+        <li class={styles?.item ?? stylesinternal.item}>
           {`${error}: ${$errors[error]}`}
         </li>
       {/if}
