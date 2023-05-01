@@ -1,5 +1,5 @@
 import { object } from "yup";
-import { fieldsContact } from "../schemas/index.js";
+import { fieldsContact } from "../../schemas/index.js";
 
 // eslint-disable-next-line import/order
 import type { InferType } from "yup";

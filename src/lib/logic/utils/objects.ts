@@ -1,4 +1,4 @@
-import type { ObjStrCommon } from "../typing/globals.types.js";
+import type { ObjStrCommon } from "../typing/globals/types.js";
 
 export function generateDatas(datas: ObjStrCommon) {
   return Object.keys(datas).reduce(

@@ -1,6 +1,6 @@
 import { ValidationError } from "yup";
 
-import type { ConfigError, ConfigErrors, ConfigShowErrors, Errors } from "../typing/utils.errors.js";
+import type { ConfigError, ConfigErrors, ConfigShowErrors, Errors } from "../typing/utils/errors.js";
 
 export class FormError extends Error {
   title: string;

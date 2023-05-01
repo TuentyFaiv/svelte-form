@@ -1,7 +1,13 @@
 import type { Readable } from "svelte/store";
 import type { AnyObject } from "yup";
-import type { ObjStrCommon } from "./globals.types.js";
-import type { FormContext, Message, StoreStyles, SubmitAction, SubmitOptions } from "./stores.form.js";
+import type { ObjStrCommon } from "./types.js";
+import type {
+  FormContext,
+  Message,
+  StoreStyles,
+  SubmitAction,
+  SubmitOptions
+} from "../stores/form.js";
 
 export interface GeneralInputProps {
   type: string;

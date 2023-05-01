@@ -1,8 +1,8 @@
 import { ObjectSchema } from "yup";
 
 import type { Writable } from "svelte/store";
-import type { FieldValidation } from "../typing/utils.validation.js";
-import type { Errors } from "../typing/utils.errors.js";
+import type { FieldValidation } from "../typing/utils/validation.js";
+import type { Errors } from "../typing/utils/errors.js";
 
 import { setError } from "./errors.js";
 import { transformOnOff } from "./booleans.js";

@@ -4,8 +4,8 @@
   import { countries } from "$lib/logic/utils/countries.js";
   import { FormError } from "$lib/logic/utils/errors.js";
 
-  import type { SelectOption } from "$lib/logic/typing/globals.interfaces.js";
-  import type { SignupValues } from "$lib/logic/typing/schemas.auth.js";
+  import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
+  import type { SignupValues } from "$lib/logic/typing/schemas/auth.js";
   import type { Props } from "./SignupForm.proptypes.js";
 
   import * as stylesinternal from "./SignupForm.styles.js";

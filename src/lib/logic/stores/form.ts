@@ -18,8 +18,8 @@ import type {
   StoreConfig,
   SubmitAction,
   SubmitOptions
-} from "../typing/stores.form.js";
-import type { Errors } from "../typing/utils.errors.js";
+} from "../typing/stores/form.js";
+import type { Errors } from "../typing/utils/errors.js";
 
 export function formStore<TFields extends AnyObject = AnyObject>({
   fields,
@@ -51,12 +51,12 @@ export function formStore<TFields extends AnyObject = AnyObject>({
   type Values = InferType<typeof schema>;
   type Fields = keyof Values;
 
-  const errors = writable<Errors>(Object.keys(sfields).reduce((acc, err) => ({
+  const errors = writable<Errors>(Object.keys(sfields).reduce((acc, key) => ({
     ...acc,
-    [err]: null
+    [key]: null
   }), {}));
   const loading = writable<boolean>(false);
-  const data = writable<Data>({});
+  const data = writable<Data>(schema.getDefault());
 
   function toggleLoading(value?: unknown): void {
     toggle(loading, value);

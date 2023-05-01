@@ -3,7 +3,7 @@
   import { fade } from "svelte/transition";
   import { generateDatas } from "$lib/logic/utils/objects.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals.proptypes.js";
+  import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Option, Props } from "./Option.proptypes.js";
 
   import * as stylesinternal from "./Option.styles.js";
