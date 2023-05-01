@@ -3,7 +3,7 @@ import { readable } from "svelte/store";
 
 import type { StoreStyles } from "../typing/stores/form.js";
 
-export function setStyles(config: StoreStyles) {
+export function setStyles(config: StoreStyles = {}) {
   const {
     input = {},
     option = {},

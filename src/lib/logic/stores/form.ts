@@ -172,38 +172,38 @@ export function formStore<TFields extends AnyObject = AnyObject>({
       success
     }: SubmitOptions = {}
   ) {
-    const globalStyles = get(getContext<Readable<StoreStyles>>("styles"));
-    if (Object.keys(globalStyles?.input ?? {}).length === 0) {
+    const globalStyles = get(getContext<Readable<StoreStyles | undefined>>("styles"));
+    if (globalStyles?.input && Object.keys(globalStyles?.input ?? {}).length === 0) {
       ctxStyles.update((prev) => ({
         ...prev,
         input: globalStyles.input
       }))
     }
-    if (Object.keys(globalStyles?.option ?? {}).length === 0) {
+    if (globalStyles?.option && Object.keys(globalStyles?.option ?? {}).length === 0) {
       ctxStyles.update((prev) => ({
         ...prev,
         option: globalStyles.option
       }))
     }
-    if (Object.keys(globalStyles?.select ?? {}).length === 0) {
+    if (globalStyles?.select && Object.keys(globalStyles?.select ?? {}).length === 0) {
       ctxStyles.update((prev) => ({
         ...prev,
         select: globalStyles.select
       }))
     }
-    if (Object.keys(globalStyles?.fileinput ?? {}).length === 0) {
+    if (globalStyles?.fileinput && Object.keys(globalStyles?.fileinput ?? {}).length === 0) {
       ctxStyles.update((prev) => ({
         ...prev,
         fileinput: globalStyles.fileinput
       }))
     }
-    if (Object.keys(globalStyles?.errors ?? {}).length === 0) {
+    if (globalStyles?.errors && Object.keys(globalStyles?.errors ?? {}).length === 0) {
       ctxStyles.update((prev) => ({
         ...prev,
         errors: globalStyles.errors
       }))
     }
-    if (icons) {
+    if (globalStyles?.icons) {
       ctxStyles.update((prev) => ({
         ...prev,
         icons: globalStyles.icons
