@@ -95,7 +95,7 @@
   }
 
   onDestroy(() => {
-    setField(name, undefined);
+    setField(name, options?.[0]?.value);
   });
 </script>
 
