@@ -1,16 +1,22 @@
 <script lang="ts">
-  import { Errors, SigninForm, SignupForm } from "../lib/index.js";
+  import {
+    Errors,
+    FileInput,
+    Option,
+    SigninForm,
+    SignupForm,
+  } from "../lib/index.js";
 </script>
 
 <SigninForm
-  onSubmit={async (values) => {
-    console.log(values);
+  on:submit={async ({ detail }) => {
+    console.log(detail);
   }}
   showErrors
 />
 <SignupForm
-  onSubmit={async (values) => {
-    console.log(values);
+  on:submit={async ({ detail }) => {
+    console.log(detail);
   }}
   showErrors
 />

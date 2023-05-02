@@ -54,16 +54,13 @@ export interface ErrorsStyles {
   item?: string;
 }
 
-export interface GlobalFormProps<T> extends Pick<StoreConfig<unknown>, "ns" | "t"> {
-  onSubmit: SubmitAction<T>;
-  onError: SubmitOptions["error"];
-  onFinish: SubmitOptions["finish"];
+export interface GlobalFormProps extends Pick<StoreConfig<unknown>, "ns" | "t"> {
   context: SubmitOptions["context"];
   styles?: Partial<StylesForm>;
   showErrors?: boolean;
 }
 
-export type FormStyles = GlobalFormProps<unknown>["styles"];
+export type FormStyles = GlobalFormProps["styles"];
 
 export interface StylesForm extends StoreStyles {
   form: GlobalFormStyles;

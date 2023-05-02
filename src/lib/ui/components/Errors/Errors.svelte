@@ -7,17 +7,17 @@
   import * as stylesinternal from "./Errors.styles.js";
 
   export let context: Props["context"] = "form";
-  export let showErrors: Props["showErrors"] = undefined;
+  export let show: Props["show"] = undefined;
 
   const form = getContext<InputContext>(context);
   const { errors, styles: cxtStyles } = $form;
   $: ({ errors: styles } = $cxtStyles);
 
-  $: show =
-    showErrors && Object.values($errors).some((error) => error !== null);
+  $: showErrors =
+    show && Object.values($errors).some((error) => error !== null);
 </script>
 
-{#if show}
+{#if showErrors}
   <ul class={styles?.list ?? stylesinternal.list}>
     {#each Object.keys($errors) as error (error)}
       {#if $errors[error] !== null}

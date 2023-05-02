@@ -1,16 +1,15 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import { formStore } from "$lib/logic/stores/index.js";
   import { fieldsSignin } from "$lib/logic/schemas/index.js";
 
+  import type { SigninValues } from "$lib/logic/typing/schemas/auth.js";
   import type { Props } from "./SigninForm.proptypes.js";
 
   import * as stylesinternal from "./SigninForm.styles.js";
 
   import { Errors, Input } from "$lib/ui/components/index.js";
 
-  export let onSubmit: Props["onSubmit"];
-  export let onError: Props["onError"] = undefined;
-  export let onFinish: Props["onFinish"] = undefined;
   export let context: Props["context"] = undefined;
   export let showErrors: Props["showErrors"] = undefined;
   export let ns: Props["ns"] = undefined;
@@ -30,12 +29,26 @@
     },
   });
   const { submit, t: tf } = $store;
+  const dispatch = createEventDispatcher<{
+    submit: SigninValues;
+    error: unknown;
+    finish: never;
+  }>();
 
-  const action = submit(onSubmit, {
-    error: onError,
-    finish: onFinish,
-    context,
-  });
+  const action = submit(
+    async (values) => {
+      await dispatch("submit", values);
+    },
+    {
+      error(err) {
+        dispatch("error", err);
+      },
+      finish() {
+        dispatch("finish");
+      },
+      context,
+    }
+  );
 </script>
 
 <form
@@ -56,5 +69,5 @@
   <button class={styles?.form?.submit ?? stylesinternal.submit} type="submit">
     {tf("forms:submit-signin")}
   </button>
-  <Errors {showErrors} {context} />
+  <Errors show={showErrors} {context} />
 </form>

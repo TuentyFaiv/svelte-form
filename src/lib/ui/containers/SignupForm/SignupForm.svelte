@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import { formStore } from "$lib/logic/stores/index.js";
   import { fieldsSignup } from "$lib/logic/schemas/index.js";
   import { countries } from "$lib/logic/utils/countries.js";
@@ -12,9 +13,6 @@
 
   import { Errors, Input, Select } from "$lib/ui/components/index.js";
 
-  export let onSubmit: Props["onSubmit"];
-  export let onError: Props["onError"] = undefined;
-  export let onFinish: Props["onFinish"] = undefined;
   export let context: Props["context"] = undefined;
   export let showErrors: Props["showErrors"] = undefined;
   export let ns: Props["ns"] = undefined;
@@ -34,8 +32,20 @@
     },
   });
   const { submit, setField, setError, t: tf } = $store;
+  const dispatch = createEventDispatcher<{
+    submit: SignupValues;
+    error: unknown;
+    finish: never;
+  }>();
 
-  const action = submit<SignupValues>(
+  const optionsCountries: SelectOption[] = countries.map(
+    ({ name, code, flag }) => ({
+      label: `${flag} ${name}`,
+      value: code,
+    })
+  );
+
+  $: action = submit<SignupValues>(
     async (values) => {
       if (values.password.trim() !== values.confirmPassword.trim()) {
         const error = "password-not-match";
@@ -43,20 +53,17 @@
         setError("confirmPassword", error);
         throw new FormError("signup-error", error);
       }
-      await onSubmit(values);
+      await dispatch("submit", values);
     },
     {
-      error: onError,
-      finish: onFinish,
+      error(err) {
+        dispatch("error", err);
+      },
+      finish: () => {
+        dispatch("finish");
+      },
       context,
     }
-  );
-
-  const optionsCountries: SelectOption[] = countries.map(
-    ({ name, code, flag }) => ({
-      label: `${flag} ${name}`,
-      value: code,
-    })
   );
 </script>
 
@@ -72,8 +79,8 @@
         name="country"
         label={tf("forms:country")}
         options={optionsCountries}
-        onSelect={(value) => {
-          const country = countries.find(({ code }) => code === value);
+        on:choose={({ detail }) => {
+          const country = countries.find(({ code }) => code === detail);
           setField("phoneCode", country?.dial_code);
         }}
         {context}
@@ -98,5 +105,5 @@
   <button class={styles?.form?.submit ?? stylesinternal.submit} type="submit">
     {tf("forms:submit-signup")}
   </button>
-  <Errors {showErrors} {context} />
+  <Errors show={showErrors} {context} />
 </form>

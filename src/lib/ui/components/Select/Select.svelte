@@ -1,7 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-  import { getContext, onDestroy } from "svelte";
+  import { createEventDispatcher, getContext, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
   import { keys } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
@@ -18,14 +18,18 @@
   export let placeholder: Props["placeholder"] = "";
   export let context: Props["context"] = "form";
   export let datas: Props["datas"] = {};
-  export let onSelect: Props["onSelect"] = null;
 
   let container: Select = null;
   let active = false;
 
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, setField, t } = $form;
+  const dispatch = createEventDispatcher<{ choose: string }>();
   $: ({ select: styles } = $ctxStyles);
+
+  function onChoose(value: string) {
+    dispatch("choose", value);
+  }
 
   function handleToggle() {
     active = !active;
@@ -39,7 +43,7 @@
     const { value } = option.dataset;
     if (value) {
       setField(name, value);
-      onSelect?.(value);
+      onChoose(value);
     }
     active = false;
   }
@@ -92,7 +96,7 @@
   $: {
     if (options.length === 1 && $data[name] !== options[0].value) {
       setField(name, options[0].value);
-      onSelect?.(options[0].value);
+      onChoose(options[0].value);
     }
   }
 

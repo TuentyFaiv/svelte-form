@@ -1,16 +1,15 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import { formStore } from "$lib/logic/stores/index.js";
   import { fieldsContact } from "$lib/logic/schemas/index.js";
 
+  import type { ContactValues } from "$lib/logic/typing/schemas/contact.js";
   import type { Props } from "./ContactForm.proptypes.js";
 
   import * as stylesinternal from "./ContactForm.styles.js";
 
   import { Input, Errors } from "$lib/ui/components/index.js";
 
-  export let onSubmit: Props["onSubmit"];
-  export let onError: Props["onError"] = undefined;
-  export let onFinish: Props["onFinish"] = undefined;
   export let phoneCode: Props["phoneCode"] = undefined;
   export let context: Props["context"] = undefined;
   export let ns: Props["ns"] = undefined;
@@ -31,15 +30,27 @@
     },
   });
   const { submit, t: tf, setField } = $store;
+  const dispatch = createEventDispatcher<{
+    submit: ContactValues;
+    error: unknown;
+    finish: never;
+  }>();
 
-  const action = submit(onSubmit, {
-    error: onError,
-    finish: () => {
-      setField("phoneCode", phoneCode);
-      onFinish?.();
+  const action = submit(
+    async (values) => {
+      await dispatch("submit", values);
     },
-    context,
-  });
+    {
+      error(err) {
+        dispatch("error", err);
+      },
+      finish() {
+        setField("phoneCode", phoneCode);
+        dispatch("finish");
+      },
+      context,
+    }
+  );
 
   $: {
     if (phoneCode) {
@@ -69,5 +80,5 @@
   <button class={styles?.form?.submit ?? stylesinternal.submit} type="submit">
     {tf("forms:submit-signin")}
   </button>
-  <Errors {showErrors} {context} />
+  <Errors show={showErrors} {context} />
 </form>

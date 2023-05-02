@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext, onDestroy } from "svelte";
+  import { createEventDispatcher, getContext, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
   import { generateDatas } from "$lib/logic/utils/objects.js";
 
@@ -14,17 +14,21 @@
   export let value: Props["value"];
   export let datas: Props["datas"] = {};
   export let context: Props["context"] = "form";
-  export let onSelect: Props["onSelect"] = null;
 
   let input: Option;
 
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, check, setField, t } = $form;
+  const dispatch = createEventDispatcher<{ choose: string }>();
   $: ({ option: styles } = $ctxStyles);
+
+  function onSelect(value: string) {
+    dispatch("choose", value);
+  }
 
   async function onCheck(event: FocusEvent | Event) {
     await check(event);
-    onSelect?.(value);
+    onSelect(value);
   }
 
   $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;

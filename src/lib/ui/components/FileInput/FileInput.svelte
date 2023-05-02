@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { generateDatas } from "$lib/logic/utils/objects.js";
 
   import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
@@ -11,8 +11,6 @@
   export let alt: Props["alt"] = null;
   export let id: Props["id"] = null;
   export let multiple: Props["multiple"] = false;
-  export let onSelect: Props["onSelect"] = null;
-  export let onRetry: Props["onRetry"] = null;
   export let accept: Props["accept"] = "image/*";
   export let context: Props["context"] = "form";
   export let defaultValue: Props["defaultValue"] = "";
@@ -23,6 +21,10 @@
 
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, setField, setError, t } = $form;
+  const dispatch = createEventDispatcher<{
+    choose: File | File[];
+    retry: never;
+  }>();
   $: ({ fileinput: styles } = $ctxStyles);
 
   $: file = !!$data[name] ? ($data[name] as File) : null;
@@ -51,7 +53,7 @@
       }
 
       setField(name, fileToUpload);
-      onSelect?.(fileToUpload);
+      dispatch("choose", fileToUpload);
     }
   }
 
@@ -84,7 +86,7 @@
         type="button"
         class={styles?.retry ?? stylesinternal.retry}
         on:click={() => {
-          onRetry?.();
+          dispatch("retry");
           onClear();
         }}
       >
