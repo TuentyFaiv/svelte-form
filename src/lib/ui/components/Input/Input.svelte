@@ -23,7 +23,7 @@
 
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, setField, check, t } = $form;
-  const { input: styles, icons } = $ctxStyles;
+  $: ({ input: styles, icons } = $ctxStyles);
 
   function toggleShow() {
     show = !show;
@@ -38,7 +38,6 @@
   }
 
   $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;
-
   $: datasets = generateDatas(datas);
 
   $: {
@@ -105,7 +104,9 @@
     <button
       type="button"
       class={styles?.show ?? stylesinternal.show}
+      class:show
       on:click={toggleShow}
+      title={t("forms:show-hide")}
     >
       {#if icons}
         <img
@@ -117,7 +118,7 @@
           role="presentation"
         />
       {:else}
-        {t("forms:show-hide")}
+        <span />
       {/if}
     </button>
   {/if}

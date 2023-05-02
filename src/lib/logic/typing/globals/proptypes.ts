@@ -3,7 +3,7 @@ import type { AnyObject } from "yup";
 import type { ObjStrCommon } from "./types.js";
 import type {
   FormContext,
-  Message,
+  StoreConfig,
   StoreStyles,
   SubmitAction,
   SubmitOptions
@@ -54,13 +54,11 @@ export interface ErrorsStyles {
   item?: string;
 }
 
-export interface GlobalFormProps<T> {
+export interface GlobalFormProps<T> extends Pick<StoreConfig<unknown>, "ns" | "t"> {
   onSubmit: SubmitAction<T>;
   onError: SubmitOptions["error"];
   onFinish: SubmitOptions["finish"];
-  context: SubmitOptions["contextns"];
-  ns?: string;
-  t?: Message;
+  context: SubmitOptions["context"];
   styles?: Partial<StylesForm>;
   showErrors?: boolean;
 }

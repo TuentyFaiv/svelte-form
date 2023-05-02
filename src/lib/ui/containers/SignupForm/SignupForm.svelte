@@ -48,7 +48,7 @@
     {
       error: onError,
       finish: onFinish,
-      contextns: context,
+      context,
     }
   );
 

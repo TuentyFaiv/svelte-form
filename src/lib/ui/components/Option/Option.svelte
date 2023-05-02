@@ -20,15 +20,15 @@
 
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, check, setField, t } = $form;
-  const { option: styles } = $ctxStyles;
-
-  $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;
-  $: datasets = generateDatas(datas);
+  $: ({ option: styles } = $ctxStyles);
 
   async function onCheck(event: FocusEvent | Event) {
     await check(event);
     onSelect?.(value);
   }
+
+  $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;
+  $: datasets = generateDatas(datas);
 
   onDestroy(() => {
     setField(name, undefined);

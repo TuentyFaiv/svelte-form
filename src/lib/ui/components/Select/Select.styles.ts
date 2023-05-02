@@ -40,7 +40,7 @@ export const select = css`
   &.active {
     & > p {
       &::after {
-        transform: rotateX(180deg);
+        transform: rotateZ(-45deg) rotateX(-180deg) translateY(-50%);
       }
     }
   }
@@ -59,14 +59,20 @@ export const value = css`
   &::after {
     position: absolute;
     content: "";
-    width: 24px;
-    min-width: 24px;
-    height: 24px;
-    min-height: 24px;
-    transition: transform .5s ease;
+    width: 12px;
+    min-width: 12px;
+    height: 12px;
+    min-height: 12px;
+    border: 2px solid transparent;
+    border-bottom-color: #ccc;
+    border-right-color: #ccc;
+    border-radius: 2px;
+    transform: rotateZ(45deg) translateY(-50%);
+    transform-origin: center;
+    transition: transform .35s linear;
     will-change: transform;
-    right: 0;
-    bottom: -5px;
+    right: 10px;
+    bottom: -2px;
     z-index: 0;
   }
 `;
@@ -106,6 +112,9 @@ export const option = css`
   padding: 5px 10px;
   font-family: system-ui, sans-serif;
   line-height: 14px;
+  &[aria-disabled="true"] {
+    pointer-events: none;
+  }
   &:hover {
     background-color: #ccc;
     & > span {

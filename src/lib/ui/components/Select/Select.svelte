@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script lang="ts">
   import { getContext, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
@@ -23,7 +25,7 @@
 
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, setField, t } = $form;
-  const { select: styles } = $ctxStyles;
+  $: ({ select: styles } = $ctxStyles);
 
   function handleToggle() {
     active = !active;
@@ -84,7 +86,7 @@
 
   $: datasets = generateDatas(datas);
   $: showedValue =
-    options.find(({ value: option }) => option === $data[name])?.label ||
+    options.find(({ value }) => value === $data[name])?.label ||
     (!!$data[name] ? $data[name] : placeholder);
 
   $: {
@@ -103,9 +105,10 @@
   {id}
   class={styles?.field ?? stylesinternal.field}
   role="menu"
+  aria-label={label}
   tabindex={0}
-  on:click={!datas?.disabled ? handleSelect : undefined}
-  on:keydown={onOpenByKey}
+  on:click|stopPropagation={!datas?.disabled ? handleSelect : undefined}
+  on:keydown|stopPropagation={onOpenByKey}
   {...datasets}
 >
   <p class={styles?.label ?? stylesinternal.label} role="none">
@@ -140,7 +143,7 @@
         {#each options as option (option.key ?? option.value)}
           <span
             role="menuitem"
-            aria-disabled={!option.disabled}
+            aria-disabled={!!option.disabled}
             tabindex={0}
             data-value={option.value}
             class={styles?.option ?? stylesinternal.option}

@@ -23,7 +23,7 @@
 
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, setField, setError, t } = $form;
-  const { fileinput: styles } = $ctxStyles;
+  $: ({ fileinput: styles } = $ctxStyles);
 
   $: file = !!$data[name] ? ($data[name] as File) : null;
   $: files = !!$data[name] ? ($data[name] as File[]) : null;

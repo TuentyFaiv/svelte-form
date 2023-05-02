@@ -29,7 +29,7 @@ export const check = css``;
 export const input = css`
   width: 100%;
   box-sizing: inherit;
-  padding: 2px 10px 3px;
+  padding: 3px 10px 4px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
@@ -48,7 +48,7 @@ export const show = css`
   width: 26px;
   height: 26px;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: inherit;
   background-color: transparent;
   font-size: 12px;
   font-family: system-ui, sans-serif;
@@ -59,6 +59,39 @@ export const show = css`
   z-index: 0;
   &:hover {
     cursor: pointer;
+  }
+  & > span {
+    display: block;
+    box-sizing: inherit;
+    width: 100%;
+    padding: 2px 5px;
+    border-radius: 100%;
+    border: 3px solid #ccc;
+    &::before {
+      display: block;
+      content: "";
+      width: 6px;
+      height: 6px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background-color: #ccc;
+    }
+  }
+  &:not(.show) > span {
+    position: relative;
+    z-index: 0;
+    ::after {
+      position: absolute;
+      display: block;
+      content: "";
+      width: 100%;
+      height: 3px;
+      background-color: #ccc;
+      transform: rotateZ(-30deg) translateY(-50%) translateX(-50%);
+      bottom: 7px;
+      left: 50%;
+      z-index: 0;
+    }
   }
 `;
 

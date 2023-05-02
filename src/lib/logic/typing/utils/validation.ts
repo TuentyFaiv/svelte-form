@@ -9,7 +9,7 @@ export type FieldValidation<T> = {
 };
 
 export interface Field {
-  name: string;
+  name: string | number | symbol;
   value: unknown;
   checked?: unknown;
   type?: string;

@@ -1,7 +1,6 @@
 import type { Writable } from "svelte/store";
-import type { ObjStrCustom } from "../globals/types.js";
 
-export type Errors = ObjStrCustom<string | null>;
+export type Errors = Record<string, string | null>;
 
 export interface ConfigShowErrors<T> {
   error: unknown;

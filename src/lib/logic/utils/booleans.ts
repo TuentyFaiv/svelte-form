@@ -9,6 +9,8 @@ export function toggle(store: Writable<boolean>, custom: unknown) {
 }
 
 export function transformOnOff(value: unknown) {
+  if (typeof value === "boolean") return value;
+
   const isOn = value === "on";
   const isBoolean = (isOn) || (value === "off");
 

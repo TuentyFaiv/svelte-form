@@ -11,7 +11,7 @@
 
   const form = getContext<InputContext>(context);
   const { errors, styles: cxtStyles } = $form;
-  const { errors: styles } = $cxtStyles;
+  $: ({ errors: styles } = $cxtStyles);
 
   $: show =
     showErrors && Object.values($errors).some((error) => error !== null);

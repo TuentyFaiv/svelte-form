@@ -38,7 +38,7 @@
       setField("phoneCode", phoneCode);
       onFinish?.();
     },
-    contextns: context,
+    context,
   });
 
   $: {

@@ -34,7 +34,7 @@
   const action = submit(onSubmit, {
     error: onError,
     finish: onFinish,
-    contextns: context,
+    context,
   });
 </script>
 

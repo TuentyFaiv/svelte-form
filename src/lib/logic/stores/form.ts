@@ -12,7 +12,6 @@ import type { AnyObject, InferType } from "yup";
 import type { Readable } from "svelte/store";
 import type {
   ActionConfig,
-  Data,
   FieldsErrorsConfig,
   FormContext,
   StoreConfig,
@@ -22,12 +21,12 @@ import type {
 } from "../typing/stores/form.js";
 import type { Errors } from "../typing/utils/errors.js";
 
-export function formStore<TFields extends AnyObject = AnyObject>({
+export function formStore<SchemaFields extends AnyObject = AnyObject>({
   fields,
   styles = {},
   ns = "forms",
   t = (msg) => (msg)
-}: StoreConfig<TFields>) {
+}: StoreConfig<SchemaFields>) {
   let form: HTMLFormElement | null = null;
   const {
     input = {},
@@ -45,19 +44,20 @@ export function formStore<TFields extends AnyObject = AnyObject>({
     errors: errorsStyles,
     icons
   });
-  const sfields: TFields = { ...fields };
+  const schemafields: SchemaFields = { ...fields };
   const namespace: string = ns;
-  const schema = object(sfields);
+  const schema = object(schemafields);
 
   type Values = InferType<typeof schema>;
   type Fields = keyof Values;
+  type Form = FormContext<Values, Fields>;
 
-  const errors = writable<Errors>(Object.keys(sfields).reduce((acc, key) => ({
+  const errors = writable<Errors>(Object.keys(schemafields).reduce((acc, key) => ({
     ...acc,
     [key]: null
   }), {}));
   const loading = writable<boolean>(false);
-  const data = writable<Data>(schema.getDefault());
+  const data = writable<Values>(schema.getDefault() as Values);
 
   function toggleLoading(value?: unknown): void {
     toggle(loading, value);
@@ -92,18 +92,17 @@ export function formStore<TFields extends AnyObject = AnyObject>({
 
   async function setField(field: Fields, value: unknown, validate = true) {
     const clear = typeof value === "undefined";
-    const key = field as string;
 
     data.update((prev) => {
       const toUpdate = { ...prev };
       if (clear) {
-        delete toUpdate[key];
+        delete toUpdate[field];
         return toUpdate;
       }
 
       return {
         ...prev,
-        [key]: transformOnOff(value)
+        [field]: transformOnOff(value)
       };
     });
 
@@ -116,10 +115,10 @@ export function formStore<TFields extends AnyObject = AnyObject>({
 
     await fieldValidation({
       event: {
-        name: key,
+        name: field,
         value
       },
-      schema: sfields,
+      schema: schemafields,
       errors,
       ns: namespace
     });
@@ -135,7 +134,7 @@ export function formStore<TFields extends AnyObject = AnyObject>({
 
     await fieldValidation({
       event,
-      schema: sfields,
+      schema: schemafields,
       errors,
       ns: namespace
     });
@@ -147,11 +146,11 @@ export function formStore<TFields extends AnyObject = AnyObject>({
     }
     if (form && type === "success") {
       form.reset();
-      data.set({});
+      data.set(schema.getDefault() as Values);
     }
   }
 
-  const context = readable<Omit<FormContext<Values, Fields>, "submit">>({
+  const context = readable<Omit<Form, "submit">>({
     loading,
     errors,
     data,
@@ -168,47 +167,24 @@ export function formStore<TFields extends AnyObject = AnyObject>({
     {
       error,
       finish,
-      contextns = "form",
+      context: contextns = "form",
       success
     }: SubmitOptions = {}
   ) {
     const globalStyles = get(getContext<Readable<StoreStyles | undefined>>("styles"));
-    if (globalStyles?.input && Object.keys(globalStyles?.input ?? {}).length === 0) {
-      ctxStyles.update((prev) => ({
-        ...prev,
-        input: globalStyles.input
-      }))
+
+    if (globalStyles) {
+      Object.keys(globalStyles).forEach((key) => {
+        const fieldStyles = globalStyles[key as keyof StoreStyles];
+        if (fieldStyles && Object.keys(fieldStyles).length > 0) {
+          ctxStyles.update((prev) => ({
+            ...prev,
+            [key]: fieldStyles
+          }));
+        }
+      });
     }
-    if (globalStyles?.option && Object.keys(globalStyles?.option ?? {}).length === 0) {
-      ctxStyles.update((prev) => ({
-        ...prev,
-        option: globalStyles.option
-      }))
-    }
-    if (globalStyles?.select && Object.keys(globalStyles?.select ?? {}).length === 0) {
-      ctxStyles.update((prev) => ({
-        ...prev,
-        select: globalStyles.select
-      }))
-    }
-    if (globalStyles?.fileinput && Object.keys(globalStyles?.fileinput ?? {}).length === 0) {
-      ctxStyles.update((prev) => ({
-        ...prev,
-        fileinput: globalStyles.fileinput
-      }))
-    }
-    if (globalStyles?.errors && Object.keys(globalStyles?.errors ?? {}).length === 0) {
-      ctxStyles.update((prev) => ({
-        ...prev,
-        errors: globalStyles.errors
-      }))
-    }
-    if (globalStyles?.icons) {
-      ctxStyles.update((prev) => ({
-        ...prev,
-        icons: globalStyles.icons
-      }))
-    }
+
     setContext(contextns, context);
     async function onSubmit(event: SubmitEvent) {
       try {
@@ -235,7 +211,7 @@ export function formStore<TFields extends AnyObject = AnyObject>({
     return onSubmit;
   }
 
-  const contextWithSubmit: Readable<FormContext<Values, Fields>> = derived(context, ($context) => ({
+  const contextWithSubmit: Readable<Form> = derived(context, ($context) => ({
     ...$context,
     submit
   }));
