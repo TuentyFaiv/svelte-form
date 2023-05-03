@@ -101,7 +101,7 @@
   }
 
   onDestroy(() => {
-    setField(name, options?.[0]?.value);
+    setField(name, $data[name]);
   });
 </script>
 
