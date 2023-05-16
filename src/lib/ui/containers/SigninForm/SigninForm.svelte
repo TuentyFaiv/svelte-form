@@ -17,6 +17,7 @@
   export let ns: Props["ns"] = undefined;
   export let t: Props["t"] = undefined;
   export let styles: Props["styles"] = undefined;
+  export let success: Props["success"] = undefined;
 
   const globalStyles = getContext<Readable<FormStyles>>("formStyles");
   $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
@@ -52,6 +53,7 @@
         dispatch("finish");
       },
       context,
+      success,
     }
   );
 </script>
@@ -59,11 +61,18 @@
 <form on:submit|preventDefault={action} class={formStyles.container}>
   <div class={formStyles.box}>
     <slot>
-      <Input name="email" type="email" label={tf("forms:email")} {context} />
+      <Input
+        name="email"
+        type="email"
+        label={tf("forms:email")}
+        placeholder={tf("forms:email")}
+        {context}
+      />
       <Input
         name="password"
         type="password"
         label={tf("forms:password")}
+        placeholder={tf("forms:password")}
         {context}
       />
     </slot>

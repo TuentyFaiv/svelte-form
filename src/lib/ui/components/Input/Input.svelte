@@ -10,7 +10,7 @@
   import * as stylesinternal from "./Input.styles.js";
 
   export let name: Props["name"];
-  export let label: Props["label"];
+  export let label: Props["label"] = null;
   export let id: Props["id"] = null;
   export let type: Props["type"] = "text";
   export let context: Props["context"] = "form";
@@ -60,13 +60,15 @@
   {...datasets}
   {title}
 >
-  <p class={styles?.label ?? stylesinternal.label}>
-    {label}
-    <slot />
-    {#if datas.labeltwo}
-      {datas.labeltwo}
-    {/if}
-  </p>
+  {#if label}
+    <p class={styles?.label ?? stylesinternal.label}>
+      {label}
+      <slot />
+      {#if datas.labeltwo}
+        {datas.labeltwo}
+      {/if}
+    </p>
+  {/if}
   {#if type === "textarea"}
     <textarea
       class={styles?.area ?? stylesinternal.area}

@@ -21,6 +21,7 @@
   export let code: Props["code"] = "bycountry";
   export let confirm: Props["confirm"] = true;
   export let styles: Props["styles"] = undefined;
+  export let success: Props["success"] = undefined;
 
   const globalStyles = getContext<Readable<FormStyles>>("formStyles");
   $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
@@ -71,30 +72,55 @@
         dispatch("finish");
       },
       context,
+      success,
     }
   );
-
-  $: console.log($data);
 </script>
 
 <form on:submit|preventDefault={action} class={formStyles.container}>
   <div class={formStyles.box}>
     <slot>
-      <Input name="firstName" label={tf("forms:first-name")} {context} />
-      <Input name="lastName" label={tf("forms:last-name")} {context} />
+      <Input
+        name="firstName"
+        label={tf("forms:first-name")}
+        placeholder={tf("forms:first-name")}
+        {context}
+      />
+      <Input
+        name="lastName"
+        label={tf("forms:last-name")}
+        placeholder={tf("forms:last-name")}
+        {context}
+      />
       <Select
         name={code === "bycountry" ? "country" : "phoneCode"}
         label={tf(`forms:${code === "bycountry" ? "country" : "phone-code"}`)}
+        placeholder={tf(
+          `forms:${code === "bycountry" ? "country" : "phone-code"}`
+        )}
         {options}
         on:choose={onChoose}
         {context}
       />
-      <Input name="email" type="email" label={tf("forms:email")} {context} />
-      <Input name="phone" type="tel" label={tf("forms:phone")} {context} />
+      <Input
+        name="email"
+        type="email"
+        label={tf("forms:email")}
+        placeholder={tf("forms:email")}
+        {context}
+      />
+      <Input
+        name="phone"
+        type="tel"
+        label={tf("forms:phone")}
+        placeholder={tf("forms:phone")}
+        {context}
+      />
       <Input
         name="password"
         type="password"
         label={tf("forms:password")}
+        placeholder={tf("forms:password")}
         {context}
       />
       {#if confirm}
@@ -102,6 +128,7 @@
           name="confirmPassword"
           type="password"
           label={tf("forms:confirm-password")}
+          placeholder={tf("forms:confirm-password")}
           {context}
         />
       {/if}

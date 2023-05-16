@@ -18,6 +18,7 @@
   export let showErrors: Props["showErrors"] = undefined;
   export let t: Props["t"] = undefined;
   export let styles: Props["styles"] = undefined;
+  export let success: Props["success"] = undefined;
 
   const globalStyles = getContext<Readable<FormStyles>>("formStyles");
   $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
@@ -54,6 +55,7 @@
         dispatch("finish");
       },
       context,
+      success,
     }
   );
 
@@ -71,12 +73,36 @@
         name="message"
         type="textarea"
         label={tf("forms:message")}
+        placeholder={tf("forms:message")}
         {context}
       />
-      <Input name="name" label={tf("forms:name")} {context} />
-      <Input name="phone" type="tel" label={tf("forms:tel")} {context} />
-      <Input name="email" type="email" label={tf("forms:email")} {context} />
-      <Input name="terms" type="checkbox" label={tf("forms:terms")} {context} />
+      <Input
+        name="name"
+        label={tf("forms:name")}
+        placeholder={tf("forms:name")}
+        {context}
+      />
+      <Input
+        name="phone"
+        type="tel"
+        label={tf("forms:tel")}
+        placeholder={tf("forms:tel")}
+        {context}
+      />
+      <Input
+        name="email"
+        type="email"
+        label={tf("forms:email")}
+        placeholder={tf("forms:email")}
+        {context}
+      />
+      <Input
+        name="terms"
+        type="checkbox"
+        label={tf("forms:terms")}
+        placeholder={tf("forms:terms")}
+        {context}
+      />
     </slot>
   </div>
   <button class={formStyles.submit} type="submit">

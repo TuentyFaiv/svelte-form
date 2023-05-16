@@ -11,8 +11,8 @@
 
   import * as stylesinternal from "./Select.styles.js";
 
-  export let label: Props["label"];
   export let name: Props["name"];
+  export let label: Props["label"] = null;
   export let id: Props["id"] = null;
   export let options: Props["options"] = [];
   export let placeholder: Props["placeholder"] = "";
@@ -115,9 +115,11 @@
   on:keydown|stopPropagation={onOpenByKey}
   {...datasets}
 >
-  <p class={styles?.label ?? stylesinternal.label} role="none">
-    {label}
-  </p>
+  {#if label}
+    <p class={styles?.label ?? stylesinternal.label} role="none">
+      {label}
+    </p>
+  {/if}
   <div
     role="none"
     class={styles?.select ?? stylesinternal.select}
