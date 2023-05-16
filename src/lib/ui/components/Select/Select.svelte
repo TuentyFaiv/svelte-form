@@ -140,7 +140,12 @@
       <div
         role="none"
         class={styles?.options ?? stylesinternal.options}
-        on:mouseleave|stopPropagation={active ? handleToggle : undefined}
+        on:mouseleave|stopPropagation={active
+          ? () => {
+              handleToggle();
+              setField(name, $data[name] ?? "");
+            }
+          : undefined}
         on:keydown|stopPropagation={onChooseByKey}
         transition:slide|local={{ delay: 200 }}
       >

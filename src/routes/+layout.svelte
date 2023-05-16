@@ -1,15 +1,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { setStyles } from "../lib/index.js";
+  import { setStyles, setFormStyles } from "../lib/index.js";
 
+  // setFormStyles({
+  //   box: "form__box",
+  //   container: "form__container",
+  //   submit: "form__submit",
+  // });
   // setStyles({
   //   select: {
   //     field: "select-field",
   //     error: "select-error",
   //   },
   // });
-  // onMount(() => {
-  // });
+  // onMount(() => {});
 </script>
 
 <main>

@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   import { formStore } from "$lib/logic/stores/index.js";
   import { fieldsSignup } from "$lib/logic/schemas/index.js";
-  import { countries } from "$lib/logic/utils/countries.js";
   import { FormError } from "$lib/logic/utils/errors.js";
 
-  import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
+  import type { Readable } from "svelte/store";
+  import type { FormStyles } from "$lib/logic/typing/globals/proptypes.js";
   import type { SignupValues } from "$lib/logic/typing/schemas/auth.js";
   import type { Props } from "./SignupForm.proptypes.js";
 
@@ -17,10 +17,17 @@
   export let showErrors: Props["showErrors"] = undefined;
   export let ns: Props["ns"] = undefined;
   export let t: Props["t"] = undefined;
+  export let options: Props["options"] = [];
+  export let code: Props["code"] = "bycountry";
+  export let confirm: Props["confirm"] = true;
   export let styles: Props["styles"] = undefined;
 
-  const store = formStore({
-    fields: fieldsSignup,
+  const globalStyles = getContext<Readable<FormStyles>>("formStyles");
+  $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
+  $: ({ confirmPassword, ...fields } = fieldsSignup);
+
+  $: store = formStore({
+    fields: { ...fields, ...(confirm ? { confirmPassword } : {}) },
     ns,
     t,
     styles: {
@@ -31,23 +38,24 @@
       icons: styles?.icons ?? null,
     },
   });
-  const { submit, setField, setError, t: tf } = $store;
+  $: ({ submit, setField, setError, t: tf, data } = $store);
   const dispatch = createEventDispatcher<{
     submit: SignupValues;
     error: unknown;
     finish: never;
+    choose: { setField: typeof setField; value: string };
   }>();
 
-  const optionsCountries: SelectOption[] = countries.map(
-    ({ name, code, flag }) => ({
-      label: `${flag} ${name}`,
-      value: code,
-    })
-  );
+  function onChoose({ detail }: CustomEvent<string>) {
+    dispatch("choose", {
+      setField,
+      value: detail,
+    });
+  }
 
   $: action = submit<SignupValues>(
     async (values) => {
-      if (values.password.trim() !== values.confirmPassword.trim()) {
+      if (confirm && values.password.trim() !== values.confirmPassword.trim()) {
         const error = "password-not-match";
         setError("password", error);
         setError("confirmPassword", error);
@@ -65,44 +73,41 @@
       context,
     }
   );
+
+  $: console.log($data);
 </script>
 
-<form
-  on:submit|preventDefault={action}
-  class={styles?.form?.container ?? stylesinternal.container}
->
-  <div class={styles?.form?.box ?? stylesinternal.box}>
+<form on:submit|preventDefault={action} class={formStyles.container}>
+  <div class={formStyles.box}>
     <slot>
       <Input name="firstName" label={tf("forms:first-name")} {context} />
       <Input name="lastName" label={tf("forms:last-name")} {context} />
       <Select
-        name="country"
-        label={tf("forms:country")}
-        options={optionsCountries}
-        on:choose={({ detail }) => {
-          const country = countries.find(({ code }) => code === detail);
-          setField("phoneCode", country?.dial_code);
-        }}
+        name={code === "bycountry" ? "country" : "phoneCode"}
+        label={tf(`forms:${code === "bycountry" ? "country" : "phone-code"}`)}
+        {options}
+        on:choose={onChoose}
         {context}
       />
       <Input name="email" type="email" label={tf("forms:email")} {context} />
       <Input name="phone" type="tel" label={tf("forms:phone")} {context} />
-      <span />
       <Input
         name="password"
         type="password"
         label={tf("forms:password")}
         {context}
       />
-      <Input
-        name="confirmPassword"
-        type="password"
-        label={tf("forms:confirm-password")}
-        {context}
-      />
+      {#if confirm}
+        <Input
+          name="confirmPassword"
+          type="password"
+          label={tf("forms:confirm-password")}
+          {context}
+        />
+      {/if}
     </slot>
   </div>
-  <button class={styles?.form?.submit ?? stylesinternal.submit} type="submit">
+  <button class={formStyles.submit} type="submit">
     {tf("forms:submit-signup")}
   </button>
   <Errors show={showErrors} {context} />

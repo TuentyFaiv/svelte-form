@@ -5,8 +5,7 @@ import type {
   FormContext,
   StoreConfig,
   StoreStyles,
-  SubmitAction,
-  SubmitOptions
+  SubmitOptions,
 } from "../stores/form.js";
 
 export interface GeneralInputProps {
@@ -60,7 +59,7 @@ export interface GlobalFormProps extends Pick<StoreConfig<unknown>, "ns" | "t"> 
   showErrors?: boolean;
 }
 
-export type FormStyles = GlobalFormProps["styles"];
+export type FormStyles = Required<GlobalFormProps>["styles"]["form"];
 
 export interface StylesForm extends StoreStyles {
   form: GlobalFormStyles;

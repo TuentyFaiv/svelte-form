@@ -3,9 +3,9 @@ import { css } from "@emotion/css";
 export const list = css`
   display: flex;
   box-sizing: border-box;
-  margin: 0;
+  margin: 25px 0 0;
   padding: 0;
-  gap: 5px;
+  gap: 6px;
   list-style: none;
   justify-content: flex-start;
   align-items: flex-start;

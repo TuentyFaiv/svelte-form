@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   import { formStore } from "$lib/logic/stores/index.js";
   import { fieldsContact } from "$lib/logic/schemas/index.js";
 
+  import type { Readable } from "svelte/store";
+  import type { FormStyles } from "$lib/logic/typing/globals/proptypes.js";
   import type { ContactValues } from "$lib/logic/typing/schemas/contact.js";
   import type { Props } from "./ContactForm.proptypes.js";
 
@@ -16,6 +18,9 @@
   export let showErrors: Props["showErrors"] = undefined;
   export let t: Props["t"] = undefined;
   export let styles: Props["styles"] = undefined;
+
+  const globalStyles = getContext<Readable<FormStyles>>("formStyles");
+  $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
 
   const store = formStore({
     fields: fieldsContact,
@@ -59,11 +64,8 @@
   }
 </script>
 
-<form
-  on:submit|preventDefault={action}
-  class={styles?.form?.container ?? stylesinternal.container}
->
-  <div class={styles?.form?.box ?? stylesinternal.box}>
+<form on:submit|preventDefault={action} class={formStyles.container}>
+  <div class={formStyles.box}>
     <slot>
       <Input
         name="message"
@@ -77,7 +79,7 @@
       <Input name="terms" type="checkbox" label={tf("forms:terms")} {context} />
     </slot>
   </div>
-  <button class={styles?.form?.submit ?? stylesinternal.submit} type="submit">
+  <button class={formStyles.submit} type="submit">
     {tf("forms:submit-signin")}
   </button>
   <Errors show={showErrors} {context} />
