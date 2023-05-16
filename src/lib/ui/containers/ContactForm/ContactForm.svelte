@@ -35,7 +35,7 @@
       icons: styles?.icons ?? null,
     },
   });
-  const { submit, t: tf, setField } = $store;
+  const { submit, t: tf, setField, loading } = $store;
   const dispatch = createEventDispatcher<{
     submit: ContactValues;
     error: unknown;
@@ -65,6 +65,10 @@
     }
   }
 </script>
+
+{#if $loading}
+  <slot name="loading" />
+{/if}
 
 <form on:submit|preventDefault={action} class={formStyles.container}>
   <div class={formStyles.box}>

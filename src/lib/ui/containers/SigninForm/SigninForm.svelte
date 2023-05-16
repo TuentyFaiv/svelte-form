@@ -34,7 +34,7 @@
       icons: styles?.icons ?? null,
     },
   });
-  const { submit, t: tf } = $store;
+  const { submit, t: tf, loading } = $store;
   const dispatch = createEventDispatcher<{
     submit: SigninValues;
     error: unknown;
@@ -57,6 +57,10 @@
     }
   );
 </script>
+
+{#if $loading}
+  <slot name="loading" />
+{/if}
 
 <form on:submit|preventDefault={action} class={formStyles.container}>
   <div class={formStyles.box}>

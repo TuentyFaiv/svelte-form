@@ -39,7 +39,7 @@
       icons: styles?.icons ?? null,
     },
   });
-  $: ({ submit, setField, setError, t: tf, data } = $store);
+  $: ({ submit, setField, setError, t: tf, data, loading } = $store);
   const dispatch = createEventDispatcher<{
     submit: SignupValues;
     error: unknown;
@@ -76,6 +76,10 @@
     }
   );
 </script>
+
+{#if $loading}
+  <slot name="loading" />
+{/if}
 
 <form on:submit|preventDefault={action} class={formStyles.container}>
   <div class={formStyles.box}>
