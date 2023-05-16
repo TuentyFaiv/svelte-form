@@ -42,16 +42,17 @@ export function setConfig({ fields, form, i18n, ...config }: Config) {
   setStyles(fields);
   setFormStyles(form);
 
+  if (i18n || Object.keys(config).length > 0) {
+    setContext<ContextConfig>("tfformconfig", {
+      ...config,
+      i18n,
+    } as ContextConfig);
+  }
+}
+
+export function getConfig(): ContextConfig {
   const fallbackI18n = writable({
     t: (msg: string) => msg
   });
-
-  setContext<ContextConfig>("tfformconfig", {
-    i18n: i18n || fallbackI18n,
-    ...config
-  } as ContextConfig);
-}
-
-export function getConfig(): ContextConfig {  
-  return getContext<ContextConfig>("tfformconfig");
+  return getContext<ContextConfig>("tfformconfig") || { i18n: fallbackI18n };
 }
