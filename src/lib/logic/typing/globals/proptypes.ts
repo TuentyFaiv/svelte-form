@@ -53,7 +53,7 @@ export interface ErrorsStyles {
   item?: string;
 }
 
-export interface GlobalFormProps extends Pick<StoreConfig<unknown>, "ns" | "t"> {
+export interface GlobalFormProps extends Pick<StoreConfig<unknown>, "ns"> {
   context: SubmitOptions["context"];
   styles?: Partial<StylesForm>;
   showErrors?: boolean;

@@ -11,7 +11,6 @@ import type {
 export interface StoreConfig<T> {
   fields: T;
   ns?: string;
-  t?: Message;
   styles?: StoreStyles;
 }
 
@@ -24,7 +23,6 @@ export interface FormContext<Values, Fields> {
   check(event: FocusEvent | Event): Promise<void>;
   action(data?: ActionConfig): Promise<void>;
   submit<T extends Values>(action: SubmitAction<T>, options?: SubmitOptions): Submit;
-  t: Message;
   styles: Writable<StoreStyles>;
 }
 

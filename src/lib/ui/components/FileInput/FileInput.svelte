@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { generateDatas } from "$lib/logic/utils/objects.js";
+  import { getConfig } from "$lib/logic/stores/config.js";
 
   import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Input, Props } from "./FileInput.proptypes.js";
@@ -19,8 +20,9 @@
 
   let input: Input;
 
+  const { i18n } = getConfig();
   const form = getContext<InputContext>(context);
-  const { data, errors, styles: ctxStyles, setField, setError, t } = $form;
+  const { data, errors, styles: ctxStyles, setField, setError } = $form;
   const dispatch = createEventDispatcher<{
     choose: File | File[];
     retry: never;
@@ -80,7 +82,7 @@
   {#if $errors[name]}
     <div class={styles?.actions ?? stylesinternal.actions}>
       <span class={styles?.error ?? stylesinternal.error}>
-        {t(`forms:${$errors[name]}`)}
+        {$i18n?.t(`forms:${$errors[name]}`)}
       </span>
       <button
         type="button"
@@ -90,7 +92,7 @@
           onClear();
         }}
       >
-        {t("forms:try-again")}
+        {$i18n?.t("forms:try-again")}
       </button>
     </div>
   {/if}

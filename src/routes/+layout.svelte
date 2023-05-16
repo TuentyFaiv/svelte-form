@@ -1,18 +1,24 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { setStyles, setFormStyles } from "../lib/index.js";
+  import { setConfig } from "../lib/index.js";
+  import { writable } from "svelte/store";
 
-  // setFormStyles({
-  //   box: "form__box",
-  //   container: "form__container",
-  //   submit: "form__submit",
-  // });
-  // setStyles({
-  //   select: {
-  //     field: "select-field",
-  //     error: "select-error",
-  //   },
-  // });
+  setConfig({
+    form: {
+      box: "form__box",
+      container: "form__container",
+      submit: "form__submit",
+    },
+    fields: {
+      select: {
+        field: "select-field",
+        error: "select-error",
+      },
+    },
+    i18n: writable({
+      t: (key: string) => key,
+    }),
+  });
   // onMount(() => {});
 </script>
 

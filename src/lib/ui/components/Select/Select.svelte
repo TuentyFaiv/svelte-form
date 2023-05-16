@@ -3,6 +3,7 @@
 <script lang="ts">
   import { createEventDispatcher, getContext, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
+  import { getConfig } from "$lib/logic/stores/config.js";
   import { keys } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
 
@@ -22,8 +23,9 @@
   let container: Select = null;
   let active = false;
 
+  const { i18n } = getConfig();
   const form = getContext<InputContext>(context);
-  const { data, errors, styles: ctxStyles, setField, t } = $form;
+  const { data, errors, styles: ctxStyles, setField } = $form;
   const dispatch = createEventDispatcher<{ choose: string }>();
   $: ({ select: styles } = $ctxStyles);
 
@@ -134,7 +136,7 @@
       {showedValue}
       {#if $errors[name]}
         <span class={styles?.error ?? stylesinternal.error} role="none">
-          {t(`${$errors[name]}`)}
+          {$i18n?.t(`${$errors[name]}`)}
         </span>
       {/if}
     </p>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, getContext, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
+  import { getConfig } from "$lib/logic/stores/config.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
 
   import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
@@ -17,8 +18,9 @@
 
   let input: Option;
 
+  const { i18n } = getConfig();
   const form = getContext<InputContext>(context);
-  const { data, errors, styles: ctxStyles, check, setField, t } = $form;
+  const { data, errors, styles: ctxStyles, check, setField } = $form;
   const dispatch = createEventDispatcher<{ choose: string }>();
   $: ({ option: styles } = $ctxStyles);
 
@@ -31,7 +33,7 @@
     onSelect(value);
   }
 
-  $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;
+  $: title = `${label} ${$errors[name] ? $i18n?.t(`${$errors[name]}`) : ""}`;
   $: datasets = generateDatas(datas);
 
   onDestroy(() => {
@@ -63,7 +65,7 @@
   </div>
   {#if $errors[name]}
     <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
-      {t(`${$errors[name]}`)}
+      {$i18n?.t(`${$errors[name]}`)}
     </span>
   {/if}
 </label>

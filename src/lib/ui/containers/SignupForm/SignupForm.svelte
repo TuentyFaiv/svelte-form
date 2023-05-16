@@ -17,7 +17,6 @@
   export let context: Props["context"] = undefined;
   export let showErrors: Props["showErrors"] = undefined;
   export let ns: Props["ns"] = undefined;
-  export let t: Props["t"] = undefined;
   export let options: Props["options"] = [];
   export let code: Props["code"] = "bycountry";
   export let confirm: Props["confirm"] = true;
@@ -26,12 +25,11 @@
 
   const globalStyles = getContext<Readable<FormStyles>>("formStyles");
   $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
-  $: ({ confirmPassword, ...fields } = fieldsSignup);
+  const { confirmPassword, ...fields } = fieldsSignup;
 
   $: store = formStore({
     fields: { ...fields, ...(confirm ? { confirmPassword } : {}) },
     ns,
-    t,
     styles: {
       input: styles?.input ?? {},
       fileinput: styles?.fileinput ?? {},
@@ -40,7 +38,7 @@
       icons: styles?.icons ?? null,
     },
   });
-  $: ({ submit: onSubmit, setField, setError, t: tf, data, loading } = $store);
+  $: ({ submit: onSubmit, setField, setError, loading } = $store);
   const dispatch = createEventDispatcher<{
     error: unknown;
     finish: never;
@@ -86,22 +84,20 @@
     <slot>
       <Input
         name="firstName"
-        label={tf("forms:first-name")}
-        placeholder={tf("forms:first-name")}
+        label="forms:first-name"
+        placeholder="forms:first-name"
         {context}
       />
       <Input
         name="lastName"
-        label={tf("forms:last-name")}
-        placeholder={tf("forms:last-name")}
+        label="forms:last-name"
+        placeholder="forms:last-name"
         {context}
       />
       <Select
         name={code === "bycountry" ? "country" : "phoneCode"}
-        label={tf(`forms:${code === "bycountry" ? "country" : "phone-code"}`)}
-        placeholder={tf(
-          `forms:${code === "bycountry" ? "country" : "phone-code"}`
-        )}
+        label={`forms:${code === "bycountry" ? "country" : "phone-code"}`}
+        placeholder={`forms:${code === "bycountry" ? "country" : "phone-code"}`}
         {options}
         on:choose={onChoose}
         {context}
@@ -109,37 +105,37 @@
       <Input
         name="email"
         type="email"
-        label={tf("forms:email")}
-        placeholder={tf("forms:email")}
+        label="forms:email"
+        placeholder="forms:email"
         {context}
       />
       <Input
         name="phone"
         type="tel"
-        label={tf("forms:phone")}
-        placeholder={tf("forms:phone")}
+        label="forms:phone"
+        placeholder="forms:phone"
         {context}
       />
       <Input
         name="password"
         type="password"
-        label={tf("forms:password")}
-        placeholder={tf("forms:password")}
+        label="forms:password"
+        placeholder="forms:password"
         {context}
       />
       {#if confirm}
         <Input
           name="confirmPassword"
           type="password"
-          label={tf("forms:confirm-password")}
-          placeholder={tf("forms:confirm-password")}
+          label="forms:confirm-password"
+          placeholder="forms:confirm-password"
           {context}
         />
       {/if}
     </slot>
   </div>
   <button class={formStyles.submit} type="submit">
-    {tf("forms:submit-signup")}
+    <slot name="submit" />
   </button>
   <Errors show={showErrors} {context} />
 </form>

@@ -24,8 +24,7 @@ import type { Errors } from "../typing/utils/errors.js";
 export function formStore<SchemaFields extends AnyObject = AnyObject>({
   fields,
   styles = {},
-  ns = "forms",
-  t = (msg) => (msg)
+  ns = "forms"
 }: StoreConfig<SchemaFields>) {
   let form: HTMLFormElement | null = null;
   const {
@@ -158,8 +157,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     setError: setFieldError,
     setField,
     check,
-    action,
-    t
+    action
   });
 
   function submit<T extends Values = Values>(

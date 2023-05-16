@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getContext, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
+  import { getConfig } from "$lib/logic/stores/config.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { keys } from "$lib/logic/utils/keys.js";
 
@@ -21,8 +22,9 @@
   let show = false;
   let mounted = false;
 
+  const { i18n } = getConfig();
   const form = getContext<InputContext>(context);
-  const { data, errors, styles: ctxStyles, setField, check, t } = $form;
+  const { data, errors, styles: ctxStyles, setField, check } = $form;
   $: ({ input: styles, icons } = $ctxStyles);
 
   function toggleShow() {
@@ -37,7 +39,7 @@
     }
   }
 
-  $: title = `${label} ${$errors[name] ? t(`${$errors[name]}`) : ""}`;
+  $: title = `${label} ${$errors[name] ? $i18n?.t(`${$errors[name]}`) : ""}`;
   $: datasets = generateDatas(datas);
 
   $: {
@@ -108,13 +110,13 @@
       class={styles?.show ?? stylesinternal.show}
       class:show
       on:click={toggleShow}
-      title={t("forms:show-hide")}
+      title={$i18n?.t("forms:show-hide")}
     >
       {#if icons}
         <img
           class={styles?.icon ?? stylesinternal.icon}
           src={show ? icons.show : icons.hide}
-          alt={t("forms:show-hide")}
+          alt={$i18n?.t("forms:show-hide")}
           decoding="async"
           loading="lazy"
           role="presentation"
@@ -126,7 +128,7 @@
   {/if}
   {#if $errors[name]}
     <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
-      {t(`${$errors[name]}`)}
+      {$i18n?.t(`${$errors[name]}`)}
     </span>
   {/if}
 </label>

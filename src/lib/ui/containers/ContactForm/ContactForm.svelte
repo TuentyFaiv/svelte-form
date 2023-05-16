@@ -16,7 +16,6 @@
   export let context: Props["context"] = undefined;
   export let ns: Props["ns"] = undefined;
   export let showErrors: Props["showErrors"] = undefined;
-  export let t: Props["t"] = undefined;
   export let styles: Props["styles"] = undefined;
   export let success: Props["success"] = undefined;
 
@@ -26,7 +25,6 @@
   const store = formStore({
     fields: fieldsContact,
     ns,
-    t,
     styles: {
       input: styles?.input ?? {},
       fileinput: styles?.fileinput ?? {},
@@ -35,7 +33,7 @@
       icons: styles?.icons ?? null,
     },
   });
-  const { submit: onSubmit, t: tf, setField, loading } = $store;
+  const { submit: onSubmit, setField, loading } = $store;
   const dispatch = createEventDispatcher<{
     error: unknown;
     finish: never;
@@ -75,41 +73,41 @@
       <Input
         name="message"
         type="textarea"
-        label={tf("forms:message")}
-        placeholder={tf("forms:message")}
+        label="forms:message"
+        placeholder="forms:message"
         {context}
       />
       <Input
         name="name"
-        label={tf("forms:name")}
-        placeholder={tf("forms:name")}
+        label="forms:name"
+        placeholder="forms:name"
         {context}
       />
       <Input
         name="phone"
         type="tel"
-        label={tf("forms:tel")}
-        placeholder={tf("forms:tel")}
+        label="forms:tel"
+        placeholder="forms:tel"
         {context}
       />
       <Input
         name="email"
         type="email"
-        label={tf("forms:email")}
-        placeholder={tf("forms:email")}
+        label="forms:email"
+        placeholder="forms:email"
         {context}
       />
       <Input
         name="terms"
         type="checkbox"
-        label={tf("forms:terms")}
-        placeholder={tf("forms:terms")}
+        label="forms:terms"
+        placeholder="forms:terms"
         {context}
       />
     </slot>
   </div>
   <button class={formStyles.submit} type="submit">
-    {tf("forms:submit-signin")}
+    <slot name="submit" />
   </button>
   <Errors show={showErrors} {context} />
 </form>
