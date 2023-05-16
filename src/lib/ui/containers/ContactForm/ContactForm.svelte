@@ -5,13 +5,13 @@
 
   import type { Readable } from "svelte/store";
   import type { FormStyles } from "$lib/logic/typing/globals/proptypes.js";
-  import type { ContactValues } from "$lib/logic/typing/schemas/contact.js";
   import type { Props } from "./ContactForm.proptypes.js";
 
   import * as stylesinternal from "./ContactForm.styles.js";
 
   import { Input, Errors } from "$lib/ui/components/index.js";
 
+  export let submit: Props["submit"];
   export let phoneCode: Props["phoneCode"] = undefined;
   export let context: Props["context"] = undefined;
   export let ns: Props["ns"] = undefined;
@@ -35,16 +35,15 @@
       icons: styles?.icons ?? null,
     },
   });
-  const { submit, t: tf, setField, loading } = $store;
+  const { submit: onSubmit, t: tf, setField, loading } = $store;
   const dispatch = createEventDispatcher<{
-    submit: ContactValues;
     error: unknown;
     finish: never;
   }>();
 
-  const action = submit(
+  const action = onSubmit(
     async (values) => {
-      await dispatch("submit", values);
+      await submit(values);
     },
     {
       error(err) {

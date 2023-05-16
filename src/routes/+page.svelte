@@ -10,8 +10,8 @@
 </script>
 
 <SigninForm
-  on:submit={async ({ detail }) => {
-    console.log(detail);
+  submit={async (values) => {
+    console.log(values);
   }}
   showErrors
 />
@@ -27,18 +27,28 @@
       value: "MX",
     },
   ]}
-  on:submit={async ({ detail }) => {
-    console.log(detail);
+  submit={async (values) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log(values);
+    throw new Error("custom-error");
   }}
   on:choose={async ({ detail }) => {
     console.log(detail);
     detail.setField("phoneCode", "+52");
   }}
-  showErrors
-/>
-<ContactForm
-  on:submit={async ({ detail }) => {
+  on:finish={() => {
+    console.log("finish");
+  }}
+  on:error={({ detail }) => {
     console.log(detail);
+  }}
+  showErrors
+>
+  <p slot="loading">Loading...</p>
+</SignupForm>
+<ContactForm
+  submit={async (values) => {
+    console.log(values);
   }}
   showErrors
 >

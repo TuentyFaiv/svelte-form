@@ -5,13 +5,13 @@
 
   import type { Readable } from "svelte/store";
   import type { FormStyles } from "$lib/logic/typing/globals/proptypes.js";
-  import type { SigninValues } from "$lib/logic/typing/schemas/auth.js";
   import type { Props } from "./SigninForm.proptypes.js";
 
   import * as stylesinternal from "./SigninForm.styles.js";
 
   import { Errors, Input } from "$lib/ui/components/index.js";
 
+  export let submit: Props["submit"];
   export let context: Props["context"] = undefined;
   export let showErrors: Props["showErrors"] = undefined;
   export let ns: Props["ns"] = undefined;
@@ -34,16 +34,15 @@
       icons: styles?.icons ?? null,
     },
   });
-  const { submit, t: tf, loading } = $store;
+  const { submit: onSubmit, t: tf, loading } = $store;
   const dispatch = createEventDispatcher<{
-    submit: SigninValues;
     error: unknown;
     finish: never;
   }>();
 
-  const action = submit(
+  const action = onSubmit(
     async (values) => {
-      await dispatch("submit", values);
+      await submit(values);
     },
     {
       error(err) {

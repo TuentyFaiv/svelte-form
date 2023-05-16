@@ -13,6 +13,7 @@
 
   import { Errors, Input, Select } from "$lib/ui/components/index.js";
 
+  export let submit: Props["submit"];
   export let context: Props["context"] = undefined;
   export let showErrors: Props["showErrors"] = undefined;
   export let ns: Props["ns"] = undefined;
@@ -39,9 +40,8 @@
       icons: styles?.icons ?? null,
     },
   });
-  $: ({ submit, setField, setError, t: tf, data, loading } = $store);
+  $: ({ submit: onSubmit, setField, setError, t: tf, data, loading } = $store);
   const dispatch = createEventDispatcher<{
-    submit: SignupValues;
     error: unknown;
     finish: never;
     choose: { setField: typeof setField; value: string };
@@ -54,7 +54,7 @@
     });
   }
 
-  $: action = submit<SignupValues>(
+  $: action = onSubmit<SignupValues>(
     async (values) => {
       if (confirm && values.password.trim() !== values.confirmPassword.trim()) {
         const error = "password-not-match";
@@ -62,7 +62,7 @@
         setError("confirmPassword", error);
         throw new FormError("signup-error", error);
       }
-      await dispatch("submit", values);
+      await submit(values);
     },
     {
       error(err) {
