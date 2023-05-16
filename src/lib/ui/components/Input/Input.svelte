@@ -16,6 +16,7 @@
   export let type: Props["type"] = "text";
   export let context: Props["context"] = "form";
   export let datas: Props["datas"] = {};
+  export let placeholder: Props["placeholder"] = undefined;
 
   let input: Input;
   let checked = false;
@@ -39,7 +40,7 @@
     }
   }
 
-  $: title = `${label} ${$errors[name] ? $i18n?.t(`${$errors[name]}`) : ""}`;
+  $: title = `${label} ${$errors[name] ? $i18n.t(`${$errors[name]}`) : ""}`;
   $: datasets = generateDatas(datas);
 
   $: {
@@ -64,7 +65,7 @@
 >
   {#if label}
     <p class={styles?.label ?? stylesinternal.label}>
-      {label}
+      {$i18n.t(label)}
       <slot />
       {#if datas.labeltwo}
         {datas.labeltwo}
@@ -78,6 +79,7 @@
       bind:this={input}
       on:blur={check}
       {name}
+      placeholder={$i18n.t(placeholder ?? "")}
       {...$$restProps}
     />
   {:else if type === "checkbox"}
@@ -89,6 +91,7 @@
       on:keydown={onChecked}
       bind:checked
       {name}
+      placeholder={$i18n.t(placeholder ?? "")}
       {...$$restProps}
     />
   {:else}
@@ -101,6 +104,7 @@
       type={type === "password" && show ? "text" : type}
       value={$data[name] ?? ""}
       {name}
+      placeholder={$i18n.t(placeholder ?? "")}
       {...$$restProps}
     />
   {/if}
@@ -110,13 +114,13 @@
       class={styles?.show ?? stylesinternal.show}
       class:show
       on:click={toggleShow}
-      title={$i18n?.t("forms:show-hide")}
+      title={$i18n.t("forms:show-hide")}
     >
       {#if icons}
         <img
           class={styles?.icon ?? stylesinternal.icon}
           src={show ? icons.show : icons.hide}
-          alt={$i18n?.t("forms:show-hide")}
+          alt={$i18n.t("forms:show-hide")}
           decoding="async"
           loading="lazy"
           role="presentation"
@@ -128,7 +132,7 @@
   {/if}
   {#if $errors[name]}
     <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
-      {$i18n?.t(`${$errors[name]}`)}
+      {$i18n.t(`${$errors[name]}`)}
     </span>
   {/if}
 </label>

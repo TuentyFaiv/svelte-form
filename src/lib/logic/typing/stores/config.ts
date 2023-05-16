@@ -9,5 +9,5 @@ export interface Config {
 }
 
 export interface ContextConfig {
-  i18n?: Writable<{ t: Message }>;
+  i18n: Writable<{ t: Message }>;
 }

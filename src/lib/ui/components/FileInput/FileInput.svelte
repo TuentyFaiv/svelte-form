@@ -82,7 +82,7 @@
   {#if $errors[name]}
     <div class={styles?.actions ?? stylesinternal.actions}>
       <span class={styles?.error ?? stylesinternal.error}>
-        {$i18n?.t(`forms:${$errors[name]}`)}
+        {$i18n.t(`forms:${$errors[name]}`)}
       </span>
       <button
         type="button"
@@ -92,7 +92,7 @@
           onClear();
         }}
       >
-        {$i18n?.t("forms:try-again")}
+        {$i18n.t("forms:try-again")}
       </button>
     </div>
   {/if}

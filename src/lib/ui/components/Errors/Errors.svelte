@@ -24,7 +24,7 @@
     {#each Object.keys($errors) as error (error)}
       {#if $errors[error] !== null}
         <li class={styles?.item ?? stylesinternal.item}>
-          {`${error}: ${$i18n?.t($errors[error] ?? "")}`}
+          {`${error}: ${$i18n.t($errors[error] ?? "")}`}
         </li>
       {/if}
     {/each}

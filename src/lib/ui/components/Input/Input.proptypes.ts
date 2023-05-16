@@ -16,6 +16,7 @@ export interface Props extends GeneralInputProps {
   | "time"
   | "url"
   | "textarea"
+  placeholder?: string;
 }
 
 export type Input = HTMLInputElement | HTMLTextAreaElement | null;

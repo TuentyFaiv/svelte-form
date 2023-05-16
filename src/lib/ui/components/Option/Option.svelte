@@ -33,7 +33,7 @@
     onSelect(value);
   }
 
-  $: title = `${label} ${$errors[name] ? $i18n?.t(`${$errors[name]}`) : ""}`;
+  $: title = `${label} ${$errors[name] ? $i18n.t(`${$errors[name]}`) : ""}`;
   $: datasets = generateDatas(datas);
 
   onDestroy(() => {
@@ -48,7 +48,7 @@
   {title}
   {...datasets}
 >
-  <p class={styles?.label ?? stylesinternal.label}>{label}</p>
+  <p class={styles?.label ?? stylesinternal.label}>{$i18n.t(label ?? "")}</p>
   <input
     class={styles?.input ?? stylesinternal.input}
     type="radio"
@@ -65,7 +65,7 @@
   </div>
   {#if $errors[name]}
     <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
-      {$i18n?.t(`${$errors[name]}`)}
+      {$i18n.t(`${$errors[name]}`)}
     </span>
   {/if}
 </label>

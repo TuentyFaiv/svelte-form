@@ -93,7 +93,7 @@
   $: datasets = generateDatas(datas);
   $: showedValue =
     options.find(({ value }) => value === $data[name])?.label ||
-    (!!$data[name] ? $data[name] : placeholder);
+    (!!$data[name] ? $data[name] : $i18n.t(placeholder ?? ""));
 
   $: {
     if (options.length === 1 && $data[name] !== options[0].value) {
@@ -119,7 +119,7 @@
 >
   {#if label}
     <p class={styles?.label ?? stylesinternal.label} role="none">
-      {label}
+      {$i18n.t(label)}
     </p>
   {/if}
   <div
@@ -131,12 +131,12 @@
     <p
       role="presentation"
       class={styles?.value ?? stylesinternal.value}
-      data-gradient={showedValue === placeholder}
+      data-gradient={showedValue === $i18n.t(placeholder ?? "")}
     >
       {showedValue}
       {#if $errors[name]}
         <span class={styles?.error ?? stylesinternal.error} role="none">
-          {$i18n?.t(`${$errors[name]}`)}
+          {$i18n.t(`${$errors[name]}`)}
         </span>
       {/if}
     </p>
