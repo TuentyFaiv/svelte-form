@@ -5,7 +5,6 @@ export type Errors = Record<string, string | null>;
 export interface ConfigShowErrors<T> {
   error: unknown;
   errors: T;
-  ns?: string;
 }
 
 export interface ConfigErrors<T> extends ConfigShowErrors<Writable<T>> {

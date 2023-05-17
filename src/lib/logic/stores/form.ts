@@ -63,11 +63,11 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
   }
 
   function setFieldError(key: Fields, error?: unknown): void {
-    setError({ key, error, errors, ns: namespace });
+    setError({ key, error, errors });
   }
 
   function setFieldsErrors({ error, handle }: FieldsErrorsConfig): void {
-    setErrors({ error, errors, ns: namespace, handle });
+    setErrors({ error, errors, handle });
   }
 
   async function validation<T>(formToValidate: HTMLFormElement): Promise<T> {
