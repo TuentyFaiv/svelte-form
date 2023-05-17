@@ -22,6 +22,8 @@
   export let confirm: Props["confirm"] = true;
   export let styles: Props["styles"] = undefined;
   export let success: Props["success"] = undefined;
+  export let t: Props["t"] = (msg) => msg;
+  export let texts: Props["texts"];
 
   const globalStyles = getContext<Readable<FormStyles>>("formStyles");
   $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
@@ -84,52 +86,63 @@
     <slot>
       <Input
         name="firstName"
-        label="forms:first-name"
-        placeholder="forms:first-name"
+        label={texts.firstname.label}
+        placeholder={texts.firstname.placeholder}
         {context}
+        {t}
       />
       <Input
         name="lastName"
-        label="forms:last-name"
-        placeholder="forms:last-name"
+        label={texts.lastname.label}
+        placeholder={texts.lastname.placeholder}
         {context}
+        {t}
       />
       <Select
         name={code === "bycountry" ? "country" : "phoneCode"}
-        label={`forms:${code === "bycountry" ? "country" : "phone-code"}`}
-        placeholder={`forms:${code === "bycountry" ? "country" : "phone-code"}`}
+        label={code === "bycountry"
+          ? texts.country.label
+          : texts.phonecode.label}
+        placeholder={code === "bycountry"
+          ? texts.country.placeholder
+          : texts.phonecode.placeholder}
         {options}
         on:choose={onChoose}
         {context}
+        {t}
       />
       <Input
         name="email"
         type="email"
-        label="forms:email"
-        placeholder="forms:email"
+        label={texts.email.label}
+        placeholder={texts.email.placeholder}
         {context}
+        {t}
       />
       <Input
         name="phone"
         type="tel"
-        label="forms:phone"
-        placeholder="forms:phone"
+        label={texts.phone.label}
+        placeholder={texts.phone.placeholder}
         {context}
+        {t}
       />
       <Input
         name="password"
         type="password"
-        label="forms:password"
-        placeholder="forms:password"
+        label={texts.password.label}
+        placeholder={texts.password.placeholder}
         {context}
+        {t}
       />
       {#if confirm}
         <Input
           name="confirmPassword"
           type="password"
-          label="forms:confirm-password"
-          placeholder="forms:confirm-password"
+          label={texts?.confirmPassword?.label}
+          placeholder={texts?.confirmPassword?.placeholder}
           {context}
+          {t}
         />
       {/if}
     </slot>
@@ -137,5 +150,5 @@
   <button class={formStyles.submit} type="submit">
     <slot name="submit" />
   </button>
-  <Errors show={showErrors} {context} />
+  <Errors show={showErrors} {context} {t} />
 </form>

@@ -3,6 +3,7 @@ import type { AnyObject } from "yup";
 import type { ObjStrCommon } from "./types.js";
 import type {
   FormContext,
+  Message,
   StoreConfig,
   StoreStyles,
   SubmitOptions,
@@ -15,6 +16,7 @@ export interface GeneralInputProps {
   id: string | null;
   context: string;
   datas: ObjStrCommon;
+  t: Message;
 }
 
 interface GeneralStyles {
@@ -57,6 +59,7 @@ export interface GlobalFormProps extends Pick<StoreConfig<unknown>, "ns"> {
   context: SubmitOptions["context"];
   styles?: Partial<StylesForm>;
   showErrors?: boolean;
+  t: Message;
 }
 
 export type FormStyles = Required<GlobalFormProps>["styles"]["form"];
@@ -72,3 +75,8 @@ interface GlobalFormStyles {
 }
 
 export type InputContext = Readable<FormContext<AnyObject, string>>;
+
+export interface Text {
+  placeholder: string;
+  label: string;
+}

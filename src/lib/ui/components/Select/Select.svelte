@@ -3,7 +3,6 @@
 <script lang="ts">
   import { createEventDispatcher, getContext, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
-  import { getConfig } from "$lib/logic/stores/config.js";
   import { keys } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
 
@@ -19,11 +18,11 @@
   export let placeholder: Props["placeholder"] = "";
   export let context: Props["context"] = "form";
   export let datas: Props["datas"] = {};
+  export let t: Props["t"] = (msg) => msg;
 
   let container: Select = null;
   let active = false;
 
-  const { i18n } = getConfig();
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, setField } = $form;
   const dispatch = createEventDispatcher<{ choose: string }>();
@@ -93,7 +92,7 @@
   $: datasets = generateDatas(datas);
   $: showedValue =
     options.find(({ value }) => value === $data[name])?.label ||
-    (!!$data[name] ? $data[name] : $i18n.t(placeholder ?? ""));
+    (!!$data[name] ? $data[name] : placeholder);
 
   $: {
     if (options.length === 1 && $data[name] !== options[0].value) {
@@ -119,7 +118,7 @@
 >
   {#if label}
     <p class={styles?.label ?? stylesinternal.label} role="none">
-      {$i18n.t(label)}
+      {label}
     </p>
   {/if}
   <div
@@ -131,12 +130,12 @@
     <p
       role="presentation"
       class={styles?.value ?? stylesinternal.value}
-      data-gradient={showedValue === $i18n.t(placeholder ?? "")}
+      data-gradient={showedValue === placeholder}
     >
       {showedValue}
       {#if $errors[name]}
         <span class={styles?.error ?? stylesinternal.error} role="none">
-          {$i18n.t(`${$errors[name]}`)}
+          {t(`${$errors[name]}`)}
         </span>
       {/if}
     </p>

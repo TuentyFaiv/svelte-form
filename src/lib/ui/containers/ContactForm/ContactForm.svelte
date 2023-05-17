@@ -18,6 +18,8 @@
   export let showErrors: Props["showErrors"] = undefined;
   export let styles: Props["styles"] = undefined;
   export let success: Props["success"] = undefined;
+  export let texts: Props["texts"];
+  export let t: Props["t"] = (msg) => msg;
 
   const globalStyles = getContext<Readable<FormStyles>>("formStyles");
   $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
@@ -73,41 +75,46 @@
       <Input
         name="message"
         type="textarea"
-        label="forms:message"
-        placeholder="forms:message"
+        label={texts.message.label}
+        placeholder={texts.message.placeholder}
         {context}
+        {t}
       />
       <Input
         name="name"
-        label="forms:name"
-        placeholder="forms:name"
+        label={texts.name.label}
+        placeholder={texts.name.placeholder}
         {context}
+        {t}
       />
       <Input
         name="phone"
         type="tel"
-        label="forms:tel"
-        placeholder="forms:tel"
+        label={texts.phone.label}
+        placeholder={texts.phone.placeholder}
         {context}
+        {t}
       />
       <Input
         name="email"
         type="email"
-        label="forms:email"
-        placeholder="forms:email"
+        label={texts.email.label}
+        placeholder={texts.email.placeholder}
         {context}
+        {t}
       />
       <Input
         name="terms"
         type="checkbox"
-        label="forms:terms"
-        placeholder="forms:terms"
+        label={texts.terms.label}
+        placeholder={texts.terms.placeholder}
         {context}
+        {t}
       />
     </slot>
   </div>
   <button class={formStyles.submit} type="submit">
     <slot name="submit" />
   </button>
-  <Errors show={showErrors} {context} />
+  <Errors show={showErrors} {context} {t} />
 </form>

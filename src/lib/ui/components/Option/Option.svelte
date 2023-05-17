@@ -1,7 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, getContext, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
-  import { getConfig } from "$lib/logic/stores/config.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
 
   import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
@@ -15,10 +14,10 @@
   export let value: Props["value"];
   export let datas: Props["datas"] = {};
   export let context: Props["context"] = "form";
+  export let t: Props["t"] = (msg) => msg;
 
   let input: Option;
 
-  const { i18n } = getConfig();
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, check, setField } = $form;
   const dispatch = createEventDispatcher<{ choose: string }>();
@@ -33,7 +32,7 @@
     onSelect(value);
   }
 
-  $: title = `${label} ${$errors[name] ? $i18n.t(`${$errors[name]}`) : ""}`;
+  $: title = `${label} ${$errors[name] ? t($errors[name] ?? "") : ""}`;
   $: datasets = generateDatas(datas);
 
   onDestroy(() => {
@@ -48,7 +47,7 @@
   {title}
   {...datasets}
 >
-  <p class={styles?.label ?? stylesinternal.label}>{$i18n.t(label ?? "")}</p>
+  <p class={styles?.label ?? stylesinternal.label}>{label}</p>
   <input
     class={styles?.input ?? stylesinternal.input}
     type="radio"
@@ -65,7 +64,7 @@
   </div>
   {#if $errors[name]}
     <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
-      {$i18n.t(`${$errors[name]}`)}
+      {t(`${$errors[name]}`)}
     </span>
   {/if}
 </label>

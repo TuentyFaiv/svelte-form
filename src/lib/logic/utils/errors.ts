@@ -26,7 +26,7 @@ export function showErrors<T>({ error, errors, ns = "errors" }: ConfigShowErrors
   if (error instanceof ValidationError) {
     return error.inner.reduce((acc, err) => ({
       ...acc,
-      [`${err.path}`]: `${ns}:${err.message.includes("`number` type") ? "type-number" : err.message}`
+      [`${err.path}`]: err.message
     }), { ...errors });
   }
   return errors;
