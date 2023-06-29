@@ -46,6 +46,11 @@
     label: `${flag} ${country.label}`,
   }));
 
+  const text = {
+    label: "",
+    placeholder: "",
+  };
+
   $: onSubmit = async ({ phoneCode, ...values }: SignupValues) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     console.log(values);
@@ -58,6 +63,10 @@
     console.log(values);
   }}
   showErrors
+  texts={{
+    email: text,
+    password: text,
+  }}
 />
 <SignupForm
   {options}
@@ -68,6 +77,16 @@
     console.log(detail);
     detail.setField("phoneCode", "+52");
   }}
+  texts={{
+    country: text,
+    email: text,
+    firstname: text,
+    lastname: text,
+    password: text,
+    phone: text,
+    phonecode: text,
+    confirmPassword: text,
+  }}
   showErrors
 >
   <p slot="loading">Loading...</p>
@@ -75,6 +94,13 @@
 <ContactForm
   submit={async (values) => {
     console.log(values);
+  }}
+  texts={{
+    email: text,
+    message: text,
+    name: text,
+    phone: text,
+    terms: text,
   }}
   showErrors
 >
