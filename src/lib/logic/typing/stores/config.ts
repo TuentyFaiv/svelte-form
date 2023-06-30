@@ -1,7 +1,8 @@
-import type { FormStyles } from "../globals/proptypes.js";
-import type { StoreStyles } from "./form.js";
+import type { ContextStyles } from "../globals/contexts.js";
+import type { CssVars, SharedFormStyles } from "../globals/styles.js";
 
 export interface Config {
-  fields?: StoreStyles;
-  form?: FormStyles;
+  fields?: ContextStyles;
+  form?: SharedFormStyles;
+  vars?: CssVars;
 }

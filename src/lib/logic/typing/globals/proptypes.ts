@@ -1,46 +1,39 @@
 import type { Readable } from "svelte/store";
 import type { AnyObject } from "yup";
 import type { ObjStrCommon } from "./types.js";
+import type { ContextStyles, ContextForm } from "./contexts.js";
+import type { SharedFormStyles } from "./styles.js";
 import type {
-  FormContext,
   Message,
-  StoreConfig,
-  StoreStyles,
+  FormStoreConfig,
   SubmitOptions,
 } from "../stores/form.js";
 
-export interface GeneralInputProps {
+export interface SharedUIProps extends Pick<FormStoreConfig<unknown>, "ns"> {
+  t: Message;
+  context: string;
+}
+
+export interface GeneralInputProps extends SharedUIProps {
   type: string;
   name: string;
   label: string | null;
   id: string | null;
-  context: string;
   datas: ObjStrCommon;
-  t: Message;
 }
 
-export interface GlobalFormProps extends Pick<StoreConfig<unknown>, "ns"> {
-  context: SubmitOptions["context"];
-  styles?: Partial<StylesForm>;
+export interface GlobalFormProps extends SharedUIProps {
+  styles?: Partial<FormStyles>;
   showErrors?: boolean;
-  t: Message;
 }
 
-export type FormStyles = Required<GlobalFormProps>["styles"]["form"];
-
-export interface StylesForm extends StoreStyles {
-  form: GlobalFormStyles;
+export interface FormStyles extends ContextStyles {
+  form: SharedFormStyles;
 }
 
-interface GlobalFormStyles {
-  container?: string;
-  box?: string;
-  submit?: string;
-}
+export type InputContext = Readable<ContextForm<AnyObject, string>>;
 
-export type InputContext = Readable<FormContext<AnyObject, string>>;
-
-export interface Text {
+export type TextProp = string | {
   placeholder: string;
   label: string;
-}
+};

@@ -1,6 +1,6 @@
 import type { ContextStyles } from "../globals/contexts.js";
 
-export interface StoreConfig<T> {
+export interface FormStoreConfig<T> {
   fields: T;
   ns?: string;
   styles?: ContextStyles;

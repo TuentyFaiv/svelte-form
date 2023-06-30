@@ -106,7 +106,7 @@
       type="button"
       class={styles?.show ?? stylesinternal.show}
       class:show
-      on:click={toggleShow}
+      on:click|stopPropagation={toggleShow}
       title={texts.icon}
     >
       {#if icons}
@@ -124,8 +124,10 @@
     </button>
   {/if}
   {#if $errors[name]}
-    <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
-      {t(`${$errors[name]}`)}
+    <span class={styles?.error ?? stylesinternal.error} transition:fade>
+      <slot name="error" error={$errors[name]}>
+        {t(`${$errors[name]}`)}
+      </slot>
     </span>
   {/if}
 </label>

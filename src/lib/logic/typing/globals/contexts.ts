@@ -24,7 +24,7 @@ export interface ContextStyles {
   errors?: ErrorsStyles;
 }
 
-export interface FormContext<Values, Fields> {
+export interface ContextForm<Values, Fields> {
   loading: Writable<boolean>;
   errors: Writable<Errors>;
   data: Writable<Values>;

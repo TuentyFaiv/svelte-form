@@ -63,8 +63,10 @@
     <slot />
   </div>
   {#if $errors[name]}
-    <span class={styles?.error ?? stylesinternal.error} transition:fade|local>
-      {t(`${$errors[name]}`)}
+    <span class={styles?.error ?? stylesinternal.error} transition:fade>
+      <slot name="error" error={$errors[name]}>
+        {t(`${$errors[name]}`)}
+      </slot>
     </span>
   {/if}
 </label>

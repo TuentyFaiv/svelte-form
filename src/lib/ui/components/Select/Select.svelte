@@ -135,7 +135,9 @@
       {showedValue}
       {#if $errors[name]}
         <span class={styles?.error ?? stylesinternal.error} role="none">
-          {t(`${$errors[name]}`)}
+          <slot name="error" error={$errors[name]}>
+            {t(`${$errors[name]}`)}
+          </slot>
         </span>
       {/if}
     </p>
@@ -150,7 +152,7 @@
             }
           : undefined}
         on:keydown|stopPropagation={onChooseByKey}
-        transition:slide|local={{ delay: 200 }}
+        transition:slide={{ delay: 200 }}
       >
         {#each options as option (option.key ?? option.value)}
           <span

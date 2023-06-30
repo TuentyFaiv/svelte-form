@@ -16,14 +16,18 @@
 
   $: showErrors =
     show && Object.values($errors).some((error) => error !== null);
+
+  $: list = Object.values($errors).map((error) => error);
 </script>
 
 {#if showErrors}
   <ul class={styles?.list ?? stylesinternal.list}>
-    {#each Object.keys($errors) as error (error)}
-      {#if $errors[error] !== null}
+    {#each list as error, index (`${error}-list-${index}`)}
+      {#if error !== null}
         <li class={styles?.item ?? stylesinternal.item}>
-          {`${error}: ${t(`${$errors[error]}`)}`}
+          <slot name="error" {error}>
+            {`${error}: ${t(`${$errors[error]}`)}`}
+          </slot>
         </li>
       {/if}
     {/each}

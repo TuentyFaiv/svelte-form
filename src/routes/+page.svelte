@@ -4,9 +4,9 @@
     Errors,
     FileInput,
     Option,
-    SigninForm,
-    SignupForm,
-    type SignupValues,
+    // SigninForm,
+    // SignupForm,
+    // type SignupValues,
   } from "../lib/index.js";
 
   const countries = [
@@ -51,14 +51,14 @@
     placeholder: "",
   };
 
-  $: onSubmit = async ({ phoneCode, ...values }: SignupValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(values);
-    throw new Error("custom-error");
-  };
+  // $: onSubmit = async ({ phoneCode, ...values }: SignupValues) => {
+  //   await new Promise((resolve) => setTimeout(resolve, 2000));
+  //   console.log(values);
+  //   throw new Error("custom-error");
+  // };
 </script>
 
-<SigninForm
+<!-- <SigninForm
   submit={async (values) => {
     console.log(values);
   }}
@@ -90,19 +90,28 @@
   showErrors
 >
   <p slot="loading">Loading...</p>
-</SignupForm>
+</SignupForm> -->
 <ContactForm
   submit={async (values) => {
     console.log(values);
   }}
   texts={{
-    email: text,
-    message: text,
-    name: text,
-    phone: text,
-    terms: text,
+    email: {
+      label: "Email",
+      placeholder: "email@example.com",
+    },
+    message: "Message",
+    name: "Name",
+    phone: "Phone",
+    terms: "Terms",
   }}
   showErrors
 >
-  asdasdas contact
+  <svelte:fragment slot="submit">Send message</svelte:fragment>
+  <svelte:fragment slot="error-field" let:error>
+    {`Error field: ${error}`}
+  </svelte:fragment>
+  <svelte:fragment slot="error-list" let:error>
+    {`Error list: ${error}`}
+  </svelte:fragment>
 </ContactForm>

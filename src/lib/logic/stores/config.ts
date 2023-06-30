@@ -1,11 +1,9 @@
 import { setContext } from "svelte";
 import { readable } from "svelte/store";
-
-import type { StoreStyles } from "../typing/stores/form.js";
-import type { FormStyles } from "../typing/globals/proptypes.js";
 import type { Config } from "../typing/stores/config.js";
+import { injectGlobal } from "@emotion/css";
 
-export function setStyles(config: StoreStyles = {}) {
+export function setStyles(config: Config["fields"] = {}) {
   const {
     input = {},
     option = {},
@@ -14,7 +12,7 @@ export function setStyles(config: StoreStyles = {}) {
     errors = {},
     icons = null
   } = config;
-  const styles = readable<StoreStyles>({
+  const styles = readable<Config["fields"]>({
     input,
     option,
     select,
@@ -26,10 +24,10 @@ export function setStyles(config: StoreStyles = {}) {
   setContext("styles", styles);
 }
 
-export function setFormStyles(config: FormStyles = {}) {
+export function setFormStyles(config: Config["form"] = {}) {
   const { box, container, submit } = config;
 
-  const styles = readable<FormStyles>({
+  const styles = readable<Config["form"]>({
     box,
     container,
     submit
@@ -38,7 +36,24 @@ export function setFormStyles(config: FormStyles = {}) {
   setContext("formStyles", styles);
 }
 
-export function setConfig({ fields, form }: Config) {
+export function setStylesVariables(config: Config["vars"] = {}) {
+  if (Object.keys(config).length === 0) return;
+  injectGlobal`
+    :root {
+      --s-form-primary: ${config.primary ?? ""};
+      --s-form-secondary: ${config.secondary ?? ""};
+      --s-form-accent: ${config.accent ?? ""};
+      --s-form-error: ${config.error ?? ""};
+      --s-form-warning: ${config.warning ?? ""};
+      --s-form-success: ${config.success ?? ""};
+      --s-form-shadow: ${config.shadow ?? ""};
+      --s-form-border: ${config.border ?? ""};
+    }
+  `;
+}
+
+export function setConfig({ fields, form, vars }: Config) {
   setStyles(fields);
   setFormStyles(form);
+  setStylesVariables(vars);
 }

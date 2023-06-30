@@ -4,7 +4,7 @@
   import { fieldsContact } from "$lib/logic/schemas/index.js";
 
   import type { Readable } from "svelte/store";
-  import type { FormStyles } from "$lib/logic/typing/globals/proptypes.js";
+  import type { Config } from "$lib/logic/typing/stores/config.js";
   import type { Props } from "./ContactForm.proptypes.js";
 
   import * as stylesinternal from "./ContactForm.styles.js";
@@ -13,7 +13,7 @@
 
   export let submit: Props["submit"];
   export let phoneCode: Props["phoneCode"] = undefined;
-  export let context: Props["context"] = undefined;
+  export let context: Props["context"] = "form";
   export let ns: Props["ns"] = undefined;
   export let showErrors: Props["showErrors"] = undefined;
   export let styles: Props["styles"] = undefined;
@@ -21,8 +21,8 @@
   export let texts: Props["texts"];
   export let t: Props["t"] = (msg) => msg;
 
-  const globalStyles = getContext<Readable<FormStyles>>("formStyles");
-  $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
+  const globalStyles = getContext<Readable<Config["form"]>>("formStyles");
+  $: formStyles = styles?.form ?? $globalStyles ?? stylesinternal ?? {};
 
   const store = formStore({
     fields: fieldsContact,
@@ -38,25 +38,57 @@
   const { submit: onSubmit, setField, loading } = $store;
   const dispatch = createEventDispatcher<{
     error: unknown;
-    finish: never;
+    finish: undefined;
   }>();
 
-  const action = onSubmit(
-    async (values) => {
-      await submit(values);
+  const action = onSubmit(submit, {
+    error(err) {
+      dispatch("error", err);
     },
-    {
-      error(err) {
-        dispatch("error", err);
+    finish() {
+      setField("phoneCode", phoneCode);
+      dispatch("finish");
+    },
+    context,
+    success,
+  });
+
+  $: fields = (
+    [
+      {
+        name: "message",
+        type: "textarea",
       },
-      finish() {
-        setField("phoneCode", phoneCode);
-        dispatch("finish");
+      {
+        name: "name",
+        type: "text",
       },
-      context,
-      success,
-    }
-  );
+      {
+        name: "phone",
+        type: "tel",
+      },
+      {
+        name: "email",
+        type: "email",
+      },
+      {
+        name: "terms",
+        type: "checkbox",
+      },
+    ] as const
+  ).map((field) => {
+    type TextObj = Exclude<Props["texts"]["email"], string>;
+    const sharedText = typeof texts[field.name] === "string";
+    return {
+      ...field,
+      label: sharedText
+        ? (texts[field.name] as string)
+        : (texts[field.name] as TextObj).label,
+      placeholder: sharedText
+        ? (texts[field.name] as string)
+        : (texts[field.name] as TextObj).placeholder,
+    };
+  });
 
   $: {
     if (phoneCode) {
@@ -72,49 +104,25 @@
 <form on:submit|preventDefault={action} class={formStyles.container}>
   <div class={formStyles.box}>
     <slot>
-      <Input
-        name="message"
-        type="textarea"
-        label={texts.message.label}
-        placeholder={texts.message.placeholder}
-        {context}
-        {t}
-      />
-      <Input
-        name="name"
-        label={texts.name.label}
-        placeholder={texts.name.placeholder}
-        {context}
-        {t}
-      />
-      <Input
-        name="phone"
-        type="tel"
-        label={texts.phone.label}
-        placeholder={texts.phone.placeholder}
-        {context}
-        {t}
-      />
-      <Input
-        name="email"
-        type="email"
-        label={texts.email.label}
-        placeholder={texts.email.placeholder}
-        {context}
-        {t}
-      />
-      <Input
-        name="terms"
-        type="checkbox"
-        label={texts.terms.label}
-        placeholder={texts.terms.placeholder}
-        {context}
-        {t}
-      />
+      {#each fields as field (field.name)}
+        <Input {...field} {context} {t}>
+          <svelte:fragment slot="error" let:error>
+            <slot name="error-field" {error}>
+              {error}
+            </slot>
+          </svelte:fragment>
+        </Input>
+      {/each}
     </slot>
   </div>
   <button class={formStyles.submit} type="submit">
     <slot name="submit" />
   </button>
-  <Errors show={showErrors} {context} {t} />
+  <Errors show={showErrors} {context} {t}>
+    <svelte:fragment slot="error" let:error>
+      <slot name="error-list" {error}>
+        {error}
+      </slot>
+    </svelte:fragment>
+  </Errors>
 </form>

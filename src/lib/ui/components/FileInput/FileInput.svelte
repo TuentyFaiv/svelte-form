@@ -24,7 +24,7 @@
   const { data, errors, styles: ctxStyles, setField, setError } = $form;
   const dispatch = createEventDispatcher<{
     choose: File | File[];
-    retry: never;
+    retry: undefined;
   }>();
   $: ({ fileinput: styles } = $ctxStyles);
 
@@ -73,7 +73,7 @@
 
 <div class={styles?.wrapper ?? stylesinternal.wrapper} {...datasets}>
   {#if $$slots.out}
-    <slot {image} name="out" />
+    <slot name="out" {image} />
   {/if}
   {#if $$slots.actions && !$errors[name] && !!$data[name]}
     <slot name="actions" {image} {onClear} />
@@ -81,12 +81,14 @@
   {#if $errors[name]}
     <div class={styles?.actions ?? stylesinternal.actions}>
       <span class={styles?.error ?? stylesinternal.error}>
-        {t(`${$errors[name]}`)}
+        <slot name="error" error={$errors[name]}>
+          {t(`${$errors[name]}`)}
+        </slot>
       </span>
       <button
         type="button"
         class={styles?.retry ?? stylesinternal.retry}
-        on:click={() => {
+        on:click|stopPropagation={() => {
           dispatch("retry");
           onClear();
         }}

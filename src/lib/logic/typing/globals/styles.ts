@@ -5,6 +5,23 @@ interface GeneralStyles {
   error?: string;
 }
 
+export interface SharedFormStyles {
+  container?: string;
+  box?: string;
+  submit?: string;
+}
+
+export interface CssVars {
+  primary?: string;
+  secondary?: string;
+  accent?: string;
+  error?: string;
+  warning?: string;
+  success?: string;
+  shadow?: string;
+  border?: string;
+}
+
 export interface SelectStyles extends Omit<GeneralStyles, "input"> {
   select?: string;
   value?: string;
@@ -39,4 +56,5 @@ export interface Icons {
   show?: string;
   hide?: string;
   arrow?: string;
+  check?: string;
 }

@@ -5,7 +5,6 @@ export type FieldValidation<T> = {
   schema: ObjStrCustom<AnySchema>;
   event: FocusEvent | Event | Field;
   errors: T;
-  ns?: string;
 };
 
 export interface Field {

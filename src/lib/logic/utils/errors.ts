@@ -33,10 +33,9 @@ export function showErrors<T>({ error, errors }: ConfigShowErrors<T>) {
 }
 
 export function setErrors<T extends Errors = Errors>({ error, errors, handle }: ConfigErrors<T>) {
-  if (!(error instanceof ValidationError)) {
+  if (!(error instanceof ValidationError) || !(error instanceof FormError)) {
     handle?.(error);
   }
-  if ((error instanceof FormError)) return;
 
   errors.update((prevErrors) => {
     const resetErrors = Object.keys(prevErrors).reduce((acc, key) => ({
@@ -49,19 +48,17 @@ export function setErrors<T extends Errors = Errors>({ error, errors, handle }: 
   });
 }
 
-export function setError<TKey, TErr extends Errors = Errors>({ error, errors, key }: ConfigError<TKey, TErr>) {
+export function setError<TKey extends string | number | symbol, TErr extends Errors = Errors>({ error, errors, key }: ConfigError<TKey, TErr>) {
   let message: string | null = null;
 
   if (error instanceof ValidationError) {
-    message = error.inner.reduce((_, err) => (
-      err.message
-    ), "");
+    message = error.inner.reduce((_, err) => (err.message), "");
   }
   if (typeof error === "string") {
     message = error;
   }
   errors.update((prevErrors) => ({
     ...prevErrors,
-    [key as string]: message
+    [String(key)]: message
   }));
 }

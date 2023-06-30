@@ -26,15 +26,15 @@ export async function fieldsValidation<T>(data: T, schema: unknown) {
 
 export async function fieldValidation<
   T extends Writable<Errors> = Writable<Errors>
->({ event, schema, errors, ns }: FieldValidation<T>) {
+>({ event, schema, errors }: FieldValidation<T>) {
   const { name: key, value } = (
     event instanceof Event
   ) ? event.target as HTMLInputElement : event;
   try {
     const field = schema[String(key)];
     await field.validate(transformOnOff(value), { abortEarly: false });
-    setError({ errors, key, ns });
+    setError({ errors, key });
   } catch (error) {
-    setError({ errors, key, error, ns });
+    setError({ errors, key, error });
   }
 }

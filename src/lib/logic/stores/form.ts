@@ -10,12 +10,11 @@ import { setError, setErrors } from "../utils/errors.js";
 import type { AnyObject, InferType } from "yup";
 // eslint-disable-next-line import/order
 import type { Readable } from "svelte/store";
+import type { ContextForm, ContextStyles } from "../typing/globals/contexts.js";
 import type {
   ActionConfig,
   FieldsErrorsConfig,
-  FormContext,
-  StoreConfig,
-  StoreStyles,
+  FormStoreConfig,
   SubmitAction,
   SubmitOptions
 } from "../typing/stores/form.js";
@@ -24,8 +23,8 @@ import type { Errors } from "../typing/utils/errors.js";
 export function formStore<SchemaFields extends AnyObject = AnyObject>({
   fields,
   styles = {},
-  ns = "forms"
-}: StoreConfig<SchemaFields>) {
+  ns: namespace = "forms"
+}: FormStoreConfig<SchemaFields>) {
   let form: HTMLFormElement | null = null;
   const {
     input = {},
@@ -35,7 +34,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     errors: errorsStyles = {},
     icons = null
   } = styles;
-  const ctxStyles = writable<StoreStyles>({
+  const ctxStyles = writable<ContextStyles>({
     input,
     option,
     select,
@@ -44,12 +43,11 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     icons
   });
   const schemafields: SchemaFields = { ...fields };
-  const namespace: string = ns;
   const schema = object(schemafields);
 
   type Values = InferType<typeof schema>;
   type Fields = keyof Values;
-  type Form = FormContext<Values, Fields>;
+  type Form = ContextForm<Values, Fields>;
 
   const errors = writable<Errors>(Object.keys(schemafields).reduce((acc, key) => ({
     ...acc,
@@ -119,7 +117,6 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
       },
       schema: schemafields,
       errors,
-      ns: namespace
     });
   }
 
@@ -135,7 +132,6 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
       event,
       schema: schemafields,
       errors,
-      ns: namespace
     });
   }
 
@@ -169,11 +165,11 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
       success
     }: SubmitOptions = {}
   ) {
-    const globalStyles = get(getContext<Readable<StoreStyles | undefined>>("styles"));
+    const globalStyles = get(getContext<Readable<ContextStyles | undefined>>("styles"));
 
     if (globalStyles) {
       Object.keys(globalStyles).forEach((key) => {
-        const fieldStyles = globalStyles[key as keyof StoreStyles];
+        const fieldStyles = globalStyles[key as keyof ContextStyles];
         if (fieldStyles && Object.keys(fieldStyles).length > 0) {
           ctxStyles.update((prev) => ({
             ...prev,
