@@ -18,7 +18,6 @@
   export let placeholder: Props["placeholder"] = "";
   export let context: Props["context"] = "form";
   export let datas: Props["datas"] = {};
-  export let t: Props["t"] = (msg) => msg;
 
   let container: Select = null;
   let active = false;
@@ -136,7 +135,7 @@
       {#if $errors[name]}
         <span class={styles?.error ?? stylesinternal.error} role="none">
           <slot name="error" error={$errors[name]}>
-            {t(`${$errors[name]}`)}
+            {$errors[name]}
           </slot>
         </span>
       {/if}

@@ -8,15 +8,14 @@
   import * as stylesinternal from "./FileInput.styles.js";
 
   export let name: Props["name"];
-  export let alt: Props["alt"] = null;
+  export let context: Props["context"] = "form";
   export let id: Props["id"] = null;
+  export let alt: Props["alt"] = null;
   export let multiple: Props["multiple"] = false;
   export let accept: Props["accept"] = "image/*";
-  export let context: Props["context"] = "form";
   export let defaultValue: Props["defaultValue"] = "";
   export let max: Props["max"] = Infinity;
   export let datas: Props["datas"] = {};
-  export let t: Props["t"] = (msg) => msg;
 
   let input: Input;
 
@@ -82,7 +81,7 @@
     <div class={styles?.actions ?? stylesinternal.actions}>
       <span class={styles?.error ?? stylesinternal.error}>
         <slot name="error" error={$errors[name]}>
-          {t(`${$errors[name]}`)}
+          {$errors[name]}
         </slot>
       </span>
       <button

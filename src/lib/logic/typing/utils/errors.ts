@@ -1,5 +1,11 @@
 import type { Writable } from "svelte/store";
 
+export interface FormErrorConfig {
+  title?: string;
+  message: string;
+  reason: string;
+}
+
 export type Errors = Record<string, string | null>;
 
 export interface ConfigShowErrors<T> {

@@ -1,11 +1,13 @@
 <script lang="ts">
   import { createEventDispatcher, getContext } from "svelte";
-  import { formStore } from "$lib/logic/stores/index.js";
+  import { getTexts } from "$lib/logic/utils/objects.js";
   import { fieldsContact } from "$lib/logic/schemas/index.js";
+  import { formStore } from "$lib/logic/stores/index.js";
 
   import type { Readable } from "svelte/store";
+  import type { FieldInputForm } from "$lib/logic/typing/globals/interfaces.js";
   import type { Config } from "$lib/logic/typing/stores/config.js";
-  import type { Props } from "./ContactForm.proptypes.js";
+  import type { ContactFields, Props } from "./ContactForm.proptypes.js";
 
   import * as stylesinternal from "./ContactForm.styles.js";
 
@@ -14,24 +16,18 @@
   export let submit: Props["submit"];
   export let phoneCode: Props["phoneCode"] = undefined;
   export let context: Props["context"] = "form";
-  export let ns: Props["ns"] = undefined;
   export let showErrors: Props["showErrors"] = undefined;
   export let styles: Props["styles"] = undefined;
   export let success: Props["success"] = undefined;
   export let texts: Props["texts"];
-  export let t: Props["t"] = (msg) => msg;
 
   const globalStyles = getContext<Readable<Config["form"]>>("formStyles");
   $: formStyles = styles?.form ?? $globalStyles ?? stylesinternal ?? {};
 
   const store = formStore({
     fields: fieldsContact,
-    ns,
     styles: {
       input: styles?.input ?? {},
-      fileinput: styles?.fileinput ?? {},
-      option: styles?.option ?? {},
-      select: styles?.select ?? {},
       icons: styles?.icons ?? null,
     },
   });
@@ -56,39 +52,27 @@
   $: fields = (
     [
       {
-        name: "message",
-        type: "textarea",
-      },
-      {
         name: "name",
         type: "text",
-      },
-      {
-        name: "phone",
-        type: "tel",
       },
       {
         name: "email",
         type: "email",
       },
       {
+        name: "phone",
+        type: "tel",
+      },
+      {
+        name: "message",
+        type: "textarea",
+      },
+      {
         name: "terms",
         type: "checkbox",
       },
-    ] as const
-  ).map((field) => {
-    type TextObj = Exclude<Props["texts"]["email"], string>;
-    const sharedText = typeof texts[field.name] === "string";
-    return {
-      ...field,
-      label: sharedText
-        ? (texts[field.name] as string)
-        : (texts[field.name] as TextObj).label,
-      placeholder: sharedText
-        ? (texts[field.name] as string)
-        : (texts[field.name] as TextObj).placeholder,
-    };
-  });
+    ] satisfies FieldInputForm<ContactFields>[]
+  ).map(getTexts(texts));
 
   $: {
     if (phoneCode) {
@@ -105,7 +89,7 @@
   <div class={formStyles.box}>
     <slot>
       {#each fields as field (field.name)}
-        <Input {...field} {context} {t}>
+        <Input {...field} {context}>
           <svelte:fragment slot="error" let:error>
             <slot name="error-field" {error}>
               {error}
@@ -116,9 +100,9 @@
     </slot>
   </div>
   <button class={formStyles.submit} type="submit">
-    <slot name="submit" />
+    <slot name="submit">Send message</slot>
   </button>
-  <Errors show={showErrors} {context} {t}>
+  <Errors show={showErrors} {context}>
     <svelte:fragment slot="error" let:error>
       <slot name="error-list" {error}>
         {error}

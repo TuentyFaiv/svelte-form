@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { setConfig } from "../lib/index.js";
-  import { writable } from "svelte/store";
 
   setConfig({
     form: {
@@ -15,11 +13,7 @@
         error: "select-error",
       },
     },
-    i18n: writable({
-      t: (key: string) => key,
-    }),
   });
-  // onMount(() => {});
 </script>
 
 <main>

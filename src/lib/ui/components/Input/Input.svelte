@@ -10,13 +10,12 @@
   import * as stylesinternal from "./Input.styles.js";
 
   export let name: Props["name"];
-  export let label: Props["label"] = null;
+  export let context: Props["context"] = "form";
   export let id: Props["id"] = null;
   export let type: Props["type"] = "text";
-  export let context: Props["context"] = "form";
+  export let label: Props["label"] = null;
   export let datas: Props["datas"] = {};
-  export let texts: Props["texts"] = {};
-  export let t: Props["t"] = (msg) => msg;
+  export let a11y: Props["a11y"] = {};
 
   let input: Input;
   let checked = false;
@@ -39,7 +38,6 @@
     }
   }
 
-  $: title = `${label} ${$errors[name] ? t($errors[name] ?? "") : ""}`;
   $: datasets = generateDatas(datas);
 
   $: {
@@ -59,8 +57,8 @@
   class={styles?.field ?? stylesinternal.field}
   data-type={type}
   data-checked={checked}
+  title={a11y.title}
   {...datasets}
-  {title}
 >
   {#if label}
     <p class={styles?.label ?? stylesinternal.label}>
@@ -107,13 +105,13 @@
       class={styles?.show ?? stylesinternal.show}
       class:show
       on:click|stopPropagation={toggleShow}
-      title={texts.icon}
+      title={a11y.icon}
     >
       {#if icons}
         <img
           class={styles?.icon ?? stylesinternal.icon}
           src={show ? icons.show : icons.hide}
-          alt={texts.icon}
+          alt={a11y.icon}
           decoding="async"
           loading="lazy"
           role="presentation"
@@ -126,7 +124,7 @@
   {#if $errors[name]}
     <span class={styles?.error ?? stylesinternal.error} transition:fade>
       <slot name="error" error={$errors[name]}>
-        {t(`${$errors[name]}`)}
+        {$errors[name]}
       </slot>
     </span>
   {/if}

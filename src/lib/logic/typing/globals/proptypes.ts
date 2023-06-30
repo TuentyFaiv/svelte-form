@@ -3,23 +3,35 @@ import type { AnyObject } from "yup";
 import type { ObjStrCommon } from "./types.js";
 import type { ContextStyles, ContextForm } from "./contexts.js";
 import type { SharedFormStyles } from "./styles.js";
-import type {
-  Message,
-  FormStoreConfig,
-  SubmitOptions,
-} from "../stores/form.js";
 
-export interface SharedUIProps extends Pick<FormStoreConfig<unknown>, "ns"> {
-  t: Message;
+export interface SharedUIProps {
   context: string;
 }
 
-export interface GeneralInputProps extends SharedUIProps {
+export interface GeneralFieldProps extends SharedUIProps {
   type: string;
   name: string;
   label: string | null;
   id: string | null;
   datas: ObjStrCommon;
+}
+
+export interface GeneralInputProps extends GeneralFieldProps {
+  type: "text"
+  | "checkbox"
+  | "color"
+  | "date"
+  | "email"
+  | "hidden"
+  | "month"
+  | "number"
+  | "password"
+  | "range"
+  | "search"
+  | "tel"
+  | "time"
+  | "url"
+  | "textarea";
 }
 
 export interface GlobalFormProps extends SharedUIProps {
@@ -33,7 +45,13 @@ export interface FormStyles extends ContextStyles {
 
 export type InputContext = Readable<ContextForm<AnyObject, string>>;
 
-export type TextProp = string | {
+export type TextsProp<T extends string> = {
+  [key in T]: TextProp;
+}
+
+export type TextProp = string | TextPropExplicit;
+
+export interface TextPropExplicit {
   placeholder: string;
   label: string;
-};
+}

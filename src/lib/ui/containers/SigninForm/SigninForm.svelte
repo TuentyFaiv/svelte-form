@@ -1,60 +1,64 @@
 <script lang="ts">
   import { createEventDispatcher, getContext } from "svelte";
-  import { formStore } from "$lib/logic/stores/index.js";
+  import { getTexts } from "$lib/logic/utils/objects.js";
   import { fieldsSignin } from "$lib/logic/schemas/index.js";
+  import { formStore } from "$lib/logic/stores/index.js";
 
   import type { Readable } from "svelte/store";
-  import type { FormStyles } from "$lib/logic/typing/globals/proptypes.js";
-  import type { Props } from "./SigninForm.proptypes.js";
+  import type { FieldInputForm } from "$lib/logic/typing/globals/interfaces.js";
+  import type { Config } from "$lib/logic/typing/stores/config.js";
+  import type { Props, SigninFields } from "./SigninForm.proptypes.js";
 
   import * as stylesinternal from "./SigninForm.styles.js";
 
   import { Errors, Input } from "$lib/ui/components/index.js";
 
   export let submit: Props["submit"];
-  export let context: Props["context"] = undefined;
+  export let context: Props["context"] = "form";
   export let showErrors: Props["showErrors"] = undefined;
-  export let ns: Props["ns"] = undefined;
   export let styles: Props["styles"] = undefined;
   export let success: Props["success"] = undefined;
-  export let t: Props["t"] = (msg) => msg;
   export let texts: Props["texts"];
 
-  const globalStyles = getContext<Readable<FormStyles>>("formStyles");
-  $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
+  const globalStyles = getContext<Readable<Config["form"]>>("formStyles");
+  $: formStyles = styles?.form ?? $globalStyles ?? stylesinternal ?? {};
 
   const store = formStore({
     fields: fieldsSignin,
-    ns,
     styles: {
       input: styles?.input ?? {},
-      fileinput: styles?.fileinput ?? {},
-      option: styles?.option ?? {},
-      select: styles?.select ?? {},
       icons: styles?.icons ?? null,
     },
   });
   const { submit: onSubmit, loading } = $store;
   const dispatch = createEventDispatcher<{
     error: unknown;
-    finish: never;
+    finish: undefined;
   }>();
 
-  const action = onSubmit(
-    async (values) => {
-      await submit(values);
+  const action = onSubmit(submit, {
+    error(err) {
+      dispatch("error", err);
     },
-    {
-      error(err) {
-        dispatch("error", err);
+    finish() {
+      dispatch("finish");
+    },
+    context,
+    success,
+  });
+
+  $: fields = (
+    [
+      {
+        name: "email",
+        type: "email",
       },
-      finish() {
-        dispatch("finish");
+      {
+        name: "password",
+        type: "password",
       },
-      context,
-      success,
-    }
-  );
+    ] satisfies FieldInputForm<SigninFields>[]
+  ).map(getTexts(texts));
 </script>
 
 {#if $loading}
@@ -64,26 +68,25 @@
 <form on:submit|preventDefault={action} class={formStyles.container}>
   <div class={formStyles.box}>
     <slot>
-      <Input
-        name="email"
-        type="email"
-        label={texts.email.label}
-        placeholder={texts.email.placeholder}
-        {context}
-        {t}
-      />
-      <Input
-        name="password"
-        type="password"
-        label={texts.password.label}
-        placeholder={texts.password.placeholder}
-        {context}
-        {t}
-      />
+      {#each fields as field (field.name)}
+        <Input {...field} {context}>
+          <svelte:fragment slot="error" let:error>
+            <slot name="error-field" {error}>
+              {error}
+            </slot>
+          </svelte:fragment>
+        </Input>
+      {/each}
     </slot>
   </div>
   <button class={formStyles.submit} type="submit">
-    <slot name="submit" />
+    <slot name="submit">Signin</slot>
   </button>
-  <Errors show={showErrors} {context} {t} />
+  <Errors show={showErrors} {context}>
+    <svelte:fragment slot="error" let:error>
+      <slot name="error-list" {error}>
+        {error}
+      </slot>
+    </svelte:fragment>
+  </Errors>
 </form>

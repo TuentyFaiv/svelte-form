@@ -1,13 +1,25 @@
 import { ValidationError } from "yup";
 
-import type { ConfigError, ConfigErrors, ConfigShowErrors, Errors } from "../typing/utils/errors.js";
+import type {
+  FormErrorConfig,
+  ConfigError,
+  ConfigErrors,
+  ConfigShowErrors,
+  Errors,
+} from "../typing/utils/errors.js";
 
 export class FormError extends Error {
   title: string;
+  reason: string;
+  message: string;
   date: Date;
 
   constructor(
-    title = "!Form Error¡",
+    {
+      title = "!Form Error¡",
+      message,
+      reason
+    }: FormErrorConfig,
     ...params: (string | undefined)[]
   ) {
     super(...params);
@@ -18,6 +30,8 @@ export class FormError extends Error {
 
     this.name = "FormError";
     this.title = title;
+    this.message = message,
+    this.reason = reason;
     this.date = new Date();
   }
 }

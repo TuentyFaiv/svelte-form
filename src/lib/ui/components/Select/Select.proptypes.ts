@@ -1,7 +1,7 @@
 import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
-import type { GeneralInputProps } from "$lib/logic/typing/globals/proptypes.js";
+import type { GeneralFieldProps } from "$lib/logic/typing/globals/proptypes.js";
 
-export interface Props extends GeneralInputProps {
+export interface Props extends GeneralFieldProps {
   options: SelectOption[];
   placeholder: string | null;
 }

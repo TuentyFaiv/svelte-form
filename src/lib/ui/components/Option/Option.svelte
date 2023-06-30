@@ -12,9 +12,9 @@
   export let name: Props["name"];
   export let id: Props["id"];
   export let value: Props["value"];
-  export let datas: Props["datas"] = {};
   export let context: Props["context"] = "form";
-  export let t: Props["t"] = (msg) => msg;
+  export let datas: Props["datas"] = {};
+  export let a11y: Props["a11y"] = {};
 
   let input: Option;
 
@@ -32,7 +32,6 @@
     onSelect(value);
   }
 
-  $: title = `${label} ${$errors[name] ? t($errors[name] ?? "") : ""}`;
   $: datasets = generateDatas(datas);
 
   onDestroy(() => {
@@ -44,7 +43,7 @@
   for={id}
   class={styles?.field ?? stylesinternal.field}
   data-checked={$data[name] === value}
-  {title}
+  title={a11y.title}
   {...datasets}
 >
   <p class={styles?.label ?? stylesinternal.label}>{label}</p>
@@ -65,7 +64,7 @@
   {#if $errors[name]}
     <span class={styles?.error ?? stylesinternal.error} transition:fade>
       <slot name="error" error={$errors[name]}>
-        {t(`${$errors[name]}`)}
+        {$errors[name]}
       </slot>
     </span>
   {/if}

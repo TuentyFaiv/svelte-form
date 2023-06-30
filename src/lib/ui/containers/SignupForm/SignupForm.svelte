@@ -1,41 +1,38 @@
 <script lang="ts">
   import { createEventDispatcher, getContext } from "svelte";
-  import { formStore } from "$lib/logic/stores/index.js";
-  import { fieldsSignup } from "$lib/logic/schemas/index.js";
+  import { getTexts } from "$lib/logic/utils/objects.js";
   import { FormError } from "$lib/logic/utils/errors.js";
+  import { fieldsSignup } from "$lib/logic/schemas/index.js";
+  import { formStore } from "$lib/logic/stores/index.js";
 
   import type { Readable } from "svelte/store";
-  import type { FormStyles } from "$lib/logic/typing/globals/proptypes.js";
+  import type { FieldInputForm } from "$lib/logic/typing/globals/interfaces.js";
+  import type { Config } from "$lib/logic/typing/stores/config.js";
   import type { SignupValues } from "$lib/logic/typing/schemas/auth.js";
-  import type { Props } from "./SignupForm.proptypes.js";
+  import type { Props, SignupFields } from "./SignupForm.proptypes.js";
 
   import * as stylesinternal from "./SignupForm.styles.js";
 
   import { Errors, Input, Select } from "$lib/ui/components/index.js";
 
   export let submit: Props["submit"];
-  export let context: Props["context"] = undefined;
+  export let context: Props["context"] = "form";
   export let showErrors: Props["showErrors"] = undefined;
-  export let ns: Props["ns"] = undefined;
   export let options: Props["options"] = [];
   export let code: Props["code"] = "bycountry";
   export let confirm: Props["confirm"] = true;
   export let styles: Props["styles"] = undefined;
   export let success: Props["success"] = undefined;
-  export let t: Props["t"] = (msg) => msg;
   export let texts: Props["texts"];
 
-  const globalStyles = getContext<Readable<FormStyles>>("formStyles");
-  $: formStyles = $globalStyles ?? styles?.form ?? stylesinternal ?? {};
-  const { confirmPassword, ...fields } = fieldsSignup;
+  const globalStyles = getContext<Readable<Config["form"]>>("formStyles");
+  $: formStyles = styles?.form ?? $globalStyles ?? stylesinternal ?? {};
+  const { confirmPassword, ...fieldsRemaining } = fieldsSignup;
 
   $: store = formStore({
-    fields: { ...fields, ...(confirm ? { confirmPassword } : {}) },
-    ns,
+    fields: { ...fieldsRemaining, ...(confirm ? { confirmPassword } : {}) },
     styles: {
       input: styles?.input ?? {},
-      fileinput: styles?.fileinput ?? {},
-      option: styles?.option ?? {},
       select: styles?.select ?? {},
       icons: styles?.icons ?? null,
     },
@@ -43,15 +40,16 @@
   $: ({ submit: onSubmit, setField, setError, loading } = $store);
   const dispatch = createEventDispatcher<{
     error: unknown;
-    finish: never;
-    choose: { setField: typeof setField; value: string };
+    finish: undefined;
+    choose: {
+      value: string;
+      setField: typeof setField;
+      setError: typeof setError;
+    };
   }>();
 
-  function onChoose({ detail }: CustomEvent<string>) {
-    dispatch("choose", {
-      setField,
-      value: detail,
-    });
+  function onChoose({ detail: value }: CustomEvent<string>) {
+    dispatch("choose", { value, setField, setError });
   }
 
   $: action = onSubmit<SignupValues>(
@@ -60,13 +58,17 @@
         const error = "password-not-match";
         setError("password", error);
         setError("confirmPassword", error);
-        throw new FormError("signup-error", error);
+        throw new FormError({
+          title: "Error to signup",
+          message: "Password and confirm password must be the same",
+          reason: error,
+        });
       }
       await submit(values);
     },
     {
-      error(err) {
-        dispatch("error", err);
+      error(error) {
+        dispatch("error", error);
       },
       finish: () => {
         dispatch("finish");
@@ -75,6 +77,43 @@
       success,
     }
   );
+
+  $: fields = (
+    [
+      {
+        name: "firstName",
+        type: "text",
+      },
+      {
+        name: "lastName",
+        type: "text",
+      },
+      {
+        name: code === "bycountry" ? "country" : "phoneCode",
+        type: "select",
+      },
+      {
+        name: "email",
+        type: "email",
+      },
+      {
+        name: "phone",
+        type: "tel",
+      },
+      {
+        name: "password",
+        type: "password",
+      },
+      ...(confirm
+        ? ([
+            {
+              name: "confirmPassword",
+              type: "password",
+            },
+          ] satisfies FieldInputForm<SignupFields>[])
+        : ([] satisfies FieldInputForm<SignupFields>[])),
+    ] satisfies FieldInputForm<SignupFields, "select">[]
+  ).map(getTexts(texts));
 </script>
 
 {#if $loading}
@@ -84,71 +123,35 @@
 <form on:submit|preventDefault={action} class={formStyles.container}>
   <div class={formStyles.box}>
     <slot>
-      <Input
-        name="firstName"
-        label={texts.firstname.label}
-        placeholder={texts.firstname.placeholder}
-        {context}
-        {t}
-      />
-      <Input
-        name="lastName"
-        label={texts.lastname.label}
-        placeholder={texts.lastname.placeholder}
-        {context}
-        {t}
-      />
-      <Select
-        name={code === "bycountry" ? "country" : "phoneCode"}
-        label={code === "bycountry"
-          ? texts.country.label
-          : texts.phonecode.label}
-        placeholder={code === "bycountry"
-          ? texts.country.placeholder
-          : texts.phonecode.placeholder}
-        {options}
-        on:choose={onChoose}
-        {context}
-        {t}
-      />
-      <Input
-        name="email"
-        type="email"
-        label={texts.email.label}
-        placeholder={texts.email.placeholder}
-        {context}
-        {t}
-      />
-      <Input
-        name="phone"
-        type="tel"
-        label={texts.phone.label}
-        placeholder={texts.phone.placeholder}
-        {context}
-        {t}
-      />
-      <Input
-        name="password"
-        type="password"
-        label={texts.password.label}
-        placeholder={texts.password.placeholder}
-        {context}
-        {t}
-      />
-      {#if confirm}
-        <Input
-          name="confirmPassword"
-          type="password"
-          label={texts?.confirmPassword?.label}
-          placeholder={texts?.confirmPassword?.placeholder}
-          {context}
-          {t}
-        />
-      {/if}
+      {#each fields as { type, ...field } (field.name)}
+        {#if type !== "select"}
+          <Input {...field} {type} {context}>
+            <svelte:fragment slot="error" let:error>
+              <slot name="error-field" {error}>
+                {error}
+              </slot>
+            </svelte:fragment>
+          </Input>
+        {:else}
+          <Select {...field} on:choose={onChoose} {options} {context}>
+            <svelte:fragment slot="error" let:error>
+              <slot name="error-field" {error}>
+                {error}
+              </slot>
+            </svelte:fragment>
+          </Select>
+        {/if}
+      {/each}
     </slot>
   </div>
   <button class={formStyles.submit} type="submit">
-    <slot name="submit" />
+    <slot name="submit">Signup</slot>
   </button>
-  <Errors show={showErrors} {context} {t} />
+  <Errors show={showErrors} {context}>
+    <svelte:fragment slot="error" let:error>
+      <slot name="error-list" {error}>
+        {error}
+      </slot>
+    </svelte:fragment>
+  </Errors>
 </form>

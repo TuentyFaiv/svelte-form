@@ -23,7 +23,6 @@ import type { Errors } from "../typing/utils/errors.js";
 export function formStore<SchemaFields extends AnyObject = AnyObject>({
   fields,
   styles = {},
-  ns: namespace = "forms"
 }: FormStoreConfig<SchemaFields>) {
   let form: HTMLFormElement | null = null;
   const {
@@ -169,13 +168,24 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
     if (globalStyles) {
       Object.keys(globalStyles).forEach((key) => {
-        const fieldStyles = globalStyles[key as keyof ContextStyles];
-        if (fieldStyles && Object.keys(fieldStyles).length > 0) {
-          ctxStyles.update((prev) => ({
+        const keyStyle = key as keyof ContextStyles;
+        const globalStyle = globalStyles[keyStyle];
+
+        ctxStyles.update((prev) => {
+          const validPrev = Object.keys(prev[keyStyle] ?? {}).length === 0 ? null : prev[keyStyle];
+          const validGlobal = Object.keys(globalStyle ?? {}).length === 0 ? null : globalStyle;
+
+          console.log({
+            keyStyle,
+            validGlobal,
+            validPrev,
+          });
+
+          return {
             ...prev,
-            [key]: fieldStyles
-          }));
-        }
+            [keyStyle]: validPrev ?? validGlobal
+          };
+        });
       });
     }
 

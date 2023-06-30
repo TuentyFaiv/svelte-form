@@ -2,7 +2,6 @@ import type { ContextStyles } from "../globals/contexts.js";
 
 export interface FormStoreConfig<T> {
   fields: T;
-  ns?: string;
   styles?: ContextStyles;
 }
 
@@ -15,8 +14,6 @@ export interface ActionConfig {
 export type SubmitAction<T> = (values: T) => Promise<void>;
 
 export type Submit = (event: SubmitEvent) => Promise<void>;
-
-export type Message = (msg: string) => (string | null);
 
 export interface SubmitOptions {
   error?(error: unknown): void;
