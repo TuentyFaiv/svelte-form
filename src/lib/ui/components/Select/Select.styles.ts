@@ -21,7 +21,9 @@ export const label = css`
   box-sizing: inherit;
   width: 100%;
   margin: 0 0 5px;
+  color: var(--s-form-text);
   font-size: 16px;
+  line-height: 18px;
   font-family: system-ui, sans-serif;
 `;
 
@@ -29,9 +31,9 @@ export const select = css`
   position: relative;
   box-sizing: inherit;
   width: 100%;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 4px 8px;
+  border: var(--s-form-border);
+  border-radius: var(--s-form-radius);
   z-index: 0;
   &:is(:hover, :focus, :focus-within) {}
   &:is(:hover, :focus, :focus-within) > p {
@@ -52,27 +54,24 @@ export const value = css`
   width: 100%;
   min-height: 14px;
   margin: 0;
+  color: var(--s-form-text);
   font-size: 14px;
+  line-height: 16px;
   font-family: system-ui, sans-serif;
-  line-height: 14px;
   z-index: 0;
-  &::after {
+  &[data-placeholder="true"] {
+    color: var(--s-form-placeholder);
+  }
+  & > img {
     position: absolute;
-    content: "";
-    width: 12px;
-    min-width: 12px;
-    height: 12px;
-    min-height: 12px;
-    border: 2px solid transparent;
-    border-bottom-color: #ccc;
-    border-right-color: #ccc;
-    border-radius: 2px;
-    transform: rotateZ(45deg) translateY(-50%);
-    transform-origin: center;
-    transition: transform .35s linear;
-    will-change: transform;
-    right: 10px;
-    bottom: -2px;
+    display: block;
+    box-sizing: inherit;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%) translateX(2px);
     z-index: 0;
   }
 `;

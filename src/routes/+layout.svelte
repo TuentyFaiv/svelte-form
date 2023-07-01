@@ -7,11 +7,9 @@
       container: "form__container",
       submit: "form__submit",
     },
-    fields: {
-      select: {
-        field: "select-field",
-        error: "select-error",
-      },
+    vars: {
+      primary: "#ccc",
+      secondary: "#000",
     },
   });
 </script>

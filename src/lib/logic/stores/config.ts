@@ -37,17 +37,20 @@ export function setFormStyles(config: Config["form"] = {}) {
 }
 
 export function setStylesVariables(config: Config["vars"] = {}) {
-  if (Object.keys(config).length === 0) return;
   injectGlobal`
     :root {
-      --s-form-primary: ${config.primary ?? ""};
-      --s-form-secondary: ${config.secondary ?? ""};
-      --s-form-accent: ${config.accent ?? ""};
-      --s-form-error: ${config.error ?? ""};
-      --s-form-warning: ${config.warning ?? ""};
-      --s-form-success: ${config.success ?? ""};
-      --s-form-shadow: ${config.shadow ?? ""};
-      --s-form-border: ${config.border ?? ""};
+      --s-form-primary: ${config.primary ?? "#CCCCCC"};
+      --s-form-secondary: ${config.secondary ?? "#FFFFFF"};
+      --s-form-accent: ${config.accent ?? "#000000"};
+      --s-form-error: ${config.error ?? "#FF0000"};
+      --s-form-warning: ${config.warning ?? "#FFA500"};
+      --s-form-success: ${config.success ?? "#008000"};
+      --s-form-shadow: ${config.shadow ?? "0 0 5px 0 rgba(0, 0, 0, 0.5)"};
+      --s-form-border: ${config.border ?? "1px solid var(--s-form-primary)"};
+      --s-form-text: ${config.text ?? "#000000"};
+      --s-form-placeholder: ${config.placeholder ?? "#B8B2B2"};
+      --s-form-text-error: ${config.texterror ?? "#FFFFFF"};
+      --s-form-radius: ${config.radius ?? "4px"};
     }
   `;
 }

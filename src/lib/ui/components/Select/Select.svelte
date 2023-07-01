@@ -11,6 +11,8 @@
 
   import * as stylesinternal from "./Select.styles.js";
 
+  import IconArrow from "../../assets/icon-arrow.svg";
+
   export let name: Props["name"];
   export let label: Props["label"] = null;
   export let id: Props["id"] = null;
@@ -25,7 +27,7 @@
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, setField } = $form;
   const dispatch = createEventDispatcher<{ choose: string }>();
-  $: ({ select: styles } = $ctxStyles);
+  $: ({ select: styles, icons } = $ctxStyles);
 
   function onChoose(value: string) {
     dispatch("choose", value);
@@ -129,9 +131,14 @@
     <p
       role="presentation"
       class={styles?.value ?? stylesinternal.value}
-      data-gradient={showedValue === placeholder}
+      data-placeholder={showedValue === placeholder}
     >
       {showedValue}
+      <img
+        src={styles?.icon ?? icons?.arrow ?? `${IconArrow}?v=2`}
+        alt=""
+        role="presentation"
+      />
       {#if $errors[name]}
         <span class={styles?.error ?? stylesinternal.error} role="none">
           <slot name="error" error={$errors[name]}>

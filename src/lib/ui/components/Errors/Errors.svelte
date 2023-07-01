@@ -8,7 +8,6 @@
 
   export let context: Props["context"] = "form";
   export let show: Props["show"] = undefined;
-  export let t: Props["t"] = (msg) => msg;
 
   const form = getContext<InputContext>(context);
   const { errors, styles: cxtStyles } = $form;
@@ -26,7 +25,7 @@
       {#if error !== null}
         <li class={styles?.item ?? stylesinternal.item}>
           <slot name="error" {error}>
-            {`${error}: ${t(`${$errors[error]}`)}`}
+            {`${error}: ${$errors[error]}`}
           </slot>
         </li>
       {/if}

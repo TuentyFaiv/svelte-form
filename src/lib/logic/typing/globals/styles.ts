@@ -20,6 +20,10 @@ export interface CssVars {
   success?: string;
   shadow?: string;
   border?: string;
+  text?: string;
+  placeholder?: string;
+  radius?: string;
+  texterror?: string;
 }
 
 export interface SelectStyles extends Omit<GeneralStyles, "input"> {

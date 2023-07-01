@@ -57,10 +57,11 @@
   class={styles?.field ?? stylesinternal.field}
   data-type={type}
   data-checked={checked}
+  data-checked-icon={icons?.check ?? ""}
   title={a11y.title}
   {...datasets}
 >
-  {#if label}
+  {#if label && type !== "checkbox"}
     <p class={styles?.label ?? stylesinternal.label}>
       {label}
       <slot />
@@ -86,6 +87,12 @@
       {name}
       {...$$restProps}
     />
+    {#if label}
+      <p class={styles?.label ?? stylesinternal.label}>
+        {label}
+        <slot />
+      </p>
+    {/if}
   {:else}
     <input
       class={styles?.input ?? stylesinternal.input}

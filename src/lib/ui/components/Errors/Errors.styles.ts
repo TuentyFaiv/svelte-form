@@ -3,7 +3,7 @@ import { css } from "@emotion/css";
 export const list = css`
   display: flex;
   box-sizing: border-box;
-  margin: 25px 0 0;
+  margin: 16px 0 0;
   padding: 0;
   gap: 6px;
   list-style: none;
@@ -15,7 +15,11 @@ export const list = css`
 export const item = css`
   display: block;
   margin: 0;
-  font-size: 14px;
+  padding: 3px 5px;
+  background-color: var(--s-form-error);
+  border-radius: var(--s-form-radius);
+  color: var(--s-form-text-error);
+  font-size: 12px;
+  line-height: 12px;
   font-family: system-ui, sans-serif;
-  line-height: 14px;
 `;
