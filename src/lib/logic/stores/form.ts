@@ -16,7 +16,7 @@ import type {
   FieldsErrorsConfig,
   FormStoreConfig,
   SubmitAction,
-  SubmitOptions
+  SubmitOptions,
 } from "../typing/stores/form.js";
 import type { Errors } from "../typing/utils/errors.js";
 
@@ -26,20 +26,20 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 }: FormStoreConfig<SchemaFields>) {
   let form: HTMLFormElement | null = null;
   const {
-    field = {},
+    field: fieldstyles = {},
     option = {},
     select = {},
     file = {},
     errors: errorsStyles = {},
-    icons = null
+    icons = null,
   } = styles;
   const ctxStyles = writable<ContextStyles>({
-    field,
+    field: fieldstyles,
     option,
     select,
     file,
     errors: errorsStyles,
-    icons
+    icons,
   });
   const schemafields: SchemaFields = { ...fields };
   const schema = object(schemafields);
@@ -50,7 +50,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
   const errors = writable<Errors>(Object.keys(schemafields).reduce((acc, key) => ({
     ...acc,
-    [key]: null
+    [key]: null,
   }), {}));
   const loading = writable<boolean>(false);
   const data = writable<Values>(schema.getDefault() as Values);
@@ -73,12 +73,12 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
     const parsedData = {
       ...formData,
-      ...get(data)
+      ...get(data),
     };
 
     const toValidate: T = Object.keys(parsedData).reduce((acc, key) => ({
       ...acc,
-      [key]: transformOnOff(parsedData[key])
+      [key]: transformOnOff(parsedData[key]),
     }), {} as T);
 
     await fieldsValidation(toValidate, schema);
@@ -98,7 +98,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
       return {
         ...prev,
-        [field]: transformOnOff(value)
+        [field]: transformOnOff(value),
       };
     });
 
@@ -112,7 +112,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     await fieldValidation({
       event: {
         name: field,
-        value
+        value,
       },
       schema: schemafields,
       errors,
@@ -124,7 +124,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
     data.update((prev) => ({
       ...prev,
-      [name]: transformOnOff(value)
+      [name]: transformOnOff(value),
     }));
 
     await fieldValidation({
@@ -152,7 +152,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     setError: setFieldError,
     setField,
     check,
-    action
+    action,
   });
 
   function submit<T extends Values = Values>(
@@ -161,8 +161,8 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
       error,
       finish,
       context: contextns = "form",
-      success
-    }: SubmitOptions = {}
+      success,
+    }: SubmitOptions = {},
   ) {
     const globalStyles = get(getContext<Readable<ContextStyles | undefined>>("styles"));
 
@@ -177,7 +177,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
           return {
             ...prev,
-            [keyStyle]: validPrev ?? validGlobal
+            [keyStyle]: validPrev ?? validGlobal,
           };
         });
       });
@@ -196,7 +196,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
         await action({
           type: "success",
           title: success?.title,
-          message: success?.message
+          message: success?.message,
         });
       } catch (err) {
         setFieldsErrors({ error: err, handle: error });
@@ -211,7 +211,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
   const contextWithSubmit: Readable<Form> = derived(context, ($context) => ({
     ...$context,
-    submit
+    submit,
   }));
 
   return contextWithSubmit;

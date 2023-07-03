@@ -47,7 +47,7 @@ export type InputContext = Readable<ContextForm<AnyObject, string>>;
 
 export type TextsProp<T extends string> = {
   [key in T]: TextProp;
-}
+};
 
 export type TextProp = string | TextPropExplicit;
 

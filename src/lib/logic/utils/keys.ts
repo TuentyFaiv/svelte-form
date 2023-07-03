@@ -4,5 +4,5 @@ export const keys = {
   down: "ArrowDown",
   left: "ArrowLeft",
   right: "ArrowRight",
-  tab: "Tab"
+  tab: "Tab",
 };

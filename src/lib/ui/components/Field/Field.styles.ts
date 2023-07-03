@@ -108,7 +108,7 @@ export const input = cx(
   css`
     &::placeholder {
     }
-  `
+  `,
 );
 
 export const action = css`

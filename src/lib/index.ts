@@ -4,7 +4,7 @@ export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
 export {
   SigninForm,
   SignupForm,
-  ContactForm
+  ContactForm,
 } from "./ui/containers/index.js";
 export { FormError } from "./logic/utils/errors.js";
 

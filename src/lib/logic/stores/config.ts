@@ -1,7 +1,8 @@
 import { setContext } from "svelte";
 import { readable } from "svelte/store";
-import type { Config } from "../typing/stores/config.js";
 import { injectGlobal } from "@emotion/css";
+
+import type { Config } from "../typing/stores/config.js";
 
 export function setStyles(config: Config["fields"] = {}) {
   const {
@@ -10,7 +11,7 @@ export function setStyles(config: Config["fields"] = {}) {
     select = {},
     file = {},
     errors = {},
-    icons = null
+    icons = null,
   } = config;
   const styles = readable<Config["fields"]>({
     field,
@@ -18,7 +19,7 @@ export function setStyles(config: Config["fields"] = {}) {
     select,
     file,
     errors,
-    icons
+    icons,
   });
 
   setContext("styles", styles);
@@ -30,13 +31,14 @@ export function setFormStyles(config: Config["form"] = {}) {
   const styles = readable<Config["form"]>({
     box,
     container,
-    submit
+    submit,
   });
 
   setContext("formStyles", styles);
 }
 
 export function setStylesVariables(config: Config["vars"] = {}) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   injectGlobal`
     :root {
       --s-form-primary: ${config.primary ?? "#CCCCCC"};
