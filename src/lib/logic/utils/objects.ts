@@ -6,9 +6,9 @@ export function generateDatas(datas: ObjStrCommon) {
   return Object.keys(datas).reduce(
     (acc, key) => ({
       ...acc,
-      [`data-${key}`]: datas[key]
+      [`data-${key}`]: datas[key],
     }),
-    {}
+    {},
   );
 }
 
@@ -22,5 +22,5 @@ export function getTexts<T extends string>(texts: TextsProp<T>) {
       label: isShared ? textField : (textField as TextPropExplicit).label,
       placeholder: isShared ? textField : (textField as TextPropExplicit).placeholder,
     };
-  }
+  };
 }

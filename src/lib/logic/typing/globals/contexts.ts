@@ -4,7 +4,7 @@ import type {
   ActionConfig,
   Submit,
   SubmitAction,
-  SubmitOptions
+  SubmitOptions,
 } from "../stores/form.js";
 import type {
   ErrorsStyles,
@@ -12,7 +12,7 @@ import type {
   Icons,
   FieldStyles,
   OptionStyles,
-  SelectStyles
+  SelectStyles,
 } from "./styles.js";
 
 export interface ContextStyles {

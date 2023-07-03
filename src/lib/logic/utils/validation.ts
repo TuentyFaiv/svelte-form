@@ -10,10 +10,10 @@ import { transformOnOff } from "./booleans.js";
 export async function fieldsValidation<T>(data: T, schema: unknown) {
   if (schema instanceof ObjectSchema) {
     const trasformedData = (typeof data === "object" && data) ? Object.keys(data).reduce((acc, key) => {
-      const field = (data as Record<string, unknown>)[key];;
+      const field = (data as Record<string, unknown>)[key];
       return {
         ...acc,
-        [key]: typeof field === "undefined" ? "" : field
+        [key]: typeof field === "undefined" ? "" : field,
       };
     }, {}) : {};
 
@@ -24,9 +24,11 @@ export async function fieldsValidation<T>(data: T, schema: unknown) {
   }
 }
 
-export async function fieldValidation<
-  T extends Writable<Errors> = Writable<Errors>
->({ event, schema, errors }: FieldValidation<T>) {
+export async function fieldValidation<T extends Writable<Errors> = Writable<Errors>>({
+  event,
+  schema,
+  errors,
+}: FieldValidation<T>) {
   const { name: key, value } = (
     event instanceof Event
   ) ? event.target as HTMLInputElement : event;
