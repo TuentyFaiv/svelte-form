@@ -1,6 +1,6 @@
 export { formStore, setConfig } from "./logic/stores/index.js";
 export { fieldsSignin, fieldsSignup, fieldsContact } from "./logic/schemas/index.js";
-export { Input, Select, Option, FileInput, Errors } from "./ui/components/index.js";
+export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
 export {
   SigninForm,
   SignupForm,

@@ -11,7 +11,7 @@
 
   import * as stylesinternal from "./SigninForm.styles.js";
 
-  import { Errors, Input } from "$lib/ui/components/index.js";
+  import { Errors, Field } from "$lib/ui/components/index.js";
 
   export let submit: Props["submit"];
   export let context: Props["context"] = "form";
@@ -69,13 +69,13 @@
   <div class={formStyles.box}>
     <slot>
       {#each fields as field (field.name)}
-        <Input {...field} {context}>
+        <Field {...field} {context}>
           <svelte:fragment slot="error" let:error>
             <slot name="error-field" {error}>
               {error}
             </slot>
           </svelte:fragment>
-        </Input>
+        </Field>
       {/each}
     </slot>
   </div>

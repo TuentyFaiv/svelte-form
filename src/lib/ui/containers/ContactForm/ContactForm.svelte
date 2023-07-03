@@ -11,7 +11,7 @@
 
   import * as stylesinternal from "./ContactForm.styles.js";
 
-  import { Input, Errors } from "$lib/ui/components/index.js";
+  import { Field, Errors } from "$lib/ui/components/index.js";
 
   export let submit: Props["submit"];
   export let phoneCode: Props["phoneCode"] = undefined;
@@ -89,13 +89,13 @@
   <div class={formStyles.box}>
     <slot>
       {#each fields as field (field.name)}
-        <Input {...field} {context}>
+        <Field {...field} {context}>
           <svelte:fragment slot="error" let:error>
             <slot name="error-field" {error}>
               {error}
             </slot>
           </svelte:fragment>
-        </Input>
+        </Field>
       {/each}
     </slot>
   </div>

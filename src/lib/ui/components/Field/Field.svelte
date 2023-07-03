@@ -5,9 +5,9 @@
   import { keys } from "$lib/logic/utils/keys.js";
 
   import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
-  import type { Input, Props } from "./Input.proptypes.js";
+  import type { Input, Props } from "./Field.proptypes.js";
 
-  import * as stylesinternal from "./Input.styles.js";
+  import * as stylesinternal from "./Field.styles.js";
 
   import IconShow from "../../assets/icon-show.svg";
   import IconHide from "../../assets/icon-hide.svg";

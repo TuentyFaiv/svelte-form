@@ -13,7 +13,7 @@
 
   import * as stylesinternal from "./SignupForm.styles.js";
 
-  import { Errors, Input, Select } from "$lib/ui/components/index.js";
+  import { Errors, Field, Select } from "$lib/ui/components/index.js";
 
   export let submit: Props["submit"];
   export let context: Props["context"] = "form";
@@ -125,13 +125,13 @@
     <slot>
       {#each fields as { type, ...field } (field.name)}
         {#if type !== "select"}
-          <Input {...field} {type} {context}>
+          <Field {...field} {type} {context}>
             <svelte:fragment slot="error" let:error>
               <slot name="error-field" {error}>
                 {error}
               </slot>
             </svelte:fragment>
-          </Input>
+          </Field>
         {:else}
           <Select {...field} on:choose={onChoose} {options} {context}>
             <svelte:fragment slot="error" let:error>

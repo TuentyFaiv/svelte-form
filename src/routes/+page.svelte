@@ -2,7 +2,7 @@
   import {
     ContactForm,
     Errors,
-    FileInput,
+    File,
     Option,
     SigninForm,
     SignupForm,
