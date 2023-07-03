@@ -106,9 +106,6 @@
     <svelte:fragment slot="error-field" let:error>
       {`Error field: ${error}`}
     </svelte:fragment>
-    <svelte:fragment slot="error-list" let:error>
-      {`Error list: ${error}`}
-    </svelte:fragment>
   </SignupForm>
 </details>
 

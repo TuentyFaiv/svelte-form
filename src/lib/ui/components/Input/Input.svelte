@@ -9,6 +9,9 @@
 
   import * as stylesinternal from "./Input.styles.js";
 
+  import IconShow from "../../assets/icon-show.svg";
+  import IconHide from "../../assets/icon-hide.svg";
+
   export let name: Props["name"];
   export let context: Props["context"] = "form";
   export let id: Props["id"] = null;
@@ -24,7 +27,7 @@
 
   const form = getContext<InputContext>(context);
   const { data, errors, styles: ctxStyles, setField, check } = $form;
-  $: ({ input: styles, icons } = $ctxStyles);
+  $: ({ field: styles, icons } = $ctxStyles);
 
   function toggleShow() {
     show = !show;
@@ -109,23 +112,21 @@
   {#if type === "password"}
     <button
       type="button"
-      class={styles?.show ?? stylesinternal.show}
+      class={styles?.action ?? stylesinternal.action}
       class:show
       on:click|stopPropagation={toggleShow}
       title={a11y.icon}
     >
-      {#if icons}
-        <img
-          class={styles?.icon ?? stylesinternal.icon}
-          src={show ? icons.show : icons.hide}
-          alt={a11y.icon}
-          decoding="async"
-          loading="lazy"
-          role="presentation"
-        />
-      {:else}
-        <span />
-      {/if}
+      <img
+        class={styles?.icon ?? stylesinternal.icon}
+        src={show
+          ? styles?.show ?? icons?.show ?? IconShow
+          : styles?.hide ?? icons?.hide ?? IconHide}
+        alt={a11y.icon}
+        decoding="async"
+        loading="lazy"
+        role="presentation"
+      />
     </button>
   {/if}
   {#if $errors[name]}

@@ -8,16 +8,16 @@ import type {
 } from "../stores/form.js";
 import type {
   ErrorsStyles,
-  FileInputStyles,
+  FileStyles,
   Icons,
-  InputStyles,
+  FieldStyles,
   OptionStyles,
   SelectStyles
 } from "./styles.js";
 
 export interface ContextStyles {
-  input?: InputStyles;
-  fileinput?: FileInputStyles;
+  field?: FieldStyles;
+  file?: FileStyles;
   select?: SelectStyles;
   option?: OptionStyles;
   icons?: Icons | null;

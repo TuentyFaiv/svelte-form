@@ -26,7 +26,7 @@
   const store = formStore({
     fields: fieldsSignin,
     styles: {
-      input: styles?.input ?? {},
+      field: styles?.field ?? {},
       icons: styles?.icons ?? null,
     },
   });
@@ -83,9 +83,9 @@
     <slot name="submit">Signin</slot>
   </button>
   <Errors show={showErrors} {context}>
-    <svelte:fragment slot="error" let:error>
-      <slot name="error-list" {error}>
-        {error}
+    <svelte:fragment slot="error" let:error let:field>
+      <slot name="error-list" {error} {field}>
+        {`${field}: ${error}`}
       </slot>
     </svelte:fragment>
   </Errors>

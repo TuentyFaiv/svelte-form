@@ -8,7 +8,7 @@ export const field = css`
   z-index: 0;
   &[data-type="password"] {
     & > span {
-      right: 42px;
+      right: 36px;
     }
   }
   &[data-type="checkbox"] {
@@ -67,7 +67,7 @@ export const label = css`
   color: var(--s-form-text);
   font-size: 16px;
   line-height: 18px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--s-form-font);
 `;
 
 const shared = css`
@@ -77,14 +77,14 @@ const shared = css`
   color: var(--s-form-text);
   font-size: 14px;
   line-height: 16px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--s-form-font);
   border: var(--s-form-border);
   border-radius: var(--s-form-radius);
   &::placeholder {
     color: var(--s-form-placeholder);
     font-size: 14px;
     line-height: 16px;
-    font-family: system-ui, sans-serif;
+    font-family: var(--s-form-font);
   }
 `;
 
@@ -92,6 +92,7 @@ export const area = cx(
   shared,
   css`
     padding: 8px;
+    min-height: 100px;
     resize: vertical;
     &::placeholder {
     }
@@ -110,7 +111,7 @@ export const input = cx(
   `
 );
 
-export const show = css`
+export const action = css`
   position: absolute;
   display: block;
   box-sizing: inherit;
@@ -121,46 +122,13 @@ export const show = css`
   color: var(--s-form-text);
   font-size: 12px;
   line-height: 12px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--s-form-font);
   border: 0;
   bottom: 0;
-  right: 10px;
+  right: 6px;
   z-index: 0;
   &:hover {
     cursor: pointer;
-  }
-  & > span {
-    display: block;
-    box-sizing: inherit;
-    width: 100%;
-    padding: 2px 5px;
-    border-radius: 100%;
-    border: 3px solid var(--s-form-primary);
-    &::before {
-      display: block;
-      content: "";
-      width: 6px;
-      height: 6px;
-      margin: 0 auto;
-      border-radius: 50%;
-      background-color: var(--s-form-primary);
-    }
-  }
-  &:not(.show) > span {
-    position: relative;
-    z-index: 0;
-    ::after {
-      position: absolute;
-      display: block;
-      content: "";
-      width: 100%;
-      height: 3px;
-      background-color: var(--s-form-primary);
-      transform: rotateZ(-30deg) translateY(-50%) translateX(-50%);
-      bottom: 7px;
-      left: 50%;
-      z-index: 0;
-    }
   }
 `;
 
@@ -181,7 +149,7 @@ export const error = css`
   color: var(--s-form-text-error);
   font-size: 12px;
   line-height: 12px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--s-form-font);
   transform: translateY(50%);
   border-radius: var(--s-form-radius);
   bottom: 13px;

@@ -90,6 +90,13 @@
     }
   }
 
+  $: onHide = active
+    ? () => {
+        handleToggle();
+        setField(name, $data[name] ?? "");
+      }
+    : undefined;
+
   $: datasets = generateDatas(datas);
   $: showedValue =
     options.find(({ value }) => value === $data[name])?.label ||
@@ -135,8 +142,9 @@
     >
       {showedValue}
       <img
-        src={styles?.icon ?? icons?.arrow ?? `${IconArrow}?v=2`}
-        alt=""
+        src={styles?.arrow ?? icons?.arrow ?? IconArrow}
+        alt={showedValue}
+        class={styles?.icon ?? stylesinternal.icon}
         role="presentation"
       />
       {#if $errors[name]}
@@ -151,12 +159,7 @@
       <div
         role="none"
         class={styles?.options ?? stylesinternal.options}
-        on:mouseleave|stopPropagation={active
-          ? () => {
-              handleToggle();
-              setField(name, $data[name] ?? "");
-            }
-          : undefined}
+        on:mouseleave|stopPropagation={onHide}
         on:keydown|stopPropagation={onChooseByKey}
         transition:slide={{ delay: 200 }}
       >

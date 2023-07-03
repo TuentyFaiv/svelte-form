@@ -3,6 +3,7 @@ interface GeneralStyles {
   input?: string;
   label?: string;
   error?: string;
+  icon?: string;
 }
 
 export interface SharedFormStyles {
@@ -24,6 +25,7 @@ export interface CssVars {
   placeholder?: string;
   radius?: string;
   texterror?: string;
+  font?: string;
 }
 
 export interface SelectStyles extends Omit<GeneralStyles, "input"> {
@@ -31,17 +33,18 @@ export interface SelectStyles extends Omit<GeneralStyles, "input"> {
   value?: string;
   options?: string;
   option?: string;
-  icon?: string;
+  arrow?: string;
 }
 
-export interface InputStyles extends GeneralStyles {
+export interface FieldStyles extends GeneralStyles {
   area?: string;
   check?: string;
+  action?: string;
+  hide?: string;
   show?: string;
-  icon?: string;
 }
 
-export interface FileInputStyles extends Omit<GeneralStyles, "label"> {
+export interface FileStyles extends Omit<GeneralStyles, "label"> {
   wrapper?: string;
   actions?: string;
   retry?: string;

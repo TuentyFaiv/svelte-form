@@ -1,7 +1,5 @@
 import { css } from "@emotion/css";
 
-// import Icon from "@icons/icon-select.svg";
-
 export const field = css`
   position: relative;
   display: block;
@@ -24,7 +22,7 @@ export const label = css`
   color: var(--s-form-text);
   font-size: 16px;
   line-height: 18px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--s-form-font);
 `;
 
 export const select = css`
@@ -36,14 +34,10 @@ export const select = css`
   border-radius: var(--s-form-radius);
   z-index: 0;
   &:is(:hover, :focus, :focus-within) {}
-  &:is(:hover, :focus, :focus-within) > p {
-    &::after {}
-  }
-  &.active {
-    & > p {
-      &::after {
-        transform: rotateZ(-45deg) rotateX(-180deg) translateY(-50%);
-      }
+  &:is(:hover, :focus, :focus-within) > p {}
+  &.active > p {
+    & > img {
+      transform: translateY(-50%) translateX(2px) rotateX(180deg);
     }
   }
 `;
@@ -57,23 +51,25 @@ export const value = css`
   color: var(--s-form-text);
   font-size: 14px;
   line-height: 16px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--s-form-font);
   z-index: 0;
   &[data-placeholder="true"] {
     color: var(--s-form-placeholder);
   }
-  & > img {
-    position: absolute;
-    display: block;
-    box-sizing: inherit;
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%) translateX(2px);
-    z-index: 0;
-  }
+`;
+
+export const icon = css`
+  position: absolute;
+  display: block;
+  box-sizing: inherit;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) translateX(2px);
+  transition: transform .5s ease-in-out;
+  z-index: 0;
 `;
 
 export const options = css`
@@ -82,9 +78,9 @@ export const options = css`
   box-sizing: inherit;
   width: 100%;
   max-height: 150px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 0 0 4px 4px;
+  background-color: var(--s-form-secondary);
+  border: var(--s-form-border);
+  border-radius: 0 0 var(--s-form-radius) var(--s-form-radius);
   overflow-y: auto;
   justify-content: flex-start;
   align-items: center;
@@ -99,23 +95,24 @@ export const options = css`
   }
   &::-webkit-scrollbar-thumb {
     width: 10px;
-    background-color: #ccc;
+    background-color: var(--s-form-primary);
   }
 `;
 
 export const option = css`
   display: block;
-  width: 100%;
-  font-size: 14px;
   box-sizing: inherit;
+  width: 100%;
   padding: 5px 10px;
-  font-family: system-ui, sans-serif;
-  line-height: 14px;
+  color: var(--s-form-text);
+  font-size: 14px;
+  line-height: 16px;
+  font-family: var(--s-form-font);
   &[aria-disabled="true"] {
     pointer-events: none;
   }
   &:hover {
-    background-color: #ccc;
+    background-color: var(--s-form-primary);
     & > span {
       pointer-events: none;
     }
@@ -127,14 +124,14 @@ export const error = css`
   display: block;
   padding: 3px 5px;
   box-sizing: inherit;
-  background-color: red;
-  color: white;
+  background-color: var(--s-form-error);
+  color: var(--s-form-text-error);
   font-size: 12px;
-  font-family: system-ui, sans-serif;
   line-height: 12px;
+  font-family: var(--s-form-font);
   transform: translateY(50%);
-  border-radius: 4px;
-  bottom: 7px;
-  right: 31px;
+  border-radius: var(--s-form-radius);
+  bottom: 8px;
+  right: 26px;
   z-index: 0;
 `;

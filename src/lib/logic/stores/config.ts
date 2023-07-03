@@ -5,18 +5,18 @@ import { injectGlobal } from "@emotion/css";
 
 export function setStyles(config: Config["fields"] = {}) {
   const {
-    input = {},
+    field = {},
     option = {},
     select = {},
-    fileinput = {},
+    file = {},
     errors = {},
     icons = null
   } = config;
   const styles = readable<Config["fields"]>({
-    input,
+    field,
     option,
     select,
-    fileinput,
+    file,
     errors,
     icons
   });
@@ -51,6 +51,7 @@ export function setStylesVariables(config: Config["vars"] = {}) {
       --s-form-placeholder: ${config.placeholder ?? "#B8B2B2"};
       --s-form-text-error: ${config.texterror ?? "#FFFFFF"};
       --s-form-radius: ${config.radius ?? "4px"};
+      --s-form-font: ${config.font ?? "system-ui, sans-serif"};
     }
   `;
 }

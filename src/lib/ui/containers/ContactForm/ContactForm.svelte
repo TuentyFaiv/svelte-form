@@ -27,7 +27,7 @@
   const store = formStore({
     fields: fieldsContact,
     styles: {
-      input: styles?.input ?? {},
+      field: styles?.field ?? {},
       icons: styles?.icons ?? null,
     },
   });
@@ -103,9 +103,9 @@
     <slot name="submit">Send message</slot>
   </button>
   <Errors show={showErrors} {context}>
-    <svelte:fragment slot="error" let:error>
-      <slot name="error-list" {error}>
-        {error}
+    <svelte:fragment slot="error" let:error let:field>
+      <slot name="error-list" {error} {field}>
+        {`${field}: ${error}`}
       </slot>
     </svelte:fragment>
   </Errors>

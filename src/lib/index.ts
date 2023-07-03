@@ -14,8 +14,8 @@ export type {
   CssVars,
   ErrorsStyles,
   Icons,
-  FileInputStyles,
-  InputStyles,
+  FileStyles,
+  FieldStyles,
   OptionStyles,
   SelectStyles,
 } from "./logic/typing/globals/styles.js";

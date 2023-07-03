@@ -26,18 +26,18 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 }: FormStoreConfig<SchemaFields>) {
   let form: HTMLFormElement | null = null;
   const {
-    input = {},
+    field = {},
     option = {},
     select = {},
-    fileinput = {},
+    file = {},
     errors: errorsStyles = {},
     icons = null
   } = styles;
   const ctxStyles = writable<ContextStyles>({
-    input,
+    field,
     option,
     select,
-    fileinput,
+    file,
     errors: errorsStyles,
     icons
   });
@@ -174,12 +174,6 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
         ctxStyles.update((prev) => {
           const validPrev = Object.keys(prev[keyStyle] ?? {}).length === 0 ? null : prev[keyStyle];
           const validGlobal = Object.keys(globalStyle ?? {}).length === 0 ? null : globalStyle;
-
-          console.log({
-            keyStyle,
-            validGlobal,
-            validPrev,
-          });
 
           return {
             ...prev,

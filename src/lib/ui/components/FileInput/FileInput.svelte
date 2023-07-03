@@ -25,7 +25,7 @@
     choose: File | File[];
     retry: undefined;
   }>();
-  $: ({ fileinput: styles } = $ctxStyles);
+  $: ({ file: styles } = $ctxStyles);
 
   $: file = !!$data[name] ? ($data[name] as File) : null;
   $: files = !!$data[name] ? ($data[name] as File[]) : null;
