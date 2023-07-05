@@ -67,6 +67,16 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     setErrors({ error, errors, handle });
   }
 
+  function reset(resetErrors = true): void {
+    data.set(schema.getDefault() as Values);
+    if (!resetErrors) return;
+
+    errors.set(Object.keys(schemafields).reduce((acc, key) => ({
+      ...acc,
+      [key]: null,
+    }), {}));
+  }
+
   async function validation<T>(formToValidate: HTMLFormElement): Promise<T> {
     form = formToValidate;
     const formData = Object.fromEntries(new FormData(form).entries());
@@ -120,11 +130,11 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
   }
 
   async function check(event: FocusEvent | Event): Promise<void> {
-    const { name, value } = event.target as HTMLInputElement;
+    const { name, value, type } = event.target as HTMLInputElement;
 
     data.update((prev) => ({
       ...prev,
-      [name]: transformOnOff(value),
+      [name]: type === "number" ? parseFloat(value) : transformOnOff(value),
     }));
 
     await fieldValidation({
@@ -149,6 +159,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     errors,
     data,
     styles: ctxStyles,
+    reset,
     setError: setFieldError,
     setField,
     check,
