@@ -58,7 +58,7 @@ export function setStylesVariables(config: Config["vars"] = {}) {
   `;
 }
 
-export function setConfig({ fields, form, vars }: Config) {
+export function setConfig({ fields, form, vars }: Config = {}) {
   setStyles(fields);
   setFormStyles(form);
   setStylesVariables(vars);

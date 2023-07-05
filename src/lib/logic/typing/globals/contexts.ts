@@ -28,6 +28,7 @@ export interface ContextForm<Values, Fields> {
   loading: Writable<boolean>;
   errors: Writable<Errors>;
   data: Writable<Values>;
+  reset(resetErrors?: boolean): void;
   setError(name: Fields, error?: unknown): void;
   setField(field: Fields, value: unknown, validate?: boolean): Promise<void>;
   check(event: FocusEvent | Event): Promise<void>;
