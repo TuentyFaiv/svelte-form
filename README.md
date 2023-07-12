@@ -2,6 +2,8 @@
 
 `npm install @tuentyfaiv/svelte-form`
 
+> Note: The Built-in forms was moved to [@tuentyfaiv/svelte-forms-ui](https://www.npmjs.com/package/@tuentyfaiv/svelte-form-ui)
+
 ## Examples
 
 - ### Store creation
@@ -46,7 +48,11 @@
 ## Imports
 - ### Store 
   ```typescript
-  import { faivform, useForm, setConfig } from "@tuentyfaiv/svelte-form";
+  import {
+    faivform,
+    useForm,
+    setConfig
+  } from "@tuentyfaiv/svelte-form";
   ```
 - ### Components
   ```typescript
@@ -58,21 +64,6 @@
     Errors
   } from "@tuentyfaiv/svelte-form";
   ```
-- ### Build-in forms
-  ```typescript
-  // Forms components
-  import {
-    SigninForm,
-    SignupForm,
-    ContactForm,
-  } from "@tuentyfaiv/svelte-form";
-  // Forms schemas
-  import {
-    fieldsSignin,
-    fieldsSignup,
-    fieldsContact,
-  } from "@tuentyfaiv/svelte-form";
-  ```
 - ### Utils
   ```typescript
   import { FormError } from "@tuentyfaiv/svelte-form";
@@ -80,16 +71,15 @@
 - ### Types
   ```typescript
   import type {
+    Config,
     ContextStyles,
     ContextForm,
-    FormStoreConfig,
-    Config,
     SelectOption,
-    TextsProp,
-    SigninValues,
-    SignupValues,
-    ContactValues,
-    SharedFormStyles,
+    SharedUIProps,
+    GeneralInputProps,
+    GeneralFieldProps,
+    FormStoreConfig,
+    SubmitOptions,
     CssVars,
     ErrorsStyles,
     Icons,

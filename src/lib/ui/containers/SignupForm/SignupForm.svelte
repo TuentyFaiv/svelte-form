@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { createEventDispatcher, getContext } from "svelte";
   import { getTexts } from "$lib/logic/utils/objects.js";
   import { FormError } from "$lib/logic/utils/errors.js";
@@ -152,4 +152,4 @@
       </slot>
     </svelte:fragment>
   </Errors>
-</form>
+</form> -->

@@ -1,8 +1,8 @@
-import type { Readable } from "svelte/store";
-import type { AnyObject } from "yup";
+// import type { Readable } from "svelte/store";
+// import type { AnyObject } from "yup";
 import type { ObjStrCommon } from "./types.js";
-import type { ContextStyles, ContextForm } from "./contexts.js";
-import type { SharedFormStyles } from "./styles.js";
+// import type { ContextForm } from "./contexts.js";
+// import type { SharedFormStyles } from "./styles.js";
 
 export interface SharedUIProps {
   context: string;
@@ -34,24 +34,24 @@ export interface GeneralInputProps extends GeneralFieldProps {
   | "textarea";
 }
 
-export interface GlobalFormProps extends SharedUIProps {
-  styles?: Partial<FormStyles>;
-  showErrors?: boolean;
-}
+// export interface GlobalFormProps extends SharedUIProps {
+//   styles?: Partial<FormStyles>;
+//   showErrors?: boolean;
+// }
 
-export interface FormStyles extends ContextStyles {
-  form: SharedFormStyles;
-}
+// export interface FormStyles extends ContextStyles {
+//   form: SharedFormStyles;
+// }
 
-export type InputContext = Readable<ContextForm<AnyObject, string>>;
+// export type InputContext = Readable<ContextForm<AnyObject, string>>;
 
-export type TextsProp<T extends string> = {
-  [key in T]: TextProp;
-};
+// export type TextsProp<T extends string> = {
+//   [key in T]: TextProp;
+// };
 
-export type TextProp = string | TextPropExplicit;
+// export type TextProp = string | TextPropExplicit;
 
-export interface TextPropExplicit {
-  placeholder: string;
-  label: string;
-}
+// export interface TextPropExplicit {
+//   placeholder: string;
+//   label: string;
+// }

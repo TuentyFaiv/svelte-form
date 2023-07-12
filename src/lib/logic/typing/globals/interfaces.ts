@@ -1,4 +1,4 @@
-import type { GeneralInputProps } from "./proptypes.js";
+// import type { GeneralInputProps } from "./proptypes.js";
 
 export interface SelectOption {
   key?: string;
@@ -7,7 +7,7 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
-export interface FieldInputForm<TName extends string, TExtraTypes extends string = "email"> {
-  readonly name: TName;
-  readonly type: GeneralInputProps["type"] | TExtraTypes;
-}
+// export interface FieldInputForm<TName extends string, TExtraTypes extends string = "email"> {
+//   readonly name: TName;
+//   readonly type: GeneralInputProps["type"] | TExtraTypes;
+// }

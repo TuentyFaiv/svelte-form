@@ -4,7 +4,7 @@ import { FormVarStyles } from "./styles.js";
 
 import type { Config } from "../typing/stores/config.js";
 
-export function setStyles(config: Config["fields"] = {}) {
+function setStyles(config: Config["fields"] = {}) {
   const {
     field = {},
     option = {},
@@ -25,24 +25,24 @@ export function setStyles(config: Config["fields"] = {}) {
   setContext("styles", styles);
 }
 
-export function setFormStyles(config: Config["form"] = {}) {
-  const { box, container, submit } = config;
+// export function setFormStyles(config: Config["form"] = {}) {
+//   const { box, container, submit } = config;
 
-  const styles = readable<Config["form"]>({
-    box,
-    container,
-    submit,
-  });
+//   const styles = readable<Config["form"]>({
+//     box,
+//     container,
+//     submit,
+//   });
 
-  setContext("formStyles", styles);
-}
+//   setContext("formStyles", styles);
+// }
 
-export function setStylesVariables(config: Config["vars"] = {}) {
+function setStylesVariables(config: Config["vars"] = {}) {
   FormVarStyles.create(config, true);
 }
 
-export function setConfig({ fields, form, vars }: Config = {}) {
+export function setConfig({ fields, vars }: Config = {}) {
   setStyles(fields);
-  setFormStyles(form);
+  // setFormStyles(form);
   setStylesVariables(vars);
 }

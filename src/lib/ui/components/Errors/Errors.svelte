@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { getContext } from "svelte";
+  import { useForm } from "$lib/index.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Props } from "./Errors.proptypes.js";
 
   import * as stylesinternal from "./Errors.styles.js";
@@ -9,7 +8,7 @@
   export let context: Props["context"] = "form";
   export let show: Props["show"] = undefined;
 
-  const form = getContext<InputContext>(context);
+  const form = useForm(context);
   const { errors, styles: cxtStyles } = $form;
   $: ({ errors: styles } = $cxtStyles);
 

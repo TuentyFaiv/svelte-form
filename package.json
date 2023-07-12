@@ -1,7 +1,7 @@
 {
   "name": "@tuentyfaiv/svelte-form",
   "description": "A forms management library for svelte inspired by Formik",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -38,11 +38,14 @@
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "peerDependencies": {
+    "@emotion/css": "^11.11.2",
+    "svelte": "^4.0.1",
+    "yup": "^1.2.0"
+  },
   "devDependencies": {
     "@emotion/css": "^11.11.2",
     "@playwright/test": "^1.36.0",
-    "@sveltejs/adapter-auto": "^2.1.0",
-    "@sveltejs/adapter-static": "^2.0.2",
     "@sveltejs/adapter-vercel": "^3.0.2",
     "@sveltejs/kit": "^1.22.3",
     "@sveltejs/package": "^2.2.0",
@@ -65,11 +68,6 @@
     "typescript": "^5.1.6",
     "vite": "^4.4.3",
     "vitest": "^0.33.0",
-    "yup": "^1.2.0"
-  },
-  "peerDependencies": {
-    "@emotion/css": "^11.11.2",
-    "svelte": "^4.0.1",
     "yup": "^1.2.0"
   },
   "engines": {
