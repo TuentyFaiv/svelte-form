@@ -25,24 +25,11 @@ function setStyles(config: Config["fields"] = {}) {
   setContext("styles", styles);
 }
 
-// export function setFormStyles(config: Config["form"] = {}) {
-//   const { box, container, submit } = config;
-
-//   const styles = readable<Config["form"]>({
-//     box,
-//     container,
-//     submit,
-//   });
-
-//   setContext("formStyles", styles);
-// }
-
 function setStylesVariables(config: Config["vars"] = {}) {
   FormVarStyles.create(config, true);
 }
 
 export function setConfig({ fields, vars }: Config = {}) {
   setStyles(fields);
-  // setFormStyles(form);
   setStylesVariables(vars);
 }

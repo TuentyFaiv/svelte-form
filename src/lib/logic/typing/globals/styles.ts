@@ -6,12 +6,6 @@ interface GeneralStyles {
   icon?: string;
 }
 
-// export interface SharedFormStyles {
-//   container?: string;
-//   box?: string;
-//   submit?: string;
-// }
-
 export interface CssVars {
   primary?: string;
   secondary?: string;
