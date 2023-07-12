@@ -1,9 +1,9 @@
-import { object } from "yup";
-import { fieldsContact } from "../../schemas/index.js";
+// import { object } from "yup";
+// import { fieldsContact } from "../../schemas/index.js";
 
-// eslint-disable-next-line import/order
-import type { InferType } from "yup";
+// // eslint-disable-next-line import/order
+// import type { InferType } from "yup";
 
-const schema = object(fieldsContact);
+// const schema = object(fieldsContact);
 
-export type ContactValues = InferType<typeof schema>;
+// export type ContactValues = InferType<typeof schema>;
