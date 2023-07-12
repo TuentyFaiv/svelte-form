@@ -4,9 +4,10 @@ import { object } from "yup";
 import { toggle, transformOnOff } from "../utils/booleans.js";
 import { fieldsValidation, fieldValidation } from "../utils/validation.js";
 import { FormError, setError, setErrors } from "../utils/errors.js";
+import { FormVarStyles } from "./styles.js";
 
 // eslint-disable-next-line import/order
-import type { AnyObject, InferType } from "yup";
+import type { AnyObject, AnySchema, InferType } from "yup";
 // eslint-disable-next-line import/order
 import type { Readable } from "svelte/store";
 import type { ContextForm, ContextStyles } from "../typing/globals/contexts.js";
@@ -18,10 +19,9 @@ import type {
 } from "../typing/stores/form.js";
 import type { Errors } from "../typing/utils/errors.js";
 
-export function faivform<SchemaFields extends AnyObject = AnyObject>({
-  fields,
-  styles = {},
-}: FormStoreConfig<SchemaFields>) {
+export function faivform<
+  Schema extends Record<string, AnySchema> = Record<string, AnySchema>,
+>({ fields, styles = {} }: FormStoreConfig<Schema>) {
   let form: HTMLFormElement | null = null;
   const ctxStyles = writable<ContextStyles>({
     field: styles.field ?? {},
@@ -31,7 +31,8 @@ export function faivform<SchemaFields extends AnyObject = AnyObject>({
     errors: styles.errors ?? {},
     icons: styles.icons ?? null,
   });
-  const schemafields: SchemaFields = { ...fields };
+  FormVarStyles.create();
+  const schemafields: Schema = { ...fields };
   const schema = object(schemafields);
 
   type Values = InferType<typeof schema>;

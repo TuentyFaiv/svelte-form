@@ -1,17 +1,17 @@
 <script lang="ts">
   import { setConfig } from "../lib/index.js";
 
-  setConfig({
-    form: {
-      box: "form__box",
-      container: "form__container",
-      submit: "form__submit",
-    },
-    vars: {
-      primary: "#ccc",
-      secondary: "#000",
-    },
-  });
+  // setConfig({
+  //   form: {
+  //     box: "form__box",
+  //     container: "form__container",
+  //     submit: "form__submit",
+  //   },
+  //   vars: {
+  //     primary: "#ccc",
+  //     secondary: "#000",
+  //   },
+  // });
 </script>
 
 <main>

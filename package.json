@@ -9,16 +9,18 @@
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
     "prepublishOnly": "npm run package",
-    "test": "playwright test",
+    "test": "npm run test:integration && npm run test:unit",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "test:unit": "vitest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:integration": "playwright test",
+    "test:unit": "vitest"
   },
   "keywords": [
     "Svelte",
-    "form",
-    "ui"
+    "Form",
+    "UI",
+    "Inputs"
   ],
   "author": "Tonalli López <contact@tuentyfaiv.com>",
   "license": "MIT",
@@ -36,35 +38,33 @@
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "dependencies": {
+  "devDependencies": {
+    "@emotion/css": "^11.11.2",
+    "@playwright/test": "^1.36.0",
+    "@sveltejs/adapter-auto": "^2.1.0",
+    "@sveltejs/adapter-static": "^2.0.2",
+    "@sveltejs/adapter-vercel": "^3.0.2",
+    "@sveltejs/kit": "^1.22.3",
+    "@sveltejs/package": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.44.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-import-resolver-node": "^0.3.7",
     "eslint-module-utils": "^2.8.0",
     "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-svelte": "^2.32.2",
     "eslint-scope": "^7.2.0",
     "eslint-visitor-keys": "^3.4.1",
-    "svelte-eslint-parser": "^0.32.0"
-  },
-  "devDependencies": {
-    "@emotion/css": "^11.11.2",
-    "@playwright/test": "^1.35.1",
-    "@sveltejs/adapter-auto": "^2.1.0",
-    "@sveltejs/adapter-static": "^2.0.2",
-    "@sveltejs/adapter-vercel": "^3.0.1",
-    "@sveltejs/kit": "^1.21.0",
-    "@sveltejs/package": "^2.1.0",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
-    "@typescript-eslint/parser": "^5.60.1",
-    "eslint": "^8.43.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-plugin-svelte": "^2.32.0",
-    "publint": "^0.1.13",
-    "svelte": "^4.0.1",
-    "svelte-check": "^3.4.4",
+    "publint": "^0.1.16",
+    "svelte": "^4.0.5",
+    "svelte-check": "^3.4.6",
+    "svelte-eslint-parser": "^0.32.1",
     "tslib": "^2.6.0",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9",
-    "vitest": "^0.32.2",
+    "vite": "^4.4.3",
+    "vitest": "^0.33.0",
     "yup": "^1.2.0"
   },
   "peerDependencies": {
@@ -76,10 +76,6 @@
     "npm": ">=7.0.0",
     "pnpm": ">=7.0.0",
     "node": ">=16.0.0"
-  },
-  "main": "svelte.config.js",
-  "directories": {
-    "test": "tests"
   },
   "repository": {
     "type": "git",
