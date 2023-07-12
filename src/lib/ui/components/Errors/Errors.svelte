@@ -6,7 +6,7 @@
   import * as stylesinternal from "./Errors.styles.js";
 
   export let context: Props["context"] = "form";
-  export let show: Props["show"] = undefined;
+  export let show: Props["show"] = true;
 
   const form = useForm(context);
   const { errors, styles: cxtStyles } = $form;

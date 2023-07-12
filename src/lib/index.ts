@@ -1,11 +1,5 @@
 export { faivform, useForm, setConfig } from "./logic/stores/index.js";
-// export { fieldsSignin, fieldsSignup, fieldsContact } from "./logic/schemas/index.js";
 export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
-// export {
-//   SigninForm,
-//   SignupForm,
-//   ContactForm,
-// } from "./ui/containers/index.js";
 export { FormError } from "./logic/utils/errors.js";
 
 export type { Config } from "./logic/typing/stores/config.js";
@@ -22,5 +16,3 @@ export type {
   OptionStyles,
   SelectStyles,
 } from "./logic/typing/globals/styles.js";
-// export type { SigninValues, SignupValues } from "./logic/typing/schemas/auth.js";
-// export type { ContactValues } from "./logic/typing/schemas/contact.js";

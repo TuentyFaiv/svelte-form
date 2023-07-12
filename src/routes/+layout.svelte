@@ -2,10 +2,13 @@
   import { setConfig } from "../lib/index.js";
 
   // setConfig({
-  //   form: {
-  //     box: "form__box",
-  //     container: "form__container",
-  //     submit: "form__submit",
+  //   fields: {
+  //     field: {
+  //       field: "form__field",
+  //     },
+  //     select: {
+  //       field: "form__field form__field--select",
+  //     }
   //   },
   //   vars: {
   //     primary: "#ccc",
