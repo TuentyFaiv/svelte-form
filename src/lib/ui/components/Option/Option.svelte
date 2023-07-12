@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { createEventDispatcher, getContext, onDestroy } from "svelte";
+  import { createEventDispatcher, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
   import { generateDatas } from "$lib/logic/utils/objects.js";
+  import { useForm } from "$lib/logic/stores/form.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Option, Props } from "./Option.proptypes.js";
 
   import * as stylesinternal from "./Option.styles.js";
@@ -18,7 +18,7 @@
 
   let input: Option;
 
-  const form = getContext<InputContext>(context);
+  const form = useForm(context);
   const { data, errors, styles: ctxStyles, check, setField } = $form;
   const dispatch = createEventDispatcher<{ choose: string }>();
   $: ({ option: styles } = $ctxStyles);

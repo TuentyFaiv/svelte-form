@@ -7,14 +7,14 @@
 - ### Store creation
   ```typescript
   import { string } from "yup";
-  import { formStore } from "@tuentyfaiv/svelte-form";
+  import { faivform } from "@tuentyfaiv/svelte-form";
 
   const fields = {
     email: string().email("required-email").required("required"),
     // ...other fields
   };
 
-  export const form = formStore({ fields });
+  export const form = faivform({ fields });
   ```
 - ### Input
   ```svelte
@@ -24,10 +24,10 @@
     // From store created
     const { submit } = $form; // Store created
     // Or create a new one
-    const form = formStore({ fields });
+    const form = faivform({ fields });
     const { submit } = $form;
     // If you want reactivity
-    $: form = formStore({ fields });
+    $: form = faivform({ fields });
     $: ({ submit } = $form);
 
 
@@ -46,7 +46,7 @@
 ## Imports
 - ### Store 
   ```typescript
-  import { formStore, setConfig } from "@tuentyfaiv/svelte-form";
+  import { faivform, useForm, setConfig } from "@tuentyfaiv/svelte-form";
   ```
 - ### Components
   ```typescript

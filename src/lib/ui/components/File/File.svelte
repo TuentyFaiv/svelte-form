@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { generateDatas } from "$lib/logic/utils/objects.js";
+  import { useForm } from "$lib/logic/stores/form.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Input, Props } from "./File.proptypes.js";
 
   import * as stylesinternal from "./File.styles.js";
@@ -19,7 +19,7 @@
 
   let input: Input;
 
-  const form = getContext<InputContext>(context);
+  const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField, setError } = $form;
   const dispatch = createEventDispatcher<{
     choose: File | File[];
@@ -38,22 +38,28 @@
   $: datasets = generateDatas(datas);
 
   function onSelectFile(event: Event) {
-    const { files: filesToUpload } = event.target as HTMLInputElement;
-    if (filesToUpload) {
-      const fileToUpload =
+    const { files: filesInput } = event.target as HTMLInputElement;
+    if (filesInput) {
+      const filesToUpload =
         multiple && files
-          ? ([...files, ...filesToUpload] as File[])
-          : filesToUpload[0];
+          ? ([...files, ...filesInput] as File[])
+          : filesInput[0];
 
-      if (fileToUpload instanceof File) {
-        const sizeKB = fileToUpload.size / 1024;
+      if (filesToUpload instanceof File || Array.isArray(filesToUpload)) {
+        const sizeKB =
+          (filesToUpload instanceof File
+            ? filesToUpload.size
+            : filesToUpload.reduce(
+                (acc, fileToUpload) => acc + fileToUpload.size,
+                0
+              )) / 1024;
         if (sizeKB > max) {
           setError(name, "to-big");
         }
       }
 
-      setField(name, fileToUpload);
-      dispatch("choose", fileToUpload);
+      setField(name, filesToUpload);
+      dispatch("choose", filesToUpload);
     }
   }
 

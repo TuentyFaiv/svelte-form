@@ -1,15 +1,8 @@
 import type { AnySchema } from "yup";
-import type { ObjStrCustom } from "../globals/types.js";
 
-export type FieldValidation<T> = {
-  schema: ObjStrCustom<AnySchema>;
-  event: FocusEvent | Event | Field;
+export type FieldValidation<T > = {
+  schema: AnySchema;
+  field: string | number | symbol;
+  value: unknown;
   errors: T;
 };
-
-export interface Field {
-  name: string | number | symbol;
-  value: unknown;
-  checked?: unknown;
-  type?: string;
-}

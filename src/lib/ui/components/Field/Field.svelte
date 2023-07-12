@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { getContext, onDestroy } from "svelte";
+  import { onDestroy } from "svelte";
   import { fade } from "svelte/transition";
   import { generateDatas } from "$lib/logic/utils/objects.js";
+  import { useForm } from "$lib/logic/stores/form.js";
   import { keys } from "$lib/logic/utils/keys.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Input, Props } from "./Field.proptypes.js";
 
   import * as stylesinternal from "./Field.styles.js";
@@ -25,7 +25,7 @@
   let show = false;
   let mounted = false;
 
-  const form = getContext<InputContext>(context);
+  const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField, check } = $form;
   $: ({ field: styles, icons } = $ctxStyles);
 
@@ -43,11 +43,9 @@
 
   $: datasets = generateDatas(datas);
 
-  $: {
-    if (type === "checkbox") {
-      if (!mounted && checked) mounted = true;
-      setField(name, checked, mounted);
-    }
+  $: if (type === "checkbox") {
+    if (!mounted && checked) mounted = true;
+    setField(name, checked, mounted);
   }
 
   onDestroy(() => {
@@ -85,8 +83,8 @@
       id={id ?? name}
       type="checkbox"
       bind:this={input}
-      on:keydown={onChecked}
       bind:checked
+      on:keydown={onChecked}
       {name}
       {...$$restProps}
     />

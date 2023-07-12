@@ -1,7 +1,6 @@
 import type { Writable } from "svelte/store";
 import type { Errors } from "../utils/errors.js";
 import type {
-  ActionConfig,
   Submit,
   SubmitAction,
   SubmitOptions,
@@ -32,7 +31,6 @@ export interface ContextForm<Values, Fields> {
   setError(name: Fields, error?: unknown): void;
   setField(field: Fields, value: unknown, validate?: boolean): Promise<void>;
   check(event: FocusEvent | Event): Promise<void>;
-  action(data?: ActionConfig): Promise<void>;
   submit<T extends Values>(action: SubmitAction<T>, options?: SubmitOptions): Submit;
   styles: Writable<ContextStyles>;
 }

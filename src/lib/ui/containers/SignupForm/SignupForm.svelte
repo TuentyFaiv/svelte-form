@@ -3,7 +3,7 @@
   import { getTexts } from "$lib/logic/utils/objects.js";
   import { FormError } from "$lib/logic/utils/errors.js";
   import { fieldsSignup } from "$lib/logic/schemas/index.js";
-  import { formStore } from "$lib/logic/stores/index.js";
+  import { faivform } from "$lib/logic/stores/index.js";
 
   import type { Readable } from "svelte/store";
   import type { FieldInputForm } from "$lib/logic/typing/globals/interfaces.js";
@@ -22,14 +22,13 @@
   export let code: Props["code"] = "bycountry";
   export let confirm: Props["confirm"] = true;
   export let styles: Props["styles"] = undefined;
-  export let success: Props["success"] = undefined;
   export let texts: Props["texts"];
 
   const globalStyles = getContext<Readable<Config["form"]>>("formStyles");
   $: formStyles = styles?.form ?? $globalStyles ?? stylesinternal ?? {};
   const { confirmPassword, ...fieldsRemaining } = fieldsSignup;
 
-  $: store = formStore({
+  $: store = faivform({
     fields: { ...fieldsRemaining, ...(confirm ? { confirmPassword } : {}) },
     styles: {
       field: styles?.field ?? {},
@@ -74,7 +73,6 @@
         dispatch("finish");
       },
       context,
-      success,
     }
   );
 
