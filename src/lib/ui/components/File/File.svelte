@@ -38,25 +38,28 @@
   $: datasets = generateDatas(datas);
 
   function onSelectFile(event: Event) {
-    const { files: filesToUpload } = event.target as HTMLInputElement;
-    if (filesToUpload) {
-      const fileToUpload =
+    const { files: filesInput } = event.target as HTMLInputElement;
+    if (filesInput) {
+      const filesToUpload =
         multiple && files
-          ? ([...files, ...filesToUpload] as File[])
-          : filesToUpload[0];
+          ? ([...files, ...filesInput] as File[])
+          : filesInput[0];
 
-      if (fileToUpload instanceof File || Array.isArray(fileToUpload)) {
+      if (filesToUpload instanceof File || Array.isArray(filesToUpload)) {
         const sizeKB =
-          (fileToUpload instanceof File
-            ? fileToUpload.size
-            : fileToUpload.reduce((acc, file) => acc + file.size, 0)) / 1024;
+          (filesToUpload instanceof File
+            ? filesToUpload.size
+            : filesToUpload.reduce(
+                (acc, fileToUpload) => acc + fileToUpload.size,
+                0
+              )) / 1024;
         if (sizeKB > max) {
           setError(name, "to-big");
         }
       }
 
-      setField(name, fileToUpload);
-      dispatch("choose", fileToUpload);
+      setField(name, filesToUpload);
+      dispatch("choose", filesToUpload);
     }
   }
 
