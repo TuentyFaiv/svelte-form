@@ -1,10 +1,9 @@
-import { getContext, setContext } from "svelte";
+import { getContext, hasContext, setContext } from "svelte";
 import { derived, get, readable, writable } from "svelte/store";
 import { object } from "yup";
-import swal from "sweetalert";
 import { toggle, transformOnOff } from "../utils/booleans.js";
 import { fieldsValidation, fieldValidation } from "../utils/validation.js";
-import { setError, setErrors } from "../utils/errors.js";
+import { FormError, setError, setErrors } from "../utils/errors.js";
 
 // eslint-disable-next-line import/order
 import type { AnyObject, InferType } from "yup";
@@ -12,7 +11,6 @@ import type { AnyObject, InferType } from "yup";
 import type { Readable } from "svelte/store";
 import type { ContextForm, ContextStyles } from "../typing/globals/contexts.js";
 import type {
-  ActionConfig,
   FieldsErrorsConfig,
   FormStoreConfig,
   SubmitAction,
@@ -20,26 +18,18 @@ import type {
 } from "../typing/stores/form.js";
 import type { Errors } from "../typing/utils/errors.js";
 
-export function formStore<SchemaFields extends AnyObject = AnyObject>({
+export function faivform<SchemaFields extends AnyObject = AnyObject>({
   fields,
   styles = {},
 }: FormStoreConfig<SchemaFields>) {
   let form: HTMLFormElement | null = null;
-  const {
-    field: fieldstyles = {},
-    option = {},
-    select = {},
-    file = {},
-    errors: errorsStyles = {},
-    icons = null,
-  } = styles;
   const ctxStyles = writable<ContextStyles>({
-    field: fieldstyles,
-    option,
-    select,
-    file,
-    errors: errorsStyles,
-    icons,
+    field: styles.field ?? {},
+    option: styles.option ?? {},
+    select: styles.select ?? {},
+    file: styles.file ?? {},
+    errors: styles.errors ?? {},
+    icons: styles.icons ?? null,
   });
   const schemafields: SchemaFields = { ...fields };
   const schema = object(schemafields);
@@ -69,6 +59,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
   function reset(resetErrors = true): void {
     data.set(schema.getDefault() as Values);
+    form?.reset();
     if (!resetErrors) return;
 
     errors.set(Object.keys(schemafields).reduce((acc, key) => ({
@@ -120,11 +111,9 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     if (!validate) return;
 
     await fieldValidation({
-      event: {
-        name: field,
-        value,
-      },
-      schema: schemafields,
+      value,
+      field,
+      schema: schemafields[String(field)],
       errors,
     });
   }
@@ -138,23 +127,14 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     }));
 
     await fieldValidation({
-      event,
-      schema: schemafields,
+      value,
+      field: name,
+      schema: schemafields[name],
       errors,
     });
   }
 
-  async function action({ title, message, type }: ActionConfig = {}): Promise<void> {
-    if (title && message && type) {
-      await (swal as any)(title, message, type);
-    }
-    if (form && type === "success") {
-      form.reset();
-      data.set(schema.getDefault() as Values);
-    }
-  }
-
-  const context = readable<Omit<Form, "submit">>({
+  const contextform = readable<Omit<Form, "submit">>({
     loading,
     errors,
     data,
@@ -163,7 +143,6 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     setError: setFieldError,
     setField,
     check,
-    action,
   });
 
   function submit<T extends Values = Values>(
@@ -171,8 +150,8 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     {
       error,
       finish,
-      context: contextns = "form",
-      success,
+      context = "form",
+      reset: resetForm = true,
     }: SubmitOptions = {},
   ) {
     const globalStyles = get(getContext<Readable<ContextStyles | undefined>>("styles"));
@@ -194,7 +173,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
       });
     }
 
-    setContext(contextns, context);
+    setContext(context, contextform);
     async function onSubmit(event: SubmitEvent) {
       try {
         toggleLoading(true);
@@ -204,11 +183,7 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
 
         await handleData(values);
 
-        await action({
-          type: "success",
-          title: success?.title,
-          message: success?.message,
-        });
+        if (resetForm) reset(true);
       } catch (err) {
         setFieldsErrors({ error: err, handle: error });
       } finally {
@@ -220,10 +195,23 @@ export function formStore<SchemaFields extends AnyObject = AnyObject>({
     return onSubmit;
   }
 
-  const contextWithSubmit: Readable<Form> = derived(context, ($context) => ({
-    ...$context,
+  const context: Readable<Form> = derived(contextform, ($ctx) => ({
+    ...$ctx,
     submit,
   }));
 
-  return contextWithSubmit;
+  return context;
+}
+
+export function useForm<Values extends AnyObject, Fields extends string>(context = "form") {
+  if (!hasContext(context)) {
+    throw new FormError({
+      title: "Form Error",
+      // eslint-disable-next-line max-len
+      message: `Error to get form context: ${context}. You must create the form context in a parent component using the faivform function.`,
+      reason: `The context "${context}" that does not exist.`,
+    });
+  }
+
+  return getContext<Readable<ContextForm<Values, Fields>>>(context);
 }

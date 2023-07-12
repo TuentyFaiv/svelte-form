@@ -1,12 +1,12 @@
 <svelte:options immutable />
 
 <script lang="ts">
-  import { createEventDispatcher, getContext, onDestroy } from "svelte";
+  import { createEventDispatcher, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
   import { keys } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
+  import { useForm } from "$lib/logic/stores/form.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Props, Select, Target } from "./Select.proptypes.js";
 
   import * as stylesinternal from "./Select.styles.js";
@@ -24,7 +24,7 @@
   let container: Select = null;
   let active = false;
 
-  const form = getContext<InputContext>(context);
+  const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField } = $form;
   const dispatch = createEventDispatcher<{ choose: string }>();
   $: ({ select: styles, icons } = $ctxStyles);

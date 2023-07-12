@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { generateDatas } from "$lib/logic/utils/objects.js";
+  import { useForm } from "$lib/logic/stores/form.js";
 
-  import type { InputContext } from "$lib/logic/typing/globals/proptypes.js";
   import type { Input, Props } from "./File.proptypes.js";
 
   import * as stylesinternal from "./File.styles.js";
@@ -19,7 +19,7 @@
 
   let input: Input;
 
-  const form = getContext<InputContext>(context);
+  const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField, setError } = $form;
   const dispatch = createEventDispatcher<{
     choose: File | File[];
@@ -45,8 +45,11 @@
           ? ([...files, ...filesToUpload] as File[])
           : filesToUpload[0];
 
-      if (fileToUpload instanceof File) {
-        const sizeKB = fileToUpload.size / 1024;
+      if (fileToUpload instanceof File || Array.isArray(fileToUpload)) {
+        const sizeKB =
+          (fileToUpload instanceof File
+            ? fileToUpload.size
+            : fileToUpload.reduce((acc, file) => acc + file.size, 0)) / 1024;
         if (sizeKB > max) {
           setError(name, "to-big");
         }

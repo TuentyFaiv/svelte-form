@@ -1,4 +1,4 @@
-export { formStore, setConfig } from "./logic/stores/index.js";
+export { faivform, useForm, setConfig } from "./logic/stores/index.js";
 export { fieldsSignin, fieldsSignup, fieldsContact } from "./logic/schemas/index.js";
 export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
 export {

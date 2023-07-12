@@ -2,7 +2,7 @@
   import { createEventDispatcher, getContext } from "svelte";
   import { getTexts } from "$lib/logic/utils/objects.js";
   import { fieldsContact } from "$lib/logic/schemas/index.js";
-  import { formStore } from "$lib/logic/stores/index.js";
+  import { faivform } from "$lib/logic/stores/index.js";
 
   import type { Readable } from "svelte/store";
   import type { FieldInputForm } from "$lib/logic/typing/globals/interfaces.js";
@@ -18,13 +18,12 @@
   export let context: Props["context"] = "form";
   export let showErrors: Props["showErrors"] = undefined;
   export let styles: Props["styles"] = undefined;
-  export let success: Props["success"] = undefined;
   export let texts: Props["texts"];
 
   const globalStyles = getContext<Readable<Config["form"]>>("formStyles");
   $: formStyles = styles?.form ?? $globalStyles ?? stylesinternal ?? {};
 
-  const store = formStore({
+  const store = faivform({
     fields: fieldsContact,
     styles: {
       field: styles?.field ?? {},
@@ -46,7 +45,6 @@
       dispatch("finish");
     },
     context,
-    success,
   });
 
   $: fields = (
