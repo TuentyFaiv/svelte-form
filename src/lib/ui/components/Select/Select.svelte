@@ -3,6 +3,7 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
+  import { cx } from "@emotion/css";
   import { keys } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
@@ -116,7 +117,7 @@
 
 <div
   {id}
-  class={styles?.field ?? stylesinternal.field}
+  class={cx(stylesinternal.field, styles?.field ?? "")}
   role="menu"
   aria-label={label}
   tabindex={0}
@@ -125,30 +126,30 @@
   {...datasets}
 >
   {#if label}
-    <p class={styles?.label ?? stylesinternal.label} role="none">
+    <p class={cx(stylesinternal.label, styles?.label ?? "")} role="none">
       {label}
     </p>
   {/if}
   <div
     role="none"
-    class={styles?.select ?? stylesinternal.select}
+    class={cx(stylesinternal.select, styles?.select ?? "")}
     class:active
     bind:this={container}
   >
     <p
       role="presentation"
-      class={styles?.value ?? stylesinternal.value}
+      class={cx(stylesinternal.value, styles?.value ?? "")}
       data-placeholder={showedValue === placeholder}
     >
       {showedValue}
       <img
         src={styles?.arrow ?? icons?.arrow ?? IconArrow}
         alt={showedValue}
-        class={styles?.icon ?? stylesinternal.icon}
+        class={cx(stylesinternal.icon, styles?.icon ?? "")}
         role="presentation"
       />
       {#if $errors[name]}
-        <span class={styles?.error ?? stylesinternal.error} role="none">
+        <span class={cx(stylesinternal.error, styles?.error ?? "")} role="none">
           <slot name="error" error={$errors[name]}>
             {$errors[name]}
           </slot>
@@ -158,7 +159,7 @@
     {#if active}
       <div
         role="none"
-        class={styles?.options ?? stylesinternal.options}
+        class={cx(stylesinternal.options, styles?.options ?? "")}
         on:mouseleave|stopPropagation={onHide}
         on:keydown|stopPropagation={onChooseByKey}
         transition:slide={{ delay: 200 }}
@@ -169,7 +170,7 @@
             aria-disabled={!!option.disabled}
             tabindex={0}
             data-value={option.value}
-            class={styles?.option ?? stylesinternal.option}
+            class={cx(stylesinternal.option, styles?.option ?? "")}
           >
             <span role="none">{option.label}</span>
           </span>

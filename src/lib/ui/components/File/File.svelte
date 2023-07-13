@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
+  import { cx } from "@emotion/css";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
 
@@ -76,7 +77,7 @@
   });
 </script>
 
-<div class={styles?.wrapper ?? stylesinternal.wrapper} {...datasets}>
+<div class={cx(stylesinternal.wrapper, styles?.wrapper ?? "")} {...datasets}>
   {#if $$slots.out}
     <slot name="out" {image} />
   {/if}
@@ -84,15 +85,15 @@
     <slot name="actions" {image} {onClear} />
   {/if}
   {#if $errors[name]}
-    <div class={styles?.actions ?? stylesinternal.actions}>
-      <span class={styles?.error ?? stylesinternal.error}>
+    <div class={cx(stylesinternal.actions, styles?.actions ?? "")}>
+      <span class={cx(stylesinternal.error, styles?.error ?? "")}>
         <slot name="error" error={$errors[name]}>
           {$errors[name]}
         </slot>
       </span>
       <button
         type="button"
-        class={styles?.retry ?? stylesinternal.retry}
+        class={cx(stylesinternal.retry, styles?.retry ?? "")}
         on:click|stopPropagation={() => {
           dispatch("retry");
           onClear();
@@ -102,14 +103,14 @@
       </button>
     </div>
   {/if}
-  <label for={id ?? name} class={styles?.field ?? stylesinternal.field}>
+  <label for={id ?? name} class={cx(stylesinternal.field, styles?.field ?? "")}>
     {#if !$data[name]}
       <slot name="activate" {image} />
     {/if}
     <input
       bind:this={input}
       id={id ?? name}
-      class={styles?.input ?? stylesinternal.input}
+      class={cx(stylesinternal.input, styles?.input ?? "")}
       type="file"
       {accept}
       on:change={onSelectFile}

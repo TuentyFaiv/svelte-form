@@ -75,6 +75,7 @@
     ContextStyles,
     ContextForm,
     SelectOption,
+    OptionItem,
     SharedUIProps,
     GeneralInputProps,
     GeneralFieldProps,

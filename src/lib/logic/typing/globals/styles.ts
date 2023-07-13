@@ -46,6 +46,7 @@ export interface FileStyles extends Omit<GeneralStyles, "label"> {
 
 export interface OptionStyles extends GeneralStyles {
   content?: string;
+  options?: string;
 }
 
 export interface ErrorsStyles {

@@ -8,7 +8,7 @@
   //     },
   //     select: {
   //       field: "form__field form__field--select",
-  //     }
+  //     },
   //   },
   //   vars: {
   //     primary: "#ccc",
