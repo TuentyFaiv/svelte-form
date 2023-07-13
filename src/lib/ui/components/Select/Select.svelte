@@ -25,9 +25,9 @@
   let container: Select = null;
   let active = false;
 
+  const dispatch = createEventDispatcher<{ choose: string }>();
   const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField } = $form;
-  const dispatch = createEventDispatcher<{ choose: string }>();
   $: ({ select: styles, icons } = $ctxStyles);
 
   function onChoose(value: string) {

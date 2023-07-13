@@ -20,12 +20,12 @@
 
   let input: Input;
 
-  const form = useForm(context);
-  const { data, errors, styles: ctxStyles, setField, setError } = $form;
   const dispatch = createEventDispatcher<{
     choose: File | File[];
     retry: undefined;
   }>();
+  const form = useForm(context);
+  const { data, errors, styles: ctxStyles, setField, setError } = $form;
   $: ({ file: styles } = $ctxStyles);
 
   $: file = !!$data[name] ? ($data[name] as File) : null;

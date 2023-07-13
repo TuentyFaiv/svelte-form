@@ -19,9 +19,9 @@
 
   let inputs: Record<string, Option> = {};
 
+  const dispatch = createEventDispatcher<{ choose: string }>();
   const form = useForm(context);
   const { data, errors, styles: ctxStyles, check, setField } = $form;
-  const dispatch = createEventDispatcher<{ choose: string }>();
   $: ({ option: styles } = $ctxStyles);
 
   function onSelect(value: string) {
