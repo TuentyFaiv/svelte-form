@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { fade } from "svelte/transition";
+  import { cx } from "@emotion/css";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
   import { keys } from "$lib/logic/utils/keys.js";
@@ -55,7 +56,7 @@
 
 <label
   for={id ?? name}
-  class={styles?.field ?? stylesinternal.field}
+  class={cx(stylesinternal.field, styles?.field ?? "")}
   data-type={type}
   data-checked={checked}
   data-checked-icon={icons?.check ?? ""}
@@ -63,14 +64,14 @@
   {...datasets}
 >
   {#if label && type !== "checkbox"}
-    <p class={styles?.label ?? stylesinternal.label}>
+    <p class={cx(stylesinternal.label, styles?.label ?? "")}>
       {label}
       <slot />
     </p>
   {/if}
   {#if type === "textarea"}
     <textarea
-      class={styles?.area ?? stylesinternal.area}
+      class={cx(stylesinternal.area, styles?.area ?? "")}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -79,7 +80,7 @@
     />
   {:else if type === "checkbox"}
     <input
-      class={styles?.check ?? stylesinternal.check}
+      class={cx(stylesinternal.check, styles?.check ?? "")}
       id={id ?? name}
       type="checkbox"
       bind:this={input}
@@ -89,14 +90,14 @@
       {...$$restProps}
     />
     {#if label}
-      <p class={styles?.label ?? stylesinternal.label}>
+      <p class={cx(stylesinternal.label, styles?.label ?? "")}>
         {label}
         <slot />
       </p>
     {/if}
   {:else}
     <input
-      class={styles?.input ?? stylesinternal.input}
+      class={cx(stylesinternal.input, styles?.input ?? "")}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -110,13 +111,13 @@
   {#if type === "password"}
     <button
       type="button"
-      class={styles?.action ?? stylesinternal.action}
+      class={cx(stylesinternal.action, styles?.action ?? "")}
       class:show
       on:click|stopPropagation={toggleShow}
       title={a11y.icon}
     >
       <img
-        class={styles?.icon ?? stylesinternal.icon}
+        class={cx(stylesinternal.icon, styles?.icon ?? "")}
         src={show
           ? styles?.show ?? icons?.show ?? IconShow
           : styles?.hide ?? icons?.hide ?? IconHide}
@@ -128,7 +129,7 @@
     </button>
   {/if}
   {#if $errors[name]}
-    <span class={styles?.error ?? stylesinternal.error} transition:fade>
+    <span class={cx(stylesinternal.error, styles?.error ?? "")} transition:fade>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>

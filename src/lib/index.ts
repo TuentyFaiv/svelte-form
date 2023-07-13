@@ -4,7 +4,7 @@ export { FormError } from "./logic/utils/errors.js";
 
 export type { Config } from "./logic/typing/stores/config.js";
 export type { ContextStyles, ContextForm } from "./logic/typing/globals/contexts.js";
-export type { SelectOption } from "./logic/typing/globals/interfaces.js";
+export type { SelectOption, OptionItem } from "./logic/typing/globals/interfaces.js";
 export type { SharedUIProps, GeneralInputProps, GeneralFieldProps } from "./logic/typing/globals/proptypes.js";
 export type { FormStoreConfig, SubmitOptions } from "./logic/typing/stores/form.js";
 export type {

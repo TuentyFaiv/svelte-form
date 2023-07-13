@@ -1,6 +1,9 @@
+<svelte:options immutable />
+
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
+  import { cx } from "@emotion/css";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
 
@@ -8,15 +11,13 @@
 
   import * as stylesinternal from "./Option.styles.js";
 
-  export let label: Props["label"];
   export let name: Props["name"];
-  export let id: Props["id"];
-  export let value: Props["value"];
   export let context: Props["context"] = "form";
+  export let disabled: Props["disabled"] = false;
   export let datas: Props["datas"] = {};
-  export let a11y: Props["a11y"] = {};
+  export let options: Props["options"] = [];
 
-  let input: Option;
+  let inputs: Record<string, Option> = {};
 
   const form = useForm(context);
   const { data, errors, styles: ctxStyles, check, setField } = $form;
@@ -29,7 +30,7 @@
 
   async function onCheck(event: FocusEvent | Event) {
     await check(event);
-    onSelect(value);
+    onSelect((event.target as HTMLInputElement).value);
   }
 
   $: datasets = generateDatas(datas);
@@ -39,33 +40,42 @@
   });
 </script>
 
-<label
-  for={id}
-  class={styles?.field ?? stylesinternal.field}
-  data-checked={$data[name] === value}
-  title={a11y.title}
-  {...datasets}
->
-  <p class={styles?.label ?? stylesinternal.label}>{label}</p>
-  <input
-    class={styles?.input ?? stylesinternal.input}
-    type="radio"
-    {id}
-    bind:this={input}
-    on:blur={onCheck}
-    on:input={onCheck}
-    {name}
-    {value}
-    {...$$restProps}
-  />
-  <div class={styles?.content ?? stylesinternal.content}>
-    <slot />
-  </div>
+<fieldset class={cx(stylesinternal.options, styles?.options ?? "")} {disabled}>
+  {#each options as { id: idOption, value, label, a11y } (`${name}-option-${value}`)}
+    {@const id = idOption ?? `${name}-option-${value}`}
+    <label
+      for={id}
+      class={cx(stylesinternal.field, styles?.field ?? "")}
+      data-checked={$data[name] === value}
+      title={a11y?.title ?? label}
+      {...datasets}
+    >
+      <p class={cx(stylesinternal.label, styles?.label ?? "")}>
+        {label}
+      </p>
+      <input
+        class={cx(stylesinternal.input, styles?.input ?? "")}
+        type="radio"
+        {id}
+        bind:this={inputs[id]}
+        on:blur={onCheck}
+        on:input={onCheck}
+        {name}
+        {value}
+        {...$$restProps}
+      />
+      {#if $$slots.default}
+        <div class={cx(stylesinternal.content, styles?.content ?? "")}>
+          <slot />
+        </div>
+      {/if}
+    </label>
+  {/each}
   {#if $errors[name]}
-    <span class={styles?.error ?? stylesinternal.error} transition:fade>
+    <span class={cx(stylesinternal.error, styles?.error ?? "")} transition:fade>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>
     </span>
   {/if}
-</label>
+</fieldset>

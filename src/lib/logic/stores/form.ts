@@ -178,9 +178,8 @@ export function faivform<
     async function onSubmit(event: SubmitEvent) {
       try {
         toggleLoading(true);
-        const formElement = event.target as HTMLFormElement;
 
-        const values = await validation<T>(formElement);
+        const values = await validation<T>(event.target as HTMLFormElement);
 
         await handleData(values);
 

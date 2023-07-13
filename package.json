@@ -40,7 +40,7 @@
   "types": "./dist/index.d.ts",
   "peerDependencies": {
     "@emotion/css": "^11.11.2",
-    "svelte": "^4.0.1",
+    "svelte": "^4.0.5",
     "yup": "^1.2.0"
   },
   "devDependencies": {
@@ -82,5 +82,9 @@
   "bugs": {
     "url": "https://github.com/TuentyFaiv/svelte-form/issues"
   },
-  "homepage": "https://github.com/TuentyFaiv/svelte-form#readme"
+  "homepage": "https://github.com/TuentyFaiv/svelte-form#readme",
+  "main": "./dist/index.js",
+  "directories": {
+    "test": "tests"
+  }
 }
