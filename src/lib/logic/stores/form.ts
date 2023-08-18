@@ -24,6 +24,7 @@ export function faivform<
 >({ fields, styles = {} }: FormStoreConfig<Schema>) {
   let form: HTMLFormElement | null = null;
   const ctxStyles = writable<ContextStyles>({
+    replace: styles.replace ?? false,
     field: styles.field ?? {},
     option: styles.option ?? {},
     select: styles.select ?? {},
@@ -160,11 +161,20 @@ export function faivform<
     if (globalStyles) {
       Object.keys(globalStyles).forEach((key) => {
         const keyStyle = key as keyof ContextStyles;
-        const globalStyle = globalStyles[keyStyle];
 
         ctxStyles.update((prev) => {
+          if (keyStyle === "replace") {
+            const validPrev = prev[keyStyle] ?? false;
+            const validGlobal = globalStyles[keyStyle] ?? false;
+
+            return {
+              ...prev,
+              [keyStyle]: validPrev || validGlobal,
+            };
+          }
+
           const validPrev = Object.keys(prev[keyStyle] ?? {}).length === 0 ? null : prev[keyStyle];
-          const validGlobal = Object.keys(globalStyle ?? {}).length === 0 ? null : globalStyle;
+          const validGlobal = Object.keys(globalStyles[keyStyle] ?? {}).length === 0 ? null : globalStyles[keyStyle];
 
           return {
             ...prev,

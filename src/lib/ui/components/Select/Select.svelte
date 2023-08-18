@@ -6,6 +6,7 @@
   import { keys } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
+  import { getStyle } from "$lib/logic/utils/styles.js";
 
   import type { Props, Select, Target } from "./Select.proptypes.js";
 
@@ -25,7 +26,7 @@
   const dispatch = createEventDispatcher<{ choose: string }>();
   const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField } = $form;
-  $: ({ select: styles, icons } = $ctxStyles);
+  $: ({ select: styles, icons, replace } = $ctxStyles);
 
   function onChoose(value: string) {
     dispatch("choose", value);
@@ -105,14 +106,46 @@
     onChoose(options[0].value);
   }
 
-  $: externalFieldStyles = styles?.field ? ` ${styles.field}` : "";
-  $: externalLabelStyles = styles?.label ? ` ${styles.label}` : "";
-  $: externalSelectStyles = styles?.select ? ` ${styles.select}` : "";
-  $: externalValueStyles = styles?.value ? ` ${styles.value}` : "";
-  $: externalIconStyles = styles?.icon ? ` ${styles.icon}` : "";
-  $: externalOptionsStyles = styles?.options ? ` ${styles.options}` : "";
-  $: externalOptionStyles = styles?.option ? ` ${styles.option}` : "";
-  $: externalErrorStyles = styles?.error ? ` ${styles.error}` : "";
+  $: fieldStyle = getStyle({
+    replace,
+    style: "svform-field",
+    external: styles?.field,
+  });
+  $: labelStyle = getStyle({
+    replace,
+    style: "svform-label",
+    external: styles?.label,
+  });
+  $: selectStyle = getStyle({
+    replace,
+    style: "svform-select",
+    external: styles?.select,
+  });
+  $: valueStyle = getStyle({
+    replace,
+    style: "svform-value",
+    external: styles?.value,
+  });
+  $: iconStyle = getStyle({
+    replace,
+    style: "svform-icon",
+    external: styles?.icon,
+  });
+  $: optionsStyle = getStyle({
+    replace,
+    style: "svform-options",
+    external: styles?.options,
+  });
+  $: optionStyle = getStyle({
+    replace,
+    style: "svform-option",
+    external: styles?.option,
+  });
+  $: errorStyle = getStyle({
+    replace,
+    style: "svform-error",
+    external: styles?.error,
+  });
 
   onDestroy(() => {
     setField(name, $data[name]);
@@ -121,7 +154,7 @@
 
 <div
   {id}
-  class="svform-field{externalFieldStyles}"
+  class={fieldStyle}
   role="menu"
   aria-label={label}
   tabindex={0}
@@ -130,30 +163,25 @@
   {...datasets}
 >
   {#if label}
-    <p class="svform-label{externalLabelStyles}" role="none">
+    <p class={labelStyle} role="none">
       {label}
     </p>
   {/if}
-  <div
-    role="none"
-    class="svform-select{externalSelectStyles}"
-    class:active
-    bind:this={container}
-  >
+  <div role="none" class={selectStyle} class:active bind:this={container}>
     <p
       role="presentation"
-      class="svform-value{externalValueStyles}"
+      class={valueStyle}
       data-placeholder={showedValue === placeholder}
     >
       {showedValue}
       <img
         src={styles?.arrow ?? icons?.arrow ?? IconArrow}
         alt={showedValue}
-        class="svform-icon{externalIconStyles}"
+        class={iconStyle}
         role="presentation"
       />
       {#if $errors[name]}
-        <span class="svform-error{externalErrorStyles}" role="none">
+        <span class={errorStyle} role="none">
           <slot name="error" error={$errors[name]}>
             {$errors[name]}
           </slot>
@@ -163,7 +191,7 @@
     {#if active}
       <div
         role="none"
-        class="svform-options{externalOptionsStyles}"
+        class={optionsStyle}
         on:mouseleave|stopPropagation={onHide}
         on:keydown|stopPropagation={onChooseByKey}
         transition:slide={{ delay: 200 }}
@@ -174,7 +202,7 @@
             aria-disabled={!!option.disabled}
             tabindex={0}
             data-value={option.value}
-            class="svform-option{externalOptionStyles}"
+            class={optionStyle}
           >
             <span role="none">{option.label}</span>
           </span>

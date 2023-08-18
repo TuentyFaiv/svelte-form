@@ -4,6 +4,7 @@
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
   import { keys } from "$lib/logic/utils/keys.js";
+  import { getStyle } from "$lib/logic/utils/styles.js";
 
   import type { Input, Props } from "./Field.proptypes.js";
 
@@ -25,7 +26,7 @@
 
   const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField, check } = $form;
-  $: ({ field: styles, icons } = $ctxStyles);
+  $: ({ field: styles, icons, replace } = $ctxStyles);
 
   function toggleShow() {
     show = !show;
@@ -49,14 +50,46 @@
   $: showPassword = styles?.show ?? icons?.show ?? IconShow;
   $: hidePassword = styles?.hide ?? icons?.hide ?? IconHide;
 
-  $: externalFieldStyles = styles?.field ? ` ${styles.field}` : "";
-  $: externalLabelStyles = styles?.label ? ` ${styles.label}` : "";
-  $: externalAreaStyles = styles?.area ? ` ${styles.area}` : "";
-  $: externalCheckStyles = styles?.check ? ` ${styles.check}` : "";
-  $: externalInputStyles = styles?.input ? ` ${styles.input}` : "";
-  $: externalActionStyles = styles?.action ? ` ${styles.action}` : "";
-  $: externalIconStyles = styles?.icon ? ` ${styles.icon}` : "";
-  $: externalErrorStyles = styles?.error ? ` ${styles.error}` : "";
+  $: fieldStyle = getStyle({
+    replace,
+    style: "svform-field",
+    external: styles?.field,
+  });
+  $: labelStyle = getStyle({
+    replace,
+    style: "svform-label",
+    external: styles?.label,
+  });
+  $: textAreaStyle = getStyle({
+    replace,
+    style: "svform-shared svform-textarea",
+    external: styles?.area,
+  });
+  $: checkboxStyle = getStyle({
+    replace,
+    style: "svform-checkbox",
+    external: styles?.check,
+  });
+  $: inputStyle = getStyle({
+    replace,
+    style: "svform-shared svform-input",
+    external: styles?.input,
+  });
+  $: actionStyle = getStyle({
+    replace,
+    style: "svform-action",
+    external: styles?.action,
+  });
+  $: iconStyle = getStyle({
+    replace,
+    style: "svform-icon",
+    external: styles?.icon,
+  });
+  $: errorStyle = getStyle({
+    replace,
+    style: "svform-error",
+    external: styles?.error,
+  });
 
   onDestroy(() => {
     setField(name, undefined);
@@ -65,7 +98,7 @@
 
 <label
   for={id ?? name}
-  class="svform-field{externalFieldStyles}"
+  class={fieldStyle}
   data-type={type}
   data-checked={checked}
   data-checked-icon={icons?.check ?? ""}
@@ -73,14 +106,14 @@
   {...datasets}
 >
   {#if label && type !== "checkbox"}
-    <p class="svform-label{externalLabelStyles}">
+    <p class={labelStyle}>
       {label}
       <slot />
     </p>
   {/if}
   {#if type === "textarea"}
     <textarea
-      class="svform-shared svform-textarea{externalAreaStyles}"
+      class={textAreaStyle}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -89,7 +122,7 @@
     />
   {:else if type === "checkbox"}
     <input
-      class="svform-checkbox{externalCheckStyles}"
+      class={checkboxStyle}
       id={id ?? name}
       type="checkbox"
       bind:this={input}
@@ -99,14 +132,14 @@
       {...$$restProps}
     />
     {#if label}
-      <p class="svform-label{externalLabelStyles}">
+      <p class={labelStyle}>
         {label}
         <slot />
       </p>
     {/if}
   {:else}
     <input
-      class="svform-shared svform-input{externalInputStyles}"
+      class={inputStyle}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -120,13 +153,13 @@
   {#if type === "password"}
     <button
       type="button"
-      class="svform-action{externalActionStyles}"
+      class={actionStyle}
       class:show
       on:click|stopPropagation={toggleShow}
       title={a11y.icon}
     >
       <img
-        class="svform-icon{externalIconStyles}"
+        class={iconStyle}
         src={show ? showPassword : hidePassword}
         alt={a11y.icon}
         decoding="async"
@@ -136,7 +169,7 @@
     </button>
   {/if}
   {#if $errors[name]}
-    <span class="svform-error{externalErrorStyles}" transition:fade>
+    <span class={errorStyle} transition:fade>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>
@@ -238,9 +271,9 @@
     visibility: hidden;
   }
 
-  /* .input {
+  /* .svform-input {
   }
-  .input::placeholder {
+  .svform-input::placeholder {
   } */
 
   .svform-action {

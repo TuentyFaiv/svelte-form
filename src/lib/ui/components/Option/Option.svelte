@@ -5,6 +5,7 @@
   import { fade } from "svelte/transition";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
+  import { getStyle } from "$lib/logic/utils/styles.js";
 
   import type { Option, Props } from "./Option.proptypes.js";
 
@@ -19,7 +20,7 @@
   const dispatch = createEventDispatcher<{ choose: string }>();
   const form = useForm(context);
   const { data, errors, styles: ctxStyles, check, setField } = $form;
-  $: ({ option: styles } = $ctxStyles);
+  $: ({ option: styles, replace } = $ctxStyles);
 
   function onSelect(value: string) {
     dispatch("choose", value);
@@ -32,33 +33,57 @@
 
   $: datasets = generateDatas(datas);
 
-  $: externalOptionsStyles = styles?.options ? ` ${styles.options}` : "";
-  $: externalFieldStyles = styles?.field ? ` ${styles.field}` : "";
-  $: externalLabelStyles = styles?.label ? ` ${styles.label}` : "";
-  $: externalInputStyles = styles?.input ? ` ${styles.input}` : "";
-  $: externalContentStyles = styles?.content ? ` ${styles.content}` : "";
-  $: externalErrorStyles = styles?.error ? ` ${styles.error}` : "";
+  $: optionsStyle = getStyle({
+    replace,
+    style: "svform-options",
+    external: styles?.options,
+  });
+  $: fieldStyle = getStyle({
+    replace,
+    style: "svform-field",
+    external: styles?.field,
+  });
+  $: labelStyle = getStyle({
+    replace,
+    style: "svform-label",
+    external: styles?.label,
+  });
+  $: inputStyle = getStyle({
+    replace,
+    style: "svform-input",
+    external: styles?.input,
+  });
+  $: contentStyle = getStyle({
+    replace,
+    style: "svform-content",
+    external: styles?.content,
+  });
+  $: errorStyle = getStyle({
+    replace,
+    style: "svform-error",
+    external: styles?.error,
+  });
 
   onDestroy(() => {
     setField(name, undefined);
   });
 </script>
 
-<fieldset class="svform-options{externalOptionsStyles}" {disabled}>
+<fieldset class={optionsStyle} {disabled}>
   {#each options as { id: idOption, value, label, a11y } (`${name}-option-${value}`)}
     {@const id = idOption ?? `${name}-option-${value}`}
     <label
       for={id}
-      class="svform-field{externalFieldStyles}"
+      class={fieldStyle}
       data-checked={$data[name] === value}
       title={a11y?.title ?? label}
       {...datasets}
     >
-      <p class="svform-label{externalLabelStyles}">
+      <p class={labelStyle}>
         {label}
       </p>
       <input
-        class="svform-input{externalInputStyles}"
+        class={inputStyle}
         type="radio"
         {id}
         bind:this={inputs[id]}
@@ -69,14 +94,14 @@
         {...$$restProps}
       />
       {#if $$slots.default}
-        <div class="svform-content{externalContentStyles}">
+        <div class={contentStyle}>
           <slot />
         </div>
       {/if}
     </label>
   {/each}
   {#if $errors[name]}
-    <span class="svform-error{externalErrorStyles}" transition:fade>
+    <span class={errorStyle} transition:fade>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>

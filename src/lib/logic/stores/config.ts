@@ -12,8 +12,10 @@ function setStyles(config: Config["fields"] = {}) {
     file = {},
     errors = {},
     icons = null,
+    replace = false,
   } = config;
   const styles = readable<Config["fields"]>({
+    replace,
     field,
     option,
     select,

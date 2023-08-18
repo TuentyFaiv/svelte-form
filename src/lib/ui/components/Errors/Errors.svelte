@@ -1,5 +1,6 @@
 <script lang="ts">
   import { useForm } from "$lib/index.js";
+  import { getStyle } from "$lib/logic/utils/styles.js";
 
   import type { Props } from "./Errors.proptypes.js";
 
@@ -8,7 +9,7 @@
 
   const form = useForm(context);
   const { errors, styles: cxtStyles } = $form;
-  $: ({ errors: styles } = $cxtStyles);
+  $: ({ errors: styles, replace } = $cxtStyles);
 
   $: showErrors =
     show && Object.values($errors).some((error) => error !== null);
@@ -17,15 +18,24 @@
     field,
     error: $errors[field],
   }));
-  $: externalListStyles = styles?.list ? ` ${styles.list}` : "";
-  $: externalItemStyles = styles?.item ? ` ${styles.item}` : "";
+
+  $: listStyle = getStyle({
+    replace,
+    style: "svform-list",
+    external: styles?.list,
+  });
+  $: itemStyle = getStyle({
+    replace,
+    style: "svform-item",
+    external: styles?.item,
+  });
 </script>
 
 {#if showErrors}
-  <ul class="svform-list{externalListStyles}">
+  <ul class={listStyle}>
     {#each list as { field, error }, index (`${field}-list-${index}`)}
       {#if error !== null}
-        <li class="svform-item{externalItemStyles}">
+        <li class={itemStyle}>
           <slot name="error" {error} {field}>
             {`${field}: ${error}`}
           </slot>

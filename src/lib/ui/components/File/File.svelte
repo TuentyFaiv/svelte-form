@@ -2,6 +2,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
+  import { getStyle } from "$lib/logic/utils/styles.js";
 
   import type { Input, Props } from "./File.proptypes.js";
 
@@ -23,7 +24,7 @@
   }>();
   const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField, setError } = $form;
-  $: ({ file: styles } = $ctxStyles);
+  $: ({ file: styles, replace } = $ctxStyles);
 
   $: file = !!$data[name] ? ($data[name] as File) : null;
   $: files = !!$data[name] ? ($data[name] as File[]) : null;
@@ -35,12 +36,36 @@
 
   $: datasets = generateDatas(datas);
 
-  $: externalWrapperStyles = styles?.wrapper ? ` ${styles.wrapper}` : "";
-  $: externalActionsStyles = styles?.actions ? ` ${styles.actions}` : "";
-  $: externalErrorStyles = styles?.error ? ` ${styles.error}` : "";
-  $: externalRetryStyles = styles?.retry ? ` ${styles.retry}` : "";
-  $: externalFieldStyles = styles?.field ? ` ${styles.field}` : "";
-  $: externalInputStyles = styles?.input ? ` ${styles.input}` : "";
+  $: wrapperStyle = getStyle({
+    replace,
+    style: "svform-wrapper",
+    external: styles?.wrapper,
+  });
+  $: actionsStyle = getStyle({
+    replace,
+    style: "svform-actions",
+    external: styles?.actions,
+  });
+  $: errorStyle = getStyle({
+    replace,
+    style: "svform-error",
+    external: styles?.error,
+  });
+  $: retryStyle = getStyle({
+    replace,
+    style: "svform-retry",
+    external: styles?.retry,
+  });
+  $: fieldStyle = getStyle({
+    replace,
+    style: "svform-field",
+    external: styles?.field,
+  });
+  $: inputStyle = getStyle({
+    replace,
+    style: "svform-input",
+    external: styles?.input,
+  });
 
   function onSelectFile(event: Event) {
     const { files: filesInput } = event.target as HTMLInputElement;
@@ -81,7 +106,7 @@
   });
 </script>
 
-<div class="svform-wrapper{externalWrapperStyles}" {...datasets}>
+<div class={wrapperStyle} {...datasets}>
   {#if $$slots.out}
     <slot name="out" {image} />
   {/if}
@@ -89,15 +114,15 @@
     <slot name="actions" {image} {onClear} />
   {/if}
   {#if $errors[name]}
-    <div class="svform-actions{externalActionsStyles}">
-      <span class="svform-errot{externalErrorStyles}">
+    <div class={actionsStyle}>
+      <span class={errorStyle}>
         <slot name="error" error={$errors[name]}>
           {$errors[name]}
         </slot>
       </span>
       <button
         type="button"
-        class="svform-retry{externalRetryStyles}"
+        class={retryStyle}
         on:click|stopPropagation={() => {
           dispatch("retry");
           onClear();
@@ -107,14 +132,14 @@
       </button>
     </div>
   {/if}
-  <label for={id ?? name} class="svform-field{externalFieldStyles}">
+  <label for={id ?? name} class={fieldStyle}>
     {#if !$data[name]}
       <slot name="activate" {image} />
     {/if}
     <input
       bind:this={input}
       id={id ?? name}
-      class="svform-input{externalInputStyles}"
+      class={inputStyle}
       type="file"
       {accept}
       on:change={onSelectFile}

@@ -7,6 +7,7 @@
 
   $: setConfig({
     fields: {
+      replace: true,
       field: {
         field: "form__field",
       },

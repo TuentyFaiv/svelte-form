@@ -15,6 +15,8 @@ import type {
 } from "./styles.js";
 
 export interface ContextStyles {
+  /** Set to true to replace the default styles  @default false */
+  replace?: boolean;
   field?: FieldStyles;
   file?: FileStyles;
   select?: SelectStyles;
