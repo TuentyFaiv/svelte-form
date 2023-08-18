@@ -39,12 +39,10 @@
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "peerDependencies": {
-    "@emotion/css": "^11.11.2",
     "svelte": "^4.0.5",
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@emotion/css": "^11.11.2",
     "@playwright/test": "^1.36.0",
     "@sveltejs/adapter-vercel": "^3.0.2",
     "@sveltejs/kit": "^1.22.3",

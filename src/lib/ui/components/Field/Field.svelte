@@ -1,14 +1,11 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { fade } from "svelte/transition";
-  import { cx } from "@emotion/css";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
   import { keys } from "$lib/logic/utils/keys.js";
 
   import type { Input, Props } from "./Field.proptypes.js";
-
-  import * as stylesinternal from "./Field.styles.js";
 
   import IconShow from "../../assets/icon-show.svg";
   import IconHide from "../../assets/icon-hide.svg";
@@ -49,6 +46,18 @@
     setField(name, checked, mounted);
   }
 
+  $: showPassword = styles?.show ?? icons?.show ?? IconShow;
+  $: hidePassword = styles?.hide ?? icons?.hide ?? IconHide;
+
+  $: externalFieldStyles = styles?.field ? ` ${styles.field}` : "";
+  $: externalLabelStyles = styles?.label ? ` ${styles.label}` : "";
+  $: externalAreaStyles = styles?.area ? ` ${styles.area}` : "";
+  $: externalCheckStyles = styles?.check ? ` ${styles.check}` : "";
+  $: externalInputStyles = styles?.input ? ` ${styles.input}` : "";
+  $: externalActionStyles = styles?.action ? ` ${styles.action}` : "";
+  $: externalIconStyles = styles?.icon ? ` ${styles.icon}` : "";
+  $: externalErrorStyles = styles?.error ? ` ${styles.error}` : "";
+
   onDestroy(() => {
     setField(name, undefined);
   });
@@ -56,7 +65,7 @@
 
 <label
   for={id ?? name}
-  class={cx(stylesinternal.field, styles?.field ?? "")}
+  class="field{externalFieldStyles}"
   data-type={type}
   data-checked={checked}
   data-checked-icon={icons?.check ?? ""}
@@ -64,14 +73,14 @@
   {...datasets}
 >
   {#if label && type !== "checkbox"}
-    <p class={cx(stylesinternal.label, styles?.label ?? "")}>
+    <p class="label{externalLabelStyles}">
       {label}
       <slot />
     </p>
   {/if}
   {#if type === "textarea"}
     <textarea
-      class={cx(stylesinternal.area, styles?.area ?? "")}
+      class="shared textarea{externalAreaStyles}"
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -80,7 +89,7 @@
     />
   {:else if type === "checkbox"}
     <input
-      class={cx(stylesinternal.check, styles?.check ?? "")}
+      class="checkbox{externalCheckStyles}"
       id={id ?? name}
       type="checkbox"
       bind:this={input}
@@ -90,14 +99,14 @@
       {...$$restProps}
     />
     {#if label}
-      <p class={cx(stylesinternal.label, styles?.label ?? "")}>
+      <p class="label{externalLabelStyles}">
         {label}
         <slot />
       </p>
     {/if}
   {:else}
     <input
-      class={cx(stylesinternal.input, styles?.input ?? "")}
+      class="shared input{externalInputStyles}"
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -111,16 +120,14 @@
   {#if type === "password"}
     <button
       type="button"
-      class={cx(stylesinternal.action, styles?.action ?? "")}
+      class="action{externalActionStyles}"
       class:show
       on:click|stopPropagation={toggleShow}
       title={a11y.icon}
     >
       <img
-        class={cx(stylesinternal.icon, styles?.icon ?? "")}
-        src={show
-          ? styles?.show ?? icons?.show ?? IconShow
-          : styles?.hide ?? icons?.hide ?? IconHide}
+        class="icon{externalIconStyles}"
+        src={show ? showPassword : hidePassword}
         alt={a11y.icon}
         decoding="async"
         loading="lazy"
@@ -129,10 +136,160 @@
     </button>
   {/if}
   {#if $errors[name]}
-    <span class={cx(stylesinternal.error, styles?.error ?? "")} transition:fade>
+    <span class="error{externalErrorStyles}" transition:fade>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>
     </span>
   {/if}
 </label>
+
+<style>
+  .field {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 0;
+    &[data-type="password"] {
+      & > span {
+        right: 36px;
+      }
+    }
+    &[data-type="checkbox"] {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      &::before {
+        position: absolute;
+        display: block;
+        box-sizing: inherit;
+        content: "";
+        width: 16px;
+        min-width: 16px;
+        height: 16px;
+        min-height: 16px;
+        border-radius: var(--s-form-radius);
+        border: var(--s-form-border);
+        transform: translateY(-50%);
+        top: 50%;
+        left: 0;
+        z-index: 0;
+      }
+      & > p {
+        margin-bottom: 0;
+      }
+      & > span {
+        transform: translateY(115%);
+        left: 0;
+        right: auto;
+        bottom: 0;
+        cursor: default;
+      }
+      &[data-checked="true"] {
+        &::after {
+          position: absolute;
+          display: block;
+          box-sizing: inherit;
+          content: attr(data-checked-icon);
+          width: 16px;
+          min-width: 16px;
+          height: 16px;
+          min-height: 16px;
+          border-radius: var(--s-form-radius);
+          background-color: var(--s-form-success);
+        }
+      }
+    }
+  }
+
+  .label {
+    display: block;
+    box-sizing: inherit;
+    width: 100%;
+    margin: 0 0 5px;
+    color: var(--s-form-text);
+    font-size: 16px;
+    line-height: 18px;
+    font-family: var(--s-form-font);
+  }
+  .shared {
+    width: 100%;
+    box-sizing: inherit;
+    padding: 4px 8px;
+    color: var(--s-form-text);
+    font-size: 14px;
+    line-height: 16px;
+    font-family: var(--s-form-font);
+    border: var(--s-form-border);
+    border-radius: var(--s-form-radius);
+    &::placeholder {
+      color: var(--s-form-placeholder);
+      font-size: 14px;
+      line-height: 16px;
+      font-family: var(--s-form-font);
+    }
+  }
+  .textarea {
+    padding: 8px;
+    min-height: 100px;
+    resize: vertical;
+    &::placeholder {
+    }
+  }
+  .checkbox {
+    visibility: hidden;
+  }
+
+  .input {
+    &::placeholder {
+    }
+  }
+
+  .action {
+    position: absolute;
+    display: block;
+    box-sizing: inherit;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    background-color: transparent;
+    color: var(--s-form-text);
+    font-size: 12px;
+    line-height: 12px;
+    font-family: var(--s-form-font);
+    border: 0;
+    bottom: 0;
+    right: 6px;
+    z-index: 0;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .icon {
+    display: block;
+    box-sizing: inherit;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .error {
+    position: absolute;
+    display: block;
+    box-sizing: inherit;
+    padding: 3px 5px;
+    background-color: var(--s-form-error);
+    color: var(--s-form-text-error);
+    font-size: 12px;
+    line-height: 12px;
+    font-family: var(--s-form-font);
+    transform: translateY(50%);
+    border-radius: var(--s-form-radius);
+    bottom: 13px;
+    right: 5px;
+    z-index: 0;
+  }
+</style>

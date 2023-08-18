@@ -1,12 +1,9 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import { cx } from "@emotion/css";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
 
   import type { Input, Props } from "./File.proptypes.js";
-
-  import * as stylesinternal from "./File.styles.js";
 
   export let name: Props["name"];
   export let context: Props["context"] = "form";
@@ -37,6 +34,13 @@
   };
 
   $: datasets = generateDatas(datas);
+
+  $: externalWrapperStyles = styles?.wrapper ? ` ${styles.wrapper}` : "";
+  $: externalActionsStyles = styles?.actions ? ` ${styles.actions}` : "";
+  $: externalErrorStyles = styles?.error ? ` ${styles.error}` : "";
+  $: externalRetryStyles = styles?.retry ? ` ${styles.retry}` : "";
+  $: externalFieldStyles = styles?.field ? ` ${styles.field}` : "";
+  $: externalInputStyles = styles?.input ? ` ${styles.input}` : "";
 
   function onSelectFile(event: Event) {
     const { files: filesInput } = event.target as HTMLInputElement;
@@ -77,7 +81,7 @@
   });
 </script>
 
-<div class={cx(stylesinternal.wrapper, styles?.wrapper ?? "")} {...datasets}>
+<div class="wrapper{externalWrapperStyles}" {...datasets}>
   {#if $$slots.out}
     <slot name="out" {image} />
   {/if}
@@ -85,15 +89,15 @@
     <slot name="actions" {image} {onClear} />
   {/if}
   {#if $errors[name]}
-    <div class={cx(stylesinternal.actions, styles?.actions ?? "")}>
-      <span class={cx(stylesinternal.error, styles?.error ?? "")}>
+    <div class="actions{externalActionsStyles}">
+      <span class="errot{externalErrorStyles}">
         <slot name="error" error={$errors[name]}>
           {$errors[name]}
         </slot>
       </span>
       <button
         type="button"
-        class={cx(stylesinternal.retry, styles?.retry ?? "")}
+        class="retry{externalRetryStyles}"
         on:click|stopPropagation={() => {
           dispatch("retry");
           onClear();
@@ -103,14 +107,14 @@
       </button>
     </div>
   {/if}
-  <label for={id ?? name} class={cx(stylesinternal.field, styles?.field ?? "")}>
+  <label for={id ?? name} class="field{externalFieldStyles}">
     {#if !$data[name]}
       <slot name="activate" {image} />
     {/if}
     <input
       bind:this={input}
       id={id ?? name}
-      class={cx(stylesinternal.input, styles?.input ?? "")}
+      class="input{externalInputStyles}"
       type="file"
       {accept}
       on:change={onSelectFile}
@@ -119,3 +123,18 @@
     />
   </label>
 </div>
+
+<style>
+  .wrapper {
+  }
+  .actions {
+  }
+  .error {
+  }
+  .retry {
+  }
+  .field {
+  }
+  .input {
+  }
+</style>

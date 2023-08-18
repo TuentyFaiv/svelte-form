@@ -3,14 +3,11 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
-  import { cx } from "@emotion/css";
   import { keys } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
 
   import type { Props, Select, Target } from "./Select.proptypes.js";
-
-  import * as stylesinternal from "./Select.styles.js";
 
   import IconArrow from "../../assets/icon-arrow.svg";
 
@@ -103,12 +100,19 @@
     options.find(({ value }) => value === $data[name])?.label ||
     (!!$data[name] ? $data[name] : placeholder);
 
-  $: {
-    if (options.length === 1 && $data[name] !== options[0].value) {
-      setField(name, options[0].value);
-      onChoose(options[0].value);
-    }
+  $: if (options.length === 1 && $data[name] !== options[0].value) {
+    setField(name, options[0].value);
+    onChoose(options[0].value);
   }
+
+  $: externalFieldStyles = styles?.field ? ` ${styles.field}` : "";
+  $: externalLabelStyles = styles?.label ? ` ${styles.label}` : "";
+  $: externalSelectStyles = styles?.select ? ` ${styles.select}` : "";
+  $: externalValueStyles = styles?.value ? ` ${styles.value}` : "";
+  $: externalIconStyles = styles?.icon ? ` ${styles.icon}` : "";
+  $: externalOptionsStyles = styles?.options ? ` ${styles.options}` : "";
+  $: externalOptionStyles = styles?.option ? ` ${styles.option}` : "";
+  $: externalErrorStyles = styles?.error ? ` ${styles.error}` : "";
 
   onDestroy(() => {
     setField(name, $data[name]);
@@ -117,7 +121,7 @@
 
 <div
   {id}
-  class={cx(stylesinternal.field, styles?.field ?? "")}
+  class="field{externalFieldStyles}"
   role="menu"
   aria-label={label}
   tabindex={0}
@@ -126,30 +130,30 @@
   {...datasets}
 >
   {#if label}
-    <p class={cx(stylesinternal.label, styles?.label ?? "")} role="none">
+    <p class="label{externalLabelStyles}" role="none">
       {label}
     </p>
   {/if}
   <div
     role="none"
-    class={cx(stylesinternal.select, styles?.select ?? "")}
+    class="select{externalSelectStyles}"
     class:active
     bind:this={container}
   >
     <p
       role="presentation"
-      class={cx(stylesinternal.value, styles?.value ?? "")}
+      class="value{externalValueStyles}"
       data-placeholder={showedValue === placeholder}
     >
       {showedValue}
       <img
         src={styles?.arrow ?? icons?.arrow ?? IconArrow}
         alt={showedValue}
-        class={cx(stylesinternal.icon, styles?.icon ?? "")}
+        class="icon{externalIconStyles}"
         role="presentation"
       />
       {#if $errors[name]}
-        <span class={cx(stylesinternal.error, styles?.error ?? "")} role="none">
+        <span class="error{externalErrorStyles}" role="none">
           <slot name="error" error={$errors[name]}>
             {$errors[name]}
           </slot>
@@ -159,7 +163,7 @@
     {#if active}
       <div
         role="none"
-        class={cx(stylesinternal.options, styles?.options ?? "")}
+        class="options{externalOptionsStyles}"
         on:mouseleave|stopPropagation={onHide}
         on:keydown|stopPropagation={onChooseByKey}
         transition:slide={{ delay: 200 }}
@@ -170,7 +174,7 @@
             aria-disabled={!!option.disabled}
             tabindex={0}
             data-value={option.value}
-            class={cx(stylesinternal.option, styles?.option ?? "")}
+            class="option{externalOptionStyles}"
           >
             <span role="none">{option.label}</span>
           </span>
@@ -179,3 +183,136 @@
     {/if}
   </div>
 </div>
+
+<style>
+  .field {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 1;
+    &[data-disabled="true"] {
+      pointer-events: none;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .label {
+    display: block;
+    box-sizing: inherit;
+    width: 100%;
+    margin: 0 0 5px;
+    color: var(--s-form-text);
+    font-size: 16px;
+    line-height: 18px;
+    font-family: var(--s-form-font);
+  }
+  .select {
+    position: relative;
+    box-sizing: inherit;
+    width: 100%;
+    padding: 4px 8px;
+    border: var(--s-form-border);
+    border-radius: var(--s-form-radius);
+    z-index: 0;
+    &:is(:hover, :focus, :focus-within) {
+    }
+    &:is(:hover, :focus, :focus-within) > p {
+    }
+    &.active > p {
+      & > img {
+        transform: translateY(-50%) translateX(2px) rotateX(180deg);
+      }
+    }
+  }
+  .value {
+    position: relative;
+    box-sizing: inherit;
+    width: 100%;
+    min-height: 14px;
+    margin: 0;
+    color: var(--s-form-text);
+    font-size: 14px;
+    line-height: 16px;
+    font-family: var(--s-form-font);
+    z-index: 0;
+    &[data-placeholder="true"] {
+      color: var(--s-form-placeholder);
+    }
+  }
+  .icon {
+    position: absolute;
+    display: block;
+    box-sizing: inherit;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%) translateX(2px);
+    transition: transform 0.5s ease-in-out;
+    z-index: 0;
+  }
+  .options {
+    position: absolute;
+    display: flex;
+    box-sizing: inherit;
+    width: 100%;
+    max-height: 150px;
+    background-color: var(--s-form-secondary);
+    border: var(--s-form-border);
+    border-radius: 0 0 var(--s-form-radius) var(--s-form-radius);
+    overflow-y: auto;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    transform: translateX(-50%);
+    top: 100%;
+    left: 50%;
+    z-index: 0;
+    &::-webkit-scrollbar {
+      width: 10px;
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      width: 10px;
+      background-color: var(--s-form-primary);
+    }
+  }
+  .option {
+    display: block;
+    box-sizing: inherit;
+    width: 100%;
+    padding: 5px 10px;
+    color: var(--s-form-text);
+    font-size: 14px;
+    line-height: 16px;
+    font-family: var(--s-form-font);
+    &[aria-disabled="true"] {
+      pointer-events: none;
+    }
+    &:hover {
+      background-color: var(--s-form-primary);
+      & > span {
+        pointer-events: none;
+      }
+    }
+  }
+  .error {
+    position: absolute;
+    display: block;
+    padding: 3px 5px;
+    box-sizing: inherit;
+    background-color: var(--s-form-error);
+    color: var(--s-form-text-error);
+    font-size: 12px;
+    line-height: 12px;
+    font-family: var(--s-form-font);
+    transform: translateY(50%);
+    border-radius: var(--s-form-radius);
+    bottom: 8px;
+    right: 26px;
+    z-index: 0;
+  }
+</style>
