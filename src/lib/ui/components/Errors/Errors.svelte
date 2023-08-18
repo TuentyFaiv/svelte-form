@@ -17,14 +17,15 @@
     field,
     error: $errors[field],
   }));
-  $: externalStyles = styles?.list ? ` ${styles.list}` : "";
+  $: externalListStyles = styles?.list ? ` ${styles.list}` : "";
+  $: externalItemStyles = styles?.item ? ` ${styles.item}` : "";
 </script>
 
 {#if showErrors}
-  <ul class="list{externalStyles}">
+  <ul class="svform-list{externalListStyles}">
     {#each list as { field, error }, index (`${field}-list-${index}`)}
       {#if error !== null}
-        <li class={styles?.item ?? "item"}>
+        <li class="svform-item{externalItemStyles}">
           <slot name="error" {error} {field}>
             {`${field}: ${error}`}
           </slot>
@@ -35,7 +36,7 @@
 {/if}
 
 <style>
-  .list {
+  .svform-list {
     display: flex;
     box-sizing: border-box;
     margin: 16px 0 0;
@@ -47,7 +48,7 @@
     flex-direction: column;
   }
 
-  .item {
+  .svform-item {
     display: block;
     margin: 0;
     padding: 3px 5px;

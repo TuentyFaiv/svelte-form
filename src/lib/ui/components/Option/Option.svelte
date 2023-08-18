@@ -44,21 +44,21 @@
   });
 </script>
 
-<fieldset class="options{externalOptionsStyles}" {disabled}>
+<fieldset class="svform-options{externalOptionsStyles}" {disabled}>
   {#each options as { id: idOption, value, label, a11y } (`${name}-option-${value}`)}
     {@const id = idOption ?? `${name}-option-${value}`}
     <label
       for={id}
-      class="field{externalFieldStyles}"
+      class="svform-field{externalFieldStyles}"
       data-checked={$data[name] === value}
       title={a11y?.title ?? label}
       {...datasets}
     >
-      <p class="label{externalLabelStyles}">
+      <p class="svform-label{externalLabelStyles}">
         {label}
       </p>
       <input
-        class="input{externalInputStyles}"
+        class="svform-input{externalInputStyles}"
         type="radio"
         {id}
         bind:this={inputs[id]}
@@ -69,14 +69,14 @@
         {...$$restProps}
       />
       {#if $$slots.default}
-        <div class="content{externalContentStyles}">
+        <div class="svform-content{externalContentStyles}">
           <slot />
         </div>
       {/if}
     </label>
   {/each}
   {#if $errors[name]}
-    <span class="error{externalErrorStyles}" transition:fade>
+    <span class="svform-error{externalErrorStyles}" transition:fade>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>
@@ -85,7 +85,7 @@
 </fieldset>
 
 <style>
-  .options {
+  .svform-options {
     position: relative;
     box-sizing: border-box;
     display: flex;
@@ -99,7 +99,7 @@
     flex-wrap: wrap;
     z-index: 0;
   }
-  .field {
+  .svform-field {
     display: block;
     box-sizing: inherit;
     flex: 1;
@@ -107,21 +107,21 @@
     padding: 8px;
     border-radius: var(--s-form-radius);
     border: var(--s-form-border);
-    &:hover {
-      cursor: pointer;
-      border-color: var(--s-form-accent);
-      border-width: 2px;
-    }
-    &[data-checked="true"] {
-      border-color: var(--s-form-success);
-      border-width: 2px;
-    }
-    &[data-checked="false"] {
-      & > p {
-      }
-    }
   }
-  .label {
+  .svform-field:hover {
+    cursor: pointer;
+    border-color: var(--s-form-accent);
+    border-width: 2px;
+  }
+  .svform-field[data-checked="true"] {
+    border-color: var(--s-form-success);
+    border-width: 2px;
+  }
+  /* .svform-field[data-checked="false"] {
+  }
+  .svform-field[data-checked="false"] > p {
+  } */
+  .svform-label {
     width: 100%;
     box-sizing: inherit;
     padding: 0;
@@ -132,7 +132,7 @@
     font-family: var(--s-form-font);
     text-align: center;
   }
-  .input {
+  .svform-input {
     position: absolute;
     display: block;
     box-sizing: inherit;
@@ -142,11 +142,11 @@
     left: 0;
     z-index: 0;
   }
-  .content {
+  .svform-content {
     width: 100%;
     box-sizing: inherit;
   }
-  .error {
+  .svform-error {
     position: absolute;
     display: block;
     box-sizing: inherit;

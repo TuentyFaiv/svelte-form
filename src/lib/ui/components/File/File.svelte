@@ -81,7 +81,7 @@
   });
 </script>
 
-<div class="wrapper{externalWrapperStyles}" {...datasets}>
+<div class="svform-wrapper{externalWrapperStyles}" {...datasets}>
   {#if $$slots.out}
     <slot name="out" {image} />
   {/if}
@@ -89,15 +89,15 @@
     <slot name="actions" {image} {onClear} />
   {/if}
   {#if $errors[name]}
-    <div class="actions{externalActionsStyles}">
-      <span class="errot{externalErrorStyles}">
+    <div class="svform-actions{externalActionsStyles}">
+      <span class="svform-errot{externalErrorStyles}">
         <slot name="error" error={$errors[name]}>
           {$errors[name]}
         </slot>
       </span>
       <button
         type="button"
-        class="retry{externalRetryStyles}"
+        class="svform-retry{externalRetryStyles}"
         on:click|stopPropagation={() => {
           dispatch("retry");
           onClear();
@@ -107,14 +107,14 @@
       </button>
     </div>
   {/if}
-  <label for={id ?? name} class="field{externalFieldStyles}">
+  <label for={id ?? name} class="svform-field{externalFieldStyles}">
     {#if !$data[name]}
       <slot name="activate" {image} />
     {/if}
     <input
       bind:this={input}
       id={id ?? name}
-      class="input{externalInputStyles}"
+      class="svform-input{externalInputStyles}"
       type="file"
       {accept}
       on:change={onSelectFile}
@@ -125,16 +125,16 @@
 </div>
 
 <style>
-  .wrapper {
-  }
-  .actions {
-  }
-  .error {
-  }
-  .retry {
-  }
-  .field {
-  }
-  .input {
-  }
+  /* .svform-wrapper {
+  } */
+  /* .svform-actions {
+  } */
+  /* .svform-error {
+  } */
+  /* .svform-retry {
+  } */
+  /* .svform-field {
+  } */
+  /* .svform-input {
+  } */
 </style>

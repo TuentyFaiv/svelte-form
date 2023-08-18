@@ -65,7 +65,7 @@
 
 <label
   for={id ?? name}
-  class="field{externalFieldStyles}"
+  class="svform-field{externalFieldStyles}"
   data-type={type}
   data-checked={checked}
   data-checked-icon={icons?.check ?? ""}
@@ -73,14 +73,14 @@
   {...datasets}
 >
   {#if label && type !== "checkbox"}
-    <p class="label{externalLabelStyles}">
+    <p class="svform-label{externalLabelStyles}">
       {label}
       <slot />
     </p>
   {/if}
   {#if type === "textarea"}
     <textarea
-      class="shared textarea{externalAreaStyles}"
+      class="svform-shared svform-textarea{externalAreaStyles}"
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -89,7 +89,7 @@
     />
   {:else if type === "checkbox"}
     <input
-      class="checkbox{externalCheckStyles}"
+      class="svform-checkbox{externalCheckStyles}"
       id={id ?? name}
       type="checkbox"
       bind:this={input}
@@ -99,14 +99,14 @@
       {...$$restProps}
     />
     {#if label}
-      <p class="label{externalLabelStyles}">
+      <p class="svform-label{externalLabelStyles}">
         {label}
         <slot />
       </p>
     {/if}
   {:else}
     <input
-      class="shared input{externalInputStyles}"
+      class="svform-shared svform-input{externalInputStyles}"
       id={id ?? name}
       bind:this={input}
       on:blur={check}
@@ -120,13 +120,13 @@
   {#if type === "password"}
     <button
       type="button"
-      class="action{externalActionStyles}"
+      class="svform-action{externalActionStyles}"
       class:show
       on:click|stopPropagation={toggleShow}
       title={a11y.icon}
     >
       <img
-        class="icon{externalIconStyles}"
+        class="svform-icon{externalIconStyles}"
         src={show ? showPassword : hidePassword}
         alt={a11y.icon}
         decoding="async"
@@ -136,7 +136,7 @@
     </button>
   {/if}
   {#if $errors[name]}
-    <span class="error{externalErrorStyles}" transition:fade>
+    <span class="svform-error{externalErrorStyles}" transition:fade>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>
@@ -145,66 +145,62 @@
 </label>
 
 <style>
-  .field {
+  .svform-field {
     position: relative;
     display: block;
     box-sizing: border-box;
     width: 100%;
     z-index: 0;
-    &[data-type="password"] {
-      & > span {
-        right: 36px;
-      }
-    }
-    &[data-type="checkbox"] {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      cursor: pointer;
-      &::before {
-        position: absolute;
-        display: block;
-        box-sizing: inherit;
-        content: "";
-        width: 16px;
-        min-width: 16px;
-        height: 16px;
-        min-height: 16px;
-        border-radius: var(--s-form-radius);
-        border: var(--s-form-border);
-        transform: translateY(-50%);
-        top: 50%;
-        left: 0;
-        z-index: 0;
-      }
-      & > p {
-        margin-bottom: 0;
-      }
-      & > span {
-        transform: translateY(115%);
-        left: 0;
-        right: auto;
-        bottom: 0;
-        cursor: default;
-      }
-      &[data-checked="true"] {
-        &::after {
-          position: absolute;
-          display: block;
-          box-sizing: inherit;
-          content: attr(data-checked-icon);
-          width: 16px;
-          min-width: 16px;
-          height: 16px;
-          min-height: 16px;
-          border-radius: var(--s-form-radius);
-          background-color: var(--s-form-success);
-        }
-      }
-    }
+  }
+  .svform-field[data-type="password"] > span {
+    right: 36px;
+  }
+  .svform-field[data-type="checkbox"] {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+  }
+  .svform-field[data-type="checkbox"]::before {
+    position: absolute;
+    display: block;
+    box-sizing: inherit;
+    content: "";
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    min-height: 16px;
+    border-radius: var(--s-form-radius);
+    border: var(--s-form-border);
+    transform: translateY(-50%);
+    top: 50%;
+    left: 0;
+    z-index: 0;
+  }
+  .svform-field[data-type="checkbox"] > p {
+    margin-bottom: 0;
+  }
+  .svform-field[data-type="checkbox"] > span {
+    transform: translateY(115%);
+    left: 0;
+    right: auto;
+    bottom: 0;
+    cursor: default;
+  }
+  .svform-field[data-type="checkbox"][data-checked="true"]::after {
+    position: absolute;
+    display: block;
+    box-sizing: inherit;
+    content: attr(data-checked-icon);
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    min-height: 16px;
+    border-radius: var(--s-form-radius);
+    background-color: var(--s-form-success);
   }
 
-  .label {
+  .svform-label {
     display: block;
     box-sizing: inherit;
     width: 100%;
@@ -214,7 +210,7 @@
     line-height: 18px;
     font-family: var(--s-form-font);
   }
-  .shared {
+  .svform-shared {
     width: 100%;
     box-sizing: inherit;
     padding: 4px 8px;
@@ -224,30 +220,30 @@
     font-family: var(--s-form-font);
     border: var(--s-form-border);
     border-radius: var(--s-form-radius);
-    &::placeholder {
-      color: var(--s-form-placeholder);
-      font-size: 14px;
-      line-height: 16px;
-      font-family: var(--s-form-font);
-    }
   }
-  .textarea {
+  .svform-shared::placeholder {
+    color: var(--s-form-placeholder);
+    font-size: 14px;
+    line-height: 16px;
+    font-family: var(--s-form-font);
+  }
+  .svform-textarea {
     padding: 8px;
     min-height: 100px;
     resize: vertical;
-    &::placeholder {
-    }
   }
-  .checkbox {
+  /* .textarea::placeholder {
+  } */
+  .svform-checkbox {
     visibility: hidden;
   }
 
-  .input {
-    &::placeholder {
-    }
+  /* .input {
   }
+  .input::placeholder {
+  } */
 
-  .action {
+  .svform-action {
     position: absolute;
     display: block;
     box-sizing: inherit;
@@ -263,12 +259,12 @@
     bottom: 0;
     right: 6px;
     z-index: 0;
-    &:hover {
-      cursor: pointer;
-    }
+  }
+  .svform-action:hover {
+    cursor: pointer;
   }
 
-  .icon {
+  .svform-icon {
     display: block;
     box-sizing: inherit;
     width: 100%;
@@ -276,7 +272,7 @@
     object-fit: contain;
   }
 
-  .error {
+  .svform-error {
     position: absolute;
     display: block;
     box-sizing: inherit;

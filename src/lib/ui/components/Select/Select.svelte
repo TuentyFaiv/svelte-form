@@ -121,7 +121,7 @@
 
 <div
   {id}
-  class="field{externalFieldStyles}"
+  class="svform-field{externalFieldStyles}"
   role="menu"
   aria-label={label}
   tabindex={0}
@@ -130,30 +130,30 @@
   {...datasets}
 >
   {#if label}
-    <p class="label{externalLabelStyles}" role="none">
+    <p class="svform-label{externalLabelStyles}" role="none">
       {label}
     </p>
   {/if}
   <div
     role="none"
-    class="select{externalSelectStyles}"
+    class="svform-select{externalSelectStyles}"
     class:active
     bind:this={container}
   >
     <p
       role="presentation"
-      class="value{externalValueStyles}"
+      class="svform-value{externalValueStyles}"
       data-placeholder={showedValue === placeholder}
     >
       {showedValue}
       <img
         src={styles?.arrow ?? icons?.arrow ?? IconArrow}
         alt={showedValue}
-        class="icon{externalIconStyles}"
+        class="svform-icon{externalIconStyles}"
         role="presentation"
       />
       {#if $errors[name]}
-        <span class="error{externalErrorStyles}" role="none">
+        <span class="svform-error{externalErrorStyles}" role="none">
           <slot name="error" error={$errors[name]}>
             {$errors[name]}
           </slot>
@@ -163,7 +163,7 @@
     {#if active}
       <div
         role="none"
-        class="options{externalOptionsStyles}"
+        class="svform-options{externalOptionsStyles}"
         on:mouseleave|stopPropagation={onHide}
         on:keydown|stopPropagation={onChooseByKey}
         transition:slide={{ delay: 200 }}
@@ -174,7 +174,7 @@
             aria-disabled={!!option.disabled}
             tabindex={0}
             data-value={option.value}
-            class="option{externalOptionStyles}"
+            class="svform-option{externalOptionStyles}"
           >
             <span role="none">{option.label}</span>
           </span>
@@ -185,20 +185,20 @@
 </div>
 
 <style>
-  .field {
+  .svform-field {
     position: relative;
     display: block;
     box-sizing: border-box;
     width: 100%;
     z-index: 1;
-    &[data-disabled="true"] {
-      pointer-events: none;
-    }
-    &:hover {
-      cursor: pointer;
-    }
   }
-  .label {
+  .svform-field[data-disabled="true"] {
+    pointer-events: none;
+  }
+  .svform-field:hover {
+    cursor: pointer;
+  }
+  .svform-label {
     display: block;
     box-sizing: inherit;
     width: 100%;
@@ -208,7 +208,7 @@
     line-height: 18px;
     font-family: var(--s-form-font);
   }
-  .select {
+  .svform-select {
     position: relative;
     box-sizing: inherit;
     width: 100%;
@@ -216,17 +216,17 @@
     border: var(--s-form-border);
     border-radius: var(--s-form-radius);
     z-index: 0;
-    &:is(:hover, :focus, :focus-within) {
-    }
-    &:is(:hover, :focus, :focus-within) > p {
-    }
-    &.active > p {
-      & > img {
-        transform: translateY(-50%) translateX(2px) rotateX(180deg);
-      }
-    }
   }
-  .value {
+  /* .svform-select:is(:hover, :focus, :focus-within) {
+  }
+  .svform-select:is(:hover, :focus, :focus-within) > p {
+  } */
+  /* .svform-select.active > p {
+  } */
+  .svform-select.active > p > img {
+    transform: translateY(-50%) translateX(2px) rotateX(180deg);
+  }
+  .svform-value {
     position: relative;
     box-sizing: inherit;
     width: 100%;
@@ -237,11 +237,11 @@
     line-height: 16px;
     font-family: var(--s-form-font);
     z-index: 0;
-    &[data-placeholder="true"] {
-      color: var(--s-form-placeholder);
-    }
   }
-  .icon {
+  .svform-value[data-placeholder="true"] {
+    color: var(--s-form-placeholder);
+  }
+  .svform-icon {
     position: absolute;
     display: block;
     box-sizing: inherit;
@@ -253,8 +253,9 @@
     transform: translateY(-50%) translateX(2px);
     transition: transform 0.5s ease-in-out;
     z-index: 0;
+    pointer-events: none;
   }
-  .options {
+  .svform-options {
     position: absolute;
     display: flex;
     box-sizing: inherit;
@@ -271,16 +272,16 @@
     top: 100%;
     left: 50%;
     z-index: 0;
-    &::-webkit-scrollbar {
-      width: 10px;
-      background-color: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-      width: 10px;
-      background-color: var(--s-form-primary);
-    }
   }
-  .option {
+  .svform-options::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+  }
+  .svform-options::-webkit-scrollbar-thumb {
+    width: 10px;
+    background-color: var(--s-form-primary);
+  }
+  .svform-option {
     display: block;
     box-sizing: inherit;
     width: 100%;
@@ -289,17 +290,17 @@
     font-size: 14px;
     line-height: 16px;
     font-family: var(--s-form-font);
-    &[aria-disabled="true"] {
-      pointer-events: none;
-    }
-    &:hover {
-      background-color: var(--s-form-primary);
-      & > span {
-        pointer-events: none;
-      }
-    }
   }
-  .error {
+  .svform-option[aria-disabled="true"] {
+    pointer-events: none;
+  }
+  .svform-option:hover {
+    background-color: var(--s-form-primary);
+  }
+  .svform-option:hover > span {
+    pointer-events: none;
+  }
+  .svform-error {
     position: absolute;
     display: block;
     padding: 3px 5px;
