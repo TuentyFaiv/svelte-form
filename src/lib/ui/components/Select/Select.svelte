@@ -177,6 +177,10 @@
     onChoose(options[0].value);
   }
 
+  $: if ($data[name] !== search) {
+    onHasValue();
+  }
+
   $: fieldStyle = getStyle({
     replace,
     style: "svform-field",
@@ -237,8 +241,6 @@
     style: "svform-error",
     external: styles?.error,
   });
-
-  $: console.log({ active });
 
   onDestroy(() => {
     setField(name, $data[name]);

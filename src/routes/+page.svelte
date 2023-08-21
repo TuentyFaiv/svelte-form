@@ -20,7 +20,7 @@
     asset: mixed().required(),
   };
   const form = faivform({ fields });
-  const { submit, data, errors } = $form;
+  const { submit, data, errors, setField } = $form;
 
   const onSubmit = submit(async (values) => {
     console.log(values);
@@ -50,6 +50,15 @@
   />
   <Option name="option" {options} />
   <File name="asset" />
+
+  <button
+    type="button"
+    on:click={() => {
+      setField("type", "2");
+    }}
+  >
+    set type value
+  </button>
 </form>
 <button form="test" type="submit">Submit</button>
 <Errors />
