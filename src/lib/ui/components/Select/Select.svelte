@@ -3,11 +3,12 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
-  import { keys } from "$lib/logic/utils/keys.js";
+  import { keys, tags } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
   import { getStyle } from "$lib/logic/utils/styles.js";
 
+  import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
   import type { Props, Select, Target } from "./Select.proptypes.js";
 
   import IconArrow from "../../assets/icon-arrow.svg";
@@ -15,70 +16,110 @@
   export let name: Props["name"];
   export let label: Props["label"] = null;
   export let id: Props["id"] = null;
+  export let searchable: Props["searchable"] = true;
+  export let multiple: Props["multiple"] = false;
+  export let disabled: Props["disabled"] = false;
   export let options: Props["options"] = [];
   export let placeholder: Props["placeholder"] = "";
   export let context: Props["context"] = "form";
   export let datas: Props["datas"] = {};
 
+  let select: HTMLDivElement | null = null;
+  let labelElement: HTMLParagraphElement | null = null;
   let container: Select = null;
-  let active = false;
+  let valueBoxElement: HTMLDivElement | null = null;
+  let searchableElement: HTMLInputElement | null = null;
+  let arrowElement: HTMLImageElement | null = null;
+  let errorElement: HTMLSpanElement | null = null;
+  let optionsElement: HTMLDivElement | null = null;
 
-  const dispatch = createEventDispatcher<{ choose: string }>();
+  let active = false;
+  let search = "";
+
+  const dispatch = createEventDispatcher<{
+    choose: string[] | string;
+  }>();
   const form = useForm(context);
   const { data, errors, styles: ctxStyles, setField } = $form;
   $: ({ select: styles, icons, replace } = $ctxStyles);
 
-  function onChoose(value: string) {
+  function onChoose(value: string | string[]) {
     dispatch("choose", value);
   }
 
-  function handleToggle() {
+  function onToggle() {
     active = !active;
   }
 
+  function onHasValue() {
+    if (!multiple && $data[name]) {
+      const selection = options.find(({ value }) => value === $data[name]);
+      search = selection?.label ?? "";
+    }
+  }
+
+  function onFilter() {
+    if (!active) onToggle();
+  }
+
   function handleChoose(element: HTMLElement) {
-    const option =
-      element.role === "none" && element.tagName === "SPAN"
-        ? element.parentElement ?? element
-        : element;
+    const isOptions = element === optionsElement;
+    const option = isOptions
+      ? (element.firstElementChild as HTMLElement)
+      : element;
     const { value } = option.dataset;
     if (value) {
-      setField(name, value);
-      onChoose(value);
+      const selection = options.find(({ value: v }) => v === value);
+      const newValue = multiple
+        ? ([...($data[name] ?? []), value] as string[])
+        : value;
+      search = multiple ? "" : selection?.label ?? "";
+      setField(name, newValue);
+      onChoose(newValue);
     }
-    active = false;
+    active = multiple;
   }
 
   function handleSelect(event: MouseEvent) {
     const element = event.target as Target;
+    const isSelect = element === select;
+    const isLabel = element === labelElement;
+    const isContainer = element === container;
+    const isValueBox = element === valueBoxElement;
+    const isShowedOption =
+      element.tagName === tags.span &&
+      JSON.parse(element.dataset.optionShowed ?? "false");
+    const isSearchable = element === searchableElement;
+    const isArrow = element === arrowElement;
+    const isError = element === errorElement;
+    const isOptions = element === optionsElement;
+
     const isMenu =
-      element.role === "menu" ||
-      (element.role === "none" && element.parentElement?.role === "menu") ||
-      (element.role === "none" &&
-        (element.parentElement?.role === "presentation" ||
-          element.firstElementChild?.role === "presentation")) ||
-      (element.role === "presentation" &&
-        (element.parentElement?.role === "none" ||
-          element.firstElementChild?.role === "none"));
+      isSelect ||
+      isLabel ||
+      isContainer ||
+      isValueBox ||
+      isShowedOption ||
+      isSearchable ||
+      isArrow ||
+      isError ||
+      isOptions;
     const isOption =
-      (element.role === "none" &&
-        (element.parentElement?.role === "menuitem" ||
-          element.firstElementChild?.role === "menuitem")) ||
-      (element.role === "menuitem" &&
-        (element.parentElement?.role === "none" ||
-          element.firstElementChild?.role === "none"));
+      element.tagName === tags.span &&
+      JSON.parse(element.dataset.option ?? "false") &&
+      !isMenu;
 
     if (isOption) {
       handleChoose(element);
     } else if (isMenu) {
-      handleToggle();
+      onToggle();
       if (container) container.lastElementChild?.scrollTo(0, 0);
     }
   }
 
   function onOpenByKey(event: KeyboardEvent) {
     if (event.code === keys.enter) {
-      handleToggle();
+      onToggle();
     }
   }
 
@@ -89,17 +130,47 @@
     }
   }
 
-  $: onHide = active
-    ? () => {
-        handleToggle();
-        setField(name, $data[name] ?? "");
-      }
-    : undefined;
+  function onHide() {
+    onToggle();
+    onHasValue();
+    setField(name, $data[name] ?? (multiple ? [] : ""));
+  }
+
+  function onRemove(option: SelectOption) {
+    const selection = ($data[name] ?? []) as string[];
+    const newSelection = selection.filter((value) => value !== option.value);
+    setField(name, newSelection);
+  }
+
+  function onClear() {
+    setField(name, multiple ? [] : "");
+    if (!multiple) search = "";
+  }
 
   $: datasets = generateDatas(datas);
-  $: showedValue =
-    options.find(({ value }) => value === $data[name])?.label ||
-    (!!$data[name] ? $data[name] : placeholder);
+
+  $: optionsToShow = (
+    searchable
+      ? options.filter(({ label }) =>
+          label.toLowerCase().includes(search.toLowerCase())
+        )
+      : options
+  ).filter(({ value }) =>
+    multiple
+      ? !(($data[name] ?? []) as string[]).some((v) => v === value)
+      : true
+  );
+
+  $: showedValue = (
+    multiple
+      ? options.filter((option) =>
+          (($data[name] ?? []) as string[]).some(
+            (value) => value === option.value
+          )
+        )
+      : options.find(({ value }) => value === $data[name])?.label ||
+        ($data[name] ?? null)
+  ) as SelectOption[] | string | null;
 
   $: if (options.length === 1 && $data[name] !== options[0].value) {
     setField(name, options[0].value);
@@ -126,6 +197,26 @@
     style: "svform-value",
     external: styles?.value,
   });
+  $: itemStyle = getStyle({
+    replace,
+    style: "svform-item",
+    external: styles?.item,
+  });
+  $: removeStyle = getStyle({
+    replace,
+    style: "svform-remove",
+    external: styles?.remove,
+  });
+  $: searchableStyle = getStyle({
+    replace,
+    style: "svform-searchable",
+    external: styles?.searchable,
+  });
+  $: clearStyle = getStyle({
+    replace,
+    style: "svform-clear",
+    external: styles?.clear,
+  });
   $: iconStyle = getStyle({
     replace,
     style: "svform-icon",
@@ -147,6 +238,8 @@
     external: styles?.error,
   });
 
+  $: console.log({ active });
+
   onDestroy(() => {
     setField(name, $data[name]);
   });
@@ -154,57 +247,118 @@
 
 <div
   {id}
+  bind:this={select}
   class={fieldStyle}
   role="menu"
   aria-label={label}
   tabindex={0}
-  on:click|stopPropagation={!datas?.disabled ? handleSelect : undefined}
+  on:click|stopPropagation={!disabled ? handleSelect : undefined}
   on:keydown|stopPropagation={onOpenByKey}
+  on:mouseleave|stopPropagation={active ? onHide : undefined}
+  data-disabled={disabled}
   {...datasets}
 >
   {#if label}
-    <p class={labelStyle} role="none">
+    <p
+      bind:this={labelElement}
+      class={labelStyle}
+      data-label={true}
+      role="presentation"
+    >
       {label}
     </p>
   {/if}
-  <div role="none" class={selectStyle} class:active bind:this={container}>
-    <p
-      role="presentation"
-      class={valueStyle}
-      data-placeholder={showedValue === placeholder}
-    >
-      {showedValue}
-      <img
-        src={styles?.arrow ?? icons?.arrow ?? IconArrow}
-        alt={showedValue}
-        class={iconStyle}
-        role="presentation"
-      />
+  <div
+    role="presentation"
+    class={selectStyle}
+    class:active
+    data-multiple={multiple}
+    bind:this={container}
+  >
+    <div role="presentation" class={valueStyle} bind:this={valueBoxElement}>
+      {#if multiple && Array.isArray(showedValue)}
+        {#each showedValue as option (option.value)}
+          <span role="presentation" class={itemStyle} data-option-showed={true}>
+            {option.label}
+            <button
+              type="button"
+              class="svform-remove-childs {removeStyle}"
+              on:click|stopPropagation={() => onRemove(option)}
+            >
+              <slot name="remove">x</slot>
+            </button>
+          </span>
+        {/each}
+      {/if}
+      {#if searchable}
+        <input
+          type="text"
+          class={searchableStyle}
+          data-multiple={multiple}
+          bind:this={searchableElement}
+          bind:value={search}
+          on:input={onFilter}
+          {placeholder}
+        />
+      {:else if !searchable && (!Array.isArray(showedValue) || showedValue.length === 0)}
+        <input
+          type="text"
+          class={searchableStyle}
+          data-multiple={multiple}
+          value={showedValue}
+          readonly
+          bind:this={searchableElement}
+          {placeholder}
+        />
+      {/if}
       {#if $errors[name]}
-        <span class={errorStyle} role="none">
+        <span
+          bind:this={errorElement}
+          class="svform-error-childs {errorStyle}"
+          role="presentation"
+        >
           <slot name="error" error={$errors[name]}>
             {$errors[name]}
           </slot>
         </span>
       {/if}
-    </p>
+    </div>
+    {#if showedValue && showedValue.length > 0}
+      <button
+        type="button"
+        class="svform-clear-childs {clearStyle}"
+        on:click|stopPropagation={onClear}
+      >
+        <slot name="clear">X</slot>
+      </button>
+    {/if}
+    <img
+      src={styles?.arrow ?? icons?.arrow ?? IconArrow}
+      alt={placeholder}
+      class={iconStyle}
+      bind:this={arrowElement}
+      role="presentation"
+    />
     {#if active}
       <div
-        role="none"
+        role="presentation"
         class={optionsStyle}
-        on:mouseleave|stopPropagation={onHide}
+        bind:this={optionsElement}
         on:keydown|stopPropagation={onChooseByKey}
         transition:slide={{ delay: 200 }}
       >
-        {#each options as option (option.key ?? option.value)}
+        {#each optionsToShow as option (option.key ?? option.value)}
           <span
             role="menuitem"
             aria-disabled={!!option.disabled}
             tabindex={0}
+            class="svform-option-childs {optionStyle}"
             data-value={option.value}
-            class={optionStyle}
+            data-option={true}
           >
-            <span role="none">{option.label}</span>
+            <slot name="option" {option}>
+              {option.label}
+            </slot>
           </span>
         {/each}
       </div>
@@ -239,11 +393,20 @@
   .svform-select {
     position: relative;
     box-sizing: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    padding: 4px 8px;
+    padding: 0;
+    padding-right: 34px;
     border: var(--s-form-border);
     border-radius: var(--s-form-radius);
     z-index: 0;
+  }
+  .svform-select[data-multiple="true"] {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
   }
   /* .svform-select:is(:hover, :focus, :focus-within) {
   }
@@ -251,23 +414,101 @@
   } */
   /* .svform-select.active > p {
   } */
-  .svform-select.active > p > img {
+  .svform-select.active > img {
     transform: translateY(-50%) translateX(2px) rotateX(180deg);
   }
   .svform-value {
     position: relative;
     box-sizing: inherit;
+    display: flex;
     width: 100%;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 4px;
+    flex-wrap: wrap;
     min-height: 14px;
     margin: 0;
+    z-index: 0;
+  }
+  .svform-item {
+    box-sizing: inherit;
+    display: flex;
+    width: max-content;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding-left: 4px;
+    background-color: var(--s-form-primary);
     color: var(--s-form-text);
     font-size: 14px;
     line-height: 16px;
     font-family: var(--s-form-font);
-    z-index: 0;
+    border-radius: 3px;
   }
-  .svform-value[data-placeholder="true"] {
+  .svform-remove {
+    display: block;
+    box-sizing: inherit;
+    width: 16px;
+    height: 100%;
+    margin: 0;
+    padding: 0 5px 0 4px;
+    font-size: 12px;
+    line-height: 12px;
+    border: 0;
+    border-left: 1px solid var(--s-form-placeholder);
+    border-radius: 0 3px 3px 0;
+    background-color: var(--s-form-primary);
+  }
+  .svform-remove:hover {
+    cursor: pointer;
+    color: var(--s-form-text-error);
+    background-color: var(--s-form-error);
+  }
+  .svform-searchable {
+    display: block;
+    box-sizing: inherit;
+    flex: 1;
+    width: 100%;
+    min-width: 100px;
+    padding: 4px 8px;
+    color: var(--s-form-text);
+    font-size: 14px;
+    line-height: 16px;
+    font-family: var(--s-form-font);
+    border: 0;
+  }
+  .svform-searchable:read-only {
+    cursor: pointer;
+    border: 0;
+  }
+  .svform-searchable[data-multiple="true"] {
+    padding: 0;
+  }
+  .svform-searchable::placeholder {
     color: var(--s-form-placeholder);
+    font-size: 14px;
+    line-height: 16px;
+    font-family: var(--s-form-font);
+  }
+  .svform-clear {
+    display: block;
+    box-sizing: inherit;
+    width: 16px;
+    min-width: 16px;
+    height: 100%;
+    min-height: 16px;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 14px;
+    border: 0;
+    border-radius: calc(var(--s-form-radius) / 2);
+    background-color: var(--s-form-primary);
+  }
+  .svform-clear:hover {
+    cursor: pointer;
+    color: var(--s-form-text-error);
+    background-color: var(--s-form-error);
   }
   .svform-icon {
     position: absolute;
@@ -277,7 +518,7 @@
     height: 24px;
     object-fit: contain;
     top: 50%;
-    right: 0;
+    right: 8px;
     transform: translateY(-50%) translateX(2px);
     transition: transform 0.5s ease-in-out;
     z-index: 0;
@@ -309,6 +550,14 @@
     width: 10px;
     background-color: var(--s-form-primary);
   }
+
+  .svform-remove-childs > *,
+  .svform-clear-childs > *,
+  .svform-error-childs > *,
+  .svform-option-childs > * {
+    pointer-events: none;
+  }
+
   .svform-option {
     display: block;
     box-sizing: inherit;
@@ -340,8 +589,9 @@
     font-family: var(--s-form-font);
     transform: translateY(50%);
     border-radius: var(--s-form-radius);
-    bottom: 8px;
-    right: 26px;
+    transform: translateY(-50%);
+    top: 50%;
+    right: 0;
     z-index: 0;
   }
 </style>

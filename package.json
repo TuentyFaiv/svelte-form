@@ -1,7 +1,7 @@
 {
   "name": "@tuentyfaiv/svelte-form",
   "description": "A forms management library for svelte inspired by Formik",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "type": "module",
   "scripts": {
     "dev": "vite dev",

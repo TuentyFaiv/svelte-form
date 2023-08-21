@@ -13,7 +13,7 @@ export async function fieldsValidation<T>(data: T, schema: unknown) {
       const field = (data as Record<string, unknown>)[key];
       return {
         ...acc,
-        [key]: typeof field === "undefined" ? "" : field,
+        [key]: field,
       };
     }, {}) : {};
 

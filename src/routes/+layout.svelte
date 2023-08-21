@@ -7,17 +7,21 @@
 
   $: setConfig({
     fields: {
-      replace: true,
+      // replace: true,
       field: {
         field: "form__field",
       },
       select: {
         field: "form__field form__field--select",
+        item: "form__field__item",
+        searchable: "form__field__searchable",
+        remove: "form__field__remove",
+        clear: "form__field__clear",
       },
     },
     vars: {
-      primary,
-      secondary,
+      // primary,
+      // secondary,
     },
   });
 </script>

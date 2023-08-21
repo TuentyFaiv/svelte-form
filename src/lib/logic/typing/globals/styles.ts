@@ -28,6 +28,10 @@ export interface SelectStyles extends Omit<GeneralStyles, "input"> {
   options?: string;
   option?: string;
   arrow?: string;
+  item?: string;
+  remove?: string;
+  searchable?: string;
+  clear?: string;
 }
 
 export interface FieldStyles extends GeneralStyles {

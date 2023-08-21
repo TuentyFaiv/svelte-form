@@ -3,6 +3,9 @@ import type { GeneralFieldProps } from "$lib/logic/typing/globals/proptypes.js";
 
 export interface Props extends GeneralFieldProps {
   options: SelectOption[];
+  multiple: boolean;
+  disabled: boolean;
+  searchable: boolean;
   placeholder: string | null;
 }
 
