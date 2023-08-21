@@ -6,3 +6,10 @@ export const keys = {
   right: "ArrowRight",
   tab: "Tab",
 };
+
+export const tags = {
+  span: "SPAN",
+  div: "DIV",
+  p: "P",
+  button: "BUTTON",
+};

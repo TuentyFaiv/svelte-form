@@ -7,7 +7,7 @@
 
   $: setConfig({
     fields: {
-      replace: true,
+      // replace: true,
       field: {
         field: "form__field",
       },
@@ -16,8 +16,8 @@
       },
     },
     vars: {
-      primary,
-      secondary,
+      // primary,
+      // secondary,
     },
   });
 </script>
