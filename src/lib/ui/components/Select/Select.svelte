@@ -59,7 +59,7 @@
   }
 
   function onFilter() {
-    if (!active) active = true;
+    if (!active) onToggle();
   }
 
   function handleChoose(element: HTMLElement) {
@@ -200,22 +200,22 @@
   $: itemStyle = getStyle({
     replace,
     style: "svform-item",
-    external: styles?.value, // TODO: change to item
+    external: styles?.item,
   });
   $: removeStyle = getStyle({
     replace,
     style: "svform-remove",
-    external: styles?.value, // TODO: change to remove
+    external: styles?.remove,
   });
   $: searchableStyle = getStyle({
     replace,
     style: "svform-searchable",
-    external: styles?.value, // TODO: change to searchable
+    external: styles?.searchable,
   });
   $: clearStyle = getStyle({
     replace,
     style: "svform-clear",
-    external: styles?.value, // TODO: change to clear
+    external: styles?.clear,
   });
   $: iconStyle = getStyle({
     replace,
@@ -276,9 +276,6 @@
     bind:this={container}
   >
     <div role="presentation" class={valueStyle} bind:this={valueBoxElement}>
-      {#if !searchable && !multiple}
-        {showedValue}
-      {/if}
       {#if multiple && Array.isArray(showedValue)}
         {#each showedValue as option (option.value)}
           <span role="presentation" class={itemStyle} data-option-showed={true}>
@@ -300,9 +297,17 @@
           data-multiple={multiple}
           bind:this={searchableElement}
           bind:value={search}
-          on:click|stopPropagation={() => {}}
           on:input={onFilter}
-          on:focus={!active ? onToggle : undefined}
+          {placeholder}
+        />
+      {:else if !searchable && (!Array.isArray(showedValue) || showedValue.length === 0)}
+        <input
+          type="text"
+          class={searchableStyle}
+          data-multiple={multiple}
+          value={showedValue}
+          readonly
+          bind:this={searchableElement}
           {placeholder}
         />
       {/if}
@@ -409,7 +414,7 @@
   } */
   /* .svform-select.active > p {
   } */
-  .svform-select.active > div > img {
+  .svform-select.active > img {
     transform: translateY(-50%) translateX(2px) rotateX(180deg);
   }
   .svform-value {
@@ -470,6 +475,10 @@
     font-size: 14px;
     line-height: 16px;
     font-family: var(--s-form-font);
+    border: 0;
+  }
+  .svform-searchable:read-only {
+    cursor: pointer;
     border: 0;
   }
   .svform-searchable[data-multiple="true"] {

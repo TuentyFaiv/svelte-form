@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { array, mixed, string } from "yup";
+  import { array, boolean, mixed, string } from "yup";
   import {
     Errors,
     Field,
@@ -12,6 +12,8 @@
 
   const fields = {
     name: string().required(),
+    accept: boolean(),
+    message: string(),
     type: string().required(),
     types: array().of(string().required()).required(),
     option: string().required(),
@@ -35,8 +37,17 @@
 
 <form on:submit|preventDefault={onSubmit} class="form" id="test">
   <Field name="name" />
+  <Field label="You accept?" name="accept" type="checkbox" />
   <Select name="type" {options} placeholder="Choose an option" />
-  <Select multiple name="types" {options} placeholder="Choose an option" />
+  <Select
+    multiple
+    name="types"
+    {options}
+    placeholder="Choose an option"
+    on:choose={({ detail }) => {
+      console.log({ detail });
+    }}
+  />
   <Option name="option" {options} />
   <File name="asset" />
 </form>

@@ -129,17 +129,19 @@
     box-sizing: inherit;
     flex: 1;
     width: 100%;
-    padding: 8px;
+    padding: 4px;
     border-radius: var(--s-form-radius);
     border: var(--s-form-border);
   }
   .svform-field:hover {
     cursor: pointer;
     border-color: var(--s-form-accent);
+    padding: 3px 4px;
     border-width: 2px;
   }
   .svform-field[data-checked="true"] {
     border-color: var(--s-form-success);
+    padding: 3px 4px;
     border-width: 2px;
   }
   /* .svform-field[data-checked="false"] {
@@ -152,8 +154,8 @@
     padding: 0;
     margin: 0;
     color: var(--s-form-text);
-    font-size: 16px;
-    line-height: 18px;
+    font-size: 14px;
+    line-height: 16px;
     font-family: var(--s-form-font);
     text-align: center;
   }
