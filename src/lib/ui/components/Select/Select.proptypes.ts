@@ -7,6 +7,12 @@ export interface Props extends GeneralFieldProps {
   disabled: boolean;
   searchable: boolean;
   placeholder: string | null;
+  autoselectable: boolean;
+  clearable: ((values: string[] | string) => boolean) | boolean;
+}
+
+export interface Events {
+  choose: string;
 }
 
 export type Target = HTMLDivElement | HTMLParagraphElement | HTMLSpanElement;

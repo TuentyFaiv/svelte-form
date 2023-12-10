@@ -2,6 +2,7 @@ export interface SelectOption {
   key?: string;
   label: string;
   value: string;
+  fixed?: boolean;
   disabled?: boolean;
 }
 

@@ -1,15 +1,14 @@
 <svelte:options immutable />
 
 <script lang="ts">
-  import { createEventDispatcher, onDestroy } from "svelte";
-  import { slide } from "svelte/transition";
+  import { createEventDispatcher, onMount } from "svelte";
   import { keys, tags } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
   import { getStyle } from "$lib/logic/utils/styles.js";
 
   import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
-  import type { Props, Select, Target } from "./Select.proptypes.js";
+  import type { Events, Props, Select, Target } from "./Select.proptypes.js";
 
   import IconArrow from "../../assets/icon-arrow.svg";
 
@@ -19,9 +18,11 @@
   export let searchable: Props["searchable"] = true;
   export let multiple: Props["multiple"] = false;
   export let disabled: Props["disabled"] = false;
+  export let autoselectable: Props["autoselectable"] = true;
   export let options: Props["options"] = [];
   export let placeholder: Props["placeholder"] = "";
   export let context: Props["context"] = "form";
+  export let clearable: Props["clearable"] = true;
   export let datas: Props["datas"] = {};
 
   let select: HTMLDivElement | null = null;
@@ -36,14 +37,12 @@
   let active = false;
   let search = "";
 
-  const dispatch = createEventDispatcher<{
-    choose: string[] | string;
-  }>();
-  const form = useForm(context);
-  const { data, errors, styles: ctxStyles, setField } = $form;
+  const dispatch = createEventDispatcher<Events>();
+  $: form = useForm(context);
+  $: ({ data, errors, styles: ctxStyles, setField } = $form);
   $: ({ select: styles, icons, replace } = $ctxStyles);
 
-  function onChoose(value: string | string[]) {
+  function onChoose(value: string) {
     dispatch("choose", value);
   }
 
@@ -56,10 +55,6 @@
       const selection = options.find(({ value }) => value === $data[name]);
       search = selection?.label ?? "";
     }
-  }
-
-  function onFilter() {
-    if (!active) onToggle();
   }
 
   function handleChoose(element: HTMLElement) {
@@ -75,7 +70,7 @@
         : value;
       search = multiple ? "" : selection?.label ?? "";
       setField(name, newValue);
-      onChoose(newValue);
+      onChoose(value);
     }
     active = multiple;
   }
@@ -124,9 +119,8 @@
   }
 
   function onChooseByKey(event: KeyboardEvent) {
-    const element = event.target as HTMLElement;
     if (event.code === keys.enter) {
-      handleChoose(element);
+      handleChoose(event.target as HTMLElement);
     }
   }
 
@@ -137,49 +131,63 @@
   }
 
   function onRemove(option: SelectOption) {
-    const selection = ($data[name] ?? []) as string[];
+    const selection: string[] = $data[name] ?? [];
     const newSelection = selection.filter((value) => value !== option.value);
     setField(name, newSelection);
   }
 
   function onClear() {
-    setField(name, multiple ? [] : "");
-    if (!multiple) search = "";
+    setField(
+      name,
+      multiple
+        ? options.filter(({ fixed }) => fixed).map(({ value }) => value)
+        : "",
+    );
+    search = "";
   }
 
   $: datasets = generateDatas(datas);
 
+  $: if (
+    autoselectable &&
+    options.length === 1 &&
+    $data[name] !== options[0].value
+  ) {
+    const value = options[0].value;
+    setField(name, multiple ? [value] : value);
+    onChoose(value);
+    onHasValue();
+  }
+
   $: optionsToShow = (
     searchable
       ? options.filter(({ label }) =>
-          label.toLowerCase().includes(search.toLowerCase())
+          label.toLowerCase().includes(search.toLowerCase()),
         )
       : options
   ).filter(({ value }) =>
     multiple
-      ? !(($data[name] ?? []) as string[]).some((v) => v === value)
-      : true
+      ? !($data[name] ?? []).some((item: string) => item === value)
+      : true,
   );
 
   $: showedValue = (
     multiple
-      ? options.filter((option) =>
-          (($data[name] ?? []) as string[]).some(
-            (value) => value === option.value
-          )
+      ? options.filter(({ value }) =>
+          ($data[name] ?? []).some((item: string) => item === value),
         )
       : options.find(({ value }) => value === $data[name])?.label ||
         ($data[name] ?? null)
   ) as SelectOption[] | string | null;
 
-  $: if (options.length === 1 && $data[name] !== options[0].value) {
-    setField(name, options[0].value);
-    onChoose(options[0].value);
-  }
-
-  $: if ($data[name] !== search) {
-    onHasValue();
-  }
+  $: toClear =
+    multiple && Array.isArray(showedValue)
+      ? showedValue.filter(({ fixed }) => !fixed)
+      : showedValue;
+  $: showClear =
+    (typeof clearable === "boolean" ? clearable : clearable($data[name])) &&
+    toClear &&
+    toClear.length > 0;
 
   $: fieldStyle = getStyle({
     replace,
@@ -241,9 +249,23 @@
     style: "svform-error",
     external: styles?.error,
   });
+  $: emptyStyle = getStyle({
+    replace,
+    style: "svform-empty",
+    external: styles?.empty,
+  });
 
-  onDestroy(() => {
-    setField(name, $data[name]);
+  onMount(() => {
+    if (multiple) {
+      const fixedValues = options
+        .filter(({ fixed }) => fixed)
+        .map(({ value }) => value);
+      if (fixedValues.length > 0) setField(name, fixedValues);
+    }
+
+    return () => {
+      setField(name, $data[name]);
+    };
   });
 </script>
 
@@ -279,16 +301,23 @@
   >
     <div role="presentation" class={valueStyle} bind:this={valueBoxElement}>
       {#if multiple && Array.isArray(showedValue)}
-        {#each showedValue as option (option.value)}
-          <span role="presentation" class={itemStyle} data-option-showed={true}>
+        {#each showedValue as option (option.key ?? option.value)}
+          <span
+            role="presentation"
+            class={itemStyle}
+            data-item-showed={true}
+            data-item-fixed={option.fixed}
+          >
             {option.label}
-            <button
-              type="button"
-              class="svform-remove-childs {removeStyle}"
-              on:click|stopPropagation={() => onRemove(option)}
-            >
-              <slot name="remove">x</slot>
-            </button>
+            {#if !option.fixed}
+              <button
+                type="button"
+                class="svform-remove-childs {removeStyle}"
+                on:click|stopPropagation={() => onRemove(option)}
+              >
+                <slot name="remove">x</slot>
+              </button>
+            {/if}
           </span>
         {/each}
       {/if}
@@ -299,7 +328,7 @@
           data-multiple={multiple}
           bind:this={searchableElement}
           bind:value={search}
-          on:input={onFilter}
+          on:input={!active ? onToggle : undefined}
           {placeholder}
         />
       {:else if !searchable && (!Array.isArray(showedValue) || showedValue.length === 0)}
@@ -325,7 +354,7 @@
         </span>
       {/if}
     </div>
-    {#if showedValue && showedValue.length > 0}
+    {#if showClear}
       <button
         type="button"
         class="svform-clear-childs {clearStyle}"
@@ -347,7 +376,6 @@
         class={optionsStyle}
         bind:this={optionsElement}
         on:keydown|stopPropagation={onChooseByKey}
-        transition:slide={{ delay: 200 }}
       >
         {#each optionsToShow as option (option.key ?? option.value)}
           <span
@@ -363,6 +391,11 @@
             </slot>
           </span>
         {/each}
+        {#if optionsToShow.length === 0}
+          <span class={emptyStyle}>
+            <slot name="empty">No options</slot>
+          </span>
+        {/if}
       </div>
     {/if}
   </div>
@@ -446,6 +479,11 @@
     line-height: 16px;
     font-family: var(--s-form-font);
     border-radius: 3px;
+  }
+  .svform-item[data-item-fixed="true"] {
+    background-color: var(--s-form-primary);
+    filter: brightness(0.75);
+    padding: 0 4px;
   }
   .svform-remove {
     display: block;
@@ -578,6 +616,17 @@
   }
   .svform-option:hover > span {
     pointer-events: none;
+  }
+  .svform-empty {
+    display: block;
+    box-sizing: inherit;
+    width: 100%;
+    padding: 12px 10px;
+    color: var(--s-form-placeholder);
+    font-size: 14px;
+    text-align: center;
+    line-height: 16px;
+    font-family: var(--s-form-font);
   }
   .svform-error {
     position: absolute;
