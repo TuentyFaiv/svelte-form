@@ -189,6 +189,10 @@
     toClear &&
     toClear.length > 0;
 
+  $: if ($data[name]) {
+    onHasValue();
+  }
+
   $: fieldStyle = getStyle({
     replace,
     style: "svform-field",

@@ -1,5 +1,3 @@
-import type { ObjStrCommon } from "./types.js";
-
 export interface SharedUIProps {
   context: string;
 }
@@ -9,7 +7,7 @@ export interface GeneralFieldProps extends SharedUIProps {
   name: string;
   label: string | null;
   id: string | null;
-  datas: ObjStrCommon;
+  datas: Record<string, string | boolean | number>;
 }
 
 export interface GeneralInputProps extends GeneralFieldProps {

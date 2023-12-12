@@ -7,14 +7,22 @@ interface GeneralStyles {
 }
 
 export interface CssVars {
+  space?: string;
   primary?: string;
+  primaryOpacity?: string;
   secondary?: string;
+  secondaryOpacity?: string;
   accent?: string;
   error?: string;
   warning?: string;
   success?: string;
   shadow?: string;
+  shadowOpacity?: string;
+  shadowSize?: string;
+  shadowColor?: string;
   border?: string;
+  borderWidth?: string;
+  borderStyle?: string;
   text?: string;
   placeholder?: string;
   radius?: string;
@@ -43,10 +51,12 @@ export interface FieldStyles extends GeneralStyles {
   show?: string;
 }
 
-export interface FileStyles extends Omit<GeneralStyles, "label"> {
+export interface FileStyles extends GeneralStyles {
   wrapper?: string;
-  actions?: string;
   retry?: string;
+  cover?: string;
+  remove?: string;
+  item?: string;
 }
 
 export interface OptionStyles extends GeneralStyles {

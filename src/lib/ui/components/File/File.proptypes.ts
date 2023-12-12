@@ -1,11 +1,14 @@
 import type { GeneralFieldProps } from "$lib/logic/typing/globals/proptypes.js";
 
-export interface Props extends GeneralFieldProps {
+export interface Props extends Omit<GeneralFieldProps, "type"> {
   max: number;
   accept: string;
-  alt: string | null;
   multiple: boolean;
-  defaultValue: string;
+  dragable: boolean;
+}
+export interface Events {
+  choose: File | File[];
+  retry: undefined;
 }
 
 export type Input = HTMLInputElement | null;

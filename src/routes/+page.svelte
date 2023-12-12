@@ -18,6 +18,7 @@
     types: array().of(string().required()).required(),
     option: string().required(),
     asset: mixed().required(),
+    assets: array().of(mixed().required()).required(),
   };
   const form = faivform({ fields });
   const { submit, data, errors, setField } = $form;
@@ -50,7 +51,7 @@
   />
   <Option name="option" {options} />
   <File name="asset" />
-
+  <File multiple name="assets" />
   <button
     type="button"
     on:click={() => {
