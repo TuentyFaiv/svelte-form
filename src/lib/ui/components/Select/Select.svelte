@@ -2,11 +2,13 @@
 
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
+  import { fade } from "svelte/transition";
   import { keys, tags } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
   import { getStyle } from "$lib/logic/utils/styles.js";
 
+  import type { UserEvent } from "$lib/logic/typing/globals/types.js";
   import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
   import type { Events, Props, Select, Target } from "./Select.proptypes.js";
 
@@ -75,8 +77,8 @@
     active = multiple;
   }
 
-  function handleSelect(event: MouseEvent) {
-    const element = event.target as Target;
+  function handleSelect({ target }: UserEvent<Target, MouseEvent>) {
+    const element = target as Target;
     const isSelect = element === select;
     const isLabel = element === labelElement;
     const isContainer = element === container;
@@ -112,15 +114,18 @@
     }
   }
 
-  function onOpenByKey(event: KeyboardEvent) {
-    if (event.code === keys.enter) {
+  function onOpenByKey({ code }: UserEvent<HTMLDivElement, KeyboardEvent>) {
+    if (code === keys.enter) {
       onToggle();
     }
   }
 
-  function onChooseByKey(event: KeyboardEvent) {
-    if (event.code === keys.enter) {
-      handleChoose(event.target as HTMLElement);
+  function onChooseByKey({
+    code,
+    target,
+  }: UserEvent<HTMLDivElement, KeyboardEvent>) {
+    if (code === keys.enter) {
+      handleChoose(target as HTMLElement);
     }
   }
 
@@ -351,6 +356,7 @@
           bind:this={errorElement}
           class="svform-error-childs {errorStyle}"
           role="presentation"
+          transition:fade={{ duration: 200 }}
         >
           <slot name="error" error={$errors[name]}>
             {$errors[name]}

@@ -7,7 +7,8 @@
   import { useForm } from "$lib/logic/stores/form.js";
   import { getStyle } from "$lib/logic/utils/styles.js";
 
-  import type { Option, Props } from "./Option.proptypes.js";
+  import type { UserEvent } from "$lib/logic/typing/globals/types.js";
+  import type { Events, Option, Props } from "./Option.proptypes.js";
 
   export let name: Props["name"];
   export let context: Props["context"] = "form";
@@ -17,18 +18,20 @@
 
   let inputs: Record<string, Option> = {};
 
-  const dispatch = createEventDispatcher<{ choose: string }>();
-  const form = useForm(context);
-  const { data, errors, styles: ctxStyles, check, setField } = $form;
+  const dispatch = createEventDispatcher<Events>();
+  $: form = useForm(context);
+  $: ({ data, errors, styles: ctxStyles, check, setField } = $form);
   $: ({ option: styles, replace } = $ctxStyles);
 
   function onSelect(value: string) {
     dispatch("choose", value);
   }
 
-  async function onCheck(event: FocusEvent | Event) {
+  async function onCheck(
+    event: UserEvent<HTMLInputElement, FocusEvent | Event>,
+  ) {
     await check(event);
-    onSelect((event.target as HTMLInputElement).value);
+    onSelect(event.currentTarget.value);
   }
 
   $: datasets = generateDatas(datas);
@@ -101,7 +104,7 @@
     </label>
   {/each}
   {#if $errors[name]}
-    <span class={errorStyle} transition:fade>
+    <span class={errorStyle} transition:fade={{ duration: 200 }}>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>

@@ -2,6 +2,7 @@
 
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from "svelte";
+  import { fade } from "svelte/transition";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
   import { getStyle } from "$lib/logic/utils/styles.js";
@@ -202,7 +203,7 @@
     {/if}
   </slot>
   {#if $errors[name]}
-    <span class={errorStyle}>
+    <span class={errorStyle} transition:fade={{ duration: 200 }}>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>

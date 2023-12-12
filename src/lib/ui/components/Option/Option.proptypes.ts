@@ -6,4 +6,8 @@ export interface Props extends Omit<GeneralFieldProps, "id" | "label" | "type"> 
   disabled: boolean;
 }
 
+export interface Events {
+  choose: string;
+}
+
 export type Option = HTMLInputElement | null;

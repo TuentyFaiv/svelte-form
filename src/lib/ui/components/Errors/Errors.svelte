@@ -7,8 +7,8 @@
   export let context: Props["context"] = "form";
   export let show: Props["show"] = true;
 
-  const form = useForm(context);
-  const { errors, styles: cxtStyles } = $form;
+  $: form = useForm(context);
+  $: ({ errors, styles: cxtStyles } = $form);
   $: ({ errors: styles, replace } = $cxtStyles);
 
   $: showErrors =

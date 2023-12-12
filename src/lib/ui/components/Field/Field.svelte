@@ -6,6 +6,7 @@
   import { keys } from "$lib/logic/utils/keys.js";
   import { getStyle } from "$lib/logic/utils/styles.js";
 
+  import type { UserEvent } from "$lib/logic/typing/globals/types.js";
   import type { Input, Props } from "./Field.proptypes.js";
 
   import IconShow from "../../assets/icon-show.svg";
@@ -24,18 +25,17 @@
   let show = false;
   let mounted = false;
 
-  const form = useForm(context);
-  const { data, errors, styles: ctxStyles, setField, check } = $form;
+  $: form = useForm(context);
+  $: ({ data, errors, styles: ctxStyles, setField, check } = $form);
   $: ({ field: styles, icons, replace } = $ctxStyles);
 
   function toggleShow() {
     show = !show;
   }
 
-  function onChecked(event: KeyboardEvent) {
-    const enter = event.key === keys.enter;
+  function onChecked({ code }: UserEvent<HTMLInputElement, KeyboardEvent>) {
     if (!mounted) mounted = true;
-    if (enter) {
+    if (code === keys.enter) {
       checked = !checked;
     }
   }
@@ -169,7 +169,7 @@
     </button>
   {/if}
   {#if $errors[name]}
-    <span class={errorStyle} transition:fade>
+    <span class={errorStyle} transition:fade={{ duration: 200 }}>
       <slot name="error" error={$errors[name]}>
         {$errors[name]}
       </slot>
