@@ -1,7 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
   import { keys, tags } from "$lib/logic/utils/keys.js";
   import { generateDatas } from "$lib/logic/utils/objects.js";
@@ -198,6 +198,13 @@
     onHasValue();
   }
 
+  $: if (multiple) {
+    const fixedValues = options
+      .filter(({ fixed }) => fixed)
+      .map(({ value }) => value);
+    if (fixedValues.length > 0) setField(name, fixedValues);
+  }
+
   $: fieldStyle = getStyle({
     replace,
     style: "svform-field",
@@ -264,17 +271,8 @@
     external: styles?.empty,
   });
 
-  onMount(() => {
-    if (multiple) {
-      const fixedValues = options
-        .filter(({ fixed }) => fixed)
-        .map(({ value }) => value);
-      if (fixedValues.length > 0) setField(name, fixedValues);
-    }
-
-    return () => {
-      setField(name, $data[name]);
-    };
+  onDestroy(() => {
+    setField(name, $data[name]);
   });
 </script>
 
