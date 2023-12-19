@@ -5,16 +5,17 @@ on:
       - main
 jobs:
   release:
+    if: github.repository == 'TuentyFaiv/svelte-form'
     name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node.js to 18
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 18
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies

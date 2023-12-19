@@ -34,19 +34,21 @@
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
+  "main": "./dist/index.js",
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "peerDependencies": {
-    "svelte": "^4.0.5",
+    "svelte": "^4.0.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.36.0",
     "@sveltejs/adapter-vercel": "^3.0.2",
     "@sveltejs/kit": "^1.22.3",
-    "@sveltejs/package": "^2.2.0",
+    "@sveltejs/package": "^2.2.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.44.0",
@@ -59,19 +61,19 @@
     "eslint-scope": "^7.2.0",
     "eslint-visitor-keys": "^3.4.1",
     "publint": "^0.2.4",
-    "svelte": "^4.0.5",
+    "svelte": "^4.2.8",
     "svelte-check": "^3.4.6",
     "svelte-eslint-parser": "^0.33.1",
     "tslib": "^2.6.0",
     "typescript": "^5.1.6",
-    "vite": "^4.4.3",
+    "vite": "^4.5.1",
     "vitest": "^0.34.6",
     "yup": "^1.2.0"
   },
   "engines": {
     "npm": ">=7.0.0",
     "pnpm": ">=7.0.0",
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "repository": {
     "type": "git",
@@ -81,7 +83,6 @@
     "url": "https://github.com/TuentyFaiv/svelte-form/issues"
   },
   "homepage": "https://github.com/TuentyFaiv/svelte-form#readme",
-  "main": "./dist/index.js",
   "directories": {
     "test": "tests"
   }
