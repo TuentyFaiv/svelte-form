@@ -164,6 +164,13 @@
     onHasValue();
   }
 
+  $: if (multiple) {
+    const fixedValues = options
+      .filter(({ fixed }) => fixed)
+      .map(({ value }) => value);
+    if (fixedValues.length > 0) setField(name, fixedValues);
+  }
+
   $: optionsToShow = (
     searchable
       ? options.filter(({ label }) =>
@@ -196,13 +203,6 @@
 
   $: if ($data[name]) {
     onHasValue();
-  }
-
-  $: if (multiple) {
-    const fixedValues = options
-      .filter(({ fixed }) => fixed)
-      .map(({ value }) => value);
-    if (fixedValues.length > 0) setField(name, fixedValues);
   }
 
   $: fieldStyle = getStyle({

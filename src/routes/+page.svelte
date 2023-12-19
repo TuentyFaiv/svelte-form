@@ -17,11 +17,12 @@
     type: string().required(),
     types: array().of(string().required()).required(),
     option: string().required(),
+    details: string(),
     asset: mixed().required(),
     assets: array().of(mixed().required()).required(),
   };
   const form = faivform({ fields });
-  const { submit, data, errors, setField } = $form;
+  const { submit, data, errors, setField, setError } = $form;
 
   const onSubmit = submit(async (values) => {
     console.log(values);
@@ -33,11 +34,13 @@
     { value: "3", label: "Three" },
   ];
 
-  $: console.log({ $data, $errors });
+  $: console.log("data: ", $data);
+  $: console.log("errors: ", $errors);
 </script>
 
 <form on:submit|preventDefault={onSubmit} class="form" id="test">
   <Field name="name" />
+  <Field name="details" type="textarea" />
   <Field label="You accept?" name="accept" type="checkbox" />
   <Select name="type" {options} placeholder="Choose an option" />
   <Select
@@ -52,14 +55,32 @@
   <Option name="option" {options} />
   <File name="asset" />
   <File multiple name="assets" />
-  <button
-    type="button"
-    on:click={() => {
-      setField("type", "2");
-    }}
-  >
-    set type value
-  </button>
+  <div>
+    <button
+      type="button"
+      on:click={() => {
+        setField("type", "2");
+      }}
+    >
+      set type value
+    </button>
+    <button
+      type="button"
+      on:click={() => {
+        setField("details", "Details example");
+      }}
+    >
+      set details
+    </button>
+    <button
+      type="button"
+      on:click={() => {
+        setField("accept", !$data.accept);
+      }}
+    >
+      toggle accept
+    </button>
+  </div>
 </form>
 <button form="test" type="submit">Submit</button>
 <Errors />

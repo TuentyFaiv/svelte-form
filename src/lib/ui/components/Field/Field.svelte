@@ -21,9 +21,7 @@
   export let a11y: Props["a11y"] = {};
 
   let input: Input;
-  let checked = false;
   let show = false;
-  let mounted = false;
 
   $: form = useForm(context);
   $: ({ data, errors, styles: ctxStyles, setField, check } = $form);
@@ -33,19 +31,18 @@
     show = !show;
   }
 
-  function onChecked({ code }: UserEvent<HTMLInputElement, KeyboardEvent>) {
-    if (!mounted) mounted = true;
-    if (code === keys.enter) {
-      checked = !checked;
+  function onChecked(event: UserEvent<HTMLInputElement, KeyboardEvent>) {
+    if (event.code === keys.enter) {
+      event.preventDefault();
+      setField(name, !($data[name] ?? false));
     }
   }
 
-  $: datasets = generateDatas(datas);
-
-  $: if (type === "checkbox") {
-    if (!mounted && checked) mounted = true;
-    setField(name, checked, mounted);
+  function onCheck({ currentTarget }: UserEvent<HTMLInputElement, Event>) {
+    setField(name, currentTarget.checked);
   }
+
+  $: datasets = generateDatas(datas);
 
   $: showPassword = styles?.show ?? icons?.show ?? IconShow;
   $: hidePassword = styles?.hide ?? icons?.hide ?? IconHide;
@@ -100,7 +97,7 @@
   for={id ?? name}
   class={fieldStyle}
   data-type={type}
-  data-checked={checked}
+  data-checked={$data[name] ?? false}
   data-checked-icon={icons?.check ?? ""}
   title={a11y.title}
   {...datasets}
@@ -117,6 +114,7 @@
       id={id ?? name}
       bind:this={input}
       on:blur={check}
+      value={$data[name] ?? ""}
       {name}
       {...$$restProps}
     />
@@ -126,7 +124,8 @@
       id={id ?? name}
       type="checkbox"
       bind:this={input}
-      bind:checked
+      checked={$data[name] ?? false}
+      on:change={onCheck}
       on:keydown={onChecked}
       {name}
       {...$$restProps}
@@ -194,22 +193,6 @@
     justify-content: flex-start;
     cursor: pointer;
   }
-  .svform-field[data-type="checkbox"]::before {
-    position: absolute;
-    display: block;
-    box-sizing: inherit;
-    content: "";
-    width: 16px;
-    min-width: 16px;
-    height: 16px;
-    min-height: 16px;
-    border-radius: var(--s-form-radius);
-    border: var(--s-form-border);
-    transform: translateY(-50%);
-    top: 50%;
-    left: 0;
-    z-index: 0;
-  }
   .svform-field[data-type="checkbox"] > p {
     margin-bottom: 0;
   }
@@ -219,18 +202,6 @@
     right: auto;
     bottom: 0;
     cursor: default;
-  }
-  .svform-field[data-type="checkbox"][data-checked="true"]::after {
-    position: absolute;
-    display: block;
-    box-sizing: inherit;
-    content: attr(data-checked-icon);
-    width: 16px;
-    min-width: 16px;
-    height: 16px;
-    min-height: 16px;
-    border-radius: var(--s-form-radius);
-    background-color: var(--s-form-success);
   }
 
   .svform-label {
@@ -268,7 +239,10 @@
   /* .textarea::placeholder {
   } */
   .svform-checkbox {
-    visibility: hidden;
+    display: block;
+    width: var(--s-form-space);
+    height: var(--s-form-space);
+    border-radius: var(--s-form-radius);
   }
 
   /* .svform-input {
