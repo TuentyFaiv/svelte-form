@@ -1,92 +1,32 @@
-# Svelte Form
+# Turborepo Svelte starter
 
-`npm install @tuentyfaiv/svelte-form`
+This is an official starter Turborepo.
 
-> Note: The Built-in forms was moved to [@tuentyfaiv/svelte-forms-ui](https://www.npmjs.com/package/@tuentyfaiv/svelte-form-ui)
+## Using this example
 
-## Examples
+Run the following command:
 
-- ### Store creation
-  ```typescript
-  import { string } from "yup";
-  import { faivform } from "@tuentyfaiv/svelte-form";
+```sh
+npx create-turbo@latest -e with-svelte
+```
 
-  const fields = {
-    email: string().email("required-email").required("required"),
-    // ...other fields
-  };
+## What's inside?
 
-  export const form = faivform({ fields });
-  ```
-- ### Input
-  ```svelte
-  <script lang="ts">
-    import { Field } from "@tuentyfaiv/svelte-form";
+This Turborepo includes the following packages/apps:
 
-    // From store created
-    const { submit } = $form; // Store created
-    // Or create a new one
-    const form = faivform({ fields });
-    const { submit } = $form;
-    // If you want reactivity
-    $: form = faivform({ fields });
-    $: ({ submit } = $form);
+### Apps and Packages
 
+- `docs`: a [svelte-kit](https://kit.svelte.dev/) app
+- `web`: another [svelte-kit](https://kit.svelte.dev/) app
+- `ui`: a stub Svelte component library shared by both `web` and `docs` applications
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-plugin-svelte` and `eslint-config-prettier`)
 
-    const onSubmit = submit(async (values) => {
-      // ...action
-    });
-  </script>
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-  <form on:submit|preventDefault={onSubmit}>
-    <Field name="email" type="email" label="Email" />
-    // ... other inputs
-    <button type="submit">Submit</button>
-  </form>
-  ```
+### Utilities
 
-## Imports
-- ### Store 
-  ```typescript
-  import {
-    faivform,
-    useForm,
-    setConfig
-  } from "@tuentyfaiv/svelte-form";
-  ```
-- ### Components
-  ```typescript
-  import {
-    Field,
-    Select,
-    Option,
-    File,
-    Errors
-  } from "@tuentyfaiv/svelte-form";
-  ```
-- ### Utils
-  ```typescript
-  import { FormError } from "@tuentyfaiv/svelte-form";
-  ```
-- ### Types
-  ```typescript
-  import type {
-    Config,
-    ContextStyles,
-    ContextForm,
-    SelectOption,
-    OptionItem,
-    SharedUIProps,
-    GeneralInputProps,
-    GeneralFieldProps,
-    FormStoreConfig,
-    SubmitOptions,
-    CssVars,
-    ErrorsStyles,
-    Icons,
-    FileStyles,
-    FieldStyles,
-    OptionStyles,
-    SelectStyles,
-  } from "@tuentyfaiv/svelte-form";
-  ```
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
