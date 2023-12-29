@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "./apps/docs/node_modules/.bin/astro dev",
+      "name": "Docs dev mode",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+  ]
+}
