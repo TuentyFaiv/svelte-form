@@ -1,11 +1,12 @@
-# Svelte Form UI
-Build-in forms for Svelte using [@tuentyfaiv/svelte-form](https://www.npmjs.com/package/@tuentyfaiv/svelte-form)
-`npm install @tuentyfaiv/svelte-form-ui @tuentyfaiv/svelte-form`
+# Built-in Svelte forms
+Build-in forms using [@tuentyfaiv/svelte-form](https://www.npmjs.com/package/@tuentyfaiv/svelte-form)
+
+`npm install @tuentyfaiv/svelte-form @faivform/builtin`
 
 ## Imports
 - ### Config 
   ```typescript
-  import { setConfig, useGlobalFormStyles } from "@tuentyfaiv/svelte-form-ui";
+  import { setConfig, useGlobalFormStyles } from "@faivform/builtin";
   ```
 - ### Build-in forms
   ```typescript
@@ -14,25 +15,25 @@ Build-in forms for Svelte using [@tuentyfaiv/svelte-form](https://www.npmjs.com/
     SigninForm,
     SignupForm,
     ContactForm,
-  } from "@tuentyfaiv/svelte-form-ui";
+  } from "@faivform/builtin";
   // Forms schemas
   import {
     fieldsSignin,
     fieldsSignup,
     fieldsContact,
-  } from "@tuentyfaiv/svelte-form-ui";
+  } from "@faivform/builtin";
   ```
 - ### Utils
   ```typescript
   // Functions
-  import { getTexts } from "@tuentyfaiv/svelte-form-ui";
+  import { getTexts } from "@faivform/builtin";
   // Regex
   import {
     REGEX_NUMBERS,
     REGEX_PASSWORD,
     REGEX_PHONE,
     REGEX_PHONE_CODE,
-  } from "@tuentyfaiv/svelte-form-ui";
+  } from "@faivform/builtin";
   ```
 - ### Types
   ```typescript
@@ -45,5 +46,5 @@ Build-in forms for Svelte using [@tuentyfaiv/svelte-form](https://www.npmjs.com/
     SigninValues,
     SignupValues,
     ContactValues,
-  } from "@tuentyfaiv/svelte-form-ui";
+  } from "@faivform/builtin";
   ```

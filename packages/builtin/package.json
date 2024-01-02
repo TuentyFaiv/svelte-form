@@ -1,7 +1,7 @@
 {
 	"name": "@faivform/builtin",
 	"description": "Built-in Svelte forms using @tuentyfaiv/svelte-form",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
 	"scripts": {
 		"dev:web": "vite dev",
@@ -68,7 +68,7 @@
 		"svelte-check": "^3.4.6",
 		"tslib": "^2.6.0",
 		"typescript": "^5.1.6",
-		"vite": "^4.4.3",
+		"vite": "^4.5.1",
 		"vitest": "^0.33.0",
 		"yup": "^1.2.0"
 	},
