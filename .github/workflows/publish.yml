@@ -28,7 +28,7 @@ jobs:
         run: pnpm build --filter @tuentyfaiv/svelte-form
 
       - name: Publish main package
-        run: pnpm publish --filter @tuentyfaiv/svelte-form --access=publish
+        run: pnpm publish --filter @tuentyfaiv/svelte-form --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -56,6 +56,6 @@ jobs:
         run: pnpm build --filter @faivform/builtin
 
       - name: Publish main package
-        run: pnpm publish --filter @faivform/builtin --access=publish
+        run: pnpm publish --filter @faivform/builtin --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_BUILTIN_TOKEN }}
