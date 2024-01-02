@@ -15,10 +15,11 @@
     "@astrojs/svelte": "^5.0.3",
     "@astrojs/tailwind": "^5.1.0",
     "@astrojs/vercel": "^6.1.1",
+    "@faivform/builtin": "workspace:^",
+    "@tuentyfaiv/svelte-form": "workspace:*",
     "astro": "^4.0.8",
     "svelte": "^4.2.8",
     "tailwindcss": "^3.4.0",
-    "@tuentyfaiv/svelte-form": "workspace:*",
     "typescript": "^5.3.3",
     "yup": "^1.3.3"
   }

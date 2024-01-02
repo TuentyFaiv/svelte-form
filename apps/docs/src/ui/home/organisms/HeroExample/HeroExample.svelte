@@ -23,7 +23,7 @@
     assets: array().of(mixed().required()).required(),
   };
   const form = faivform({ fields });
-  const { submit, data, errors, setField, setError } = $form;
+  const { submit, data, errors, setField } = $form;
 
   const onSubmit = submit(async (values) => {
     console.log(values);

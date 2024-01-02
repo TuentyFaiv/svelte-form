@@ -18,11 +18,17 @@
       "@home/organisms": [
         "./src/ui/home/organisms/index.ts"
       ],
+      "@builtin/organisms": [
+        "./src/ui/builtin/organisms/index.ts"
+      ],
       "@sharing/organisms/*": [
         "./src/ui/sharing/organisms/*"
       ],
       "@home/organisms/*": [
         "./src/ui/home/organisms/*"
+      ],
+      "@builtin/organisms/*": [
+        "./src/ui/builtin/organisms/*"
       ],
     }
   }

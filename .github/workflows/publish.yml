@@ -6,7 +6,7 @@ on:
 jobs:
   release:
     if: github.repository == 'TuentyFaiv/svelte-form'
-    name: Release
+    name: Release core package
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,3 +31,31 @@ jobs:
         run: pnpm publish --filter @tuentyfaiv/svelte-form --access=publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release-builtin:
+    if: github.repository == 'TuentyFaiv/svelte-form'
+    name: Release Built-in forms package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: true
+
+      - name: Build @faivform/builtin
+        run: pnpm build --filter @faivform/builtin
+
+      - name: Publish main package
+        run: pnpm publish --filter @faivform/builtin --access=publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_BUILTIN_TOKEN }}
