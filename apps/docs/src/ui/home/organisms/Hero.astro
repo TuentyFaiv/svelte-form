@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { Prism } from "@astrojs/prism";
+import { Code } from "astro:components";
+// import { Prism } from "@astrojs/prism";
 import { HeroExample } from "@home/organisms";
 
 const lang = Astro.currentLocale ?? "en";
@@ -13,7 +14,7 @@ const packages = getRelativeLocaleUrl(lang, "packages");
   <p class="hero__description">
     A simple form library for Svelte.
   </p>
-  <Prism code="npm install @tuentyfaiv/svelte-form" lang="sh" />
+  <Code code="npm install @tuentyfaiv/svelte-form" lang="sh" theme="min-dark" />
   <div class="hero__actions">
     <a href={docs} class="hero__action">
     Get started

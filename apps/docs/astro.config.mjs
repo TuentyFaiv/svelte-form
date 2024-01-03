@@ -26,7 +26,7 @@ export default defineConfig({
       es: "en",
     },
   },
-  markdown: {
-    syntaxHighlight: "prism",
-  },
+  // markdown: {
+  //   syntaxHighlight: "prism",
+  // },
 });
