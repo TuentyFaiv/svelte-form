@@ -6,16 +6,9 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en", "es"],
-    fallback: {
-      es: "en",
-    },
-  },
+  output: "server",
   site: "https://forms.tuentyfaiv.com",
   integrations: [svelte(), tailwind(), sitemap()],
-  output: "server",
   adapter: vercel({
     webAnalytics: {
       enabled: true,
@@ -26,4 +19,14 @@ export default defineConfig({
     },
     imageService: true,
   }),
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "es"],
+    fallback: {
+      es: "en",
+    },
+  },
+  markdown: {
+    syntaxHighlight: "prism",
+  },
 });

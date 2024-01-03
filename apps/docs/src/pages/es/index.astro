@@ -1,15 +1,8 @@
 ---
-import { Code } from "astro:components";
 import Layout from "@layouts/Layout.astro";
+import Hero from "@home/organisms/Hero.astro";
 ---
 
-<Layout lang="es">
-  <p>Página de inicio</p>
-  <Code
-    code="npm install @tuentyfaiv/svelte-form"
-    lang="zsh"
-    wrap
-    theme="material-theme-ocean"
-  />
-  <Code code={Astro.url.pathname} lang="json" wrap theme="material-theme-ocean" />
+<Layout>
+  <Hero />
 </Layout>

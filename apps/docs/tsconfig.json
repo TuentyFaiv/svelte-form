@@ -3,6 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@icons/*": [
+        "./src/assets/icons/*"
+      ],
       "@layouts/*": [
         "./src/layouts/*"
       ],
@@ -11,6 +14,9 @@
       ],
       "@styles/*": [
         "./src/styles/*"
+      ],
+      "@sharing/atoms": [
+        "./src/ui/sharing/atoms/index.ts"
       ],
       "@sharing/organisms": [
         "./src/ui/sharing/organisms/index.ts"
@@ -23,6 +29,9 @@
       ],
       "@sharing/organisms/*": [
         "./src/ui/sharing/organisms/*"
+      ],
+      "@sharing/atoms/*": [
+        "./src/ui/sharing/atoms/*"
       ],
       "@home/organisms/*": [
         "./src/ui/home/organisms/*"

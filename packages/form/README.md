@@ -2,8 +2,6 @@
 
 `npm install @tuentyfaiv/svelte-form`
 
-> Note: The Built-in forms was moved to [@tuentyfaiv/svelte-forms-ui](https://www.npmjs.com/package/@tuentyfaiv/svelte-form-ui)
-
 ## Examples
 
 - ### Store creation

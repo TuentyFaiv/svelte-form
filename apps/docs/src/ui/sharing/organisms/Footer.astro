@@ -1,0 +1,42 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+
+const resources = getRelativeLocaleUrl(lang, "resources");
+---
+
+<footer class="footer">
+  <ul class="footer__menu">
+    <li class="footer__item">
+      <a href={resources} class="footer__link">
+        Resources
+      </a>
+    </li>
+  </ul>
+  <small class="footer__user">
+    By
+    <a href="https://github.com/TuentyFaiv" target="_blank" rel="noopener noreferrer">
+      TuentyFaiv
+    </a>
+  </small>
+</footer>
+
+<style>
+  .footer {
+    @apply w-full flex flex-col items-center justify-center px-4 py-8 gap-4;
+    &__menu {
+      @apply flex justify-center items-center gap-2;
+    }
+    &__item {
+      @apply w-max;
+    }
+    &__link {
+      @apply text-sm;
+    }
+  }
+</style>

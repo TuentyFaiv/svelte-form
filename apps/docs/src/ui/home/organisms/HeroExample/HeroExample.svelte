@@ -1,95 +1,73 @@
 <script lang="ts">
-  import { array, boolean, mixed, string } from "yup";
-  import {
-    Errors,
-    Field,
-    File,
-    Option,
-    Select,
-    faivform,
-  } from "@tuentyfaiv/svelte-form";
+  import { boolean, string } from "yup";
+  import { Field, Select, faivform } from "@tuentyfaiv/svelte-form";
 
   import type { SelectOption } from "@tuentyfaiv/svelte-form";
 
   const fields = {
-    name: string().required(),
-    accept: boolean(),
+    username: string().required(),
     message: string(),
-    type: string().required(),
-    types: array().of(string().required()).required(),
-    option: string().required(),
-    details: string(),
-    asset: mixed().required(),
-    assets: array().of(mixed().required()).required(),
+    like: boolean(),
+    much: string().required(),
   };
   const form = faivform({ fields });
-  const { submit, data, errors, setField } = $form;
+  const { submit, data, errors } = $form;
 
   const onSubmit = submit(async (values) => {
     console.log(values);
   });
 
   const options: SelectOption[] = [
-    { fixed: true, value: "1", label: "One" },
-    { value: "2", label: "Two" },
-    { value: "3", label: "Three" },
+    { label: "sad", value: "sad" },
+    { label: "happy", value: "happy" },
+    { label: "angry", value: "angry" },
   ];
-
-  $: console.log("data: ", $data);
-  $: console.log("errors: ", $errors);
 </script>
 
-<form on:submit|preventDefault={onSubmit} class="form" id="test">
-  <Field name="name" />
-  <Field name="details" type="textarea" />
-  <Field label="You accept?" name="accept" type="checkbox" />
-  <Select name="type" {options} placeholder="Choose an option" />
-  <Select
-    multiple
-    name="types"
-    {options}
-    placeholder="Choose an option"
-    on:choose={({ detail }) => {
-      console.log({ detail });
-    }}
-  />
-  <Option name="option" {options} />
-  <File name="asset" />
-  <File multiple name="assets" />
-  <div>
-    <button
-      type="button"
-      on:click={() => {
-        setField("type", "2");
-      }}
-    >
-      set type value
-    </button>
-    <button
-      type="button"
-      on:click={() => {
-        setField("details", "Details example");
-      }}
-    >
-      set details
-    </button>
-    <button
-      type="button"
-      on:click={() => {
-        setField("accept", !$data.accept);
-      }}
-    >
-      toggle accept
-    </button>
+<div class="hero-example">
+  <form
+    on:submit|preventDefault={onSubmit}
+    class="hero-example__form"
+    id="test"
+  >
+    <Field name="username" label="Leve an user name" />
+    <Field name="message" type="textarea" label="Leve a message" />
+    <Field label="Do you like it?" name="like" type="checkbox" />
+    <Select
+      label="How much like it?"
+      placeholder="Choose an option"
+      name="much"
+      {options}
+    />
+  </form>
+  <button form="test" type="submit">Submit</button>
+  <div class="hero-example__data">
+    <div class="hero-exmample__box">
+      <h2>Data</h2>
+      <pre>
+        <code>{JSON.stringify($data, null, 2)}</code>
+      </pre>
+    </div>
+    <div class="hero-exmample__box">
+      <h2>Errors</h2>
+      <pre>
+        <code>{JSON.stringify($errors, null, 2)}</code>
+      </pre>
+    </div>
   </div>
-</form>
-<button form="test" type="submit">Submit</button>
-<Errors />
+</div>
 
-<style>
-  .form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+<style lang="postcss">
+  .hero-example {
+    @apply w-full max-w-screen-md mx-auto;
+    &__data {
+      @apply w-full flex justify-center items-start gap-4;
+    }
+    &__box {
+      @apply flex-1;
+    }
+    &__form {
+      @apply w-full flex flex-col gap-4;
+    }
   }
 </style>

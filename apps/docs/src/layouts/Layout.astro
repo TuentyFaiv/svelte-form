@@ -1,5 +1,6 @@
 ---
 import Header from "@sharing/organisms/Header.astro";
+import Footer from "@sharing/organisms/Footer.astro";
 
 const lang = Astro.currentLocale as "es" | "en" ?? "en";
 ---
@@ -19,8 +20,27 @@ const lang = Astro.currentLocale as "es" | "en" ?? "en";
     <main class="layout">
       <slot />
     </main>
+    <Footer {lang} />
   </body>
 </html>
+
+<script is:inline>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    return "system";
+  })();
+
+  const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  if (theme === "light" || (theme === "system" && !systemDark)) {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+  window.localStorage.setItem("theme", theme);
+</script>
 
 <style is:global>
   @tailwind base;
@@ -30,6 +50,9 @@ const lang = Astro.currentLocale as "es" | "en" ?? "en";
 </style>
 
 <style>
+  body {
+    @apply bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50;
+  }
   .layout {
     @apply w-full;
   }

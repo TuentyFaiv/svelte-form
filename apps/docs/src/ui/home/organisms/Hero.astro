@@ -1,7 +1,45 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { Prism } from "@astrojs/prism";
 import { HeroExample } from "@home/organisms";
+
+const lang = Astro.currentLocale ?? "en";
+const docs = getRelativeLocaleUrl(lang, "docs");
+const packages = getRelativeLocaleUrl(lang, "packages");
 ---
 
-<h1 class="text-xl mb-10">Get started "@tuentyfaiv/svelte-form"</h1>
+<section class="hero">
+  <h1 class="hero__title">faivform</h1>
+  <p class="hero__description">
+    A simple form library for Svelte.
+  </p>
+  <Prism code="npm install @tuentyfaiv/svelte-form" lang="sh" />
+  <div class="hero__actions">
+    <a href={docs} class="hero__action">
+    Get started
+  </a>
+  <a href={packages} class="hero__action hero__action--secondary">
+    Packages list
+  </a>
+  </div>
+  <HeroExample client:load />
+</section>
 
-<HeroExample client:load />
+
+<style>
+  .hero {
+    @apply flex flex-col items-center justify-start px-4 pt-10 py-14;
+    &__title {
+      @apply text-4xl font-bold text-center;
+    }
+    &__description {
+      @apply my-4 text-lg text-center;
+    }
+    &__actions {
+      @apply w-full flex justify-center items-center gap-10 my-6;
+    }
+    &__action {
+      @apply block;
+    }
+  }
+</style>

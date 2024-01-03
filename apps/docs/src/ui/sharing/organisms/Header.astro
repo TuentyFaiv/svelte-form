@@ -1,6 +1,9 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-// import "./Header.postcss";
+import { Image } from "astro:assets";
+import { Theme } from "@sharing/atoms";
+
+import IconGitHub from "@icons/icon-github.png";
 
 interface Props {
   lang: "es" | "en";
@@ -44,22 +47,27 @@ const langs: {
   <nav class="header__nav">
     <ul class="header__list">
       <li class="header__item">
+        <a href="https://www.npmjs.com/package/@tuentyfaiv/svelte-form" class="header__link header__link--icon" target="_blank" rel="noopener noreferrer">
+          <Image src={IconGitHub} alt="GitHub Icon" class="header__icon" />
+        </a>
+      </li>
+      <li class="header__item">
         <a href={docs} class="header__link">Docs</a>
       </li>
       <li class="header__item">
         <a href={packages} class="header__link">Packages</a>
       </li>
       <li class="header__item">
-        <a href="https://www.npmjs.com/package/@tuentyfaiv/svelte-form" class="header__link header__link--icon" target="_blank" rel="noopener noreferrer">
-          <img src="" alt="GitHub Icon" class="header__icon">
-        </a>
+        <Theme client:load />
       </li>
       <li class="header__item">
-        <select name="language" id="language">
-          {langs.map((locale) => (
-            <option selected={pathname[locale.lang] === currentPathname} value={locale.path}>{locale.label}</option>
-          ))}
-        </select>
+        <label for="language" class="header__lang">
+          <select name="language" id="language" class="header__lang-select">
+            {langs.map((locale) => (
+              <option selected={pathname[locale.lang] === currentPathname} value={locale.path}>{locale.label}</option>
+            ))}
+          </select>
+        </label>
       </li>
     </ul>
   </nav>
@@ -90,7 +98,19 @@ const langs: {
       @apply w-max;
     }
     &__link {
-      @apply text-lg font-medium text-gray-700 hover:text-gray-900;
+      @apply block font-medium py-2 px-4 hover:text-slate-500;
+      &--icon {
+        @apply w-10 h-10 p-0;
+      }
+    }
+    &__icon {
+      @apply block w-full h-full object-contain;
+    }
+    &__lang {
+      @apply flex justify-center items-center gap-1 hover:cursor-pointer;
+    }
+    &__lang-select {
+      @apply block font-medium appearance-none bg-transparent py-2 px-4 hover:cursor-pointer;
     }
   }
 </style>
