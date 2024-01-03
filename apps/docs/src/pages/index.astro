@@ -1,8 +1,14 @@
 ---
+import { Prism } from "@astrojs/prism";
 import Layout from "@layouts/Layout.astro";
-import Hero from "@home/organisms/Hero.astro";
 ---
-<Layout>
-	<Hero />
-	<p>Home page</p>
+<Layout lang="en">
+	<h1 class="title">faivform</h1>
+	<Prism code="npm install @tuentyfaiv/svelte-form" lang="sh" />
 </Layout>
+
+<style>
+	.title {
+		@apply text-4xl font-bold text-center;
+	}
+</style>

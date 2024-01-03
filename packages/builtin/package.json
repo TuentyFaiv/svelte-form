@@ -79,12 +79,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/TuentyFaiv/svelte-form-ui.git"
+		"url": "git+https://github.com/TuentyFaiv/svelte-form.git"
 	},
 	"bugs": {
-		"url": "https://github.com/TuentyFaiv/svelte-form-ui/issues"
+		"url": "https://github.com/TuentyFaiv/svelte-form/issues"
 	},
-	"homepage": "https://github.com/TuentyFaiv/svelte-form-ui#readme",
+	"homepage": "https://github.com/TuentyFaiv/svelte-form/packages/builtin#readme",
 	"directories": {
 		"test": "tests"
 	}

@@ -1,0 +1,96 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+// import "./Header.postcss";
+
+interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+
+const home = getRelativeLocaleUrl(lang, "/");
+const docs = getRelativeLocaleUrl(lang, "docs");
+const packages = getRelativeLocaleUrl(lang, "packages");
+
+const currentPathname = Astro.url.pathname;
+const pathname = {
+  es: `${lang === "es" ? "" : "/es"}${Astro.url.pathname}`,
+  en: Astro.url.pathname.replace(`${lang}/`, ""),
+};
+const langs: {
+  lang: "es" | "en";
+  path: string;
+  label: string;
+}[] = [
+  {
+    lang: "en",
+    path: pathname.en,
+    label: "English",
+  },
+  {
+    lang: "es",
+    path: pathname.es,
+    label: "Español",
+  },
+];
+---
+
+<header class="header">
+  <p class="header__logo">
+    <a href={home}>
+      faivform
+    </a>
+  </p>
+  <nav class="header__nav">
+    <ul class="header__list">
+      <li class="header__item">
+        <a href={docs} class="header__link">Docs</a>
+      </li>
+      <li class="header__item">
+        <a href={packages} class="header__link">Packages</a>
+      </li>
+      <li class="header__item">
+        <a href="https://www.npmjs.com/package/@tuentyfaiv/svelte-form" class="header__link header__link--icon" target="_blank" rel="noopener noreferrer">
+          <img src="" alt="GitHub Icon" class="header__icon">
+        </a>
+      </li>
+      <li class="header__item">
+        <select name="language" id="language">
+          {langs.map((locale) => (
+            <option selected={pathname[locale.lang] === currentPathname} value={locale.path}>{locale.label}</option>
+          ))}
+        </select>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const select: HTMLSelectElement | null = document.querySelector("select#language");
+  select?.addEventListener("change", (event) => {
+    const path = (event.target as HTMLSelectElement).value;
+
+    window.location.pathname = path;
+  });
+</script>
+
+<style>
+  .header {
+    @apply w-full flex justify-between items-center p-4;
+    &__logo {
+      @apply text-2xl font-bold uppercase;
+    }
+    &__nav {
+      @apply w-max;
+    }
+    &__list {
+      @apply flex items-center justify-center gap-3;
+    }
+    &__item {
+      @apply w-max;
+    }
+    &__link {
+      @apply text-lg font-medium text-gray-700 hover:text-gray-900;
+    }
+  }
+</style>

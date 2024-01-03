@@ -8,19 +8,22 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "es"]
+    locales: ["en", "es"],
+    fallback: {
+      es: "en",
+    },
   },
   site: "https://forms.tuentyfaiv.com",
   integrations: [svelte(), tailwind(), sitemap()],
   output: "server",
   adapter: vercel({
     webAnalytics: {
-      enabled: true
+      enabled: true,
     },
     imagesConfig: {
       sizes: [320, 480, 768, 1024, 1200, 1600, 1920],
       domains: ["forms.tuentyfaiv.com"],
     },
-    imageService: true
-  })
+    imageService: true,
+  }),
 });
