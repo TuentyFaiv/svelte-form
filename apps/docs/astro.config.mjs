@@ -1,32 +1,51 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
+import starlight from "@astrojs/starlight";
 import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/serverless";
-import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
   site: "https://forms.tuentyfaiv.com",
-  integrations: [svelte(), tailwind(), sitemap()],
+  integrations: [starlight({
+    title: "Faivform",
+    social: {
+      github: "https://github.com/TuentyFaiv/svelte-form"
+    },
+    sidebar: [{
+      label: "Guides",
+      autogenerate: {
+        directory: "guides"
+      }
+    }, {
+      label: "Reference",
+      autogenerate: {
+        directory: "reference"
+      }
+    }],
+    customCss: ["./src/ui/styles/app.css"],
+    defaultLocale: "root",
+    locales: {
+      root: {
+        label: "English",
+        lang: "en"
+      },
+      es: {
+        label: "Español"
+      }
+    }
+  }), tailwind({
+    applyBaseStyles: false
+  }), svelte()],
+  output: "hybrid",
   adapter: vercel({
     webAnalytics: {
-      enabled: true,
+      enabled: true
     },
     imagesConfig: {
       sizes: [320, 480, 768, 1024, 1200, 1600, 1920],
-      domains: ["forms.tuentyfaiv.com"],
+      domains: ["forms.tuentyfaiv.com"]
     },
-    imageService: true,
-  }),
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en", "es"],
-    fallback: {
-      es: "en",
-    },
-  },
-  // markdown: {
-  //   syntaxHighlight: "prism",
-  // },
+    imageService: true
+  })
 });

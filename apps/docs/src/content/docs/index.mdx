@@ -1,0 +1,40 @@
+---
+title: Svelte form library
+description: A simple form library for Svelte.
+template: splash
+hero:
+  # tagline: Start using now
+  image:
+    file: ../../assets/houston.webp
+  actions:
+    - text: Get Started
+      link: /guides/example/
+      icon: right-arrow
+      variant: primary
+    - text: See packages
+      link: /docs/packages/
+      # icon: external
+banner:
+  content: |
+    This library is still in development and there may be breaking changes in the future.
+    You can help by reporting <a href="https://github.com/TuentyFaiv/svelte-form/issues/new" target="_blank" rel="noopener noreferrer">bugs and suggesting features.</a>
+		# This library is still in development and there may be breaking changes in the future.
+		# You can help by reporting <a href="https://github.com/TuentyFaiv/svelte-form/issues/new">bugs and suggesting features.</a>
+---
+
+import {  Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid stagger>
+	<Card title="Built-in components" icon="open-book">
+		Includes components for common form elements like text inputs, select boxes, file uploads, and more.
+	</Card>
+	<Card title="Validation" icon="warning">
+		Uses external libraries like Yup and Zod for validation. You can also use your own validation library.
+	</Card>
+	<Card title="Customizable" icon="setting">
+		You can customize the field components to fit your needs. Or you can build your own components.
+	</Card>
+	<Card title="TypeScript" icon="approve-check-circle">
+		Includes TypeScript definitions for all the components and utilities.
+	</Card>
+</CardGrid>

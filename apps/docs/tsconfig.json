@@ -3,41 +3,17 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@icons/*": [
-        "./src/assets/icons/*"
+      "@atoms": [
+        "./src/ui/atoms/index.ts"
       ],
-      "@layouts/*": [
-        "./src/layouts/*"
+      "@organisms": [
+        "./src/ui/organisms/index.ts"
       ],
-      "@pages/*": [
-        "./src/pages/*"
+      "@organisms/*": [
+        "./src/ui/organisms/*"
       ],
-      "@styles/*": [
-        "./src/styles/*"
-      ],
-      "@sharing/atoms": [
-        "./src/ui/sharing/atoms/index.ts"
-      ],
-      "@sharing/organisms": [
-        "./src/ui/sharing/organisms/index.ts"
-      ],
-      "@home/organisms": [
-        "./src/ui/home/organisms/index.ts"
-      ],
-      "@builtin/organisms": [
-        "./src/ui/builtin/organisms/index.ts"
-      ],
-      "@sharing/organisms/*": [
-        "./src/ui/sharing/organisms/*"
-      ],
-      "@sharing/atoms/*": [
-        "./src/ui/sharing/atoms/*"
-      ],
-      "@home/organisms/*": [
-        "./src/ui/home/organisms/*"
-      ],
-      "@builtin/organisms/*": [
-        "./src/ui/builtin/organisms/*"
+      "@atoms/*": [
+        "./src/ui/atoms/*"
       ],
     }
   }
