@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel/static";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,14 +13,28 @@ export default defineConfig({
       github: "https://github.com/TuentyFaiv/svelte-form"
     },
     sidebar: [{
-      label: "Guides",
+      label: "Start here",
+      translations: {
+        es: "Empieza aquí"
+      },
       autogenerate: {
-        directory: "guides"
+        directory: "quick-start"
+      },
+    }, {
+      label: "Components",
+      translations: {
+        es: "Componentes"
+      },
+      autogenerate: {
+        directory: "components"
       }
     }, {
-      label: "Reference",
+      label: "Guides",
+      translations: {
+        es: "Guías"
+      },
       autogenerate: {
-        directory: "reference"
+        directory: "guides"
       }
     }],
     customCss: ["./src/ui/styles/app.css"],
@@ -37,7 +51,7 @@ export default defineConfig({
   }), tailwind({
     applyBaseStyles: false
   }), svelte()],
-  output: "hybrid",
+  output: "static",
   adapter: vercel({
     webAnalytics: {
       enabled: true

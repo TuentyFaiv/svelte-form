@@ -51,7 +51,7 @@ export function faivform<
     toggle(loading, value);
   }
 
-  function setFieldError(key: Fields, error?: unknown): void {
+  async function setFieldError(key: Fields, error?: unknown): Promise<void> {
     setError({ key, error, errors });
   }
 
@@ -89,7 +89,7 @@ export function faivform<
     return toValidate;
   }
 
-  async function setField(field: Fields, value: unknown, validate = true) {
+  async function setField(field: Fields, value: unknown, validate = true): Promise<void> {
     const clear = typeof value === "undefined";
 
     data.update((prev) => {
@@ -155,7 +155,7 @@ export function faivform<
       context = "form",
       reset: resetForm = true,
     }: SubmitOptions = {},
-  ) {
+  ): (event: SubmitEvent) => Promise<void> {
     const globalStyles = get(getContext<Readable<ContextStyles | undefined>>("styles"));
 
     if (globalStyles) {

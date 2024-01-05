@@ -1,0 +1,124 @@
+---
+title: Usage
+description: How to start using this library.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+This library provides a set of [components](/components) that can be used to build forms. Or if you prefer, you can build your [own components](/guides/components). You must use any of these components inside the `form` context.
+
+## The **faivform** function
+
+Here is an example of how to use the `faivform` function to create a form.
+
+This function receives a configuration object with a `fields` property, which is an object that contains all fields of the form. Each field must have a regular expression or a primitive type as value. The key of each field is the name of the field.
+
+<Tabs>
+  <TabItem label="Example">
+  ```svelte
+  <script>
+    import { faivform, Field } from '@tuentyfaiv/svelte-form';
+
+    const form = faivform({
+      fields: {
+        name: /^[a-zA-Z]+$/,
+        message: "string",
+        accept: "boolean",
+      },
+    });
+
+    const {
+      data,
+      loading,
+      errors,
+      styles,
+      setField,
+      setError,
+      check,
+      submit,
+      reset
+    } = $form;
+
+    // ... rest of the code
+  </script>
+
+  <!-- Here you can use the `Field` component inside a form element -->
+  ```
+  </TabItem>
+  <TabItem label="Config">
+  | Property | Type | Description |
+  | ----- | ----- | ----- |
+  | `fields` | `({ [key: string]: RegExp \| "string" \|  "number" \| "boolean" \| "date"  }) \| Adapter` | Object with all fields of the form or an [`Adapter`](/adapters/) function. |
+  | `styles` | `ContextStyles` | Object with the class names of the form. |
+  </TabItem>
+  <TabItem label="Store created">
+  | Property | Type | Description |
+  | ----- | ----- | ----- |
+  | `data` | `Writable<Data>` | Form values. |
+  | `loading` | `Writable<boolean>` | Loading state of the form. |
+  | `errors` | `Writable<Errors>` | Form errors. |
+  | `styles` | `Writable<ContextStyles>` | Form context styles. |
+  | `setField` | `(name: keyof Data, value: unknown, validate?: boolean) => Promise<void>` | Set the value of a field |
+  | `setError` | `(name: keyof Data, error: string) => Promise<void>` | Set the error of a field |
+  | `check` | `(event: FocusEvent \| Event) => Promise<void>` | A function for [custom component](/guides/components). |
+  | `submit` | `(action: SubmitAction<Data>, options?: SubmitOptions) => (event: SubmitEvent) => Promise<void>` | Set the context form  |
+  | `reset` | `() => void` | Resets the form. |
+  </TabItem>
+</Tabs>
+
+## Built-in components
+
+You can use the built-in components to build your forms easily. Here is an example using the [`Field`](/components/field) component.
+
+:::note
+Each component must have a `name` prop that matches with a field of the form.
+:::
+
+```svelte
+<script>
+  // ... form configuration
+</script>
+
+<form on:submit|preventDefault>
+  <Field name="name" label="Name:" />
+  <Field name="message" label="Leave a message:" type="textarea" />
+  <Field name="accept" label="Accept terms:" type="checkbox" />
+  <button type="submit">
+    Submit
+  </button>
+</form>
+```
+
+## Submitting a form
+
+To submit a form, you must use the `submit` function and pass it to the `on:submit` event of the form.
+
+:::note
+Don't forget to add the `preventDefault` modifier to the `on:submit` event.
+:::
+
+<Tabs>
+  <TabItem label="Example">
+  ```svelte
+  <script>
+    // ... form configuration
+
+    const onSubmit = $form.submit(async (values) => {
+      // Do something with the values
+    });
+  </script>
+
+  <form on:submit|preventDefault={onSubmit}>
+    <!-- ... `Field` components -->
+  </form>
+  ```
+  </TabItem>
+  <TabItem label="Config options">
+  | Property | Type | Description |
+  | ----- | ----- | ----- |
+  | `error` | `((error: unknown) => void) \| undefined` | Callback that receives an error as parameter. This function is executed when the form is submitted and an error occurs. |
+  | `finish` | `(() => void) \| undefined` | Callback that is executed when the form has finalized the submission whether it was successful or not. |
+  | `context` | `string \| undefined` | Context name of the form. |
+  | `reset` | `boolean \| undefined` | Whether to reset the form after submission or not. |
+  </TabItem>
+</Tabs>
