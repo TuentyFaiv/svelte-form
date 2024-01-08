@@ -4,8 +4,16 @@ description: How to start using this library.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Usage from "@organisms/Usage.astro";
 
 This library provides a set of [components](/components) that can be used to build forms. Or if you prefer, you can build your [own components](/guides/components). You must use any of these components inside the `form` context.
+
+## Example
+
+:::tip[Try it out]
+This is an interactive example of the code used below.
+:::
+<Usage />
 
 ## The **faivform** function
 
@@ -68,7 +76,7 @@ This function receives a configuration object with a `fields` property, which is
 
 ## Built-in components
 
-You can use the built-in components to build your forms easily. Here is an example using the [`Field`](/components/field) component.
+You can use the [built-in components](/components) to build your forms easily. Here is an example using the [`Field`](/components/field) component.
 
 :::note
 Each component must have a `name` prop that matches with a field of the form.
@@ -91,10 +99,14 @@ Each component must have a `name` prop that matches with a field of the form.
 
 ## Submitting a form
 
-To submit a form, you must use the `submit` function and pass it to the `on:submit` event of the form.
+To submit a form, you must use the `submit` function and pass it to the `on:submit` event of the form. Here is where the context form is created.
 
 :::note
 Don't forget to add the `preventDefault` modifier to the `on:submit` event.
+:::
+
+:::caution
+All components must be inside the form context. Otherwise, they won't work. This includes your own components.
 :::
 
 <Tabs>

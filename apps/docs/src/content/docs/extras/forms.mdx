@@ -1,0 +1,223 @@
+---
+title: Built-in forms
+description: This aditional package provides a set of built-in forms that can be used in your application.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+This aditional package provides a set of built-in forms that can be used in your application.
+
+## Installation
+
+<Tabs>
+  <TabItem label="pnpm">
+    ```bash frame="none"
+    pnpm add @faivform/builtin
+    ```
+  </TabItem>
+  <TabItem label="npm">
+    ```bash frame="none"
+    npm install @faivform/builtin
+    ```
+  </TabItem>
+</Tabs>
+
+## Available forms
+
+There are currently 3 forms available:
+
+- [Login](#login)
+- [Register](#register)
+- [Forgot password](#forgot-password)
+
+## Usage
+
+You can import the forms from the package and use them in your application. For example:
+
+```svelte
+<script>
+  import { Login } from "@faivform/builtin";
+</script>
+
+<Login />
+```
+
+## Login
+
+The login form is used to authenticate a user in your application.
+
+:::note
+  Comming soon here will be an interactive example.
+:::
+<Tabs>
+  {/* <TabItem label="Example">
+
+  </TabItem> */}
+  <TabItem label="Code">
+    ```svelte
+    <script>
+      import { Login } from "@faivform/builtin";
+
+      const submit = async (data) => {
+        // Do something with the data
+      };
+
+      const texts = {
+        title: "Login",
+        email: {
+          label: "Email",
+          placeholder: "example@email.com",
+        },
+        password: {
+          label: "Password",
+          placeholder: "********",
+        },
+        submit: "Login",
+        forgotPassword: "Forgot password?",
+        register: "Register",
+      };
+    </script>
+
+    <Login {submit} {texts} />
+    ```
+  </TabItem>
+  <TabItem label="Props">
+  | Name | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `submit` | `function` | `true` | The function that will be called when the form is submitted. |
+  | `texts` | `object` | `false` | The texts that will be used in the form. |
+  </TabItem>
+  <TabItem label="Events">
+  | Name | Type | Description |
+  | --- | --- | --- |
+  | `on:error` | `function` | This event is triggered when the form has an error. |
+  | `on:finish` | `function` | This event is triggered when the submit function has finished whether it was successful or not. |
+  </TabItem>
+  <TabItem label="Slots">
+  | Name | Type | Description |
+  | --- | --- | --- |
+  | `error` | `string` | This slot is used to display the error message. |
+  | `submit` | `string` | This slot is used to display the submit button. |
+  | `loading` | `boolean` | This slot is used to display the loading indicator. |
+  </TabItem>
+</Tabs>
+
+## Register
+
+The register form is used to create a new user in your application.
+
+:::note
+  Comming soon here will be an interactive example.
+:::
+
+<Tabs>
+  {/* <TabItem label="Example">
+
+  </TabItem> */}
+  <TabItem label="Code">
+    ```svelte
+    <script>
+      import { Register } from "@faivform/builtin";
+
+      const submit = async (data) => {
+        // Do something with the data
+      };
+
+      const texts = {
+        title: "Register",
+        name: {
+          label: "Name",
+          placeholder: "John Doe",
+        },
+        email: {
+          label: "Email",
+          placeholder: "example@email.com",
+        },
+        password: {
+          label: "Password",
+          placeholder: "********",
+        },
+        submit: "Register",
+        login: "Login",
+      };
+    </script>
+
+    <Register {submit} {texts} />
+    ```
+  </TabItem>
+  <TabItem label="Props">
+  | Name | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `submit` | `function` | `true` | The function that will be called when the form is submitted. |
+  | `texts` | `object` | `false` | The texts that will be used in the form. |
+  </TabItem>
+  <TabItem label="Events">
+  | Name | Type | Description |
+  | --- | --- | --- |
+  | `on:error` | `function` | This event is triggered when the form has an error. |
+  | `on:finish` | `function` | This event is triggered when the submit function has finished whether it was successful or not. |
+  </TabItem>
+  <TabItem label="Slots">
+  | Name | Type | Description |
+  | --- | --- | --- |
+  | `error` | `string` | This slot is used to display the error message. |
+  | `submit` | `string` | This slot is used to display the submit button. |
+  | `loading` | `boolean` | This slot is used to display the loading indicator. |
+  </TabItem>
+</Tabs>
+
+## Forgot password
+
+The forgot password form is used to request a password reset for a user in your application.
+
+:::note
+  Comming soon here will be an interactive example.
+:::
+
+<Tabs>
+  {/* <TabItem label="Example">
+
+  </TabItem> */}
+  <TabItem label="Code">
+    ```svelte
+    <script>
+      import { ForgotPassword } from "@faivform/builtin";
+
+      const submit = async (data) => {
+        // Do something with the data
+      };
+
+      const texts = {
+        title: "Forgot password",
+        email: {
+          label: "Email",
+          placeholder: "example@email.com",
+        },
+        submit: "Send reset link",
+        login: "Login",
+      };
+    </script>
+
+    <ForgotPassword {submit} {texts} />
+    ```
+  </TabItem>
+  <TabItem label="Props">
+  | Name | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `submit` | `function` | `true` | The function that will be called when the form is submitted. |
+  | `texts` | `object` | `false` | The texts that will be used in the form. |
+  </TabItem>
+  <TabItem label="Events">
+  | Name | Type | Description |
+  | --- | --- | --- |
+  | `on:error` | `function` | This event is triggered when the form has an error. |
+  | `on:finish` | `function` | This event is triggered when the submit function has finished whether it was successful or not. |
+  </TabItem>
+  <TabItem label="Slots">
+  | Name | Type | Description |
+  | --- | --- | --- |
+  | `error` | `string` | This slot is used to display the error message. |
+  | `submit` | `string` | This slot is used to display the submit button. |
+  | `loading` | `boolean` | This slot is used to display the loading indicator. |
+  </TabItem>
+</Tabs>

@@ -29,6 +29,22 @@ export default defineConfig({
         directory: "components"
       }
     }, {
+      label: "Adapters",
+      translations: {
+        es: "Adaptadores"
+      },
+      autogenerate: {
+        directory: "adapters"
+      }
+    }, {
+      label: "Extras",
+      translations: {
+        es: "Extras"
+      },
+      autogenerate: {
+        directory: "extras"
+      }
+    }, {
       label: "Guides",
       translations: {
         es: "Guías"
