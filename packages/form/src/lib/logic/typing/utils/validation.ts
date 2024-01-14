@@ -19,7 +19,7 @@ export type RequiredErrorConfig = InvalidErrorConfig;
 export interface RangeErrordConfig extends Omit<SchemaErrorConfig, "reason" | "message"> {
   label: "min" | "max";
   range: number | Date;
-  value: string | number | Date;
+  value: string | number | Date | unknown[];
 }
 
 export type ParsedPrimitive = string | number | boolean | Date | undefined | null;

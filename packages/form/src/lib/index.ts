@@ -2,9 +2,6 @@ export { faivform, useForm, setConfig } from "./logic/stores/index.js";
 export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
 export { FormError } from "./logic/utils/errors.js";
 
-// utils
-export { bridge as adapter } from "./logic/utils/validation.js";
-
 // context types
 export type { Config } from "./logic/typing/stores/config.js";
 export type { ContextStyles, ContextForm } from "./logic/typing/globals/contexts.js";

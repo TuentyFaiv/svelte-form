@@ -62,7 +62,7 @@
   //   },
   // } satisfies FieldsSchema;
 
-  const fields = {
+  const schema = {
     name: /^[a-zA-Z]+$/,
     message: "string",
     accept: "boolean",
@@ -133,9 +133,11 @@
     },
   } satisfies FieldsSchema;
 
-  const form = faivform<typeof fields>({
-    fields,
-    // fields: adapter(),
+  // const fields = adapter(schema);
+
+  const form = faivform({
+    // fields: schema,
+    fields: schema,
   });
 
   const {
@@ -164,7 +166,7 @@
     <div class="usage-example__code">
       <pre>
       <code>
-        {JSON.stringify(fields, null, 2)}
+        {JSON.stringify(schema, null, 2)}
       </code>
     </pre>
     </div>
