@@ -67,7 +67,7 @@ This function receives a configuration object with a `fields` property, which is
   | `errors` | `Writable<Errors>` | Form errors. |
   | `styles` | `Writable<ContextStyles>` | Form context styles. |
   | `setField` | `(name: keyof Data, value: unknown, validate?: boolean) => Promise<void>` | Set the value of a field |
-  | `setError` | `(name: keyof Data, error: string) => Promise<void>` | Set the error of a field |
+  | `setError` | `(name: keyof Data, error?: string \| null) => Promise<void>` | Set the error of a field |
   | `check` | `(event: FocusEvent \| Event) => Promise<void>` | A function for [custom component](/guides/components). |
   | `submit` | `(action: SubmitAction<Data>, options?: SubmitOptions) => (event: SubmitEvent) => Promise<void>` | Set the context form  |
   | `reset` | `() => void` | Resets the form. |
