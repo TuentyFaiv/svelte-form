@@ -110,10 +110,13 @@
       type: "array",
       item: {
         type: "array",
+        required: true,
         item: {
           type: "array",
+          required: true,
           item: {
             type: "array",
+            required: true,
             item: {
               type: "number",
               required: true,
@@ -126,6 +129,7 @@
       type: "array",
       item: {
         type: "array",
+        required: true,
         item: {
           type: "date",
           required: true,
