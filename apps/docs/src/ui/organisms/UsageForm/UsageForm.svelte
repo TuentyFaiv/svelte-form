@@ -66,6 +66,7 @@
     name: /^[a-zA-Z]+$/,
     message: "string",
     accept: "boolean",
+    cover: "file",
     some: {
       errors: {
         first: "string",
@@ -136,8 +137,8 @@
   // const fields = adapter(schema);
 
   const form = faivform({
-    // fields: schema,
     fields: schema,
+    // fields: adapter(schemaYup),
   });
 
   const {

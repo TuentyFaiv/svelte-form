@@ -6,7 +6,7 @@ import type { Errors } from "../utils/errors.js";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Fields = Record<string, any>;
 
-export type Schema = RegExp | "string" | "number" | "boolean" | "date";
+export type Schema = RegExp | "string" | "number" | "boolean" | "date" | "file";
 export type FieldPropSchema<T> = {
   required ?: boolean;
   type: T;

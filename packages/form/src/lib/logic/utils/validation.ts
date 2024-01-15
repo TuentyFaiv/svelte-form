@@ -27,18 +27,22 @@ const fieldsSchema = {
   number: 0,
   boolean: false,
   date: new Date(),
+  file: null,
 };
 
-const primitives = ["string", "number", "boolean", "date"];
+const primitives = ["string", "number", "boolean", "date", "file"];
 
 export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(schema: T): Adapter<Data> {
-  function resolveSchema(field: Schema): ParsedPrimitive {
-    const key = field instanceof RegExp ? "string" : field;
-    return fieldsSchema[key];
+  function resolveSchema(field: Schema, required = false): ParsedPrimitive {
+    if (required) {
+      return fieldsSchema[field instanceof RegExp ? "string" : field];
+    }
+
+    return null;
   }
 
   function isFieldProps(three: DeepSchema): boolean {
-    const hasFieldProps = (Object.hasOwn(three, "required") && typeof three.required === "number")
+    const hasFieldProps = (Object.hasOwn(three, "required") && typeof three.required === "boolean")
     || (Object.hasOwn(three, "min") && typeof three.min === "number")
     || (Object.hasOwn(three, "max") && typeof three.max === "number");
     return Object.hasOwn(three, "type")
@@ -47,36 +51,26 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
       || hasFieldProps);
   }
 
-  function resolveFieldProps(three: DeepSchema): ParsedPrimitive {
-    if (isFieldProps(three)) {
-      const fieldProps = three as FieldPropSchema<Schema>;
-      return resolveSchema(fieldProps.type);
-    }
-
-    return undefined;
-  }
-
   function isArraySchema(three: DeepSchema): boolean {
     return Object.hasOwn(three, "type") && three.type === "array" && Object.hasOwn(three, "item");
   }
 
-  function resolveArray(three: DeepSchema): ParsedArray {
-    if (isArraySchema(three)) {
-      const { item } = three as ArraySchema;
-      if (typeof item === "string" || item instanceof RegExp) {
-        return [];
-      }
-      if (typeof item === "object" && !(item instanceof RegExp) && isArraySchema(item)) {
-        return [resolveArray(item)];
-      }
-      if (typeof item === "object" && !(item instanceof RegExp) && isFieldProps(item)) {
-        return [];
-      }
+  function resolveFieldProps({ type, required }: FieldPropSchema<Schema>): ParsedPrimitive {
+    return resolveSchema(type, required);
+  }
+
+  function resolveArray({ item, required }: ArraySchema): ParsedArray {
+    if (typeof item === "string" || item instanceof RegExp) {
+      return required ? [] : null;
     }
-    if (isFieldProps(three)) {
-      return [];
+    if (typeof item === "object" && !(item instanceof RegExp) && isArraySchema(item)) {
+      return required ? [resolveArray(item as ArraySchema)] : null;
     }
-    return [];
+    if (typeof item === "object" && !(item instanceof RegExp) && isFieldProps(item)) {
+      return required ? [] : null;
+    }
+
+    return required ? [] : null;
   }
 
   function resolveDeep(three: Schema | DeepSchema): Parsed | ParsedPrimitive | ParsedArray {
@@ -85,10 +79,11 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
     }
 
     if (isFieldProps(three)) {
-      return resolveFieldProps(three);
+      return resolveFieldProps(three as FieldPropSchema<Schema>);
     }
+
     if (isArraySchema(three)) {
-      return resolveArray(three);
+      return resolveArray(three as ArraySchema);
     }
 
     const resolveSelf = Object.keys(three).reduce((acc, key) => ({
@@ -125,10 +120,20 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
 
   function rangeError({ label, range, ...config }: RangeErrordConfig): SchemaError {
     const compare = label === "min" ? "less" : "more";
+    let legend = typeof config.value === "string" ? " characters" : "";
+    let rangeLegend = range as number | Date | string;
 
-    const characters = typeof config.value === "string" ? " characters" : "";
-    const legend = config.value instanceof Date ? ` ${config.value.toISOString()}` : characters;
-    const rangeLegend = range instanceof Date ? ` ${range.toISOString()}` : range;
+    if (config.value instanceof Date) {
+      legend = " date";
+    }
+
+    if (config.value instanceof File || config.value instanceof Blob) {
+      legend = " bytes";
+    }
+
+    if (range instanceof Date) {
+      rangeLegend = ` ${range.toISOString()}`;
+    }
 
     return new SchemaError({
       ...config,
@@ -149,278 +154,226 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
 
     // eslint-disable-next-line class-methods-use-this
     #validateSchema = (fieldSchema: Schema, field: keyof Data, value: unknown): ParsedPrimitive | SchemaError => {
-      const realType = fieldSchema !== "date" ? fieldSchema : new Date();
+      const correctSchema = fieldSchema instanceof RegExp
+        || fieldSchema === "string"
+        || fieldSchema === "number"
+        || fieldSchema === "boolean"
+        || fieldSchema === "date"
+        || fieldSchema === "file";
 
-      const errorConfig = {
-        field: String(field),
-        schema: fieldSchema,
-        value,
-      };
+      const error = { field: String(field), schema: fieldSchema, value };
 
-      if (realType instanceof RegExp) {
+      if (correctSchema) {
         if (typeof value === "string") {
-          if (realType.test(value)) {
-            return value;
+          if (fieldSchema instanceof RegExp) {
+            if (fieldSchema.test(value)) return value;
+
+            return new SchemaError({
+              ...error,
+              schema: fieldSchema.source as "string",
+              message: "The value is not match with the pattern.",
+              reason: `Value: "${value}" is not match with the pattern: ${fieldSchema.source}`,
+            });
           }
 
-          return new SchemaError({
-            ...errorConfig,
-            schema: realType.source as "string",
-            message: "The value is not match with the pattern.",
-            reason: `Value: "${value}" is not match with the pattern: ${realType.source}`,
-          });
-        }
-
-        return typeError({ ...errorConfig, type: "RegExp" });
-      }
-
-      if (realType === "string") {
-        if (typeof value === "string") {
           return value;
         }
 
-        return typeError({ ...errorConfig, type: "string" });
+        const correct = value === null
+          || typeof value === "undefined"
+          || typeof value === "string"
+          || typeof value === "number"
+          || typeof value === "boolean"
+          || value instanceof Date
+          || value instanceof File
+          || value instanceof Blob;
+
+        if (correct) return value;
+
+        const dateType = fieldSchema === "date" ? "Date" : fieldSchema;
+        const fileType = dateType === "file" ? "File | Blob" : dateType;
+        const errorType = fileType instanceof RegExp ? "RegExp" : fileType;
+
+        return typeError({ ...error, type: errorType });
       }
 
-      if (realType instanceof Date) {
-        if (value instanceof Date) {
-          return value;
-        }
-
-        return typeError({ ...errorConfig, type: "Date" });
-      }
-
-      if (realType === "number") {
-        if (typeof value === "number") {
-          return value;
-        }
-
-        return typeError({ ...errorConfig, type: "number" });
-      }
-
-      if (realType === "boolean") {
-        if (typeof value === "boolean") {
-          return value;
-        }
-
-        return typeError({ ...errorConfig, type: "boolean" });
-      }
-
-      if (typeof value === "undefined" || value === null) {
-        return value;
-      }
-
-      return invalidError(errorConfig);
+      return invalidError(error);
     };
 
-    #validateFieldPropsSchema = (fieldSchema: DeepSchema, field: keyof Data, value: unknown): ParsedPrimitive | SchemaError => {
-      const invalidConfig = {
-        field: String(field),
-        schema: fieldSchema,
-        value,
-      };
+    #validateFieldPropsSchema = (
+      fieldSchema: FieldPropSchema<Schema>,
+      field: keyof Data,
+      value: unknown,
+    ): ParsedPrimitive | SchemaError => {
+      const { type, required, min, max } = fieldSchema;
 
-      if (isFieldProps(fieldSchema)) {
-        const { type, required, min, max } = fieldSchema as FieldPropSchema<Schema>;
-        const validated = this.#validateSchema(type, field, value);
-        const isEmpty = typeof validated === "undefined" || validated === null;
+      const validated = this.#validateSchema(type, field, value);
+      const isEmpty = typeof validated === "undefined" || validated === null;
+      const correctSchema = type instanceof RegExp
+        || type === "string"
+        || type === "number"
+        || type === "boolean"
+        || type === "date"
+        || type === "file";
 
-        const errorConfig = {
-          ...invalidConfig,
-          value: validated,
-        };
+      const invalid = { field: String(field), schema: fieldSchema, value };
 
-        if (type === "boolean") {
-          if (required && isEmpty) return requiredError(errorConfig);
+      if (correctSchema) {
+        const error = { ...invalid, value: validated };
+        const errorMin = { ...error, label: "min", range: min, value: validated } as const;
+        const errorMax = { ...error, label: "max", range: max, value: validated } as const;
 
-          return validated;
+        if (required && ((typeof validated === "string" && validated.length === 0) || isEmpty)) {
+          return requiredError(error);
         }
 
-        if ((type instanceof RegExp || type === "string")) {
-          if (required && ((typeof validated === "string" && validated.length === 0) || isEmpty)) {
-            return requiredError(errorConfig);
+        if (typeof validated === "string") {
+          if (min && validated.length < min) {
+            return rangeError(errorMin);
           }
 
-          if (typeof validated === "string" && min && validated.length < min) {
-            return rangeError({ ...errorConfig, label: "min", range: min, value: validated });
+          if (max && validated.length > max) {
+            return rangeError(errorMax);
           }
-
-          if (typeof validated === "string" && max && validated.length > max) {
-            return rangeError({ ...errorConfig, label: "max", range: max, value: validated });
-          }
-
-          return validated;
         }
 
-        if (type === "number") {
-          if (required && isEmpty) return requiredError(errorConfig);
-
-          if (typeof validated === "number" && min && validated < min) {
-            return rangeError({ ...errorConfig, label: "min", range: min, value: validated });
+        if (typeof validated === "number") {
+          if (min && validated < min) {
+            return rangeError(errorMin);
           }
 
-          if (typeof validated === "number" && max && validated > max) {
-            return rangeError({ ...errorConfig, label: "max", range: max, value: validated });
+          if (max && validated > max) {
+            return rangeError(errorMax);
           }
-
-          return validated;
         }
 
-        if (type === "date") {
-          if (required && isEmpty) return requiredError(errorConfig);
-
-          if (validated instanceof Date && min && validated.getTime() < min) {
-            return rangeError({ ...errorConfig, label: "min", range: new Date(min), value: validated });
+        if (validated instanceof Date) {
+          if (min && validated.getTime() < min) {
+            return rangeError({ ...errorMin, range: new Date(min) });
           }
 
-          if (validated instanceof Date && max && validated.getTime() > max) {
-            return rangeError({ ...errorConfig, label: "max", range: new Date(max), value: validated });
+          if (max && validated.getTime() > max) {
+            return rangeError({ ...errorMax, range: new Date(max) });
           }
-
-          return validated;
         }
+
+        if ((validated instanceof File || validated instanceof Blob)) {
+          if (min && validated.size < min) {
+            return rangeError(errorMin);
+          }
+
+          if (max && validated.size > max) {
+            return rangeError(errorMax);
+          }
+        }
+
+        return validated;
       }
 
-      return invalidError(invalidConfig);
+      return invalidError(invalid);
     };
 
     #validateArraySchema = (
-      fieldSchema: DeepSchema,
+      fieldSchema: ArraySchema,
       field: keyof Data,
       value: unknown,
     ): ParsedArray | null | undefined | SchemaError => {
-      const errorConfig = {
-        field: String(field),
-        schema: fieldSchema,
-        value,
-      };
+      const { item, required, min, max } = fieldSchema;
 
-      if (isArraySchema(fieldSchema)) {
-        const { item, required, min, max } = fieldSchema as ArraySchema;
+      const isEmpty = typeof value === "undefined" || value === null;
 
-        if (!Array.isArray(value) && typeof value !== "undefined" && value !== null) {
-          return invalidError(errorConfig);
-        }
+      const error = { field: String(field), schema: fieldSchema, value };
 
-        if (!value && required) {
-          return requiredError(errorConfig);
-        }
-
-        if (value && min && value.length < min) {
-          return rangeError({ ...errorConfig, label: "min", range: min, value });
-        }
-
-        if (value && max && value.length > max) {
-          return rangeError({ ...errorConfig, label: "max", range: max, value });
-        }
-
-        if ((typeof item === "string" || item instanceof RegExp) && value) {
-          const incorrect = value.find((itemValue) => {
-            const validated = this.#validateSchema(item, field, itemValue);
-            return validated instanceof SchemaError;
-          });
-
-          if (incorrect) {
-            const isRegExp = item instanceof RegExp ? "string" : item;
-            const isDate = isRegExp === "date" ? "Date" : isRegExp;
-
-            return typeError({ ...errorConfig, type: `${isDate}[]`, value: incorrect });
-          }
-
-          return value;
-        }
-
-        if (typeof item === "object" && !(item instanceof RegExp) && isArraySchema(item) && value) {
-          const incorrect = value.find((subArray) => {
-            const validated = this.#validateArraySchema(item, field, subArray);
-            return validated instanceof SchemaError;
-          });
-
-          if (incorrect) {
-            return typeError({ ...errorConfig, type: "array" });
-          }
-
-          return value;
-        }
-
-        if (typeof item === "object" && !(item instanceof RegExp) && isFieldProps(item) && value) {
-          const incorrect = value.find((itemValue) => {
-            const validated = this.#validateFieldPropsSchema(item, field, itemValue);
-            return validated instanceof SchemaError;
-          });
-
-          if (incorrect) {
-            return typeError({ ...errorConfig, type: "array" });
-          }
-
-          return value;
-        }
-
-        if (typeof item === "object" && !(item instanceof RegExp) && value) {
-          const itemSchema = item as FieldsSchema;
-
-          const incorrect = value.find((itemValue) => {
-            const validated = this.#validateDeepSchema(itemSchema, field, itemValue);
-            return validated instanceof SchemaError;
-          });
-
-          if (incorrect) {
-            return typeError({ ...errorConfig, type: "array" });
-          }
-
-          return value;
-        }
+      if (!Array.isArray(value) && typeof value !== "undefined" && value !== null) {
+        return invalidError(error);
       }
 
-      if (isFieldProps(fieldSchema)) {
-        const { required, type, min, max } = fieldSchema as FieldPropSchema<Schema>;
+      if (required && isEmpty) {
+        return requiredError(error);
+      }
 
-        if (!Array.isArray(value) && typeof value !== "undefined" && value !== null) {
-          return invalidError(errorConfig);
-        }
+      if (value && min && value.length < min) {
+        return rangeError({ ...error, label: "min", range: min, value });
+      }
 
-        if (!value && required) {
-          return requiredError(errorConfig);
-        }
+      if (value && max && value.length > max) {
+        return rangeError({ ...error, label: "max", range: max, value });
+      }
 
-        if (value && min && value.length < min) {
-          return rangeError({ ...errorConfig, label: "min", range: min, value });
-        }
-
-        if (value && max && value.length > max) {
-          return rangeError({ ...errorConfig, label: "max", range: max, value });
-        }
-
+      if ((typeof item === "string" || item instanceof RegExp)) {
         const incorrect = value?.find((itemValue) => {
-          const validated = this.#validateSchema(type, field, itemValue);
+          const validated = this.#validateSchema(item, field, itemValue);
           return validated instanceof SchemaError;
         });
 
         if (incorrect) {
-          return typeError({ ...errorConfig, type: `${type}[]`, value: incorrect });
+          const isRegExp = item instanceof RegExp ? "string" : item;
+          const isFile = isRegExp === "file" ? "File | Blob" : isRegExp;
+          const isDate = isFile === "date" ? "Date" : isFile;
+
+          return typeError({ ...error, type: `${isDate}[]`, value: incorrect });
         }
 
         return value;
       }
 
-      return invalidError(errorConfig);
+      if (typeof item === "object" && !(item instanceof RegExp) && isArraySchema(item)) {
+        const incorrect = value?.find((subArray) => {
+          const validated = this.#validateArraySchema(item as ArraySchema, field, subArray);
+          return validated instanceof SchemaError;
+        });
+
+        if (incorrect) {
+          return typeError({ ...error, type: "array", value: incorrect });
+        }
+
+        return value;
+      }
+
+      if (typeof item === "object" && !(item instanceof RegExp) && isFieldProps(item)) {
+        const incorrect = value?.find((itemValue) => {
+          const validated = this.#validateFieldPropsSchema(item as FieldPropSchema<Schema>, field, itemValue);
+          return validated instanceof SchemaError;
+        });
+
+        if (incorrect) {
+          return typeError({ ...error, type: "array", value: incorrect });
+        }
+
+        return value;
+      }
+
+      if (typeof item === "object" && !(item instanceof RegExp)) {
+        const incorrect = value?.find((itemValue) => {
+          const validated = this.#validateDeepSchema(item as FieldsSchema, field, itemValue);
+          return validated instanceof SchemaError;
+        });
+
+        if (incorrect) {
+          return typeError({ ...error, type: "array", value: incorrect });
+        }
+
+        return value;
+      }
+
+      return invalidError(error);
     };
 
     #validateDeepSchema = (
       fieldSchema: Schema | DeepSchema,
       field: keyof Data,
       value: unknown,
-    ): Parsed | ParsedPrimitive | ParsedArray | SchemaError => {
+    ): Parsed | ParsedPrimitive | ParsedArray | SchemaError | SchemaErrorList => {
       if (typeof fieldSchema === "string" || fieldSchema instanceof RegExp) {
         return this.#validateSchema(fieldSchema, field, value);
       }
 
-      if (isFieldProps(fieldSchema)) {
-        return this.#validateFieldPropsSchema(fieldSchema, field, value);
+      if (isArraySchema(fieldSchema)) {
+        return this.#validateArraySchema(fieldSchema as ArraySchema, field, value);
       }
 
-      if (isArraySchema(fieldSchema)) {
-        return this.#validateArraySchema(fieldSchema, field, value);
+      if (isFieldProps(fieldSchema)) {
+        return this.#validateFieldPropsSchema(fieldSchema as FieldPropSchema<Schema>, field, value);
       }
 
       const validateSelf = Object.keys(fieldSchema).reduce((acc, key) => ({
@@ -432,6 +385,14 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
         ),
       }), {});
 
+      if (Object.values(validateSelf).some((item) => (item instanceof SchemaError || item instanceof SchemaErrorList))) {
+        const errors = Object.values(validateSelf)
+          .filter((item) => (item instanceof SchemaError || item instanceof SchemaErrorList))
+          .flatMap((item) => (item instanceof SchemaErrorList ? item.errors : item as SchemaError[]));
+
+        return new SchemaErrorList(errors);
+      }
+
       return validateSelf;
     };
 
@@ -440,6 +401,12 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
       let message: string | null = null;
       if (error instanceof SchemaError) {
         message = error.reason;
+      }
+
+      if (error instanceof SchemaErrorList) {
+        message = error.errors.reduce((acc, current) => (
+          `${acc}${current.reason}. `
+        ), "");
       }
 
       await errors.update((prev) => ({ ...prev, [field]: message }));
@@ -469,8 +436,11 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
           this.#validateDeepSchema(this.#schema[key], key as keyof Data, data[key as keyof D])
         ));
 
-        if (guard.some((item) => item instanceof SchemaError)) {
-          const errors = guard.filter((item) => item instanceof SchemaError) as SchemaError[];
+        if (guard.some((item) => item instanceof SchemaError || item instanceof SchemaErrorList)) {
+          const errors = guard
+            .filter((item) => item instanceof SchemaError || item instanceof SchemaErrorList)
+            .flatMap((item) => (item instanceof SchemaErrorList ? item.errors : item as SchemaError));
+
           throw new SchemaErrorList(errors);
         }
       }
@@ -480,7 +450,7 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
       try {
         const guard = await this.#validateDeepSchema(this.#schema[field as string], field, value);
 
-        if (guard instanceof SchemaError) throw guard;
+        if (guard instanceof SchemaError || guard instanceof SchemaErrorList) throw guard;
 
         await this.#setError(field, errors);
       } catch (error) {
@@ -503,7 +473,6 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
         }), {} as Errors<Data>);
 
         await errors.update((prev) => ({ ...prev, ...newErrors }));
-        return;
       }
     };
   }
