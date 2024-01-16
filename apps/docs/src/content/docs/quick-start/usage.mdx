@@ -1,38 +1,74 @@
 ---
 title: Usage
 description: How to start using this library.
+sidebar:
+  order: 2
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from "@astrojs/starlight/components";
 import Usage from "@organisms/Usage.astro";
 
 This library provides a set of [components](/components) that can be used to build forms. Or if you prefer, you can build your [own components](/guides/components). You must use any of these components inside the `form` context.
 
-## Example
+## Schema
 
-:::tip[Try it out]
-This is an interactive example of the code used below.
+The schema is an object that contains all fields of the form. Each field must have a regular expression or a primitive type as value. The key of each field is the name of the field.
+
+:::note
+  Here is a [full explanation](/quick-start/schema) of how schema works.
 :::
-<Usage />
 
-## The **faivform** function
+<Tabs>
+  <TabItem label="TS">
+    ```svelte
+    <script lang="ts">
+      import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+      const schema = {
+        name: /^[a-zA-Z]+$/,
+        message: "string",
+        accept: {
+          type: "boolean",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      // ... faivform function
+    </script>
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```svelte
+    <script>
+      const schema = {
+        name: /^[a-zA-Z]+$/,
+        message: "string",
+        accept: {
+          type: "boolean",
+          required: true,
+        },
+      };
+
+      // ... faivform function
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+## The *faivform* function
 
 Here is an example of how to use the `faivform` function to create a form.
 
-This function receives a configuration object with a `fields` property, which is an object that contains all fields of the form. Each field must have a regular expression or a primitive type as value. The key of each field is the name of the field.
+This function receives a configuration object with a `fields` property, which is an object that receives the [schema](/quick-start/schema) of the form. You can also pass an [`Adapter`](/adapters/) function instead of the schema.
 
 <Tabs>
   <TabItem label="Example">
   ```svelte
-  <script>
-    import { faivform, Field } from '@tuentyfaiv/svelte-form';
+  <script lang="ts"> // or remove lang="ts" if you are using JS
+    import { faivform } from '@tuentyfaiv/svelte-form';
 
     const form = faivform({
-      fields: {
-        name: /^[a-zA-Z]+$/,
-        message: "string",
-        accept: "boolean",
-      },
+      fields: // Schema | Adapter
     });
 
     const {
@@ -56,8 +92,9 @@ This function receives a configuration object with a `fields` property, which is
   <TabItem label="Config">
   | Property | Type | Description |
   | ----- | ----- | ----- |
-  | `fields` | `({ [key: string]: RegExp \| "string" \|  "number" \| "boolean" \| "date"  }) \| Adapter` | Object with all fields of the form or an [`Adapter`](/adapters/) function. |
+  | `fields` | `FieldsSchema \| Adapter` | Object with all fields of the form or an [`Adapter`](/adapters/) function. |
   | `styles` | `ContextStyles` | Object with the class names of the form. |
+  | `context` | `string \| undefined` | Context name of the form. |
   </TabItem>
   <TabItem label="Store created">
   | Property | Type | Description |
@@ -66,11 +103,11 @@ This function receives a configuration object with a `fields` property, which is
   | `loading` | `Writable<boolean>` | Loading state of the form. |
   | `errors` | `Writable<Errors>` | Form errors. |
   | `styles` | `Writable<ContextStyles>` | Form context styles. |
-  | `setField` | `(name: keyof Data, value: unknown, validate?: boolean) => Promise<void>` | Set the value of a field |
+  | `setField` | `(name: keyof Data, value: Data[keyof Data], validate?: boolean) => Promise<void>` | Set the value of a field |
   | `setError` | `(name: keyof Data, error?: string \| null) => Promise<void>` | Set the error of a field |
   | `check` | `(event: FocusEvent \| Event) => Promise<void>` | A function for [custom component](/guides/components). |
   | `submit` | `(action: SubmitAction<Data>, options?: SubmitOptions) => (event: SubmitEvent) => Promise<void>` | Set the context form  |
-  | `reset` | `() => void` | Resets the form. |
+  | `reset` | `(clear?: boolean, starting?: Data) => void` | Reset the form |
   </TabItem>
 </Tabs>
 
@@ -83,9 +120,7 @@ Each component must have a `name` prop that matches with a field of the form.
 :::
 
 ```svelte
-<script>
-  // ... form configuration
-</script>
+// ... faivform function
 
 <form on:submit|preventDefault>
   <Field name="name" label="Name:" />
@@ -112,8 +147,8 @@ All components must be inside the form context. Otherwise, they won't work. This
 <Tabs>
   <TabItem label="Example">
   ```svelte
-  <script>
-    // ... form configuration
+  <script lang="ts"> // or remove lang="ts" if you are using JS
+    // ... faivform function
 
     const onSubmit = $form.submit(async (values) => {
       // Do something with the values
@@ -121,7 +156,7 @@ All components must be inside the form context. Otherwise, they won't work. This
   </script>
 
   <form on:submit|preventDefault={onSubmit}>
-    <!-- ... `Field` components -->
+    <!-- ... Built-in components or your own components -->
   </form>
   ```
   </TabItem>
@@ -130,7 +165,15 @@ All components must be inside the form context. Otherwise, they won't work. This
   | ----- | ----- | ----- |
   | `error` | `((error: unknown) => void) \| undefined` | Callback that receives an error as parameter. This function is executed when the form is submitted and an error occurs. |
   | `finish` | `(() => void) \| undefined` | Callback that is executed when the form has finalized the submission whether it was successful or not. |
-  | `context` | `string \| undefined` | Context name of the form. |
   | `reset` | `boolean \| undefined` | Whether to reset the form after submission or not. |
+  | `initial` | `Data \| undefined` | Initial values of the form. |
   </TabItem>
 </Tabs>
+
+
+:::tip[Try it out]
+## Example
+This is an interactive example of the code used above.
+:::
+<Usage />
+

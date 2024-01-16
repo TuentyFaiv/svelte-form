@@ -1,196 +1,56 @@
 <script lang="ts">
   import { faivform, Field, Errors } from "@tuentyfaiv/svelte-form";
-  // import { string, boolean } from "yup";
+
   import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
-
-  // type FormFiels = {
-  //   name: string;
-  //   message: string;
-  //   accept: boolean;
-  //   some: {
-  //     errors: {
-  //       first: string;
-  //     };
-  //   };
-  //   asda: number;
-  //   other: string;
-  //   users: string[];
-  // }
-
-  // const fields = {
-  //   name: /^[a-zA-Z]+$/,
-  //   message: "string",
-  //   accept: "boolean",
-  //   some: {
-  //     errors: {
-  //       first: "string",
-  //     },
-  //   },
-  //   asda: {
-  //     type: "number",
-  //     min: 24,
-  //     max: 10,
-  //     required: true,
-  //   },
-  //   other: {
-  //     type: /asda/,
-  //     min: 5,
-  //     required: true,
-  //   },
-  //   avatars: {
-  //     type: "array",
-  //     item: {
-  //       type: "string",
-  //       min: 4,
-  //     },
-  //   },
-  //   users: {
-  //     type: "array",
-  //     item: {
-  //       email: {
-  //         type: "string",
-  //         required: true,
-  //       },
-  //       username: {
-  //         type: "string",
-  //         required: true,
-  //       },
-  //       active: "boolean",
-  //       age: "number",
-  //       details: "string",
-  //     },
-  //   },
-  // } satisfies FieldsSchema;
 
   const schema = {
     name: /^[a-zA-Z]+$/,
     message: "string",
-    accept: "boolean",
-    cover: "file",
-    some: {
-      errors: {
-        first: "string",
-      },
-    },
-    asda: {
-      type: "number",
-      min: 24,
-      max: 10,
+    accept: {
+      type: "boolean",
       required: true,
-    },
-    other: {
-      type: /asda/,
-      min: 5,
-      required: true,
-    },
-    avatars: {
-      type: "array",
-      item: {
-        type: "string",
-        min: 4,
-      },
-    },
-    users: {
-      type: "array",
-      item: {
-        email: {
-          type: "string",
-          required: true,
-        },
-        username: {
-          type: "string",
-          required: true,
-        },
-        active: "boolean",
-        age: "number",
-        details: "string",
-      },
-    },
-    deepArrays: {
-      type: "array",
-      item: {
-        type: "array",
-        required: true,
-        item: {
-          type: "array",
-          required: true,
-          item: {
-            type: "array",
-            required: true,
-            item: {
-              type: "number",
-              required: true,
-            },
-          },
-        },
-      },
-    },
-    dates: {
-      type: "array",
-      item: {
-        type: "array",
-        required: true,
-        item: {
-          type: "date",
-          required: true,
-        },
-      },
     },
   } satisfies FieldsSchema;
 
-  // const fields = adapter(schema);
+  const form = faivform({ fields: schema });
 
-  const form = faivform({
-    fields: schema,
-    // fields: adapter(schemaYup),
-  });
-
-  const {
-    data,
-    errors,
-    loading,
-    // styles,
-    submit,
-    // check,
-    // reset,
-    // setError,
-    setField,
-  } = $form;
+  const { data, errors, loading, submit } = $form;
 
   const onSubmit = submit(async (values) => {
     alert(JSON.stringify(values, null, 2));
   });
 
-  $: {
-    setField("accept", false);
-  }
+  const schemaString = Object.keys(schema).reduce(
+    (acc, key) => {
+      const item = key as keyof typeof schema;
+      return {
+        ...acc,
+        [item]:
+          schema[item] instanceof RegExp
+            ? (schema[item] as RegExp).source
+            : schema[item],
+      };
+    },
+    {} as typeof schema,
+  );
 </script>
 
 <div class="usage-example">
   <div class="usage-example__internal">
-    <div class="usage-example__code">
-      <pre>
-      <code>
-        {JSON.stringify(schema, null, 2)}
-      </code>
+    <pre class="usage-example__code">
+      <p>Schema</p>
+      <code>{JSON.stringify(schemaString, null, 2)}</code>
     </pre>
-    </div>
-    <div class="usage-example__code">
-      <pre>
-      <code>
-        {JSON.stringify($data, null, 2)}
-      </code>
+    <pre class="usage-example__code">
+      <p>Data</p>
+      <code>{JSON.stringify($data, null, 2)}</code>
     </pre>
-    </div>
-    <div class="usage-example__code">
-      <pre>
-      <code>
-        {JSON.stringify($errors, null, 2)}
-      </code>
+    <pre class="usage-example__code">
+      <p>Errors</p>
+      <code>{JSON.stringify($errors, null, 2)}</code>
     </pre>
-    </div>
   </div>
-  <form on:submit|preventDefault={onSubmit}>
+  <form on:submit|preventDefault={onSubmit} class="usage-example__form">
     <Field name="name" label="Name:" />
     <Field name="message" label="Leave a message:" type="textarea" />
     <Field name="accept" label="Accept terms:" type="checkbox" />
@@ -200,3 +60,35 @@
   </form>
   <Errors />
 </div>
+
+<style>
+  .usage-example {
+    @apply w-full flex justify-center items-center flex-col gap-5;
+  }
+  .usage-example__internal {
+    @apply w-full flex justify-center items-center gap-4 flex-wrap;
+  }
+  .usage-example__code {
+    @apply flex flex-col w-full max-h-max mt-0 overflow-x-auto;
+    --code-background: var(--ec-frm-edBg);
+    background: var(--code-background);
+  }
+  .usage-example__code:first-of-type {
+    @apply mt-8;
+  }
+  .usage-example__code > p {
+    @apply w-full mb-4;
+  }
+  .usage-example__code > code {
+    @apply w-full block min-w-[220px];
+  }
+  .usage-example__form {
+    @apply w-full;
+  }
+
+  @media screen and (min-width: 640px) {
+    .usage-example__code:not(:first-of-type) {
+      @apply flex-1;
+    }
+  }
+</style>
