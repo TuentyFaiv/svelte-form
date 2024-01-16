@@ -41,6 +41,7 @@ export abstract class Adapter<T> {
 export interface FaivFormConfig<F, T extends FieldsSchema | Adapter<F>> {
   fields: T;
   styles?: ContextStyles;
+  context?: string;
 }
 
 export type Submit = (event: UserEvent<HTMLFormElement, SubmitEvent>) => Promise<void>;
@@ -49,7 +50,6 @@ export type SubmitAction<T> = (values: T) => (Promise<void> | void);
 export interface SubmitConfig<T extends Fields> {
   error?(error: unknown): void;
   finish?: VoidFunction;
-  context?: string;
   reset?: boolean;
   initial?: T;
 }

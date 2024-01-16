@@ -28,6 +28,7 @@ S extends Fields = FieldsSchema,
 F extends Fields = Infer<S>,
 A extends Adapter<F> = Adapter<F>>({
   fields,
+  context = "form",
   styles = {},
 }: FaivFormConfig<F, S | A>) {
   let form: HTMLFormElement | null = null;
@@ -109,10 +110,10 @@ A extends Adapter<F> = Adapter<F>>({
     return allData;
   }
 
-  function resetForm(clear = true): void {
-    data.set(initial.fields);
-
+  function resetForm(clear = true, starting = initial.fields): void {
     form?.reset();
+
+    data.set(starting);
 
     if (clear) {
       errors.set(initial.errors);
@@ -133,7 +134,6 @@ A extends Adapter<F> = Adapter<F>>({
   function submit<T extends Fields = Values>(
     action: SubmitAction<T>,
     {
-      context = "form",
       reset = true,
       ...config
     }: SubmitConfig<T> = {},
@@ -187,12 +187,12 @@ A extends Adapter<F> = Adapter<F>>({
     return onSubmit;
   }
 
-  const context: Readable<Form> = derived(contextform, ($ctx) => ({
+  setContext(`root-${context}`, derived(contextform, ($ctx) => ({
     ...$ctx,
     submit,
-  }));
+  })));
 
-  return context;
+  return getContext<Readable<Form>>(`root-${context}`);
 }
 
 export function useForm<Values extends Fields = Fields, Keys extends keyof Values = keyof Values>(context = "form") {
@@ -205,5 +205,5 @@ export function useForm<Values extends Fields = Fields, Keys extends keyof Value
     });
   }
 
-  return getContext<Readable<ContextForm<Values, Keys>>>(context);
+  return getContext<Readable<Omit<ContextForm<Values, Keys>, "submit">>>(context);
 }

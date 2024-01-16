@@ -1,6 +1,6 @@
 {
   "name": "@tuentyfaiv/svelte-form",
-  "description": "A forms management library for svelte inspired by Formik",
+  "description": "a form library for Svelte. It is built on top of Svelte and Typescript. Inspired by Formik and React Hook Form.",
   "version": "0.2.18",
   "type": "module",
   "scripts": {
@@ -21,7 +21,8 @@
     "Svelte",
     "Form",
     "UI",
-    "Inputs"
+    "Inputs",
+    "Faivform"
   ],
   "author": "Tonalli López <contact@tuentyfaiv.com>",
   "license": "MIT",
@@ -42,8 +43,7 @@
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "peerDependencies": {
-    "svelte": "^4.0.0",
-    "yup": "^1.2.0"
+    "svelte": "^4.0.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.36.0",
@@ -65,8 +65,7 @@
     "tslib": "^2.6.0",
     "typescript": "^5.1.6",
     "vite": "^4.5.1",
-    "vitest": "^0.34.6",
-    "yup": "^1.2.0"
+    "vitest": "^0.34.6"
   },
   "engines": {
     "npm": ">=8.0.0",

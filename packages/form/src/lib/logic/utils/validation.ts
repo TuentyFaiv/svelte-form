@@ -479,34 +479,3 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
 
   return new InternalAdapter();
 }
-
-// export async function fieldsValidation<T>(data: T, schema: unknown) {
-//   if (schema instanceof ObjectSchema) {
-//     const trasformedData = (typeof data === "object" && data) ? Object.keys(data).reduce((acc, key) => {
-//       const field = (data as Record<string, unknown>)[key];
-//       return {
-//         ...acc,
-//         [key]: field,
-//       };
-//     }, {}) : {};
-
-//     await schema.validate(trasformedData, {
-//       abortEarly: false,
-//       strict: true,
-//     });
-//   }
-// }
-
-// export async function fieldValidation<T extends Writable<Errors> = Writable<Errors>>({
-//   field: key,
-//   value,
-//   schema,
-//   errors,
-// }: FieldValidation<T>) {
-//   try {
-//     await schema.validate(transformOnOff(value), { abortEarly: false });
-//     // setError({ errors, key });
-//   } catch (error) {
-//     // setError({ errors, key, error });
-//   }
-// }

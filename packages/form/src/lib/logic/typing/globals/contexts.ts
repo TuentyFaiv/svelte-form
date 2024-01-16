@@ -38,7 +38,7 @@ export interface ContextForm<Values extends Fields, Keys extends keyof Values = 
   errors: Writable<Errors<Values>>;
   data: Writable<Values>;
   styles: Writable<ContextStyles>;
-  reset(clear?: boolean): void;
+  reset(clear?: boolean, starting?: Values): void;
   setError(field: Keys, error?: string | null): Promise<void>;
   setField(field: Keys, value: Values[Keys], validate?: boolean): Promise<void>;
   check(event: UserEvent<HTMLInputElement | HTMLTextAreaElement, FocusEvent | Event>): Promise<void>;
