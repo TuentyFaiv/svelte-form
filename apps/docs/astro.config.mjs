@@ -52,6 +52,14 @@ export default defineConfig({
       autogenerate: {
         directory: "guides"
       }
+    }, {
+      label: "Reference",
+      translations: {
+        es: "Referencia"
+      },
+      autogenerate: {
+        directory: "reference"
+      }
     }],
     customCss: ["./src/ui/styles/app.css"],
     defaultLocale: "root",

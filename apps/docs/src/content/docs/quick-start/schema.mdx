@@ -1,22 +1,23 @@
 ---
 title: Schema
 description: Learn how to use schemas to validate your data.
+sidebar:
+  order: 3
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
-import Usage from "@organisms/Usage.astro";
 
 Data validation is a common problem in web development. You want to make sure that the data you receive from the user is valid before you use it in your application. This is especially important when you have a form and you want to make sure that the data the user enters is valid.
 
 Faivform provides a simple way to validate your data. You can use a schema to define the fields and their types.
 
 :::note
-All fields are optional by default. If you want to make a field required, you have to set the [`required`](#simple-configuration) property to `true`.
+All fields are optional by default. If you want to make a field required, you have to set the [`required`](#configuration) property to `true`.
 :::
 
 ## Usage
 
-To use a schema, you have to create a object where each key is a field name and the value is a type. if you are using TypeScript you need to import the type `FieldsSchema`
+To use a schema, you have to create a object where each key is a field name and the value is a type. if you are using TypeScript you need to import the type [`FieldsSchema`](/reference/#fieldsschema).
 
 <Tabs>
   <TabItem label="TS">
@@ -37,12 +38,12 @@ To use a schema, you have to create a object where each key is a field name and 
   </TabItem>
 </Tabs>
 
-## Simple configuration
+## Configuration
 
-All types have a simple configuration, you can use it to define the type of the field.
+All types have a simple configuration, you can use it to define the type of the field. You can check the configuration of each type in the [reference section.](/reference/#schemas)
 
 <Tabs>
-  <TabItem label="Example">
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -56,13 +57,17 @@ All types have a simple configuration, you can use it to define the type of the 
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label="Config">
-    | Property | Type | Description |
-    | -------- | ---- | ----------- |
-    | `type` | `Schema` | The type of the field. |
-    | `required` | `boolean \| undefined` | If the field is required. |
-    | `min` | `number \| undefined` | The minimum value of the field. |
-    | `max` | `number \| undefined` | The maximum value of the field. |
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      name: {
+        type: "string",
+        required: true,
+        min: 2,
+        max: 16,
+      },
+    };
+    ```
   </TabItem>
 </Tabs>
 
@@ -71,8 +76,10 @@ All types have a simple configuration, you can use it to define the type of the 
 
 To define a string field you have to use the `"string"` or `RegExp` type.
 
+### Example
+
 <Tabs>
-  <TabItem label="Example">
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -81,7 +88,19 @@ To define a string field you have to use the `"string"` or `RegExp` type.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label=" Advanced example">
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      username: /^[a-z0-9]$/, // or "string"
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -95,13 +114,17 @@ To define a string field you have to use the `"string"` or `RegExp` type.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label="Config">
-    | Property | Type | Description |
-    | -------- | ---- | ----------- |
-    | `type` | `"string" \| RegExp` | Indicates that the field is a string. |
-    | `required` | `boolean \| undefined` | If the field is required. |
-    | `min` | `number \| undefined` | The minimum length of the field. |
-    | `max` | `number \| undefined` | The maximum length of the field. |
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      username: {
+        type: /^[a-z0-9]$/, // or "string"
+        required: true,
+        min: 3,
+        max: 20,
+      },
+    };
+    ```
   </TabItem>
 </Tabs>
 
@@ -109,8 +132,10 @@ To define a string field you have to use the `"string"` or `RegExp` type.
 
 To define a number field you have to use the `"number"` type.
 
+### Example
+
 <Tabs>
-  <TabItem label="Example">
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -119,7 +144,19 @@ To define a number field you have to use the `"number"` type.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label=" Advanced example">
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      age: "number",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -133,13 +170,17 @@ To define a number field you have to use the `"number"` type.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label="Config">
-    | Property | Type | Description |
-    | -------- | ---- | ----------- |
-    | `type` | `"number"` | Indicates that the field is a number. |
-    | `required` | `boolean \| undefined` | If the field is required. |
-    | `min` | `number \| undefined` | The minimum value of the field. |
-    | `max` | `number \| undefined` | The maximum value of the field. |
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      age: {
+        type: "number",
+        required: true,
+        min: 18,
+        max: 99,
+      },
+    };
+    ```
   </TabItem>
 </Tabs>
 
@@ -151,8 +192,10 @@ To define a boolean field you have to use the `"boolean"` type.
 The `min` and `max` properties are not available for boolean fields.
 :::
 
+### Example
+
 <Tabs>
-  <TabItem label="Example">
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -161,7 +204,19 @@ The `min` and `max` properties are not available for boolean fields.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label=" Advanced example">
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      active: "boolean",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -173,11 +228,15 @@ The `min` and `max` properties are not available for boolean fields.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label="Config">
-    | Property | Type | Description |
-    | -------- | ---- | ----------- |
-    | `type` | `"boolean"` | Indicates that the field is a boolean. |
-    | `required` | `boolean \| undefined` | If the field is required. |
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      active: {
+        type: "boolean",
+        required: true,
+      },
+    };
+    ```
   </TabItem>
 </Tabs>
 
@@ -185,8 +244,10 @@ The `min` and `max` properties are not available for boolean fields.
 
 To define a date field you have to use the `"date"` type.
 
+### Example
+
 <Tabs>
-  <TabItem label="Example">
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -195,7 +256,19 @@ To define a date field you have to use the `"date"` type.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label=" Advanced example">
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      birthday: "date",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -209,13 +282,17 @@ To define a date field you have to use the `"date"` type.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label="Config">
-    | Property | Type | Description |
-    | -------- | ---- | ----------- |
-    | `type` | `"date"` | Indicates that the field is a date. |
-    | `required` | `boolean \| undefined` | If the field is required. |
-    | `min` | `number \| undefined` | The minimum value of the field. |
-    | `max` | `number \| undefined` | The maximum value of the field. |
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      birthday: {
+        type: "date",
+        required: true,
+        min: new Date(1950, 0, 1).getTime(),
+        max: new Date(2006, 0, 1).getTime(),
+      },
+    };
+    ```
   </TabItem>
 </Tabs>
 
@@ -223,8 +300,10 @@ To define a date field you have to use the `"date"` type.
 
 To define a file field you have to use the `"file"` type.
 
+### Example
+
 <Tabs>
-  <TabItem label="Example">
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -233,7 +312,19 @@ To define a file field you have to use the `"file"` type.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label=" Advanced example">
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      avatar: "file",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -247,13 +338,17 @@ To define a file field you have to use the `"file"` type.
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label="Config">
-    | Property | Type | Description |
-    | -------- | ---- | ----------- |
-    | `type` | `"file"` | Indicates that the field is a file. |
-    | `required` | `boolean \| undefined` | If the field is required. |
-    | `min` | `number \| undefined` | The minimum size in bytes of the file. |
-    | `max` | `number \| undefined` | The maximum size in bytes of the file. |
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      avatar: {
+        type: "file",
+        required: true,
+        min: 0,
+        max: 1024 * 1024 * 2,
+      },
+    };
+    ```
   </TabItem>
 </Tabs>
 
@@ -261,8 +356,10 @@ To define a file field you have to use the `"file"` type.
 
 To define a object field you have to compose it with the "primitive" types explained above.
 
+### Example
+
 <Tabs>
-  <TabItem label="Example">
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -278,7 +375,26 @@ To define a object field you have to compose it with the "primitive" types expla
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label=" Advanced example">
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      user: {
+        name: "string",
+        username: "string",
+        age: "number",
+        active: "boolean",
+        birthday: "date",
+        avatar: "file",
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -322,11 +438,47 @@ To define a object field you have to compose it with the "primitive" types expla
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label="Config">
-    | Property | Type | Description |
-    | -------- | ---- | ----------- |
-    | `type` | `Record<string, Schema>` | Indicates that the field is a object. |
-    | `required` | `boolean \| undefined` | If the field is required. |
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      user: {
+        name: {
+          type: "string",
+          required: true,
+          min: 2,
+          max: 16,
+        },
+        username: {
+          type: /^[a-z0-9]$/,
+          required: true,
+          min: 3,
+          max: 20,
+        },
+        age: {
+          type: "number",
+          required: true,
+          min: 18,
+          max: 99,
+        },
+        active: {
+          type: "boolean",
+          required: true,
+        },
+        birthday: {
+          type: "date",
+          required: true,
+          min: new Date(1950, 0, 1).getTime(),
+          max: new Date(2006, 0, 1).getTime(),
+        },
+        avatar: {
+          type: "file",
+          required: true,
+          min: 0,
+          max: 1024 * 1024 * 2,
+        },
+      },
+    };
+    ```
   </TabItem>
 </Tabs>
 
@@ -338,8 +490,10 @@ To define a array field you have to use the `"array"` type.
 Array fields can only have type `"array"`, to define the type of the items you have to use the `item` property.
 :::
 
+### Example
+
 <Tabs>
-  <TabItem label="Example">
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -351,7 +505,22 @@ Array fields can only have type `"array"`, to define the type of the items you h
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label=" Advanced example">
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      tags: {
+        type: "array",
+        item: "string",
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
     ```typescript
     import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
 
@@ -371,14 +540,23 @@ Array fields can only have type `"array"`, to define the type of the items you h
     } satisfies FieldsSchema;
     ```
   </TabItem>
-  <TabItem label="Config">
-    | Property | Type | Description |
-    | -------- | ---- | ----------- |
-    | `type` | `"array"` | Indicates that the field is a array. |
-    | `required` | `boolean \| undefined` | If the field is required. |
-    | `item` | `Schema` | The type of the items of the array. |
-    | `min` | `number \| undefined` | The minimum length of the array. |
-    | `max` | `number \| undefined` | The maximum length of the array. |
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      tags: {
+        type: "array",
+        item: {
+          type: "string",
+          required: true,
+          min: 2,
+          max: 16,
+        },
+        required: true,
+        min: 1,
+        max: 5,
+      },
+    };
+    ```
   </TabItem>
 </Tabs>
 

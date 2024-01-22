@@ -1,0 +1,62 @@
+---
+title: Customize
+description: Customize the look and feel of the fields.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+The built-in components comes with a default look and feel. You can customize the look and feel of the fields.
+
+
+## Globally
+
+You can customize the look and feel of all the fields globally by using the `setConfig` function include in the core package.
+
+:::note
+Recommended to be used in the root component of your application.
+:::
+
+<Tabs>
+  <TabItem label="Example">
+    ```svelte
+    <script lang="ts">
+      import { setConfig } from "@tuentyfaiv/svelte-form";
+
+      setConfig({
+        fields: {},
+        vars: {},
+      });
+    </script>
+    ```
+  </TabItem>
+  <TabItem label="Config">
+    | Name | Type | Description |
+    | ---- | ---- | ----------- |
+    | fields | `ContextStyles` | Object with the styles for the fields. |
+    | vars | `ContextCSSVars` | Object with the css vars for the fields. |
+
+    ### ContextStyles
+
+    | Name | Type | default | Description |
+    | ---- | ---- | ------- | ----------- |
+    | replace | `boolean \| undefined` | `false` | Replace the default styles with the new ones. |
+    | field | `FieldStyles` | `{}` | Object with the styles for the [`Field` component](/components/field). |
+  </TabItem>
+</Tabs>
+
+## Per form
+
+You can customize the look and feel of all the fields per form by using the `styles`.
+
+```svelte
+
+<script lang="ts">
+  import { faivform } from "@tuentyfaiv/svelte-form";
+
+  const form = faivform({
+    // ... context name and schema or adapter
+    styles: {},
+  });
+</script>
+
+```

@@ -4,7 +4,12 @@ export { FormError, SchemaError, SchemaErrorList } from "./logic/utils/errors.js
 
 // context types
 export type { Config } from "./logic/typing/stores/config.js";
-export type { ContextStyles, ContextForm } from "./logic/typing/globals/contexts.js";
+export type {
+  ContextStyles,
+  Context,
+  ContextForm as ContextFormRoot,
+  ContextFormStore as ContextForm,
+} from "./logic/typing/globals/contexts.js";
 export type { SelectOption, OptionItem } from "./logic/typing/globals/interfaces.js";
 export type { SharedUIProps, GeneralInputProps, GeneralFieldProps } from "./logic/typing/globals/proptypes.js";
 
@@ -12,7 +17,7 @@ export type { SharedUIProps, GeneralInputProps, GeneralFieldProps } from "./logi
 export type {
   // Internal schemas,
   Schema,
-  FieldPropSchema,
+  FieldProps as FieldPropSchema,
   ArraySchema,
   FieldsSchema,
   // Faivform config

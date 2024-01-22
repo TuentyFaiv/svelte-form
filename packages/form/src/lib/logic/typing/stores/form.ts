@@ -14,6 +14,8 @@ export type FieldPropSchema<T> = {
   max ?: number;
 };
 
+export type FieldProps = FieldPropSchema<Schema>;
+
 export type ArraySchema = FieldPropSchema<"array"> & {
   item: Schema | FieldPropSchema<Schema> | ArraySchema | FieldsSchema;
 };

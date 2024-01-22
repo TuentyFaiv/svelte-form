@@ -1,4 +1,4 @@
-import type { Writable } from "svelte/store";
+import type { Writable, Readable } from "svelte/store";
 import type { Errors } from "../utils/errors.js";
 import type {
   Fields,
@@ -44,3 +44,7 @@ export interface ContextForm<Values extends Fields, Keys extends keyof Values = 
   check(event: UserEvent<HTMLInputElement | HTMLTextAreaElement, FocusEvent | Event>): Promise<void>;
   submit<T extends Fields = Values>(action: SubmitAction<T>, config?: SubmitConfig<T>): Submit;
 }
+
+export type Context<T extends Fields, K extends keyof T = keyof T> = Omit<ContextForm<T, K>, "submit">;
+
+export type ContextFormStore<T extends Fields, K extends keyof T = keyof T> = Readable<Context<T, K>>;

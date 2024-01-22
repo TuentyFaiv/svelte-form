@@ -38,7 +38,7 @@
     }
   }
 
-  function onCheck({ currentTarget }: UserEvent<HTMLInputElement, Event>) {
+  function onCheck({ currentTarget }: UserEvent<HTMLInputElement>) {
     setField(name, currentTarget.checked);
   }
 
