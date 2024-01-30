@@ -7,11 +7,12 @@ sidebar:
 
 This library comes with a set of components that you can use to build your own forms. These components are built using the same API that you have access to, so you can use them as a reference for your own components.
 
+Here is a simple overview of the components that come with this library:
 
-## Field
 
-The `Field` component is the most basic component. To see the full explanation of it, check the [Field component](/components/field) page.
-Here is a quick example of how to use it:
+## [Field](/components/field)
+
+The most basic component, usefull for inputs like text, number, email, etc.
 
 ```svelte
 <script>
@@ -19,13 +20,11 @@ Here is a quick example of how to use it:
 </script>
 
 <Field name="name" label="Name" />
-
 ```
 
-## Select
+## [Select](/components/select)
 
-The `Select` component is used to render a select input. To see the full explanation of it, check the [Select component](/components/select) page.
-Here is a quick example of how to use it:
+Usefull for select inputs, it can be single or multiple.
 
 ```svelte
 <script>
@@ -39,13 +38,11 @@ Here is a quick example of how to use it:
 </script>
 
 <Select name="number" label="Name" {options} />
-
 ```
 
-## Option
+## [Option](/components/option)
 
-The `Option` component is used to render a list of options. To see the full explanation of it, check the [Option component](/components/option) page.
-Here is a quick example of how to use it:
+Usefull for radio input for single options or checkbox for multiple options.
 
 ```svelte
 <script>
@@ -59,13 +56,11 @@ Here is a quick example of how to use it:
 </script>
 
 <Option name="type" label="Name" {options} />
-
 ```
 
-## File
+## [File](/components/file)
 
-The `File` component is used to render a file input. To see the full explanation of it, check the [File component](/components/file) page.
-Here is a quick example of how to use it:
+Usefull for file inputs, it can be single or multiple and dropzone is supported.
 
 ```svelte
 <script>
@@ -73,13 +68,11 @@ Here is a quick example of how to use it:
 </script>
 
 <File name="file" />
-
 ```
 
-## Errors
+## [Errors](/components/errors)
 
-The `Errors` component is used to render the form errors. To see the full explanation of it, check the [Errors component](/components/errors) page.
-Here is a quick example of how to use it:
+Usefull for displaying errors from the form.
 
 ```svelte
 <script>
@@ -87,5 +80,37 @@ Here is a quick example of how to use it:
 </script>
 
 <Errors />
-
 ```
+
+## [Color](/components/color)
+
+Usefull for color inputs.
+
+:::note
+This component is under development. It will be available in the next release.
+:::
+
+
+## [Date](/components/date)
+
+Usefull for date, datetime-local, month, time and week inputs.
+
+:::note
+This component is under development. It will be available in the next release.
+:::
+
+## [Date Range](/components/date-range)
+
+Usefull for date range inputs.
+
+:::note
+This component is under development. It will be available in the next release.
+:::
+
+## [Range](/components/range)
+
+Usefull for range inputs.
+
+:::note
+This component is under development. It will be available in the next release.
+:::

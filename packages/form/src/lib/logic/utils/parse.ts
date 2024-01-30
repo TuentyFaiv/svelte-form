@@ -2,7 +2,7 @@ export function parseValue<T>(input: HTMLInputElement | HTMLTextAreaElement): T 
   const { value, type } = input;
 
   const types = {
-    number: parseFloat(value),
+    number: Number.isNaN(parseFloat(value)) ? null : parseFloat(value),
     text: value,
     checkbox: input instanceof HTMLInputElement ? input.checked : value,
     date: value, // TODO: parse to Date

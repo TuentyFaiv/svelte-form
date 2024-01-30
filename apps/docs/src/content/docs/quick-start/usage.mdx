@@ -6,15 +6,15 @@ sidebar:
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
-import Usage from "@organisms/Usage.astro";
+import { Usage } from "@organisms";
 
 This library provides a set of [components](/components) that can be used to build forms. Or if you prefer, you can build your [own components](/guides/components). You must use any of these components inside the `form` context.
 
 ## Schema
 
-The schema is an object that contains all fields of the form. Each field must have a regular expression or a primitive type as value. The key of each field is the name of the field.
+The schema is an object that contains all fields of the form. Each field must have a regular expression or a "primitive type" as value. The key of each field is the name of the field.
 
-:::note
+:::tip
   Here is a [full explanation](/quick-start/schema) of how schema works.
 :::
 
@@ -56,71 +56,50 @@ The schema is an object that contains all fields of the form. Each field must ha
 </Tabs>
 
 ## The *faivform* function
+Here is where the context form is created. You must use the `faivform` function to create a form.
 
-Here is an example of how to use the `faivform` function to create a form.
+This function receives a configuration object with a `fields` property, which is an object that receives the [`schema`](/quick-start/schema) of the form. You can also pass an [`Adapter`](/adapters/) function instead of the schema.
 
-This function receives a configuration object with a `fields` property, which is an object that receives the [schema](/quick-start/schema) of the form. You can also pass an [`Adapter`](/adapters/) function instead of the schema.
-
-<Tabs>
-  <TabItem label="Example">
-  ```svelte
-  <script lang="ts"> // or remove lang="ts" if you are using JS
-    import { faivform } from '@tuentyfaiv/svelte-form';
-
-    const form = faivform({
-      fields: // Schema | Adapter
-    });
-
-    const {
-      data,
-      loading,
-      errors,
-      styles,
-      setField,
-      setError,
-      check,
-      submit,
-      reset
-    } = $form;
-
-    // ... rest of the code
-  </script>
-
-  <!-- Here you can use the `Field` component inside a form element -->
-  ```
-  </TabItem>
-  <TabItem label="Config">
-  | Property | Type | Description |
-  | ----- | ----- | ----- |
-  | fields | [`FieldsSchema`](/reference/#fieldsschema) \| [`Adapter`](/reference/#adapter) | Object with all fields of the form or an [`Adapter`](/adapters/) function. |
-  | styles | [`ContextStyles`](/reference/#contextstyles) \| `undefined` | Object with the class names of the form. |
-  | context | `string \| undefined` | Context name of the form. |
-  </TabItem>
-  <TabItem label="Store created">
-  | Property | Type | Description |
-  | ----- | ----- | ----- |
-  | data | `Writable<Data>` | Form values. |
-  | loading | `Writable<boolean>` | Loading state of the form. |
-  | errors | `Writable<`[`Errors`](/reference/#errors)`<Data>>` | Form errors. |
-  | styles | `Writable<`[`ContextStyles`](/reference/#contextstyles)`>` | Form context styles. |
-  | setField | `(name: keyof Data, value: Data[keyof Data], validate?: boolean) => Promise<void>` | Set the value of a field |
-  | setError | `(name: keyof Data, error?: string \| null) => Promise<void>` | Set the error of a field |
-  | check | `(event:`[`UserEvent`](/reference/#userevent)`<HTMLInputElement \| HTMLTextAreaElement, FocusEvent \| Event>) => Promise<void>` | A function for [custom component](/guides/components). |
-  | submit | `(action: `[`SubmitAction`](/reference/#submitaction)`<Data>, config?: `[`SubmitConfig`](/reference/#submitconfig)`<Data>) =>`[`Submit`](/reference/#submit) | Submit the form |
-  | reset | `(clear?: boolean, starting?: Data) => void` | Reset the form |
-  </TabItem>
-</Tabs>
-
-## Submitting a form
-
-To submit a form, you must use the `submit` function and pass it to the `on:submit` event of the form. Here is where the context form is created.
-
-:::note
-Don't forget to add the `preventDefault` modifier to the `on:submit` event.
+:::tip
+You can check the [`FaivFormConfig`](/reference/#faivformconfig) and [`FaivFormStore`](/reference/#faivformstore) interfaces to know more about the configuration object and the store.
 :::
 
 :::caution[Important]
 All components must be inside the form context. Otherwise, they won't work. This includes your own components.
+:::
+
+```svelte
+<script lang="ts"> // or remove lang="ts" if you are using JS
+  import { faivform } from '@tuentyfaiv/svelte-form';
+
+  const form = faivform({
+    fields: // Schema | Adapter
+  });
+
+  const {
+    data,
+    loading,
+    errors,
+    styles,
+    setField,
+    setError,
+    check,
+    submit,
+    reset
+  } = $form;
+
+  // ... rest of the code
+</script>
+
+<!-- Here you can use the `Field` component inside a form element -->
+```
+
+## Submitting a form
+
+To submit a form, you must use the `submit` function and pass it to the `on:submit` event of the form.
+
+:::note
+Don't forget to add the `preventDefault` modifier to the `on:submit` event.
 :::
 
 ```svelte
@@ -141,7 +120,7 @@ All components must be inside the form context. Otherwise, they won't work. This
 
 You can use the [built-in components](/components) to build your forms easily. Here is an example using the [`Field`](/components/field) component.
 
-:::note
+:::caution[Important]
 Each component must have a `name` prop that matches with a field of the form.
 :::
 

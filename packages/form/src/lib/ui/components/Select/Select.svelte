@@ -12,7 +12,7 @@
   import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
   import type { Events, Props, Select, Target } from "./Select.proptypes.js";
 
-  import IconArrow from "../../assets/icon-arrow.svg";
+  import { IconArrow } from "$lib/ui/assets/icons/index.js";
 
   export let name: Props["name"];
   export let label: Props["label"] = null;
@@ -372,7 +372,7 @@
       </button>
     {/if}
     <img
-      src={styles?.arrow ?? icons?.arrow ?? IconArrow}
+      src={styles?.arrow ?? icons?.arrow ?? `IconArrow`}
       alt={placeholder}
       class={iconStyle}
       bind:this={arrowElement}

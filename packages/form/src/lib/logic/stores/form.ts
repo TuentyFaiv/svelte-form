@@ -1,7 +1,6 @@
 import { getContext, hasContext, setContext } from "svelte";
 import { derived, get, readable, writable } from "svelte/store";
-
-import { FormVarStyles } from "./styles.js";
+import { FaivFormStyles } from "./styles.js";
 import { FormError } from "../utils/errors.js";
 import { parseValue } from "../utils/parse.js";
 import { bridge } from "../utils/validation.js";
@@ -9,16 +8,18 @@ import { Adapter } from "../typing/stores/form.js";
 
 // eslint-disable-next-line import/order
 import type { Readable } from "svelte/store";
-import type { ContextForm, ContextStyles } from "../typing/globals/contexts.js";
 import type { UserEvent } from "../typing/globals/types.js";
+import type { ContextStyles } from "../typing/stores/styles.js";
 import type {
   Fields,
   FieldsSchema,
   FaivFormConfig,
+  FaivFormStore,
   SubmitAction,
   SubmitConfig,
   Submit,
   SetErrorsConfig,
+  ContextForm,
 } from "../typing/stores/form.js";
 import type { Errors } from "../typing/utils/errors.js";
 import type { Infer } from "../typing/utils/validation.js";
@@ -41,14 +42,14 @@ A extends Adapter<F> = Adapter<F>>({
     errors: styles.errors ?? {},
     icons: styles.icons ?? null,
   });
-  FormVarStyles.create();
+  FaivFormStyles.create();
 
   const adapter = fields instanceof Adapter ? fields : bridge<S, F>(fields);
   const initial = adapter.initial();
 
   type Values = typeof initial.fields;
   type Keys = keyof Values;
-  type Form = ContextForm<Values, Keys>;
+  type Form = FaivFormStore<Values, Keys>;
 
   const loading = writable<boolean>(false);
   const errors = writable<Errors<Values>>(initial.errors);
@@ -110,7 +111,7 @@ A extends Adapter<F> = Adapter<F>>({
     return allData;
   }
 
-  function resetForm(clear = true, starting = initial.fields): void {
+  function resetForm(clear = true, starting: Values = initial.fields): void {
     form?.reset();
 
     data.set(starting);
@@ -131,41 +132,49 @@ A extends Adapter<F> = Adapter<F>>({
     check,
   });
 
-  function submit<T extends Fields = Values>(
-    action: SubmitAction<T>,
-    {
-      reset = true,
-      ...config
-    }: SubmitConfig<T> = {},
-  ): Submit {
-    if (hasContext("styles")) {
-      const globalStyles = get(getContext<Readable<ContextStyles>>("styles"));
-      Object.keys(globalStyles).forEach((key) => {
-        const keyStyle = key as keyof ContextStyles;
+  setContext(context, contextform);
 
-        ctxStyles.update((prev) => {
-          if (keyStyle === "replace") {
-            const validPrev = prev[keyStyle] ?? false;
-            const validGlobal = globalStyles[keyStyle] ?? false;
+  if (hasContext("faivform-styles")) {
+    const globalStyles = get(getContext<Readable<ContextStyles>>("faivform-styles"));
+    const formStyles = get(ctxStyles);
 
-            return {
-              ...prev,
-              [keyStyle]: validPrev || validGlobal,
-            };
-          }
+    const updatedStyles: ContextStyles = Object.entries(globalStyles).reduce((acc, [key, value]) => {
+      const keyStyle = key as keyof ContextStyles;
+      const globalStyle = value as ContextStyles[keyof ContextStyles];
+      const formStyle = formStyles[keyStyle];
 
-          const validPrev = Object.keys(prev[keyStyle] ?? {}).length === 0 ? null : prev[keyStyle];
-          const validGlobal = Object.keys(globalStyles[keyStyle] ?? {}).length === 0 ? null : globalStyles[keyStyle];
+      if (typeof globalStyle === "undefined" || globalStyle === null) return acc;
 
-          return {
-            ...prev,
-            [keyStyle]: validPrev ?? validGlobal,
-          };
-        });
-      });
-    }
+      if (keyStyle === "replace" || typeof globalStyle === "boolean") {
+        return {
+          ...acc,
+          [keyStyle]: formStyle || globalStyle,
+        } as ContextStyles;
+      }
 
-    setContext(context, contextform);
+      const updated = Object.entries(globalStyle).reduce((prev, [element, style]) => {
+        const elementKey = element as keyof typeof globalStyle;
+        const elementStyle = style as string | undefined;
+        const formElementStyle = formStyle?.[elementKey] as string | undefined;
+
+        return {
+          ...prev,
+          [element]: formElementStyle ?? elementStyle,
+        } as typeof globalStyle;
+      }, {} as typeof globalStyle);
+
+      return {
+        ...acc,
+        [keyStyle]: updated,
+      } as ContextStyles;
+    }, {} as ContextStyles);
+
+    ctxStyles.update((prev) => ({ ...prev, ...updatedStyles }));
+  }
+
+  function submit<T extends Values = Values>(action: SubmitAction<T>, { reset = true, ...config }: SubmitConfig<T> = {}): Submit {
+    if (config.initial) data.set(config.initial);
+
     async function onSubmit(event: UserEvent<HTMLFormElement, SubmitEvent>) {
       try {
         toggleLoading(true);
@@ -175,7 +184,7 @@ A extends Adapter<F> = Adapter<F>>({
 
         await action(values);
 
-        if (reset) resetForm(true);
+        if (reset) resetForm(true, config.initial);
       } catch (error) {
         setErrors({ error, handle: config.error });
       } finally {
@@ -205,5 +214,5 @@ export function useForm<Values extends Fields = Fields, Keys extends keyof Value
     });
   }
 
-  return getContext<Readable<Omit<ContextForm<Values, Keys>, "submit">>>(context);
+  return getContext<ContextForm<Values, Keys>>(context);
 }

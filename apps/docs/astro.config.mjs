@@ -73,7 +73,8 @@ export default defineConfig({
       }
     }
   }), tailwind({
-    applyBaseStyles: false
+    applyBaseStyles: false,
+    nesting: true,
   }), svelte()],
   output: "static",
   adapter: vercel({
