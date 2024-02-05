@@ -2,54 +2,64 @@
 
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from "svelte";
-  import { fade } from "svelte/transition";
-  import { keys, tags } from "$lib/logic/utils/keys.js";
-  import { generateDatas } from "$lib/logic/utils/objects.js";
+  import { fade, slide } from "svelte/transition";
   import { useForm } from "$lib/logic/stores/form.js";
-  import { getStyle } from "$lib/logic/utils/styles.js";
+  import { keys, tags } from "$lib/logic/utils/keys.js";
+  import { generateDatas, isSelected } from "$lib/logic/utils/objects.js";
+  import { hasArray } from "$lib/logic/utils/parse.js";
+  import { getStyles } from "$lib/logic/utils/styles.js";
 
   import type { UserEvent } from "$lib/logic/typing/globals/types.js";
   import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
-  import type { Events, Props, Select, Target } from "./Select.proptypes.js";
+  import type { Props, Events, Target } from "./Select.proptypes.js";
 
-  import { IconArrow } from "$lib/ui/assets/icons/index.js";
+  import { Icon, IconArrow } from "$lib/ui/assets/icons/index.js";
+
+  type $$Props = Props;
 
   export let name: Props["name"];
+  export let context: Props["context"] = "form";
   export let label: Props["label"] = null;
+  export let placeholder: Props["placeholder"] = "";
   export let id: Props["id"] = null;
+  export let autoselect: Props["autoselect"] = true;
   export let searchable: Props["searchable"] = true;
+  export let clearable: Props["clearable"] = true;
   export let multiple: Props["multiple"] = false;
   export let disabled: Props["disabled"] = false;
-  export let autoselectable: Props["autoselectable"] = true;
   export let options: Props["options"] = [];
-  export let placeholder: Props["placeholder"] = "";
-  export let context: Props["context"] = "form";
-  export let clearable: Props["clearable"] = true;
+  export let styles: Props["styles"] = {};
   export let datas: Props["datas"] = {};
 
+  let container: HTMLDivElement | null = null;
   let select: HTMLDivElement | null = null;
   let labelElement: HTMLParagraphElement | null = null;
-  let container: Select = null;
   let valueBoxElement: HTMLDivElement | null = null;
   let searchableElement: HTMLInputElement | null = null;
+  let nonsearchableElement: HTMLSpanElement | null = null;
   let arrowElement: HTMLImageElement | null = null;
   let errorElement: HTMLSpanElement | null = null;
   let optionsElement: HTMLDivElement | null = null;
 
   let active = false;
   let search = "";
+  let fixed: SelectOption[] | null = null;
 
   const dispatch = createEventDispatcher<Events>();
   $: form = useForm(context);
-  $: ({ data, errors, styles: ctxStyles, setField } = $form);
-  $: ({ select: styles, icons, replace } = $ctxStyles);
+  $: ({ data, errors, styles: ctxStyles, setField, setError } = $form);
+  $: ({ select: ctxSelectStyles, icons, replace } = $ctxStyles);
 
-  function onChoose(value: string) {
+  function onChoose(value: SelectOption) {
     dispatch("choose", value);
   }
 
-  function onToggle() {
-    active = !active;
+  function onToggle(open?: unknown) {
+    if (typeof open === "boolean") {
+      active = open;
+    } else {
+      active = !active;
+    }
   }
 
   function onHasValue() {
@@ -61,43 +71,54 @@
 
   function handleChoose(element: HTMLElement) {
     const isOptions = element === optionsElement;
-    const option = isOptions
+    const optionElement = isOptions
       ? (element.firstElementChild as HTMLElement)
       : element;
-    const { value } = option.dataset;
+    const { value } = optionElement.dataset;
+
     if (value) {
-      const selection = options.find(({ value: v }) => v === value);
-      const newValue = multiple
-        ? ([...($data[name] ?? []), value] as string[])
-        : value;
-      search = multiple ? "" : selection?.label ?? "";
-      setField(name, newValue);
-      onChoose(value);
+      const selection = options.find((option) => option.value === value);
+
+      if (!selection) {
+        setError(name, "Invalid option, this option does not exist");
+        return;
+      }
+
+      const updated: string | string[] = multiple
+        ? [...hasArray<string>($data[name]), selection.value]
+        : selection.value;
+
+      if (searchable) {
+        search = multiple ? "" : selection.label ?? "";
+      }
+
+      setField(name, updated);
+      onChoose(selection);
     }
-    active = multiple;
+
+    onToggle(multiple);
   }
 
   function handleSelect({ target }: UserEvent<Target, MouseEvent>) {
     const element = target as Target;
+
+    const isContainer = element === container;
     const isSelect = element === select;
     const isLabel = element === labelElement;
-    const isContainer = element === container;
     const isValueBox = element === valueBoxElement;
-    const isShowedOption =
-      element.tagName === tags.span &&
-      JSON.parse(element.dataset.optionShowed ?? "false");
     const isSearchable = element === searchableElement;
+    const isNonsearchable = element === nonsearchableElement;
     const isArrow = element === arrowElement;
     const isError = element === errorElement;
     const isOptions = element === optionsElement;
 
     const isMenu =
+      isContainer ||
       isSelect ||
       isLabel ||
-      isContainer ||
       isValueBox ||
-      isShowedOption ||
       isSearchable ||
+      isNonsearchable ||
       isArrow ||
       isError ||
       isOptions;
@@ -132,143 +153,110 @@
   function onHide() {
     onToggle();
     onHasValue();
-    setField(name, $data[name] ?? (multiple ? [] : ""));
+    setField(name, $data[name] ?? null);
   }
 
   function onRemove(option: SelectOption) {
-    const selection: string[] = $data[name] ?? [];
-    const newSelection = selection.filter((value) => value !== option.value);
+    const newSelection = hasArray<string>($data[name]).filter(
+      (value) => value !== option.value,
+    );
     setField(name, newSelection);
+    dispatch("remove", option);
   }
 
   function onClear() {
-    setField(
-      name,
-      multiple
-        ? options.filter(({ fixed }) => fixed).map(({ value }) => value)
-        : "",
-    );
+    const value = multiple ? fixed?.map(({ value }) => value) ?? null : null;
+    setField(name, value);
     search = "";
+    dispatch("clear");
   }
 
   $: datasets = generateDatas(datas);
 
   $: if (
-    autoselectable &&
+    autoselect &&
     options.length === 1 &&
     $data[name] !== options[0].value
   ) {
     const value = options[0].value;
     setField(name, multiple ? [value] : value);
-    onChoose(value);
+    onChoose(options[0]);
     onHasValue();
   }
 
   $: if (multiple) {
-    const fixedValues = options
-      .filter(({ fixed }) => fixed)
-      .map(({ value }) => value);
-    if (fixedValues.length > 0) setField(name, fixedValues);
+    fixed = options.filter((option) => option.fixed);
+
+    if (fixed.length > 0) {
+      setField(
+        name,
+        fixed.map(({ value }) => value),
+      );
+    }
   }
 
   $: optionsToShow = (
-    searchable
+    searchable && search.toLowerCase() !== $data[name]
       ? options.filter(({ label }) =>
           label.toLowerCase().includes(search.toLowerCase()),
         )
       : options
-  ).filter(({ value }) =>
-    multiple
-      ? !($data[name] ?? []).some((item: string) => item === value)
-      : true,
-  );
+  ).filter(({ value }) => (multiple ? !isSelected($data[name], value) : true));
 
-  $: showedValue = (
+  $: items = (
     multiple
-      ? options.filter(({ value }) =>
-          ($data[name] ?? []).some((item: string) => item === value),
-        )
+      ? options.filter(({ value }) => isSelected($data[name], value))
       : options.find(({ value }) => value === $data[name])?.label ||
         ($data[name] ?? null)
   ) as SelectOption[] | string | null;
 
   $: toClear =
-    multiple && Array.isArray(showedValue)
-      ? showedValue.filter(({ fixed }) => !fixed)
-      : showedValue;
-  $: showClear =
-    (typeof clearable === "boolean" ? clearable : clearable($data[name])) &&
-    toClear &&
-    toClear.length > 0;
+    multiple && Array.isArray(items)
+      ? items.filter((option) => !option.fixed)
+      : items;
+  $: showClear = clearable && toClear && toClear.length > 0;
 
   $: if ($data[name]) {
     onHasValue();
   }
 
-  $: fieldStyle = getStyle({
+  $: styls = getStyles<Exclude<Props["styles"], undefined>>({
     replace,
-    style: "svform-field",
-    external: styles?.field,
-  });
-  $: labelStyle = getStyle({
-    replace,
-    style: "svform-label",
-    external: styles?.label,
-  });
-  $: selectStyle = getStyle({
-    replace,
-    style: "svform-select",
-    external: styles?.select,
-  });
-  $: valueStyle = getStyle({
-    replace,
-    style: "svform-value",
-    external: styles?.value,
-  });
-  $: itemStyle = getStyle({
-    replace,
-    style: "svform-item",
-    external: styles?.item,
-  });
-  $: removeStyle = getStyle({
-    replace,
-    style: "svform-remove",
-    external: styles?.remove,
-  });
-  $: searchableStyle = getStyle({
-    replace,
-    style: "svform-searchable",
-    external: styles?.searchable,
-  });
-  $: clearStyle = getStyle({
-    replace,
-    style: "svform-clear",
-    external: styles?.clear,
-  });
-  $: iconStyle = getStyle({
-    replace,
-    style: "svform-icon",
-    external: styles?.icon,
-  });
-  $: optionsStyle = getStyle({
-    replace,
-    style: "svform-options",
-    external: styles?.options,
-  });
-  $: optionStyle = getStyle({
-    replace,
-    style: "svform-option",
-    external: styles?.option,
-  });
-  $: errorStyle = getStyle({
-    replace,
-    style: "svform-error",
-    external: styles?.error,
-  });
-  $: emptyStyle = getStyle({
-    replace,
-    style: "svform-empty",
-    external: styles?.empty,
+    internals: {
+      container: "faivform-select-container",
+      label: "faivform-select-label",
+      select: "faivform-select-menu",
+      value: "faivform-select-value",
+      item: "faivform-select-item",
+      remove: "faivform-select-remove",
+      searchable: "faivform-select-searchable",
+      nonsearchable: "faivform-select-nonsearchable",
+      clear: "faivform-select-clear",
+      icon: "faivform-select-icon",
+      options: "faivform-select-options",
+      option: "faivform-select-option",
+      error: "faivform-select-error",
+      empty: "faivform-select-empty",
+    },
+    externals: {
+      container: styles?.container ?? ctxSelectStyles?.container,
+      label: styles?.label ?? ctxSelectStyles?.label,
+      select: styles?.select ?? ctxSelectStyles?.select,
+      value: styles?.value ?? ctxSelectStyles?.value,
+      item: styles?.item ?? ctxSelectStyles?.item,
+      remove: styles?.remove ?? ctxSelectStyles?.remove,
+      searchable: styles?.searchable ?? ctxSelectStyles?.searchable,
+      nonsearchable: styles?.nonsearchable ?? ctxSelectStyles?.nonsearchable,
+      clear: styles?.clear ?? ctxSelectStyles?.clear,
+      icon: styles?.icon ?? ctxSelectStyles?.icon,
+      options: styles?.options ?? ctxSelectStyles?.options,
+      option: styles?.option ?? ctxSelectStyles?.option,
+      error: styles?.error ?? ctxSelectStyles?.error,
+      empty: styles?.empty ?? ctxSelectStyles?.empty,
+    },
+    icons: {
+      arrow: icons?.arrow,
+    },
   });
 
   onDestroy(() => {
@@ -278,49 +266,49 @@
 
 <div
   {id}
-  bind:this={select}
-  class={fieldStyle}
-  role="menu"
-  aria-label={label}
-  tabindex={0}
+  bind:this={container}
+  class={styls.container}
+  role="presentation"
   on:click|stopPropagation={!disabled ? handleSelect : undefined}
-  on:keydown|stopPropagation={onOpenByKey}
+  on:keydown|stopPropagation={!disabled ? onOpenByKey : undefined}
   on:mouseleave|stopPropagation={active ? onHide : undefined}
-  data-disabled={disabled}
   {...datasets}
 >
-  {#if label}
-    <p
-      bind:this={labelElement}
-      class={labelStyle}
-      data-label={true}
-      role="presentation"
-    >
-      {label}
-    </p>
-  {/if}
+  <slot>
+    {#if label}
+      <p bind:this={labelElement} class={styls.label} role="presentation">
+        {label}
+      </p>
+    {/if}
+  </slot>
   <div
-    role="presentation"
-    class={selectStyle}
+    bind:this={select}
+    class={styls.select}
     class:active
     data-multiple={multiple}
-    bind:this={container}
+    data-error={!!$errors[name]}
+    aria-disabled={disabled}
+    role="menu"
+    {...disabled ? {} : { tabindex: 0 }}
   >
-    <div role="presentation" class={valueStyle} bind:this={valueBoxElement}>
-      {#if multiple && Array.isArray(showedValue)}
-        {#each showedValue as option (option.key ?? option.value)}
+    <div role="presentation" class={styls.value} bind:this={valueBoxElement}>
+      {#if multiple && Array.isArray(items)}
+        {#each items as item (item.key ?? item.value)}
           <span
             role="presentation"
-            class={itemStyle}
-            data-item-showed={true}
-            data-item-fixed={option.fixed}
+            class={styls.item}
+            data-fixed={item.fixed}
+            in:fade={{ duration: 200 }}
+            out:slide={{ duration: 250, axis: "x" }}
           >
-            {option.label}
-            {#if !option.fixed}
+            <slot name="item" {item}>
+              {item.label}
+            </slot>
+            {#if !item.fixed}
               <button
                 type="button"
-                class="svform-remove-childs {removeStyle}"
-                on:click|stopPropagation={() => onRemove(option)}
+                class="svform-remove-childs {styls.remove}"
+                on:click|stopPropagation={() => onRemove(item)}
               >
                 <slot name="remove">x</slot>
               </button>
@@ -331,28 +319,27 @@
       {#if searchable}
         <input
           type="text"
-          class={searchableStyle}
-          data-multiple={multiple}
+          class={styls.searchable}
           bind:this={searchableElement}
           bind:value={search}
           on:input={!active ? onToggle : undefined}
           {placeholder}
+          {disabled}
         />
-      {:else if !searchable && (!Array.isArray(showedValue) || showedValue.length === 0)}
-        <input
-          type="text"
-          class={searchableStyle}
-          data-multiple={multiple}
-          value={showedValue}
-          readonly
-          bind:this={searchableElement}
-          {placeholder}
-        />
+      {:else if (!searchable && !multiple) || (!searchable && Array.isArray(items) && items.length === 0)}
+        <span
+          bind:this={nonsearchableElement}
+          class={styls.nonsearchable}
+          data-placeholder={items?.length === 0 || !items}
+          role="presentation"
+        >
+          {items && items.length > 0 ? items ?? placeholder : placeholder}
+        </span>
       {/if}
       {#if $errors[name]}
         <span
           bind:this={errorElement}
-          class="svform-error-childs {errorStyle}"
+          class="svform-error-childs {styls.error}"
           role="presentation"
           transition:fade={{ duration: 200 }}
         >
@@ -365,32 +352,36 @@
     {#if showClear}
       <button
         type="button"
-        class="svform-clear-childs {clearStyle}"
+        class="svform-clear-childs {styls.clear}"
         on:click|stopPropagation={onClear}
       >
         <slot name="clear">X</slot>
       </button>
     {/if}
-    <img
-      src={styles?.arrow ?? icons?.arrow ?? `IconArrow`}
-      alt={placeholder}
-      class={iconStyle}
-      bind:this={arrowElement}
-      role="presentation"
-    />
+    <slot name="arrow">
+      <Icon
+        style={styls.icon}
+        src={styls.arrow}
+        alt={placeholder ?? ""}
+        bind:element={arrowElement}
+        component={IconArrow}
+      />
+    </slot>
     {#if active}
       <div
         role="presentation"
-        class={optionsStyle}
+        class={styls.options}
         bind:this={optionsElement}
         on:keydown|stopPropagation={onChooseByKey}
+        in:slide={{ duration: 200 }}
+        out:fade={{ duration: 180 }}
       >
-        {#each optionsToShow as option (option.key ?? option.value)}
+        {#each optionsToShow as option, index (option.key ?? option.value)}
           <span
             role="menuitem"
             aria-disabled={!!option.disabled}
             tabindex={0}
-            class="svform-option-childs {optionStyle}"
+            class="svform-option-childs {styls.option}"
             data-value={option.value}
             data-option={true}
           >
@@ -400,7 +391,7 @@
           </span>
         {/each}
         {#if optionsToShow.length === 0}
-          <span class={emptyStyle}>
+          <span class={styls.empty}>
             <slot name="empty">No options</slot>
           </span>
         {/if}
@@ -410,247 +401,368 @@
 </div>
 
 <style>
-  .svform-field {
+  :global(.faivform-select-container) {
     position: relative;
+    container: select / inline-size;
     display: block;
     box-sizing: border-box;
     width: 100%;
     z-index: 1;
   }
-  .svform-field[data-disabled="true"] {
-    pointer-events: none;
+  :global(.faivform-select-container::after) {
+    position: absolute;
+    box-sizing: inherit;
+    display: block;
+    content: "";
+    width: 100%;
+    height: calc(var(--faivform-space) / 2);
+    transform: translateX(-50%);
+    top: 100%;
+    left: 50%;
+    z-index: 0;
   }
-  .svform-field:hover {
-    cursor: pointer;
-  }
-  .svform-label {
+
+  :global(.faivform-select-label) {
     display: block;
     box-sizing: inherit;
     width: 100%;
-    margin: 0 0 5px;
-    color: var(--s-form-text);
-    font-size: 16px;
-    line-height: 18px;
-    font-family: var(--s-form-font);
+    margin-bottom: calc(var(--faivform-space) / 4);
+    color: var(--faivform-primary-text);
+    font-size: var(--faivform-space);
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    font-family: var(--faivform-primary-font);
   }
-  .svform-select {
+
+  :global(.faivform-select-menu) {
     position: relative;
     box-sizing: inherit;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0;
-    padding-right: 34px;
-    border: var(--s-form-border);
-    border-radius: var(--s-form-radius);
+    gap: calc(var(--faivform-space) / 2);
+    padding-right: calc(
+      (var(--faivform-space) * 2) + (var(--faivform-space) / 4)
+    );
+    color: var(--faivform-primary-text);
+    background-color: var(--faivform-placeholder-color);
+    border: var(--faivform-border-base);
+    border-radius: var(--faivform-radius);
     z-index: 0;
   }
-  .svform-select[data-multiple="true"] {
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 8px;
+  :global(.faivform-select-menu:is([aria-disabled="true"])) {
+    cursor: not-allowed;
+    outline: 0;
+    filter: grayscale(1) opacity(0.85);
   }
-  /* .svform-select:is(:hover, :focus, :focus-within) {
+  :global(.faivform-select-menu:is([aria-disabled="true"]) > *) {
+    pointer-events: none;
   }
-  .svform-select:is(:hover, :focus, :focus-within) > p {
-  } */
-  /* .svform-select.active > p {
-  } */
-  .svform-select.active > img {
-    transform: translateY(-50%) translateX(2px) rotateX(180deg);
+  :global(.faivform-select-menu:is([data-multiple="true"])) {
+    padding-left: calc(var(--faivform-space) / 1.5);
   }
-  .svform-value {
+  :global(
+      .faivform-select-menu:is([data-multiple="true"])
+        .faivform-select-searchable
+    ),
+  :global(
+      .faivform-select-menu:is([data-multiple="true"])
+        .faivform-select-nonsearchable
+    ) {
+    padding-left: 0;
+  }
+  :global(.faivform-select-menu:not([aria-disabled="true"]):is(:hover)) {
+    cursor: pointer;
+  }
+  :global(
+      .faivform-select-menu:not([aria-disabled="true"]):is(
+          :focus,
+          :focus-visible
+        )
+    ) {
+    outline: var(--faivform-border-base);
+    outline-color: var(--faivform-secondary-color);
+    border-color: var(--faivform-secondary-color);
+  }
+  :global(
+      .faivform-select-menu:not([aria-disabled="true"]):is([data-error="true"])
+    ),
+  :global(
+      .faivform-select-menu:not([aria-disabled="true"]):is(
+          [data-error="true"]
+        ):is(:focus, :focus-visible)
+    ) {
+    outline-color: var(--faivform-error-color);
+    border-color: var(--faivform-error-color);
+  }
+  :global(
+      .faivform-select-menu:is(:focus, :focus-visible)
+        > .faivform-select-searchable
+    ) {
+    outline: 0;
+  }
+  :global(
+      .faivform-select-menu:is(:focus, :focus-visible).active
+        > .faivform-select-options
+    ) {
+    width: calc(100% + (var(--faivform-border-width) * 4));
+    border-width: calc(var(--faivform-border-width) * 2);
+    border-color: var(--faivform-secondary-color);
+  }
+  :global(.faivform-select-menu.active > .faivform-select-icon) {
+    transform: translateY(-50%) rotateX(180deg);
+  }
+
+  :global(.faivform-select-value) {
     position: relative;
     box-sizing: inherit;
     display: flex;
     width: 100%;
+    min-height: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    margin: 0;
+    padding: calc(var(--faivform-space) / 2) 0;
     align-items: stretch;
     justify-content: flex-start;
-    gap: 4px;
+    gap: calc(var(--faivform-space) / 4);
     flex-wrap: wrap;
-    min-height: 14px;
-    margin: 0;
     z-index: 0;
   }
-  .svform-item {
+
+  :global(.faivform-select-item) {
     box-sizing: inherit;
     display: flex;
     width: max-content;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding-left: 4px;
-    background-color: var(--s-form-primary);
-    color: var(--s-form-text);
-    font-size: 14px;
-    line-height: 16px;
-    font-family: var(--s-form-font);
-    border-radius: 3px;
+    gap: calc(var(--faivform-space) / 4);
+    padding-left: calc(var(--faivform-space) / 4);
+    background-color: rgb(var(--faivform-placeholder-200) / 1);
+    color: var(--faivform-primary-text);
+    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space));
+    font-family: var(--faivform-placeholder-font);
+    border-radius: calc(var(--faivform-radius) / 2);
   }
-  .svform-item[data-item-fixed="true"] {
-    background-color: var(--s-form-primary);
-    filter: brightness(0.75);
-    padding: 0 4px;
+  :global(:root:is(.dark, [data-theme="dark"]) .faivform-select-item) {
+    background-color: rgb(var(--faivform-placeholder-400) / 1);
   }
-  .svform-remove {
+  :global(
+      :root:is(.dark, [data-theme="dark"])
+        .faivform-select-item:is([data-fixed="true"])
+    ),
+  :global(.faivform-select-item:is([data-fixed="true"])) {
+    background-color: var(--faivform-secondary-color);
+    color: var(--faivform-secondary-text);
+    padding: 0 calc(var(--faivform-space) / 4);
+  }
+
+  :global(.faivform-select-remove) {
     display: block;
     box-sizing: inherit;
-    width: 16px;
+    width: calc(var(--faivform-space) + (var(--faivform-space) / 8));
     height: 100%;
+    min-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
     margin: 0;
-    padding: 0 5px 0 4px;
-    font-size: 12px;
-    line-height: 12px;
+    padding: 0;
+    padding-bottom: calc((var(--faivform-space) / 8));
+    background-color: transparent;
+    color: var(--faivform-primary-text);
+    font-size: calc(var(--faivform-space));
+    line-height: calc(var(--faivform-space));
+    font-family: var(--faivform-placeholder-font);
+    font-weight: 500;
     border: 0;
-    border-left: 1px solid var(--s-form-placeholder);
-    border-radius: 0 3px 3px 0;
-    background-color: var(--s-form-primary);
+    border-left-color: var(--faivform-placeholder-color);
+    border-radius: 0 calc(var(--faivform-radius) / 2)
+      calc(var(--faivform-radius) / 2) 0;
+    transition: background-color 200ms linear;
+    will-change: background-color;
   }
-  .svform-remove:hover {
+  :global(.faivform-select-remove:is(:hover)) {
     cursor: pointer;
-    color: var(--s-form-text-error);
-    background-color: var(--s-form-error);
   }
-  .svform-searchable {
+  :global(.faivform-select-remove:is(:hover, :focus, :focus-visible)) {
+    color: var(--faivform-error-text);
+    outline: 0;
+    background-color: var(--faivform-error-color);
+  }
+
+  :global(.faivform-select-searchable),
+  :global(.faivform-select-nonsearchable) {
     display: block;
     box-sizing: inherit;
     flex: 1;
     width: 100%;
     min-width: 100px;
-    padding: 4px 8px;
-    color: var(--s-form-text);
-    font-size: 14px;
-    line-height: 16px;
-    font-family: var(--s-form-font);
+    min-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    padding: 0 calc(var(--faivform-space) / 1.5);
+    color: var(--faivform-primary-text);
+    background-color: var(--faivform-placeholder-color);
+    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    font-family: var(--faivform-primary-font);
+    border-top-left-radius: var(--faivform-radius);
+    border-bottom-left-radius: var(--faivform-radius);
     border: 0;
   }
-  .svform-searchable:read-only {
-    cursor: pointer;
-    border: 0;
+  :global(.faivform-select-searchable:is(:focus, :focus-visible)) {
+    outline: 0;
   }
-  .svform-searchable[data-multiple="true"] {
-    padding: 0;
+  :global(.faivform-select-nonsearchable:is([data-placeholder="true"])),
+  :global(.faivform-select-searchable::placeholder) {
+    color: var(--faivform-placeholder-text);
+    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    font-family: var(--faivform-placeholder-font);
   }
-  .svform-searchable::placeholder {
-    color: var(--s-form-placeholder);
-    font-size: 14px;
-    line-height: 16px;
-    font-family: var(--s-form-font);
-  }
-  .svform-clear {
+
+  :global(.faivform-select-clear) {
     display: block;
     box-sizing: inherit;
-    width: 16px;
-    min-width: 16px;
-    height: 100%;
-    min-height: 16px;
+    width: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    min-width: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    min-height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
     margin: 0;
     padding: 0;
-    font-size: 14px;
-    line-height: 14px;
+    background-color: transparent;
+    color: var(--faivform-primary-text);
+    font-size: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    font-weight: 500;
+    font-family: var(--faivform-error-font);
     border: 0;
-    border-radius: calc(var(--s-form-radius) / 2);
-    background-color: var(--s-form-primary);
+    border-radius: calc(var(--faivform-radius) / 2);
+    transition: background-color 200ms linear;
+    will-change: background-color;
   }
-  .svform-clear:hover {
+  :global(.faivform-select-clear:is(:hover)) {
     cursor: pointer;
-    color: var(--s-form-text-error);
-    background-color: var(--s-form-error);
   }
-  .svform-icon {
+  :global(.faivform-select-clear:is(:hover, :focus, :focus-visible)) {
+    color: var(--faivform-error-text);
+    outline: 0;
+    background-color: var(--faivform-error-color);
+  }
+
+  :global(.faivform-select-icon) {
     position: absolute;
     display: block;
     box-sizing: inherit;
-    width: 24px;
-    height: 24px;
+    width: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
     object-fit: contain;
-    top: 50%;
-    right: 8px;
-    transform: translateY(-50%) translateX(2px);
-    transition: transform 0.5s ease-in-out;
-    z-index: 0;
+    transform: translateY(-50%);
+    transition: transform 200ms linear;
     pointer-events: none;
+    top: 50%;
+    right: calc(var(--faivform-space) / 2);
+    z-index: 0;
   }
-  .svform-options {
+  :global(:root:is(.dark, [data-theme="dark"]) .faivform-select-icon) {
+    filter: invert(1);
+  }
+
+  :global(.faivform-select-options) {
     position: absolute;
     display: flex;
     box-sizing: inherit;
-    width: 100%;
+    width: calc(100% + (var(--faivform-border-width) * 2));
     max-height: 150px;
-    background-color: var(--s-form-secondary);
-    border: var(--s-form-border);
-    border-radius: 0 0 var(--s-form-radius) var(--s-form-radius);
+    background-color: var(--faivform-placeholder-color);
+    border: var(--faivform-border-base);
+    border-radius: var(--faivform-radius);
+    box-shadow: var(--faivform-shadow-base);
     overflow-y: auto;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     transform: translateX(-50%);
-    top: 100%;
+    top: calc(100% + (var(--faivform-space) / 2));
     left: 50%;
-    z-index: 0;
+    z-index: 1;
   }
-  .svform-options::-webkit-scrollbar {
-    width: 10px;
+  :global(.faivform-select-options::-webkit-scrollbar:vertical) {
+    width: calc((var(--faivform-space) / 2));
+    height: 100%;
     background-color: transparent;
   }
-  .svform-options::-webkit-scrollbar-thumb {
-    width: 10px;
-    background-color: var(--s-form-primary);
+  :global(.faivform-select-options::-webkit-scrollbar-thumb) {
+    background-color: rgb(var(--faivform-placeholder-700) / 1);
+    border-radius: var(--faivform-radius);
   }
 
-  .svform-remove-childs > *,
-  .svform-clear-childs > *,
-  .svform-error-childs > *,
-  .svform-option-childs > * {
+  :global(.faivform-select-remove-childs > *),
+  :global(.faivform-select-clear-childs > *),
+  :global(.faivform-select-error-childs > *),
+  :global(.faivform-select-option-childs > *) {
     pointer-events: none;
   }
 
-  .svform-option {
+  :global(.faivform-select-option) {
     display: block;
     box-sizing: inherit;
     width: 100%;
-    padding: 5px 10px;
-    color: var(--s-form-text);
-    font-size: 14px;
-    line-height: 16px;
-    font-family: var(--s-form-font);
+    padding: calc(var(--faivform-space) / 2) calc(var(--faivform-space) / 1.5);
+    color: var(--faivform-primary-text);
+    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    font-family: var(--faivform-primary-font);
   }
-  .svform-option[aria-disabled="true"] {
+  :global(.faivform-select-option:is([aria-disabled="true"])) {
     pointer-events: none;
   }
-  .svform-option:hover {
-    background-color: var(--s-form-primary);
+  :global(.faivform-select-option:is(:hover, :focus, :focus-visible)) {
+    color: var(--faivform-primary-text);
+    outline: 0;
+    background-color: var(--faivform-primary-color);
   }
-  .svform-option:hover > span {
-    pointer-events: none;
+  :global(
+      :root:is(.dark, [data-theme="dark"])
+        .faivform-select-option:is(:hover, :focus, :focus-visible)
+    ) {
+    color: rgb(var(--faivform-primary-900) / 1);
   }
-  .svform-empty {
+
+  :global(.faivform-select-empty) {
     display: block;
     box-sizing: inherit;
     width: 100%;
-    padding: 12px 10px;
-    color: var(--s-form-placeholder);
-    font-size: 14px;
+    color: var(--faivform-placeholder-text);
+    padding: calc(var(--faivform-space) / 2) calc(var(--faivform-space) / 1.5);
+    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    font-family: var(--faivform-primary-font);
     text-align: center;
-    line-height: 16px;
-    font-family: var(--s-form-font);
   }
-  .svform-error {
+
+  :global(.faivform-select-error) {
     position: absolute;
     display: block;
-    padding: 3px 5px;
     box-sizing: inherit;
-    background-color: var(--s-form-error);
-    color: var(--s-form-text-error);
-    font-size: 12px;
-    line-height: 12px;
-    font-family: var(--s-form-font);
+    padding: calc(var(--faivform-space) / 4);
+    background-color: var(--faivform-placeholder-color);
+    color: var(--faivform-error-color);
+    font-size: calc((var(--faivform-space) / 2) + (var(--faivform-space) / 4));
+    line-height: calc(
+      (var(--faivform-space) / 2) + (var(--faivform-space) / 4)
+    );
+    font-weight: 500;
+    font-family: var(--faivform-error-font);
+    border-radius: calc(var(--faivform-radius) / 1.5);
     transform: translateY(50%);
-    border-radius: var(--s-form-radius);
-    transform: translateY(-50%);
-    top: 50%;
+    bottom: 50%;
     right: 0;
     z-index: 0;
+  }
+
+  @container select (max-width: 450px) {
+    :global(.faivform-select-error) {
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      padding: calc(var(--faivform-space) / 4) 0;
+      transform: translateY(calc(100% + var(--faivform-space) / 4));
+    }
   }
 </style>

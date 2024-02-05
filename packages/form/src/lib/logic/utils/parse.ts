@@ -18,3 +18,7 @@ export function parseValue<T>(input: HTMLInputElement | HTMLTextAreaElement): T 
 
   return types[type as keyof typeof types] as T;
 }
+
+export function hasArray<T>(value: unknown): T[] {
+  return Array.isArray(value) ? value : [];
+}

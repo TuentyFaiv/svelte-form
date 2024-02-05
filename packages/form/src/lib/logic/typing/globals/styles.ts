@@ -24,6 +24,7 @@ export interface SelectStyles extends Omit<GeneralStyles, "input"> {
   item?: string;
   remove?: string;
   searchable?: string;
+  nonsearchable?: string;
   clear?: string;
   empty?: string;
 }

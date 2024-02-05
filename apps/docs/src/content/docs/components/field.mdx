@@ -49,8 +49,7 @@ The `Field` component by default renders a text field. You can change the type o
     | context | `string` | "form" | The context of the form. |
     | id | `string \| undefined \| null` | `null` | The id of the field. |
     | styles | [`FieldStyles`](/reference/#fieldstyles) | `{}` | The styles of the field. |
-    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | The data of the field. |
-    | a11y | [`FieldA11y`](/reference/#fielda11y) | `{}` | The accessibility attributes of the field. |
+    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
   </TabItem>
   <TabItem label="Slots">
     | Slot | Prop | Description | Available to |
@@ -58,6 +57,10 @@ The `Field` component by default renders a text field. You can change the type o
     | default | - | Customize the label of the field. | all |
     | error | `{ error: string \| null }` | Show an error message. | all |
     | icon | - | Icon of the field action  | password |
+  </TabItem>
+  <TabItem label="Events">
+    > This component has no events.
+
   </TabItem>
 </Tabs>
 

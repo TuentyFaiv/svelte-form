@@ -751,3 +751,32 @@ An interface that defines the icons of the fields.
     ```
   </TabItem>
 </Tabs>
+
+## Built-in components
+
+All types and interfaces that you have to know to use the built-in components.
+
+### SelectOption
+
+An interface that defines the select option.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | key | `string \| undefined` | The key of the option. |
+    | label | `string` | The label of the option. |
+    | value | `string` | The value of the option. |
+    | fixed | `boolean \| undefined` | Whether the option is fixed or not. |
+    | disabled | `boolean \| undefined` | Whether the option is disabled or not. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { SelectOption } from "@tuentyfaiv/svelte-form";
+
+    const option: SelectOption[] = [
+      // ... options
+    ];
+    ```
+  </TabItem>
+</Tabs>
