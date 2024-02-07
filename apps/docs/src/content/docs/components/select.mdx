@@ -27,7 +27,9 @@ By default has enabled `searchable`, `clearable` and `autoselect` options.
     <script lang="ts">
       import { Select } from "@tuentyfaiv/svelte-form";
 
-      const options = [
+      import type { SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const options: SelectOption[] = [
         { value: "1", label: "Option 1" },
         { value: "2", label: "Option 2" },
         { value: "3", label: "Option 3" },

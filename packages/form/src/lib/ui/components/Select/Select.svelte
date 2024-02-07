@@ -260,7 +260,7 @@
   });
 
   onDestroy(() => {
-    setField(name, $data[name]);
+    setField(name, undefined, false);
   });
 </script>
 
@@ -269,6 +269,7 @@
   bind:this={container}
   class={styls.container}
   role="presentation"
+  data-disabled={disabled}
   on:click|stopPropagation={!disabled ? handleSelect : undefined}
   on:keydown|stopPropagation={!disabled ? onOpenByKey : undefined}
   on:mouseleave|stopPropagation={active ? onHide : undefined}
@@ -376,7 +377,7 @@
         in:slide={{ duration: 200 }}
         out:fade={{ duration: 180 }}
       >
-        {#each optionsToShow as option, index (option.key ?? option.value)}
+        {#each optionsToShow as option (option.key ?? option.value)}
           <span
             role="menuitem"
             aria-disabled={!!option.disabled}
@@ -421,6 +422,10 @@
     left: 50%;
     z-index: 0;
   }
+  :global(.faivform-select-container:is([data-disabled="true"])) {
+    cursor: not-allowed;
+    filter: opacity(0.5);
+  }
 
   :global(.faivform-select-label) {
     display: block;
@@ -451,9 +456,8 @@
     z-index: 0;
   }
   :global(.faivform-select-menu:is([aria-disabled="true"])) {
-    cursor: not-allowed;
     outline: 0;
-    filter: grayscale(1) opacity(0.85);
+    filter: grayscale(1);
   }
   :global(.faivform-select-menu:is([aria-disabled="true"]) > *) {
     pointer-events: none;

@@ -16,3 +16,7 @@ export { default as SelectDisabled } from "./SelectDisabled/SelectDisabled.astro
 export { default as SelectNonClearable } from "./SelectNonClearable/SelectNonClearable.astro";
 export { default as SelectNonSearchable } from "./SelectNonSearchable/SelectNonSearchable.astro";
 export { default as SelectNonSearchableMultiple } from "./SelectNonSearchableMultiple/SelectNonSearchableMultiple.astro";
+// Option examples
+export { default as OptionSingle } from "./OptionSingle/OptionSingle.astro";
+export { default as OptionMultiple } from "./OptionMultiple/OptionMultiple.astro";
+export { default as OptionDisabled } from "./OptionDisabled/OptionDisabled.astro";

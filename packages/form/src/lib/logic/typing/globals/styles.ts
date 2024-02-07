@@ -31,7 +31,8 @@ export interface SelectStyles extends Omit<GeneralStyles, "input"> {
 
 export interface OptionStyles extends Omit<GeneralStyles, "icon"> {
   content?: string;
-  options?: string;
+  legend?: string;
+  option?: string;
 }
 
 export interface FileStyles extends Omit<GeneralStyles, "icon"> {

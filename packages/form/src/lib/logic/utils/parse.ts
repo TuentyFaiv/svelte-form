@@ -4,7 +4,7 @@ export function parseValue<T>(input: HTMLInputElement | HTMLTextAreaElement): T 
   const types = {
     number: Number.isNaN(parseFloat(value)) ? null : parseFloat(value),
     text: value,
-    checkbox: input instanceof HTMLInputElement ? input.checked : value,
+    checkbox: (input as HTMLInputElement).checked,
     date: value, // TODO: parse to Date
     email: value,
     month: value, // TODO: parse to Date
@@ -14,6 +14,7 @@ export function parseValue<T>(input: HTMLInputElement | HTMLTextAreaElement): T 
     time: value, // TODO: parse to Date
     url: value,
     textarea: value,
+    radio: value,
   };
 
   return types[type as keyof typeof types] as T;

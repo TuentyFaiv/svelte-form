@@ -656,8 +656,9 @@ An interface that defines the option styles.
   <TabItem label="Definition">
     | Property | Type | Description |
     | -------- | ---- | ----------- |
-    | options | `string \| undefined` | Option options class |
-    | container | `string \| undefined` | Option container class |
+    | container | `string \| undefined` | Options container class |
+    | legend | `string \| undefined` | Options label class |
+    | option | `string \| undefined` | Option class |
     | label | `string \| undefined` | Option label class |
     | input | `string \| undefined` | Option input class |
     | content | `string \| undefined` | Option content class |
@@ -774,8 +775,32 @@ An interface that defines the select option.
     ```typescript
     import type { SelectOption } from "@tuentyfaiv/svelte-form";
 
-    const option: SelectOption[] = [
-      // ... options
+    const options: SelectOption[] = [
+      // ... options list
+    ];
+    ```
+  </TabItem>
+</Tabs>
+
+### OptionItem
+
+An interface that defines the option item.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | key | `string \| undefined` | The key of the option. |
+    | label | `string \| undefined` | The label of the option. |
+    | value | `string` | The value of the option. |
+    | disabled | `boolean \| undefined` | Whether the option is disabled or not. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { OptionItem } from "@tuentyfaiv/svelte-form";
+
+    const options: OptionItem[] = [
+      // ... options list
     ];
     ```
   </TabItem>

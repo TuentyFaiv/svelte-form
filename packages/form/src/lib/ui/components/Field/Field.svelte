@@ -47,10 +47,6 @@
     }
   }
 
-  function onCheck({ currentTarget }: UserEvent<HTMLInputElement>) {
-    setField(name, currentTarget.checked);
-  }
-
   $: datasets = generateDatas(datas);
 
   $: styls = getStyles<Exclude<Props["styles"], undefined>>({
@@ -130,7 +126,7 @@
       bind:this={input}
       checked={$data[name] ?? false}
       data-error={!!$errors[name]}
-      on:change={onCheck}
+      on:change={check}
       on:keydown={onChecked}
       {name}
       {...$$restProps}
@@ -174,13 +170,13 @@
       </slot>
     </button>
   {/if}
-  {#if $errors[name]}
-    <slot name="error" error={$errors[name]}>
+  <slot name="error" error={$errors[name]}>
+    {#if $errors[name]}
       <span class={styls.error} transition:fade={{ duration: 200 }}>
         {$errors[name]}
       </span>
-    </slot>
-  {/if}
+    {/if}
+  </slot>
 </label>
 
 <style>

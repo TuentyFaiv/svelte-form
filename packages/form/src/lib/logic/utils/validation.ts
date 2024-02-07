@@ -280,7 +280,7 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
     ): ParsedArray | null | undefined | SchemaError => {
       const { item, required, min, max } = fieldSchema;
 
-      const isEmpty = typeof value === "undefined" || value === null;
+      const isEmpty = typeof value === "undefined" || value === null || (Array.isArray(value) && value.length === 0);
 
       const error = { field: String(field), schema: fieldSchema, value };
 

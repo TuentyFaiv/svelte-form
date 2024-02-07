@@ -5,4 +5,192 @@ sidebar:
   order: 4
 ---
 
-You can use the `Option` component to render a list of options.
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import {
+  OptionSingle,
+  OptionMultiple,
+  OptionDisabled,
+} from "@molecules";
+
+The `Option` component is a field to select an option from a list of options. It can be used to select a single option or multiple options.
+
+<Tabs>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { Option } from "@tuentyfaiv/svelte-form";
+
+      import type { OptionItem } from "@tuentyfaiv/svelte-form";
+
+      const options: OptionItem[] = [
+        { value: "1", label: "Option 1" },
+        { value: "2", label: "Option 2" },
+        { value: "3", label: "Option 3" },
+      ];
+    </script>
+
+    <Option name="name" label="Options" {options} />
+    <!-- Or -->
+    <Option name="name" label="Options" {options} >
+      Custom label, Options
+      <p slot="option" let:option>
+        Customized option label
+        {option.label}
+      </p>
+      <span slot="content">
+        Add some content
+      </span>
+      <span slot="error" let:error>
+        {formatError(error)}
+      </span>
+    </Option>
+    ```
+  </TabItem>
+  <TabItem label="Props">
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | name | `string` | - | The name of the field. |
+    | label | `string \| undefined \| null` | `null` | The label of the field. |
+    | context | `string` | "form" | The context of the form. |
+    | id | `string \| undefined \| null` | `null` | The id of the field. |
+    | multiple | `boolean \| undefined` | `false` | Enable or disable multiple option. |
+    | disabled | `boolean \| undefined` | `false` | Enable or disable the field. |
+    | options | [`OptionItem`](/reference/#optionitem)`[]` | `[]` | The options of the field. |
+    | styles | [`OptionStyles`](/reference/#optionstyles) | `{}` | The styles of the field. |
+    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
+  </TabItem>
+  <TabItem label="Slots">
+    | Slot | Prop | Description | Available to |
+    |------|------|-------------|--------------|
+    | default | - | Customize the label of the field. | all |
+    | option | `{ option: `[`OptionItem`](/reference/#optionitem)`; id: string; }` | Customize the option of the field. | all |
+    | content | `{ option: `[`OptionItem`](/reference/#optionitem)`; id: string; }` | Add some content to the field. | all |
+    | error | `{ error: string \| null }` | Show an error message. | all |
+  </TabItem>
+  <TabItem label="Events">
+    | Name | Type | Description |
+    |------|------|-------------|
+    | choose | `CustomEvent<`[`OptionItem`](/reference/#optionitem)`> ` | The event emitted when the user choose an option. |
+  </TabItem>
+</Tabs>
+
+## Single
+
+<Tabs>
+  <TabItem label="Example">
+    <OptionSingle />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Option, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, OptionItem } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        hobby: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: OptionItem[] = [
+        { value: "swimming", label: "Swimming" },
+        { value: "reading", label: "Reading" },
+        { value: "running", label: "Running" },
+        { value: "cycling", label: "Cycling" },
+        { value: "gaming", label: "Gaming" },
+        { value: "cooking", label: "Cooking" },
+      ];
+    </script>
+
+    <Option name="hobby" label="Select your hobby:" {options} />
+    ```
+  </TabItem>
+</Tabs>
+
+## Multiple
+
+<Tabs>
+  <TabItem label="Example">
+    <OptionMultiple />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Option, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, OptionItem } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        hobbies: {
+          type: "array",
+          required: true,
+          max: 3,
+          item: {
+            type: "string",
+            required: true,
+          },
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: OptionItem[] = [
+        { value: "swimming", label: "Swimming" },
+        { value: "reading", label: "Reading" },
+        { value: "running", label: "Running" },
+        { value: "cycling", label: "Cycling" },
+        { value: "gaming", label: "Gaming" },
+        { value: "cooking", label: "Cooking" },
+      ];
+    </script>
+
+    <Option
+      name="hobbies"
+      label="Select your hobbies:"
+      {options}
+      multiple
+    />
+    ```
+  </TabItem>
+</Tabs>
+
+## Disabled
+
+<Tabs>
+  <TabItem label="Example">
+    <OptionDisabled />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Option, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, OptionItem } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        hobby: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: OptionItem[] = [
+        { value: "swimming", label: "Swimming" },
+        { value: "reading", label: "Reading" },
+        { value: "running", label: "Running" },
+        { value: "cycling", label: "Cycling" },
+        { value: "gaming", label: "Gaming" },
+        { value: "cooking", label: "Cooking" },
+      ];
+    </script>
+
+    <Option name="hobby" label="Select your hobby:" {options} disabled />
+    ```
+  </TabItem>
+</Tabs>
