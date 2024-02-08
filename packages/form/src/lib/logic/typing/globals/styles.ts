@@ -45,7 +45,7 @@ export interface FileStyles extends Omit<GeneralStyles, "icon"> {
 }
 
 export interface ErrorsStyles {
-  list?: string;
+  container?: string;
   item?: string;
 }
 

@@ -629,6 +629,7 @@ An interface that defines the select styles.
     | item | `string \| undefined` | Select item class |
     | remove | `string \| undefined` | Select remove class |
     | searchable | `string \| undefined` | Select searchable class |
+    | nonsearchable | `string \| undefined` | Select nonsearchable class |
     | error | `string \| undefined` | Select error class |
     | clear | `string \| undefined` | Select clear class |
     | arrow | `string \| undefined` | Select arrow icon |
@@ -683,15 +684,16 @@ An interface that defines the file styles.
   <TabItem label="Definition">
     | Property | Type | Description |
     | -------- | ---- | ----------- |
-    | wrapper | `string \| undefined` | Option wrapper class |
-    | cover | `string \| undefined` | Option cover class |
-    | remove | `string \| undefined` | Option remove class |
-    | item | `string \| undefined` | Option item class |
-    | error | `string \| undefined` | Option error class |
-    | retry | `string \| undefined` | Option retry class |
-    | container | `string \| undefined` | Option container class |
-    | label | `string \| undefined` | Option label class |
-    | input | `string \| undefined` | Option input class |
+    | container | `string \| undefined` | File container class |
+    | item | `string \| undefined` | File item class |
+    | cover | `string \| undefined` | File cover class |
+    | remove | `string \| undefined` | File remove class |
+    | items | `string \| undefined` | File items class |
+    | retry | `string \| undefined` | File retry class |
+    | content | `string \| undefined` | File content class |
+    | label | `string \| undefined` | File label class |
+    | input | `string \| undefined` | File input class |
+    | error | `string \| undefined` | File error class |
   </TabItem>
   <TabItem label="Usage">
     ```typescript
@@ -712,7 +714,7 @@ An interface that defines the errors styles.
   <TabItem label="Definition">
     | Property | Type | Description |
     | -------- | ---- | ----------- |
-    | list | `string \| undefined` | Errors list class |
+    | container | `string \| undefined` | Errors list class |
     | item | `string \| undefined` | Errors item class |
   </TabItem>
   <TabItem label="Usage">

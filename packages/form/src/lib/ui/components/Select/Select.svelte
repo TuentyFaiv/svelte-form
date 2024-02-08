@@ -337,18 +337,6 @@
           {items && items.length > 0 ? items ?? placeholder : placeholder}
         </span>
       {/if}
-      {#if $errors[name]}
-        <span
-          bind:this={errorElement}
-          class="svform-error-childs {styls.error}"
-          role="presentation"
-          transition:fade={{ duration: 200 }}
-        >
-          <slot name="error" error={$errors[name]}>
-            {$errors[name]}
-          </slot>
-        </span>
-      {/if}
     </div>
     {#if showClear}
       <button
@@ -399,6 +387,18 @@
       </div>
     {/if}
   </div>
+  <slot name="error" error={$errors[name]}>
+    {#if $errors[name]}
+      <span
+        bind:this={errorElement}
+        class="svform-error-childs {styls.error}"
+        role="presentation"
+        transition:fade={{ duration: 200 }}
+      >
+        {$errors[name]}
+      </span>
+    {/if}
+  </slot>
 </div>
 
 <style>
@@ -754,8 +754,10 @@
     font-family: var(--faivform-error-font);
     border-radius: calc(var(--faivform-radius) / 1.5);
     transform: translateY(50%);
-    bottom: 50%;
-    right: 0;
+    bottom: calc(
+      ((var(--faivform-space) * 2) + (var(--faivform-space) / 4)) / 2
+    );
+    right: calc((var(--faivform-space) * 2) + (var(--faivform-space) / 4));
     z-index: 0;
   }
 

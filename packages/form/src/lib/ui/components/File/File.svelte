@@ -273,14 +273,14 @@
           </p>
         {/if}
       </slot>
-      <slot name="error" error={$errors[name]}>
-        {#if $errors[name]}
-          <span class={styls.error} transition:fade={{ duration: 200 }}>
-            {$errors[name]}
-          </span>
-        {/if}
-      </slot>
     </label>
+    <slot name="error" error={$errors[name]}>
+      {#if $errors[name]}
+        <span class={styls.error} transition:fade={{ duration: 200 }}>
+          {$errors[name]}
+        </span>
+      {/if}
+    </slot>
   {/if}
 </div>
 

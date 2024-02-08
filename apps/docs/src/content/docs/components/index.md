@@ -82,35 +82,26 @@ Usefull for displaying errors from the form.
 <Errors />
 ```
 
-## [Color](/components/color)
-
-Usefull for color inputs.
+## Comming soon
 
 :::note
-This component is under development. It will be available in the next release.
+The following components are not yet implemented, but they are planned to be implemented in the future.
 :::
 
+- ### Color
 
-## [Date](/components/date)
+  Usefull for color inputs.
 
-Usefull for date, datetime-local, month, time and week inputs.
 
-:::note
-This component is under development. It will be available in the next release.
-:::
+- ### Date
 
-## [Date Range](/components/date-range)
+  Usefull for date, datetime-local, month, time and week inputs.
 
-Usefull for date range inputs.
+- ### Date
 
-:::note
-This component is under development. It will be available in the next release.
-:::
+  Usefull for date range inputs.
 
-## [Range](/components/range)
 
-Usefull for range inputs.
+- ### Range
 
-:::note
-This component is under development. It will be available in the next release.
-:::
+  Usefull for range inputs.

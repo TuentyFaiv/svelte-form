@@ -1,72 +1,74 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
   import { useForm } from "$lib/index.js";
-  import { getStyle } from "$lib/logic/utils/styles.js";
+  import { getStyles } from "$lib/logic/utils/styles.js";
 
   import type { Props } from "./Errors.proptypes.js";
 
+  type $$Props = Props;
+
   export let context: Props["context"] = "form";
-  export let show: Props["show"] = true;
+  export let id: Props["id"] = null;
+  export let styles: Props["styles"] = {};
+  export let datas: Props["datas"] = {};
 
   $: form = useForm(context);
-  $: ({ errors, styles: cxtStyles } = $form);
-  $: ({ errors: styles, replace } = $cxtStyles);
+  $: ({ errors, styles: ctxStyles } = $form);
+  $: ({ errors: ctxErrorStyles, replace } = $ctxStyles);
 
-  $: showErrors =
-    show && Object.values($errors).some((error) => error !== null);
+  $: show = Object.values($errors).some((error) => error !== null);
 
-  $: list = Object.keys($errors).map((field) => ({
-    field,
-    error: $errors[field],
-  }));
-
-  $: listStyle = getStyle({
+  $: styls = getStyles<Exclude<Props["styles"], undefined>>({
     replace,
-    style: "svform-list",
-    external: styles?.list,
-  });
-  $: itemStyle = getStyle({
-    replace,
-    style: "svform-item",
-    external: styles?.item,
+    internals: {
+      container: "faivform-errors-container",
+      item: "faivform-errors-item",
+    },
+    externals: {
+      container: styles?.container ?? ctxErrorStyles?.container,
+      item: styles?.item ?? ctxErrorStyles?.item,
+    },
   });
 </script>
 
-{#if showErrors}
-  <ul class={listStyle}>
-    {#each list as { field, error }, index (`${field}-list-${index}`)}
-      {#if error !== null}
-        <li class={itemStyle}>
-          <slot name="error" {error} {field}>
+{#if show}
+  <ul class={styls.container} {...datas} {id}>
+    {#each Object.entries($errors) as [field, error], index (`${field}-list-${index}`)}
+      <slot {error} {field}>
+        {#if error !== null}
+          <li class={styls.item} transition:fade={{ duration: 200 }}>
             {`${field}: ${error}`}
-          </slot>
-        </li>
-      {/if}
+          </li>
+        {/if}
+      </slot>
     {/each}
   </ul>
 {/if}
 
 <style>
-  .svform-list {
-    display: flex;
+  :global(.faivform-errors-container) {
     box-sizing: border-box;
-    margin: 16px 0 0;
+    display: flex;
+    margin: var(--faivform-space) 0 0;
     padding: 0;
-    gap: 6px;
+    gap: calc(var(--faivform-space) / 4);
     list-style: none;
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .svform-item {
+  :global(.faivform-errors-item) {
+    box-sizing: inherit;
     display: block;
+    width: 100%;
     margin: 0;
-    padding: 3px 5px;
-    background-color: var(--s-form-error);
-    border-radius: var(--s-form-radius);
-    color: var(--s-form-text-error);
-    font-size: 12px;
-    line-height: 12px;
-    font-family: system-ui, sans-serif;
+    padding: calc(var(--faivform-space) / 2) calc(var(--faivform-space) / 1.5);
+    background-color: var(--faivform-error-color);
+    color: var(--faivform-error-text);
+    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    font-family: var(--faivform-placeholder-font);
+    border-radius: var(--faivform-radius);
   }
 </style>

@@ -26,3 +26,5 @@ export { default as FileSinglePdf } from "./FileSinglePdf/FileSinglePdf.astro";
 export { default as FileMultiple } from "./FileMultiple/FileMultiple.astro";
 export { default as FileMultiplePdf } from "./FileMultiplePdf/FileMultiplePdf.astro";
 export { default as FileDisabled } from "./FileDisabled/FileDisabled.astro";
+// Errors examples
+export { default as Errors } from "./Errors/Errors.astro";
