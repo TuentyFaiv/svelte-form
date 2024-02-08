@@ -5,5 +5,217 @@ sidebar:
   order: 5
 ---
 
-You can use the `File` component to render a file input.
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import {
+  FileSingle,
+  FileMultiple,
+  FileSinglePdf,
+  FileMultiplePdf,
+  FileDisabled,
+} from "@molecules";
 
+You can use the `File` to handle file inputs. It supports single and multiple files.
+
+<Tabs>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { File } from "@tuentyfaiv/svelte-form";
+    </script>
+
+    <File name="cover" />
+    <!-- Or -->
+    <File name="cover">
+      Custom label
+      <p slot="preview">
+        Custom preview
+      </p>
+      <span slot="retry">
+        Retry
+      </span>
+      <span slot="error" let:error>
+        {formatError(error)}
+      </span>
+    </File>
+    ```
+  </TabItem>
+  <TabItem label="Props">
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | name | `string` | - | The name of the field. |
+    | label | `string \| undefined \| null` | "Drag and drop a file here, or click to select a file to upload." | The label of the field. |
+    | context | `string` | "form" | The context of the form. |
+    | id | `string \| undefined \| null` | `null` | The id of the field. |
+    | dragable | `boolean` | `true` | If the field is dragable. |
+    | multiple | `boolean` | `false` | If the field is multiple. |
+    | disabled | `boolean` | `false` | If the field is disabled. |
+    | accept | `string` | "image/*" | The accept of the field. |
+    | max | `number` | `Infinity` | The max size of each file. |
+    | styles | [`FileStyles`](/reference/#filestyles) | `{}` | The styles of the field. |
+    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
+  </TabItem>
+  <TabItem label="Slots">
+    | Slot | Prop | Description | Available to |
+    |------|------|-------------|--------------|
+    | default | - | Customize the label of the field. | all |
+    | preview | `{ cover: \{ src: string; alt: string; \} \| null; file: File; }` | Customize the preview of the field. | all |
+    | remove | - | Customize the remove action. | all |
+    | retry | - | Customize the retry action. | all |
+    | error | `{ error: string \| null }` | Show an error message. | all |
+  </TabItem>
+  <TabItem label="Events">
+    | Name | Type | Description |
+    |------|------|-------------|
+    | choose | `CustomEvent<File \| File[]>` | The event emitted when the user choose a file. |
+    | remove | `CustomEvent<void>` | The event emitted when the user remove a file. |
+    | retry | `CustomEvent<void>` | The event emitted when the user retry a file. |
+  </TabItem>
+</Tabs>
+
+## Single image
+
+<Tabs>
+  <TabItem label="Example">
+    <FileSingle />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { File, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        avatar: {
+          type: "file",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <File name="avatar" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Multiple images
+
+<Tabs>
+  <TabItem label="Example">
+    <FileMultiple />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { File, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        covers: {
+          type: "array",
+          required: true,
+          item: {
+            type: "file",
+            required: true,
+          },
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <File name="covers" multiple />
+    ```
+  </TabItem>
+</Tabs>
+
+## Single not image
+
+<Tabs>
+  <TabItem label="Example">
+    <FileSinglePdf />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { File, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        document: {
+          type: "file",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <File name="document" accept=".pdf" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Multiple not images
+
+<Tabs>
+  <TabItem label="Example">
+    <FileMultiplePdf />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { File, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        documents: {
+          type: "array",
+          required: true,
+          item: {
+            type: "file",
+            required: true,
+          },
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <File name="documents" multiple accept=".pdf" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Disabled
+
+<Tabs>
+  <TabItem label="Example">
+    <FileDisabled />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { File, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        profile: {
+          type: "file",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <File name="profile" disabled />
+    ```
+  </TabItem>
+</Tabs>

@@ -20,3 +20,9 @@ export { default as SelectNonSearchableMultiple } from "./SelectNonSearchableMul
 export { default as OptionSingle } from "./OptionSingle/OptionSingle.astro";
 export { default as OptionMultiple } from "./OptionMultiple/OptionMultiple.astro";
 export { default as OptionDisabled } from "./OptionDisabled/OptionDisabled.astro";
+// File examples
+export { default as FileSingle } from "./FileSingle/FileSingle.astro";
+export { default as FileSinglePdf } from "./FileSinglePdf/FileSinglePdf.astro";
+export { default as FileMultiple } from "./FileMultiple/FileMultiple.astro";
+export { default as FileMultiplePdf } from "./FileMultiplePdf/FileMultiplePdf.astro";
+export { default as FileDisabled } from "./FileDisabled/FileDisabled.astro";

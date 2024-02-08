@@ -36,10 +36,11 @@ export interface OptionStyles extends Omit<GeneralStyles, "icon"> {
 }
 
 export interface FileStyles extends Omit<GeneralStyles, "icon"> {
-  wrapper?: string;
+  content?: string;
   retry?: string;
   cover?: string;
   remove?: string;
+  items?: string;
   item?: string;
 }
 

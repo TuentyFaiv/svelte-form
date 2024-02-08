@@ -188,7 +188,9 @@
     width: 100%;
     z-index: 0;
   }
-  :global(.faivform-field-container[data-type="password"] > span) {
+  :global(
+      .faivform-field-container[data-type="password"] > .faivform-field-error
+    ) {
     right: calc(var(--faivform-space) * 2.5);
   }
   :global(.faivform-field-container[data-type="checkbox"]) {
@@ -297,7 +299,7 @@
   :global(.faivform-field-checkbox + p) {
     margin-bottom: 0;
   }
-  :global(.faivform-field-checkbox ~ span) {
+  :global(.faivform-field-checkbox ~ .faivform-field-error) {
     transform: translateY(120%);
     left: 0;
     right: auto;
@@ -368,7 +370,9 @@
   }
 
   @container field (max-width: 450px) {
-    :global(.faivform-field-container[data-type="password"] > span) {
+    :global(
+        .faivform-field-container[data-type="password"] > .faivform-field-error
+      ) {
       right: 0;
     }
     :global(.faivform-field-error) {

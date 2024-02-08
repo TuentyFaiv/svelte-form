@@ -424,7 +424,7 @@
   }
   :global(.faivform-select-container:is([data-disabled="true"])) {
     cursor: not-allowed;
-    filter: opacity(0.5);
+    filter: grayscale(1) opacity(0.5);
   }
 
   :global(.faivform-select-label) {
@@ -457,7 +457,6 @@
   }
   :global(.faivform-select-menu:is([aria-disabled="true"])) {
     outline: 0;
-    filter: grayscale(1);
   }
   :global(.faivform-select-menu:is([aria-disabled="true"]) > *) {
     pointer-events: none;
@@ -537,7 +536,7 @@
     display: flex;
     width: max-content;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: calc(var(--faivform-space) / 4);
     padding-left: calc(var(--faivform-space) / 4);
     background-color: rgb(var(--faivform-placeholder-200) / 1);
