@@ -413,10 +413,10 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
     };
 
     initial = () => {
-      const start = Object.keys(this.#schema).reduce((acc, key) => ({
+      const start = Object.entries(this.#schema).reduce((acc, [key, three]) => ({
         fields: {
           ...acc.fields,
-          [key]: resolveDeep(this.#schema[key]),
+          [key]: resolveDeep(three),
         },
         errors: {
           ...acc.errors,

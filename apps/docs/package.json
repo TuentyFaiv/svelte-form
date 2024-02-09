@@ -17,6 +17,7 @@
     "@astrojs/tailwind": "^5.1.0",
     "@astrojs/vercel": "^6.1.2",
     "@faivform/builtin": "workspace:^",
+    "@faivform/zod": "workspace:^",
     "@tuentyfaiv/svelte-form": "workspace:^",
     "astro": "^4.0.1",
     "sharp": "^0.32.5",

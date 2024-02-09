@@ -1,6 +1,7 @@
 export { faivform, useForm, setConfig } from "./logic/stores/index.js";
 export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
 export { FormError, SchemaError, SchemaErrorList } from "./logic/utils/errors.js";
+export { Adapter } from "./logic/typing/stores/form.js";
 
 // Global types
 export type {
@@ -32,7 +33,6 @@ export type {
   // Faivform config
   FaivFormConfig,
   FaivFormStore,
-  Adapter,
   Context,
   ContextForm,
   // Submit config
@@ -40,3 +40,8 @@ export type {
   SubmitAction,
   SubmitConfig,
 } from "./logic/typing/stores/form.js";
+
+// Faivform utils types
+export type {
+  Errors as DataErrors,
+} from "./logic/typing/utils/errors.js";
