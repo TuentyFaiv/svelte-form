@@ -1,0 +1,71 @@
+---
+interface Props {
+  color: string;
+  value?: number;
+  border?: boolean;
+}
+
+const { value, color: bg, border } = Astro.props;
+
+// Convert color from RGBA to RGB by removing alpha component
+const [r, g, b] = bg.substring(bg.indexOf('(') + 1, bg.lastIndexOf(')')).split(',');
+
+// Normalize RGB values
+const normalizedR = parseFloat(r!.trim()) / 255;
+const normalizedG = parseFloat(g!.trim()) / 255;
+const normalizedB = parseFloat(b!.trim()) / 255;
+
+// Calculate relative luminance
+const luminance = 0.2126 * normalizedR + 0.7152 * normalizedG + 0.0722 * normalizedB;
+
+// Choose white or black text color based on luminance
+const color = luminance > 0.5 ? '#000000' : '#ffffff';
+---
+
+<p class="palette">
+  {value ? (
+    <span class="palette__value">
+      {value}:
+    </span>
+  ) : null}
+  <span class="palette__color" style={{ backgroundColor: bg, color, }} data-border={border}>
+    <span>{r}</span>
+    <span>{g}</span>
+    <span>{b}</span>
+  </span>
+</p>
+
+
+<style>
+  .palette {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    margin: 0 !important;
+    overflow: hidden;
+    &__value {
+      display: block;
+      min-width: 2.35rem;
+    }
+    &__color {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      min-width: 125px;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+      &[data-border] {
+        border: 1px solid black;
+      }
+      & > span {
+        display: block;
+        flex: 1;
+      }
+    }
+  }
+</style>

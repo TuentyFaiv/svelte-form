@@ -1,7 +1,7 @@
 {
   "name": "@tuentyfaiv/svelte-form",
-  "description": "A forms management library for svelte inspired by Formik",
-  "version": "0.2.18",
+  "description": "A form library for Svelte. It is built on top of Svelte and Typescript. Inspired by Formik and React Hook Form.",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev:web": "vite dev",
@@ -21,7 +21,9 @@
     "Svelte",
     "Form",
     "UI",
-    "Inputs"
+    "Inputs",
+    "Faivform",
+    "TuentyFaiv"
   ],
   "author": "Tonalli López <contact@tuentyfaiv.com>",
   "license": "MIT",
@@ -42,31 +44,26 @@
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "peerDependencies": {
-    "svelte": "^4.0.0",
-    "yup": "^1.2.0"
+    "svelte": "^4.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.36.0",
+    "@playwright/test": "^1.41.2",
     "@repo/eslint-config": "workspace:*",
-    "@sveltejs/adapter-vercel": "^3.0.2",
-    "@sveltejs/kit": "^1.22.3",
-    "@sveltejs/package": "^2.2.3",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.44.0",
-    "eslint-import-resolver-node": "^0.3.7",
-    "eslint-module-utils": "^2.8.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-scope": "^7.2.0",
-    "eslint-visitor-keys": "^3.4.1",
-    "publint": "^0.2.4",
-    "svelte": "^4.2.8",
-    "svelte-check": "^3.4.6",
-    "tslib": "^2.6.0",
-    "typescript": "^5.1.6",
-    "vite": "^4.5.1",
-    "vitest": "^0.34.6",
-    "yup": "^1.2.0"
+    "@sveltejs/adapter-auto": "^3.1.1",
+    "@sveltejs/kit": "^2.5.0",
+    "@sveltejs/package": "^2.2.6",
+    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "@types/eslint": "8.56.2",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "publint": "^0.2.7",
+    "svelte": "^4.2.10",
+    "svelte-check": "^3.6.4",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.0",
+    "vitest": "^1.2.2"
   },
   "engines": {
     "npm": ">=8.0.0",
@@ -75,12 +72,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TuentyFaiv/svelte-form.git"
+    "url": "git+https://github.com/TuentyFaiv/svelte-form/tree/main/packages/form"
   },
   "bugs": {
     "url": "https://github.com/TuentyFaiv/svelte-form/issues"
   },
-  "homepage": "https://github.com/TuentyFaiv/svelte-form#readme",
+  "homepage": "https://forms.tuentyfaiv.com/",
   "directories": {
     "test": "tests"
   }

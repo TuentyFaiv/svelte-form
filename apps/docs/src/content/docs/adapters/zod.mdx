@@ -1,0 +1,86 @@
+---
+title: Zod
+description: An adapter for using Zod with FaivForm
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import {
+  ZodAdapter,
+} from "@organisms";
+
+Zod is a TypeScript-first schema declaration and validation library. It is a library that allows you to define a schema for your data and validate it.
+
+### Installation
+
+<Tabs>
+  <TabItem label="pnpm">
+    ```bash frame="none" 
+    pnpm add @faivform/zod zod
+    ```
+  </TabItem>
+  <TabItem label="npm">
+    ```bash frame="none" 
+    npm install @faivform/zod zod
+    ```
+  </TabItem>
+</Tabs>
+
+### Usage
+
+You need to create a schema using Zod and then pass it through the adapter to the `faivform` function.
+
+<Tabs>
+  <TabItem label="TS">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+      import { adapter } from "@faivform/zod";
+      import { z } from "zod";
+
+      const schema = z.object({
+        name: z.string(),
+        age: z.number(),
+        email: z.string().email(),
+      });
+
+      type Schema = typeof schema;
+      type Fields = z.infer<Schema>;
+
+      const form = faivform<Schema, Fields>({ fields: adapter(schema) });
+
+      // ... rest of the code
+    </script>
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```svelte
+    <script>
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+      import { adapter } from "@faivform/zod";
+      import { z } from "zod";
+
+      const schema = z.object({
+        name: z.string(),
+        age: z.number(),
+        email: z.string().email(),
+      });
+
+      const form = faivform({ fields: adapter(schema) });
+
+      // ... rest of the code
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+### Example
+
+<Tabs>
+  <TabItem label="Component">
+    <ZodAdapter />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    ```
+  </TabItem>
+</Tabs>

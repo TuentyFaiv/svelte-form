@@ -5,4 +5,403 @@ sidebar:
   order: 3
 ---
 
-You can use the `Select` component to render a select input.
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import {
+  SelectSingle,
+  SelectMultiple,
+  SelectMultipleFixed,
+  SelectFixed,
+  SelectNonSearchable,
+  SelectNonSearchableMultiple,
+  SelectNonClearable,
+  SelectDisabled,
+} from "@molecules";
+
+You can use the `Select` component to render a select input. This component is for single and multiple select inputs.
+
+By default has enabled `searchable`, `clearable` and `autoselect` options.
+
+<Tabs>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { Select } from "@tuentyfaiv/svelte-form";
+
+      import type { SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const options: SelectOption[] = [
+        { value: "1", label: "Option 1" },
+        { value: "2", label: "Option 2" },
+        { value: "3", label: "Option 3" },
+      ];
+    </script>
+
+    <Select name="name" label="Options" {options} />
+    <!-- Or -->
+    <Select name="name" label="Options" {options} >
+      Custom label, Options
+      <img src="/icon-clear.svg" alt="clear options" slot="clear" />
+      <img src="/icon-arrow.svg" alt="show/hide options" slot="arrow" />
+      <p slot="option" let:option>
+        Customized option
+        {option.label}
+      </p>
+      <span slot="empty">
+        Customized empty
+      </span>
+      <span slot="error" let:error>
+        {formatError(error)}
+      </span>
+    </Select>
+    ```
+  </TabItem>
+  <TabItem label="Props">
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | name | `string` | - | The name of the field. |
+    | label | `string \| undefined \| null` | `null` | The label of the field. |
+    | placeholder | `string \| undefined \| null` | `""` | The placeholder of the field. |
+    | context | `string` | "form" | The context of the form. |
+    | id | `string \| undefined \| null` | `null` | The id of the field. |
+    | autoselect | `boolean \| undefined` | `true` | Enable or disable the autoselect option. |
+    | searchable | `boolean \| undefined` | `true` | Enable or disable the searchable option. |
+    | clearable | `boolean \| undefined` | `true` | Enable or disable the clearable action. |
+    | multiple | `boolean \| undefined` | `false` | Enable or disable multiple select. |
+    | disabled | `boolean \| undefined` | `false` | Enable or disable the field. |
+    | options | [`SelectOption`](/reference/#selectoption)`[]` | `[]` | The options of the field. |
+    | styles | [`SelectStyles`](/reference/#selectstyles) | `{}` | The styles of the field. |
+    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
+  </TabItem>
+  <TabItem label="Slots">
+    | Slot | Prop | Description | Available to |
+    |------|------|-------------|--------------|
+    | default | - | Customize the label of the field. | all |
+    | clear | - | Customize the clear action. | all |
+    | arrow | - | Customize the arrow action. | all |
+    | item | `{ item: `[`SelectOption`](/reference/#selectoption)` }` | Customize the item selected. | multiple |
+    | remove | - | Customize the item remove action. | multiple |
+    | option | `{ option: `[`SelectOption`](/reference/#selectoption)` }` | Customize the option of the field. | all |
+    | empty | - | Customize the empty message. | all |
+    | error | `{ error: string \| null }` | Show an error message. | all |
+  </TabItem>
+  <TabItem label="Events">
+  | Name | Type | Description |
+  |------|------|-------------|
+  | choose | `CustomEvent<`[`SelectOption`](/reference/#selectoption)`> ` | The event emitted when the user selects an option. |
+  | remove | `CustomEvent<`[`SelectOption`](/reference/#selectoption)`> ` | The event emitted when the user removes an item. |
+  | clear | `CustomEvent<void>` | The event emitted when the user clears the field. |
+  </TabItem>
+</Tabs>
+
+## Single
+
+<Tabs>
+  <TabItem label="Example">
+    <SelectSingle />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Select, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        tool: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: SelectOption[] = [
+        { value: "svelte", label: "Svelte" },
+        { value: "faivform", label: "FaivForm" },
+        { value: "astro", label: "Astro" },
+        { value: "starlight", label: "Starlight" },
+        { value: "vite", label: "Vite" },
+        { value: "sveltekit", label: "SvelteKit" },
+      ];
+    </script>
+
+    <Select
+      name="tool"
+      label="Tool:"
+      placeholder="Choose a tool"
+      {options}
+    />
+    ```
+  </TabItem>
+</Tabs>
+
+## Multiple
+
+<Tabs>
+  <TabItem label="Example">
+    <SelectMultiple />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Select, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        tools: {
+          type: "array",
+          required: true,
+          item: {
+            type: "string",
+            required: true,
+          },
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: SelectOption[] = [
+        { value: "svelte", label: "Svelte" },
+        { value: "faivform", label: "FaivForm" },
+        { value: "astro", label: "Astro" },
+        { value: "starlight", label: "Starlight" },
+        { value: "vite", label: "Vite" },
+        { value: "sveltekit", label: "SvelteKit" },
+      ];
+    </script>
+
+    <Select
+      name="tools"
+      label="Tools:"
+      placeholder="Choose tools"
+      {options}
+      multiple
+    />
+    ```
+  </TabItem>
+</Tabs>
+
+## Fixed options
+
+<Tabs>
+  <TabItem label="Example">
+    <SelectFixed />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Select, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        tools: {
+          type: "array",
+          required: true,
+          item: {
+            type: "string",
+            required: true,
+          },
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: SelectOption[] = [
+        { value: "svelte", label: "Svelte", fixed: true },
+        { value: "faivform", label: "FaivForm", fixed: true },
+        { value: "astro", label: "Astro" },
+        { value: "starlight", label: "Starlight" },
+        { value: "vite", label: "Vite" },
+        { value: "sveltekit", label: "SvelteKit" },
+      ];
+    </script>
+
+    <Select
+      name="tools"
+      label="Tools:"
+      placeholder="Choose tools"
+      {options}
+      multiple
+    />
+    ```
+  </TabItem>
+</Tabs>
+
+## Non searchable
+
+<Tabs>
+  <TabItem label="Example">
+    <SelectNonSearchable />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Select, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        tool: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: SelectOption[] = [
+        { value: "svelte", label: "Svelte" },
+        { value: "faivform", label: "FaivForm" },
+        { value: "astro", label: "Astro" },
+        { value: "starlight", label: "Starlight" },
+        { value: "vite", label: "Vite" },
+        { value: "sveltekit", label: "SvelteKit" },
+      ];
+    </script>
+
+    <Select
+      name="tool"
+      label="Tool:"
+      placeholder="Choose a tool"
+      {options}
+      searchable={false}
+    />
+    ```
+  </TabItem>
+</Tabs>
+
+## Multiple non searchable
+
+<Tabs>
+  <TabItem label="Example">
+    <SelectNonSearchableMultiple />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Select, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        tools: {
+          type: "array",
+          required: true,
+          item: {
+            type: "string",
+            required: true,
+          },
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: SelectOption[] = [
+        { value: "svelte", label: "Svelte" },
+        { value: "faivform", label: "FaivForm" },
+        { value: "astro", label: "Astro" },
+        { value: "starlight", label: "Starlight" },
+        { value: "vite", label: "Vite" },
+        { value: "sveltekit", label: "SvelteKit" },
+      ];
+    </script>
+
+    <Select
+      name="tools"
+      label="Tools:"
+      placeholder="Choose tools"
+      {options}
+      multiple
+      searchable={false}
+    />
+    ```
+  </TabItem>
+</Tabs>
+
+## Non clearable
+
+<Tabs>
+  <TabItem label="Example">
+    <SelectNonClearable />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Select, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        tool: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: SelectOption[] = [
+        { value: "svelte", label: "Svelte" },
+        { value: "faivform", label: "FaivForm" },
+        { value: "astro", label: "Astro" },
+        { value: "starlight", label: "Starlight" },
+        { value: "vite", label: "Vite" },
+        { value: "sveltekit", label: "SvelteKit" },
+      ];
+    </script>
+
+    <Select
+      name="tool"
+      label="Tool:"
+      placeholder="Choose a tool"
+      {options}
+      clearable={false}
+    />
+    ```
+  </TabItem>
+</Tabs>
+
+## Disabled
+
+<Tabs>
+  <TabItem label="Example">
+    <SelectDisabled />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Select, faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema, SelectOption } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        tool: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+
+      const options: SelectOption[] = [
+        { value: "svelte", label: "Svelte" },
+        { value: "faivform", label: "FaivForm" },
+        { value: "astro", label: "Astro" },
+        { value: "starlight", label: "Starlight" },
+        { value: "vite", label: "Vite" },
+        { value: "sveltekit", label: "SvelteKit" },
+      ];
+    </script>
+
+    <Select
+      name="tool"
+      label="Tool:"
+      placeholder="Choose a tool"
+      {options}
+      disabled
+    />
+    ```
+  </TabItem>
+</Tabs>

@@ -1,6 +1,6 @@
-import type { ObjStrCommon } from "../typing/globals/types.js";
+import { hasArray } from "./parse";
 
-export function generateDatas(datas: ObjStrCommon) {
+export function generateDatas(datas: Record<string, string | number | boolean> = {}) {
   return Object.keys(datas).reduce(
     (acc, key) => ({
       ...acc,
@@ -8,4 +8,8 @@ export function generateDatas(datas: ObjStrCommon) {
     }),
     {},
   );
+}
+
+export function isSelected(data: unknown, value: string) {
+  return hasArray<string>(data).some((item) => item === value);
 }

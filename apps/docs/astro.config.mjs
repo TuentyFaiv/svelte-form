@@ -52,6 +52,14 @@ export default defineConfig({
       autogenerate: {
         directory: "guides"
       }
+    }, {
+      label: "Reference",
+      translations: {
+        es: "Referencia"
+      },
+      autogenerate: {
+        directory: "reference"
+      }
     }],
     customCss: ["./src/ui/styles/app.css"],
     defaultLocale: "root",
@@ -65,7 +73,8 @@ export default defineConfig({
       }
     }
   }), tailwind({
-    applyBaseStyles: false
+    applyBaseStyles: false,
+    nesting: true,
   }), svelte()],
   output: "static",
   adapter: vercel({

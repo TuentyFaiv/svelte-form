@@ -1,0 +1,566 @@
+---
+title: Schema
+description: Learn how to use schemas to validate your data.
+sidebar:
+  order: 3
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+Data validation is a common problem in web development. You want to make sure that the data you receive from the user is valid before you use it in your application. This is especially important when you have a form and you want to make sure that the data the user enters is valid.
+
+Faivform provides a simple way to validate your data. You can use a schema to define the fields and their types.
+
+:::note
+All fields are optional by default. If you want to make a field required, you have to set the [`required`](#configuration) property to `true`.
+:::
+
+## Usage
+
+To use a schema, you have to create a object where each key is a field name and the value is a type. if you are using TypeScript you need to import the type [`FieldsSchema`](/reference/#fieldsschema).
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      name: "string",
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      name: "string",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Configuration
+
+All types have a simple configuration, you can use it to define the type of the field. You can check the configuration of each type in the [reference section.](/reference/#schemas)
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      name: {
+        type: "string",
+        required: true,
+        min: 2,
+        max: 16,
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      name: {
+        type: "string",
+        required: true,
+        min: 2,
+        max: 16,
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Strings
+
+To define a string field you have to use the `"string"` or `RegExp` type.
+
+### Example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      username: "string", // or /^[a-z0-9]$/
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      username: "string", // or /^[a-z0-9]$/
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      username: {
+        type: /^[a-z0-9]$/, // or "string"
+        required: true,
+        min: 3,
+        max: 20,
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      username: {
+        type: /^[a-z0-9]$/, // or "string"
+        required: true,
+        min: 3,
+        max: 20,
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Numbers
+
+To define a number field you have to use the `"number"` type.
+
+### Example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      age: "number",
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      age: "number",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      age: {
+        type: "number",
+        required: true,
+        min: 18,
+        max: 99,
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      age: {
+        type: "number",
+        required: true,
+        min: 18,
+        max: 99,
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Booleans
+
+To define a boolean field you have to use the `"boolean"` type.
+
+:::note
+The `min` and `max` properties are not available for boolean fields.
+:::
+
+### Example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      active: "boolean",
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      active: "boolean",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      active: {
+        type: "boolean",
+        required: true,
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      active: {
+        type: "boolean",
+        required: true,
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Dates
+
+To define a date field you have to use the `"date"` type.
+
+### Example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      birthday: "date",
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      birthday: "date",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      birthday: {
+        type: "date",
+        required: true,
+        min: new Date(1950, 0, 1).getTime(),
+        max: new Date(2006, 0, 1).getTime(),
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      birthday: {
+        type: "date",
+        required: true,
+        min: new Date(1950, 0, 1).getTime(),
+        max: new Date(2006, 0, 1).getTime(),
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Files
+
+To define a file field you have to use the `"file"` type.
+
+### Example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      avatar: "file",
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      avatar: "file",
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      avatar: {
+        type: "file",
+        required: true,
+        min: 0,
+        max: 1024 * 1024 * 2,
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      avatar: {
+        type: "file",
+        required: true,
+        min: 0,
+        max: 1024 * 1024 * 2,
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Objects
+
+To define a object field you have to compose it with the "primitive" types explained above.
+
+### Example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      user: {
+        name: "string",
+        username: "string",
+        age: "number",
+        active: "boolean",
+        birthday: "date",
+        avatar: "file",
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      user: {
+        name: "string",
+        username: "string",
+        age: "number",
+        active: "boolean",
+        birthday: "date",
+        avatar: "file",
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      user: {
+        name: {
+          type: "string",
+          required: true,
+          min: 2,
+          max: 16,
+        },
+        username: {
+          type: /^[a-z0-9]$/,
+          required: true,
+          min: 3,
+          max: 20,
+        },
+        age: {
+          type: "number",
+          required: true,
+          min: 18,
+          max: 99,
+        },
+        active: {
+          type: "boolean",
+          required: true,
+        },
+        birthday: {
+          type: "date",
+          required: true,
+          min: new Date(1950, 0, 1).getTime(),
+          max: new Date(2006, 0, 1).getTime(),
+        },
+        avatar: {
+          type: "file",
+          required: true,
+          min: 0,
+          max: 1024 * 1024 * 2,
+        },
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      user: {
+        name: {
+          type: "string",
+          required: true,
+          min: 2,
+          max: 16,
+        },
+        username: {
+          type: /^[a-z0-9]$/,
+          required: true,
+          min: 3,
+          max: 20,
+        },
+        age: {
+          type: "number",
+          required: true,
+          min: 18,
+          max: 99,
+        },
+        active: {
+          type: "boolean",
+          required: true,
+        },
+        birthday: {
+          type: "date",
+          required: true,
+          min: new Date(1950, 0, 1).getTime(),
+          max: new Date(2006, 0, 1).getTime(),
+        },
+        avatar: {
+          type: "file",
+          required: true,
+          min: 0,
+          max: 1024 * 1024 * 2,
+        },
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Arrays
+
+To define a array field you have to use the `"array"` type.
+
+:::note
+Array fields can only have type `"array"`, to define the type of the items you have to use the `item` property.
+:::
+
+### Example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      tags: {
+        type: "array",
+        item: "string",
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      tags: {
+        type: "array",
+        item: "string",
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Advanced example
+
+<Tabs>
+  <TabItem label="TS">
+    ```typescript
+    import type { FieldsSchema } from '@tuentyfaiv/svelte-form';
+
+    const schema = {
+      tags: {
+        type: "array",
+        item: {
+          type: "string",
+          required: true,
+          min: 2,
+          max: 16,
+        },
+        required: true,
+        min: 1,
+        max: 5,
+      },
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```typescript
+    const schema = {
+      tags: {
+        type: "array",
+        item: {
+          type: "string",
+          required: true,
+          min: 2,
+          max: 16,
+        },
+        required: true,
+        min: 1,
+        max: 5,
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+:::tip[¡Great!]
+You are ready to use schemas in your forms.
+:::
+

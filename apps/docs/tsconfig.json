@@ -1,6 +1,8 @@
 {
   "extends": "astro/tsconfigs/strictest",
   "compilerOptions": {
+    "verbatimModuleSyntax": true,
+    "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
       "@atoms": [
@@ -9,11 +11,8 @@
       "@organisms": [
         "./src/ui/organisms/index.ts"
       ],
-      "@organisms/*": [
-        "./src/ui/organisms/*"
-      ],
-      "@atoms/*": [
-        "./src/ui/atoms/*"
+      "@molecules": [
+        "./src/ui/molecules/index.ts"
       ],
     }
   }

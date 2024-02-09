@@ -1,0 +1,809 @@
+---
+title: Core package
+description: A list of interfaces and types used in the core package.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+Here you can find a list of interfaces and types used in the core package.
+
+:::note
+Type `Data` is mentioned in the documentation. It is a generic type that can be used to define the type of the data that is passed to the form.
+:::
+
+## Global
+
+All types and interfaces that you have to know to use the `useConfig`, and the Faivform contexts.
+
+### Config
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | fields | [`ContextStyles`](/reference/#contextstyles) \| `undefined` | Global built-in componets styles. |
+    | light | [`FaivFormTheme`](/reference/#faivformtheme) \| `undefined` | Global light theme. |
+    | dark | [`FaivFormTheme`](/reference/#faivformtheme) \| `undefined` | Global dark theme. |
+    | onLight | [`FaivCSSVars`](/reference/#faivcssvars) \| `undefined` | Global faivform CSS variables for light theme. |
+    | onDark | [`FaivCSSVars`](/reference/#faivcssvars) \| `undefined` | Global faivform CSS variables for dark theme. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { setConfig } from "@tuentyfaiv/svelte-form";
+
+      import type { Config } from "@tuentyfaiv/svelte-form";
+
+      const config: Config = {
+        fields: {
+          // ... styles
+        },
+        vars: {
+          // ... vars
+        },
+      };
+
+      setConfig(config);
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+### ContextForm
+
+An interface that defines the form context.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | loading | `Writable<boolean>` | Whether the form is loading or not. |
+    | errors | `Writable<`[`Errors`](/reference/#errors)`<Data>>` | The errors of the fields. |
+    | data | `Writable<Data>` | The values of the fields. |
+    | styles | `Writable<`[`ContextStyles`](/reference/#contextstyles)`>` | The styles of the form. |
+    | reset | `(clear?: boolean, starting?: Data) => void` | Resets the form. |
+    | setError | `(field: Keys, error?: string \| null) => Promise<void>` | Sets the error of a field. |
+    | setField | `(field: Keys, value: Data[Keys], validate?: boolean) => Promise<void>` | Sets the value of a field. |
+    | check | `(event: `[`UserEvent`](/reference/#userevent)`<HTMLInputElement \| HTMLTextAreaElement, FocusEvent \| Event>) => Promise<void>` | Checks the value of a field. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { useForm } from "@tuentyfaiv/svelte-form";
+
+      import type { ContextForm } from "@tuentyfaiv/svelte-form";
+
+      const form: ContextForm = useForm("myform");
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+### ContextStyles
+
+An interface that defines the field styles.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | replace | `boolean \| undefined` | Whether the styles should replace the default styles or not. |
+    | field | [`FieldStyles`](/reference/#fieldstyles) \| `undefined` | The styles of the [`Field`](/components/field/). |
+    | select | [`SelectStyles`](/reference/#selectstyles) \| `undefined` | The styles of the [`Select`](/components/select/). |
+    | option | [`OptionStyles`](/reference/#optionstyles) \| `undefined` | The styles of the [`Option`](/components/option/). |
+    | file | [`FileStyles`](/reference/#filestyles) \| `undefined` | The styles of the [`File`](/components/file/). |
+    | errors | [`ErrorsStyles`](/reference/#errorsstyles) \| `undefined` | The styles of the [`Errors`](/components/errors/). |
+    | icons | [`Icons`](/reference/#icons) \| `null` \| `undefined` | The icons of the form. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { ContextStyles } from "@tuentyfaiv/svelte-form";
+
+    const styles: ContextStyles = {
+      // ... styles
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### FaivFormTheme
+
+An type that defines the faivform theme.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | font | `string \| undefined` | The font of the form. |
+    | space | `string \| undefined` | The space of the form. |
+    | radius | `string \| undefined` | The radius of the form. |
+    | white | `string \| undefined` | The white color of the form. |
+    | black | `string \| undefined` | The black color of the form. |
+    | primary | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The primary theme. |
+    | secondary | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The secondary theme. |
+    | accent | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The accent theme. |
+    | error | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The error theme. |
+    | warning | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The warning theme. |
+    | success | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The success theme. |
+    | placeholder | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The placeholder theme. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FaivFormTheme } from "@tuentyfaiv/svelte-form";
+
+    const theme: FaivFormTheme = {
+      // ... theme
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### FaivFormThemePalette
+
+A type that defines the faivform theme palette.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | 50 | `string \| undefined` | The 50 color of the theme. |
+    | 100 | `string \| undefined` | The 100 color of the theme. |
+    | 200 | `string \| undefined` | The 200 color of the theme. |
+    | 300 | `string \| undefined` | The 300 color of the theme. |
+    | 400 | `string \| undefined` | The 400 color of the theme. |
+    | 500 | `string \| undefined` | The 500 color of the theme. |
+    | 600 | `string \| undefined` | The 600 color of the theme. |
+    | 700 | `string \| undefined` | The 700 color of the theme. |
+    | 800 | `string \| undefined` | The 800 color of the theme. |
+    | 900 | `string \| undefined` | The 900 color of the theme. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FaivFormThemePalette } from "@tuentyfaiv/svelte-form";
+
+    const palette: FaivFormThemePalette = {
+      // ... palette
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### FaivCSSVars
+
+A type that defines the faivform CSS variables.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | primary | [`FaivColorVars`](/reference/#faivcolorvars) \| `undefined` | The primary CSS vars. |
+    | secondary | [`FaivColorVars`](/reference/#faivcolorvars) \| `undefined` | The secondary CSS vars. |
+    | accent | [`FaivColorVars`](/reference/#faivcolorvars) \| `undefined` | The accent CSS vars. |
+    | error | [`FaivColorVars`](/reference/#faivcolorvars) \| `undefined` | The error CSS vars. |
+    | warning | [`FaivColorVars`](/reference/#faivcolorvars) \| `undefined` | The warning CSS vars. |
+    | success | [`FaivColorVars`](/reference/#faivcolorvars) \| `undefined` | The success CSS vars. |
+    | placeholder | [`FaivColorVars`](/reference/#faivcolorvars) \| `undefined` | The placeholder CSS vars. |
+    | shadow | [`FaivShadowVars`](/reference/#faivshadowvars) \| `undefined` | The shadow CSS vars. |
+    | border | [`FaivBorderVars`](/reference/#faivbordervars) \| `undefined` | The border CSS vars. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FaivCSSVars } from "@tuentyfaiv/svelte-form";
+
+    const vars: FaivCSSVars = {
+      // ... vars
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### FaivColorVars
+
+An interface that defines the faivform color CSS variables.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | color | `string \| undefined` | The color CSS variable. |
+    | opacity | `string \| undefined` | The opacity CSS variable. |
+    | text | `string \| undefined` | The text color CSS variable. |
+    | "text-opacity" | `string \| undefined` | The text color opacity CSS variable. |
+    | font | `string \| undefined` | The font CSS variable. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FaivColorVars } from "@tuentyfaiv/svelte-form";
+
+    const color: FaivColorVars = {
+      // ... color
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### FaivShadowVars
+
+An interface that defines the faivform shadow CSS variables.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | base | `string \| undefined` | The shadow CSS variable. |
+    | size | `string \| undefined` | The size CSS variable. |
+    | color | `string \| undefined` | The color CSS variable. |
+    | opacity | `string \| undefined` | The opacity color CSS variable. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FaivShadowVars } from "@tuentyfaiv/svelte-form";
+
+    const shadow: FaivShadowVars = {
+      // ... shadow
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### FaivBorderVars
+
+An interface that defines the faivform border CSS variables.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | base | `string \| undefined` | The border CSS variable. |
+    | width | `string \| undefined` | The width CSS variable. |
+    | style | `string \| undefined` | The style CSS variable. |
+    | color | `string \| undefined` | The color CSS variable. |
+    | opacity | `string \| undefined` | The opacity color CSS variable. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FaivBorderVars } from "@tuentyfaiv/svelte-form";
+
+    const border: FaivBorderVars = {
+      // ... border
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Faivform
+
+All types and interfaces that you have to know to use the core package.
+
+### FaivFormConfig
+
+An interface that defines the config of the form.
+
+<Tabs>
+  <TabItem label="Properties">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | fields | [`FieldsSchema`](/reference/#fieldsschema) \| [`Adapter`](/reference/#adapter) | The fields of the form. |
+    | styles | [`ContextStyles`](/reference/#contextstyles) \| `undefined` | The styles of the form. |
+    | context | `string \| undefined` | The context of the form. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { FaivFormConfig } from "@tuentyfaiv/svelte-form";
+
+      const config: FaivFormConfig = {
+        // ... config
+      };
+
+      const form = faivform(config);
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+### FaivFormStore
+
+An interface that defines the store of the form.
+
+<Tabs>
+  <TabItem label="Properties">
+    This contains all the properties of the [`ContextForm`](/reference/#contextform) interface and the following:
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | submit | `submit<T = Data>(action: `[`SubmitAction`](/reference/#submitaction)`<T>, config?: `[`SubmitConfig`](/reference/#submitconfig)`<T>) => `[`Submit`](/reference/#submit)` | Submits the form. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { Readable } from "svelte/store";
+      import type { FaivFormStore } from "@tuentyfaiv/svelte-form";
+
+      const form: Readable<FaivFormStore<Data>> = faivform({
+        // ... config
+      });
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+### Adapter
+An abstract class that defines the methods that an adapter must implement.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Method | Description |
+    | ------ | ----------- |
+    | `initial(): { fields: Data; errors: `[`Errors`](/reference/#errors)`<Data>; }` | Returns the initial values of the fields and errors. |
+    | `validate<T = Data>(data: T): Promise<void>` | Validates the data. |
+    | `field(field: keyof Data, value: Data[keyof Data], errors: Writable<`[`Errors`](/reference/#errors)`<Data>>): Promise<void>` | Validates a field. |
+    | `errors(error: unknown, errors: Writable<`[`Errors`](/reference/#errors)`<Data>>, handle?: (error: unknown) => (void \| Promise<void>)): Promise<void>` | Handles an error. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import { Adapter } from "@tuentyfaiv/svelte-form";
+
+    class MyAdapter extends Adapter {
+      // ... implementation
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### SubmitAction
+
+An type that defines the submit action.
+
+<Tabs>
+  <TabItem label="Properties">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | values | `Data` | The values of the form. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { SubmitAction } from "@tuentyfaiv/svelte-form";
+
+    const submitAction: SubmitAction<Data> = async (values) => {
+      // ... do something with the values
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### SubmitConfig
+
+An interface that defines the submit config.
+
+<Tabs>
+  <TabItem label="Properties">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | error | `((error: unknown) => (void \| Promise<void>)) \| undefined` | A function that handles the error. |
+    | finish | `VoidFunction \| undefined` | A function that is called when the submit action is finished whether it was successful or not. |
+    | reset | `boolean \| undefined` | Whether the form should be reset or not. |
+    | initial | `Data \| undefined` | The initial values of the form. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { SubmitConfig } from "@tuentyfaiv/svelte-form";
+
+    const submitConfig: SubmitConfig<Data> = {
+      // ... config
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Submit
+
+An type that defines the function that is called when the form is submitted.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | event | [`UserEvent`](/reference/#userevent)`<HTMLFormElement, SubmitEvent>` | The submit event. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { faivform } from "@tuentyfaiv/svelte-form";
+
+      import type { Submit } from "@tuentyfaiv/svelte-form";
+
+      const form = faivform({
+        fields: // ... schema or adapter
+      });
+
+      const handleSubmit: Submit = $form.submit(async (values) => {
+        // ... do something with the values
+      });
+    </script>
+
+    <form on:submit={handleSubmit}>
+      <!-- ... Fields -->
+    </form>
+    ```
+  </TabItem>
+</Tabs>
+
+### UserEvent
+
+An object type that defines the user event. It extends the native event to safely access the current target.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | currentTarget | `EventTarget & Element` | The current target of the event. |
+    | ... | `Event` | All the properties of the event used. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { UserEvent } from "@tuentyfaiv/svelte-form";
+
+    function handleEvent(event: UserEvent<HTMLInputElement>) {
+      // ... do something with the current target
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Errors
+
+An object type that defines the errors of the fields.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | \[field\] | `string \| null` | The error of a field. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { Errors } from "@tuentyfaiv/svelte-form";
+
+    const errors: Errors<Data> = {
+      // ... errors
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Schemas
+
+All schemas are defined using TypeScript types. This means that you can use them to define the type of your data.
+
+### FieldsSchema
+
+A object type that defines a schema for a set of fields.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | \[field\] | [`Schema`](/reference/#schema) \| [`FieldPropSchema`](/reference/#fieldpropschema) \| [`ArraySchema`](/reference/#arrayschema) \| `FieldsSchema` | A field schema. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+    const schema = {
+      // ... fields
+    } satisfies FieldsSchema;
+    ```
+  </TabItem>
+</Tabs>
+
+### Schema
+
+A type that defines the type of a field.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Value | Description |
+    | ----- | ----------- |
+    | `RegExp` | A regular expression. |
+    | `"string"` | A string. |
+    | `"number"` | A number. |
+    | `"boolean"` | A boolean. |
+    | `"date"` | A date. |
+    | `"file"` | A file. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { Schema } from "@tuentyfaiv/svelte-form";
+
+    const fieldSchema: Schema = "string";
+    ```
+  </TabItem>
+</Tabs>
+
+### FieldPropSchema
+
+A object type that defines the type of a field.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | type | [`Schema`](/reference/#schema) | The type of the field. |
+    | required | `boolean \| undefined` | Whether the field is required or not. |
+    | min | `number \| undefined` | The minimum value of the field. |
+    | max | `number \| undefined` | The maximum value of the field. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FieldPropSchema } from "@tuentyfaiv/svelte-form";
+
+    const fieldSchema: FieldPropSchema = {
+      type: "string",
+      required: true,
+      min: 5,
+      max: 10,
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### ArraySchema
+
+A object type that defines the type of an array.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | type | `"array"` | Indicates that the field is an array. |
+    | item | [`Schema`](/reference/#schema) \| [`FieldPropSchema`](/reference/#fieldpropschema) \| `ArraySchema` \| [`FieldsSchema`](/reference/#fieldsschema) | The type of the items in the array. |
+    | required | `boolean \| undefined` | Whether the array is required or not. |
+    | min | `number \| undefined` | The minimum length of the array. |
+    | max | `number \| undefined` | The maximum length of the array. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { ArraySchema } from "@tuentyfaiv/svelte-form";
+
+    const arraySchema: ArraySchema = {
+      type: "array",
+      item: "string",
+      required: true,
+      min: 5,
+      max: 10,
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Styles
+
+All types and interfaces that you have to know to use the styles.
+
+### FieldStyles
+
+An interface that defines the field styles.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | container | `string \| undefined` | Field container class |
+    | label | `string \| undefined` | Field label class |
+    | input | `string \| undefined` | Field input class |
+    | error | `string \| undefined` | Field error class |
+    | area | `string \| undefined` | Field type textarea class |
+    | check | `string \| undefined` | Field type checkbox class |
+    | action | `string \| undefined` | Field type password action class |
+    | icon | `string \| undefined` | Field type password icon class |
+    | checked | `string \| undefined` | Field type checkbox checked icon |
+    | hide | `string \| undefined` | Field type password hide icon. |
+    | show | `string \| undefined` | Field type password show icon. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FieldStyles } from "@tuentyfaiv/svelte-form";
+
+    const styles: FieldStyles = {
+      // ... styles
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### SelectStyles
+
+An interface that defines the select styles.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | container | `string \| undefined` | Select container class |
+    | label | `string \| undefined` | Select label class |
+    | select | `string \| undefined` | Select select class |
+    | value | `string \| undefined` | Select value class |
+    | item | `string \| undefined` | Select item class |
+    | remove | `string \| undefined` | Select remove class |
+    | searchable | `string \| undefined` | Select searchable class |
+    | nonsearchable | `string \| undefined` | Select nonsearchable class |
+    | error | `string \| undefined` | Select error class |
+    | clear | `string \| undefined` | Select clear class |
+    | arrow | `string \| undefined` | Select arrow icon |
+    | icon | `string \| undefined` | Select icon class |
+    | options | `string \| undefined` | Select options class |
+    | option | `string \| undefined` | Select option class |
+    | empty | `string \| undefined` | Select empty class |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { SelectStyles } from "@tuentyfaiv/svelte-form";
+
+    const styles: SelectStyles = {
+      // ... styles
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### OptionStyles
+
+An interface that defines the option styles.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | container | `string \| undefined` | Options container class |
+    | legend | `string \| undefined` | Options label class |
+    | option | `string \| undefined` | Option class |
+    | label | `string \| undefined` | Option label class |
+    | input | `string \| undefined` | Option input class |
+    | content | `string \| undefined` | Option content class |
+    | error | `string \| undefined` | Option error class |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { OptionStyles } from "@tuentyfaiv/svelte-form";
+
+    const styles: OptionStyles = {
+      // ... styles
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### FileStyles
+
+An interface that defines the file styles.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | container | `string \| undefined` | File container class |
+    | item | `string \| undefined` | File item class |
+    | cover | `string \| undefined` | File cover class |
+    | remove | `string \| undefined` | File remove class |
+    | items | `string \| undefined` | File items class |
+    | retry | `string \| undefined` | File retry class |
+    | content | `string \| undefined` | File content class |
+    | label | `string \| undefined` | File label class |
+    | input | `string \| undefined` | File input class |
+    | error | `string \| undefined` | File error class |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FileStyles } from "@tuentyfaiv/svelte-form";
+
+    const styles: FileStyles = {
+      // ... styles
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### ErrorsStyles
+
+An interface that defines the errors styles.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | container | `string \| undefined` | Errors list class |
+    | item | `string \| undefined` | Errors item class |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { ErrorsStyles } from "@tuentyfaiv/svelte-form";
+
+    const styles: ErrorsStyles = {
+      // ... styles
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+### Icons
+
+An interface that defines the icons of the fields.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | checked | `string \| undefined` | The icon of the checkbox. |
+    | hide | `string \| undefined` | The icon of the password when it is hidden. |
+    | show | `string \| undefined` | The icon of the password when it is shown. |
+    | clear | `string \| undefined` | The icon of the clear button. |
+    | arrow | `string \| undefined` | The icon of the arrow. |
+    | remove | `string \| undefined` | The icon of the remove button. |
+    | retry | `string \| undefined` | The icon of the retry button. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { Icons } from "@tuentyfaiv/svelte-form";
+
+    const icons: Icons = {
+      // ... icons
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Built-in components
+
+All types and interfaces that you have to know to use the built-in components.
+
+### SelectOption
+
+An interface that defines the select option.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | key | `string \| undefined` | The key of the option. |
+    | label | `string` | The label of the option. |
+    | value | `string` | The value of the option. |
+    | fixed | `boolean \| undefined` | Whether the option is fixed or not. |
+    | disabled | `boolean \| undefined` | Whether the option is disabled or not. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { SelectOption } from "@tuentyfaiv/svelte-form";
+
+    const options: SelectOption[] = [
+      // ... options list
+    ];
+    ```
+  </TabItem>
+</Tabs>
+
+### OptionItem
+
+An interface that defines the option item.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | key | `string \| undefined` | The key of the option. |
+    | label | `string \| undefined` | The label of the option. |
+    | value | `string` | The value of the option. |
+    | disabled | `boolean \| undefined` | Whether the option is disabled or not. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { OptionItem } from "@tuentyfaiv/svelte-form";
+
+    const options: OptionItem[] = [
+      // ... options list
+    ];
+    ```
+  </TabItem>
+</Tabs>

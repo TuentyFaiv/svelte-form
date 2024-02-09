@@ -1,22 +1,31 @@
+<svelte:options immutable />
+
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { fade } from "svelte/transition";
   import { generateDatas } from "$lib/logic/utils/objects.js";
   import { useForm } from "$lib/logic/stores/form.js";
   import { keys } from "$lib/logic/utils/keys.js";
-  import { getStyle } from "$lib/logic/utils/styles.js";
+  import { getStyles } from "$lib/logic/utils/styles.js";
+
+  import {
+    Icon,
+    IconHide,
+    IconShow,
+    IconChecked,
+  } from "$lib/ui/assets/icons/index.js";
 
   import type { UserEvent } from "$lib/logic/typing/globals/types.js";
   import type { Input, Props } from "./Field.proptypes.js";
 
-  import IconShow from "../../assets/icon-show.svg";
-  import IconHide from "../../assets/icon-hide.svg";
+  type $$Props = Props;
 
   export let name: Props["name"];
-  export let context: Props["context"] = "form";
   export let id: Props["id"] = null;
-  export let type: Props["type"] = "text";
   export let label: Props["label"] = null;
+  export let context: Props["context"] = "form";
+  export let type: Props["type"] = "text";
+  export let styles: Props["styles"] = {};
   export let datas: Props["datas"] = {};
   export let a11y: Props["a11y"] = {};
 
@@ -25,7 +34,7 @@
 
   $: form = useForm(context);
   $: ({ data, errors, styles: ctxStyles, setField, check } = $form);
-  $: ({ field: styles, icons, replace } = $ctxStyles);
+  $: ({ field: ctxFieldStyles, icons, replace } = $ctxStyles);
 
   function toggleShow() {
     show = !show;
@@ -38,113 +47,107 @@
     }
   }
 
-  function onCheck({ currentTarget }: UserEvent<HTMLInputElement, Event>) {
-    setField(name, currentTarget.checked);
-  }
-
   $: datasets = generateDatas(datas);
 
-  $: showPassword = styles?.show ?? icons?.show ?? IconShow;
-  $: hidePassword = styles?.hide ?? icons?.hide ?? IconHide;
-
-  $: fieldStyle = getStyle({
+  $: styls = getStyles<Exclude<Props["styles"], undefined>>({
     replace,
-    style: "svform-field",
-    external: styles?.field,
-  });
-  $: labelStyle = getStyle({
-    replace,
-    style: "svform-label",
-    external: styles?.label,
-  });
-  $: textAreaStyle = getStyle({
-    replace,
-    style: "svform-shared svform-textarea",
-    external: styles?.area,
-  });
-  $: checkboxStyle = getStyle({
-    replace,
-    style: "svform-checkbox",
-    external: styles?.check,
-  });
-  $: inputStyle = getStyle({
-    replace,
-    style: "svform-shared svform-input",
-    external: styles?.input,
-  });
-  $: actionStyle = getStyle({
-    replace,
-    style: "svform-action",
-    external: styles?.action,
-  });
-  $: iconStyle = getStyle({
-    replace,
-    style: "svform-icon",
-    external: styles?.icon,
-  });
-  $: errorStyle = getStyle({
-    replace,
-    style: "svform-error",
-    external: styles?.error,
+    internals: {
+      container: "faivform-field-container",
+      label: "faivform-field-label",
+      area: "faivform-field-shared faivform-field-textarea",
+      check: "faivform-field-checkbox",
+      input: "faivform-field-shared faivform-field-input",
+      action: "faivform-field-action",
+      icon: "faivform-field-icon",
+      error: "faivform-field-error",
+    },
+    externals: {
+      container: styles?.container ?? ctxFieldStyles?.container,
+      label: styles?.label ?? ctxFieldStyles?.label,
+      area: styles?.area ?? ctxFieldStyles?.area,
+      check: styles?.check ?? ctxFieldStyles?.check,
+      input: styles?.input ?? ctxFieldStyles?.input,
+      action: styles?.action ?? ctxFieldStyles?.action,
+      icon: styles?.icon ?? ctxFieldStyles?.icon,
+      error: styles?.error ?? ctxFieldStyles?.error,
+    },
+    icons: {
+      show: styles?.show ?? ctxFieldStyles?.show ?? icons?.show,
+      hide: styles?.hide ?? ctxFieldStyles?.hide ?? icons?.hide,
+      checked:
+        styles?.checked ??
+        ctxFieldStyles?.checked ??
+        icons?.checked ??
+        `data:image/svg+xml,${encodeURIComponent(IconChecked)}`,
+    },
   });
 
   onDestroy(() => {
-    setField(name, undefined);
+    setField(name, undefined, false);
   });
 </script>
 
 <label
   for={id ?? name}
-  class={fieldStyle}
+  class={styls.container}
   data-type={type}
-  data-checked={$data[name] ?? false}
-  data-checked-icon={icons?.check ?? ""}
-  title={a11y.title}
+  style={type === "checkbox"
+    ? `--checked-img: url(${styls.checked});`
+    : undefined}
+  title={a11y?.title}
   {...datasets}
 >
-  {#if label && type !== "checkbox"}
-    <p class={labelStyle}>
-      {label}
-      <slot />
-    </p>
+  {#if type !== "checkbox"}
+    <slot>
+      {#if label}
+        <p class={styls.label}>
+          {label}
+        </p>
+      {/if}
+    </slot>
   {/if}
   {#if type === "textarea"}
     <textarea
-      class={textAreaStyle}
+      class={styls.area}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
+      on:input={check}
+      data-error={!!$errors[name]}
       value={$data[name] ?? ""}
       {name}
       {...$$restProps}
     />
   {:else if type === "checkbox"}
     <input
-      class={checkboxStyle}
+      class={styls.check}
       id={id ?? name}
       type="checkbox"
       bind:this={input}
       checked={$data[name] ?? false}
-      on:change={onCheck}
+      data-error={!!$errors[name]}
+      on:change={check}
       on:keydown={onChecked}
       {name}
       {...$$restProps}
     />
-    {#if label}
-      <p class={labelStyle}>
-        {label}
-        <slot />
-      </p>
-    {/if}
+    <slot>
+      {#if label}
+        <p class={styls.label}>
+          {label}
+        </p>
+      {/if}
+    </slot>
   {:else}
     <input
-      class={inputStyle}
+      class={styls.input}
       id={id ?? name}
       bind:this={input}
       on:blur={check}
       on:input={check}
       type={type === "password" && show ? "text" : type}
       value={$data[name] ?? ""}
+      data-error={!!$errors[name]}
       {name}
       {...$$restProps}
     />
@@ -152,147 +155,233 @@
   {#if type === "password"}
     <button
       type="button"
-      class={actionStyle}
+      class={styls.action}
       class:show
       on:click|stopPropagation={toggleShow}
-      title={a11y.icon}
+      title={a11y?.icon}
     >
-      <img
-        class={iconStyle}
-        src={show ? showPassword : hidePassword}
-        alt={a11y.icon}
-        decoding="async"
-        loading="lazy"
-        role="presentation"
-      />
+      <slot name="icon">
+        <Icon
+          style={styls.icon}
+          src={show ? styls.show : styls.hide}
+          alt={a11y?.icon}
+          component={show ? IconShow : IconHide}
+        />
+      </slot>
     </button>
   {/if}
-  {#if $errors[name]}
-    <span class={errorStyle} transition:fade={{ duration: 200 }}>
-      <slot name="error" error={$errors[name]}>
+  <slot name="error" error={$errors[name]}>
+    {#if $errors[name]}
+      <span class={styls.error} transition:fade={{ duration: 200 }}>
         {$errors[name]}
-      </slot>
-    </span>
-  {/if}
+      </span>
+    {/if}
+  </slot>
 </label>
 
 <style>
-  .svform-field {
+  :global(.faivform-field-container) {
     position: relative;
     display: block;
+    container: field / inline-size;
     box-sizing: border-box;
     width: 100%;
     z-index: 0;
   }
-  .svform-field[data-type="password"] > span {
-    right: 36px;
+  :global(
+      .faivform-field-container[data-type="password"] > .faivform-field-error
+    ) {
+    right: calc(var(--faivform-space) * 2.5);
   }
-  .svform-field[data-type="checkbox"] {
+  :global(.faivform-field-container[data-type="checkbox"]) {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    cursor: pointer;
+    gap: calc(var(--faivform-space) / 2);
   }
-  .svform-field[data-type="checkbox"] > p {
+
+  :global(.faivform-field-label) {
+    display: block;
+    box-sizing: inherit;
+    width: 100%;
+    margin-bottom: calc(var(--faivform-space) / 4);
+    color: var(--faivform-primary-text);
+    font-size: var(--faivform-space);
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    font-family: var(--faivform-primary-font);
+  }
+
+  :global(.faivform-field-shared) {
+    box-sizing: inherit;
+    display: block;
+    width: 100%;
+    padding: calc(var(--faivform-space) / 2) calc(var(--faivform-space) / 1.5);
+    color: var(--faivform-primary-text);
+    background-color: var(--faivform-placeholder-color);
+    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    font-family: var(--faivform-primary-font);
+    border: var(--faivform-border-base);
+    border-radius: var(--faivform-radius);
+    transition:
+      border 200ms linear,
+      outline 200ms linear;
+    will-change: auto;
+  }
+  :global(.faivform-field-shared::placeholder) {
+    color: var(--faivform-placeholder-text);
+    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
+    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
+    font-family: var(--faivform-placeholder-font);
+  }
+  :global(.faivform-field-shared:has([data-error="true"])),
+  :global(.faivform-field-shared:invalid) {
+    border-color: var(--faivform-error-color);
+  }
+  :global(.faivform-field-shared:focus),
+  :global(.faivform-field-shared:focus-visible) {
+    outline: var(--faivform-border-base);
+    outline-color: var(--faivform-secondary-color);
+    border-color: var(--faivform-secondary-color);
+  }
+  :global(.faivform-field-shared[data-error="true"]),
+  :global(.faivform-field-shared:focus-visible:invalid) {
+    outline-color: var(--faivform-error-color);
+    border-color: var(--faivform-error-color);
+  }
+
+  :global(.faivform-field-input[type="number"]) {
+    appearance: none;
+    -moz-appearance: textfield;
+  }
+  :global(.faivform-field-input[type="number"]::-webkit-inner-spin-button),
+  :global(.faivform-field-input[type="number"]::-webkit-outer-spin-button) {
+    appearance: none;
+    margin: 0;
+  }
+
+  :global(.faivform-field-textarea) {
+    padding: calc(var(--faivform-space) / 2);
+    min-height: 100px;
+    resize: vertical;
+    appearance: none;
+  }
+
+  :global(.faivform-field-checkbox) {
+    display: block;
+    cursor: pointer;
+    appearance: none;
+    width: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    min-width: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    min-height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
+    border: var(--faivform-border-base);
+    border-radius: var(--faivform-radius);
+    transition:
+      box-shadow 200ms linear,
+      background-color 200ms linear;
+    will-change: auto;
+  }
+  :global(.faivform-field-checkbox:focus-visible) {
+    outline: 0;
+    box-shadow: var(--faivform-shadow-base);
+  }
+  :global(.faivform-field-checkbox:checked) {
+    background-color: var(--faivform-primary-color);
+    background-image: var(--checked-img);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  :global(.faivform-field-checkbox[data-error="true"]) {
+    border-color: var(--faivform-error-color);
+  }
+  :global(.faivform-field-checkbox + p) {
     margin-bottom: 0;
   }
-  .svform-field[data-type="checkbox"] > span {
-    transform: translateY(115%);
+  :global(.faivform-field-checkbox ~ .faivform-field-error) {
+    transform: translateY(120%);
     left: 0;
     right: auto;
     bottom: 0;
     cursor: default;
   }
 
-  .svform-label {
-    display: block;
-    box-sizing: inherit;
-    width: 100%;
-    margin: 0 0 5px;
-    color: var(--s-form-text);
-    font-size: 16px;
-    line-height: 18px;
-    font-family: var(--s-form-font);
-  }
-  .svform-shared {
-    width: 100%;
-    box-sizing: inherit;
-    padding: 4px 8px;
-    color: var(--s-form-text);
-    font-size: 14px;
-    line-height: 16px;
-    font-family: var(--s-form-font);
-    border: var(--s-form-border);
-    border-radius: var(--s-form-radius);
-  }
-  .svform-shared::placeholder {
-    color: var(--s-form-placeholder);
-    font-size: 14px;
-    line-height: 16px;
-    font-family: var(--s-form-font);
-  }
-  .svform-textarea {
-    padding: 8px;
-    min-height: 100px;
-    resize: vertical;
-  }
-  /* .textarea::placeholder {
-  } */
-  .svform-checkbox {
-    display: block;
-    width: var(--s-form-space);
-    height: var(--s-form-space);
-    border-radius: var(--s-form-radius);
-  }
-
-  /* .svform-input {
-  }
-  .svform-input::placeholder {
-  } */
-
-  .svform-action {
+  :global(.faivform-field-action) {
     position: absolute;
     display: block;
     box-sizing: inherit;
-    width: 26px;
-    height: 26px;
+    width: calc(var(--faivform-space) * 1.5);
+    min-width: calc(var(--faivform-space) * 1.5);
+    height: calc(var(--faivform-space) * 1.5);
     padding: 0;
     background-color: transparent;
-    color: var(--s-form-text);
-    font-size: 12px;
-    line-height: 12px;
-    font-family: var(--s-form-font);
+    color: var(--faivform-primary-text);
+    font-size: calc((var(--faivform-space) / 2) + (var(--faivform-space) / 4));
+    line-height: calc(
+      (var(--faivform-space) / 2) + (var(--faivform-space) / 4)
+    );
+    font-family: var(--faivform-primary-font);
+    transform: translateY(50%);
     border: 0;
-    bottom: 0;
-    right: 6px;
+    bottom: calc(
+      ((var(--faivform-space) * 2) + (var(--faivform-space) / 4)) / 2
+    );
+    right: calc(var(--faivform-space) / 2);
     z-index: 0;
   }
-  .svform-action:hover {
+  :global(:root:is(.dark, [data-theme="dark"]) .faivform-field-action) {
+    filter: invert(1);
+  }
+  :global(.faivform-field-action:hover) {
     cursor: pointer;
   }
 
-  .svform-icon {
+  :global(.faivform-field-icon) {
     display: block;
     box-sizing: inherit;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
+    width: 100%;
+    min-height: 100%;
     object-fit: contain;
   }
 
-  .svform-error {
+  :global(.faivform-field-error) {
     position: absolute;
     display: block;
     box-sizing: inherit;
-    padding: 3px 5px;
-    background-color: var(--s-form-error);
-    color: var(--s-form-text-error);
-    font-size: 12px;
-    line-height: 12px;
-    font-family: var(--s-form-font);
+    padding: calc(var(--faivform-space) / 4);
+    background-color: var(--faivform-placeholder-color);
+    color: var(--faivform-error-color);
+    font-size: calc((var(--faivform-space) / 2) + (var(--faivform-space) / 4));
+    line-height: calc(
+      (var(--faivform-space) / 2) + (var(--faivform-space) / 4)
+    );
+    font-weight: 500;
+    font-family: var(--faivform-error-font);
+    border-radius: calc(var(--faivform-radius) / 1.5);
     transform: translateY(50%);
-    border-radius: var(--s-form-radius);
-    bottom: 13px;
-    right: 5px;
+    bottom: calc(
+      ((var(--faivform-space) * 2) + (var(--faivform-space) / 4)) / 2
+    );
+    right: calc(var(--faivform-space) / 2);
     z-index: 0;
+  }
+
+  @container field (max-width: 450px) {
+    :global(
+        .faivform-field-container[data-type="password"] > .faivform-field-error
+      ) {
+      right: 0;
+    }
+    :global(.faivform-field-error) {
+      width: 100%;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      padding: calc(var(--faivform-space) / 4) 0;
+      transform: translateY(calc(100% + var(--faivform-space) / 4));
+    }
   }
 </style>

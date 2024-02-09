@@ -1,18 +1,47 @@
 export { faivform, useForm, setConfig } from "./logic/stores/index.js";
 export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
-export { FormError } from "./logic/utils/errors.js";
+export { FormError, SchemaError, SchemaErrorList } from "./logic/utils/errors.js";
+export { Adapter } from "./logic/typing/stores/form.js";
 
-export type { Config } from "./logic/typing/stores/config.js";
-export type { ContextStyles, ContextForm } from "./logic/typing/globals/contexts.js";
-export type { SelectOption, OptionItem } from "./logic/typing/globals/interfaces.js";
-export type { SharedUIProps, GeneralInputProps, GeneralFieldProps } from "./logic/typing/globals/proptypes.js";
-export type { FormStoreConfig, SubmitOptions } from "./logic/typing/stores/form.js";
+// Global types
 export type {
-  CssVars,
+  FieldStyles,
+  SelectStyles,
+  OptionStyles,
+  FileStyles,
   ErrorsStyles,
   Icons,
-  FileStyles,
-  FieldStyles,
-  OptionStyles,
-  SelectStyles,
 } from "./logic/typing/globals/styles.js";
+export type { SelectOption, OptionItem } from "./logic/typing/globals/interfaces.js";
+export type { SharedUIProps, GeneralFieldProps } from "./logic/typing/globals/proptypes.js";
+
+// Styles types
+export type {
+  Config,
+  ContextStyles,
+  FaivCSSVars,
+  FaivFormTheme,
+} from "./logic/typing/stores/styles.js";
+
+// Faivform types
+export type {
+  // Internal schemas,
+  Schema,
+  FieldProps as FieldPropSchema,
+  ArraySchema,
+  FieldsSchema,
+  // Faivform config
+  FaivFormConfig,
+  FaivFormStore,
+  Context,
+  ContextForm,
+  // Submit config
+  Submit,
+  SubmitAction,
+  SubmitConfig,
+} from "./logic/typing/stores/form.js";
+
+// Faivform utils types
+export type {
+  Errors as DataErrors,
+} from "./logic/typing/utils/errors.js";

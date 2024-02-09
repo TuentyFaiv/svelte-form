@@ -5,4 +5,302 @@ sidebar:
   order: 2
 ---
 
-You can use the `Field` component to render a form field.
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import {
+  FieldText,
+  FieldNumber,
+  FieldCheckbox,
+  FieldEmail,
+  FieldPassword,
+  FieldTel,
+  FieldUrl,
+  FieldSearch,
+  FieldArea,
+} from "@molecules";
+
+You can use the `Field` component to render a form field. This component is for simple *text*, *number*, *email*, etc. fields. If you need to render a *select*, *checkbox*, *radio*, etc. you can use the [`Select`](/components/select), [`Option`](/components/option), [`File`](/components/file) , etc. components.
+
+The `Field` component by default renders a text field. You can change the type of the field using the `type` prop.
+
+<Tabs>
+  <TabItem label="Usage">
+    ```svelte
+    <script lang="ts">
+      import { Field } from "@tuentyfaiv/svelte-form";
+    </script>
+
+    <Field name="name" label="Name:" />
+    <!-- Or -->
+    <Field name="name" label="Name:">
+      This is a custom label
+      <img src="/icon.svg" alt="hide/show" slot="icon" />
+      <span slot="error" let:error>
+        {formatError(error)}
+      </span>
+    </Field>
+    ```
+  </TabItem>
+  <TabItem label="Props">
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | name | `string` | - | The name of the field. |
+    | label | `string \| undefined \| null` | `null` | The label of the field. |
+    | type | `"text" \| "number" \| "checkbox" \| "email" \| "password" \| "tel" \| "url" \| "search" \| "textarea" \| undefined` | "text" | The type of the field. |
+    | context | `string` | "form" | The context of the form. |
+    | id | `string \| undefined \| null` | `null` | The id of the field. |
+    | styles | [`FieldStyles`](/reference/#fieldstyles) | `{}` | The styles of the field. |
+    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
+  </TabItem>
+  <TabItem label="Slots">
+    | Slot | Prop | Description | Available to |
+    |------|------|-------------| ------------|
+    | default | - | Customize the label of the field. | all |
+    | error | `{ error: string \| null }` | Show an error message. | all |
+    | icon | - | Icon of the field action  | password |
+  </TabItem>
+  <TabItem label="Events">
+    > This component has no events.
+
+  </TabItem>
+</Tabs>
+
+
+## Text
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldText />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        name: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="name" label="Name:" placeholder="Enter your name" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Number
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldNumber />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        age: {
+          type: "number",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="age" label="Age:" placeholder="Enter your age" type="number" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Checkbox
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldCheckbox />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        terms: "boolean",
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="terms" label="I accept the terms and conditions" type="checkbox" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Email
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldEmail />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        email: "string",
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="email" label="Email:" placeholder="user@email.com" type="email" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Password
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldPassword />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        password: "string",
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="password" label="Password:" type="password" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Tel
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldTel />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        phone: "string",
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="phone" label="Phone:" placeholder="Enter your phone number" type="tel" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Url
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldUrl />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        website: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="website" label="Website:" placeholder="https://www.example.com" type="url" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Search
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldSearch />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        search: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="search" label="Search:" placeholder="What are you looking for?" type="search" />
+    ```
+  </TabItem>
+</Tabs>
+
+## Textarea
+
+<Tabs>
+  <TabItem label="Example">
+    <FieldArea />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+
+      import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
+
+      const schema = {
+        description: {
+          type: "string",
+          required: true,
+        },
+      } satisfies FieldsSchema;
+
+      faivform({ fields: schema });
+    </script>
+
+    <Field name="description" label="Description:" placeholder="Enter a description" type="textarea" />
+    ```
+  </TabItem>
+</Tabs>

@@ -6,9 +6,6 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
-export interface OptionItem extends Omit<SelectOption, "key" | "disabled"> {
-  id?: string;
-  a11y?: {
-    title?: string;
-  }
+export interface OptionItem extends Omit<SelectOption, "fixed" | "label"> {
+  label?: string;
 }

@@ -5,6 +5,9 @@ on:
       - v*
       - builtin-v*
       - adapter-*
+    branches:
+      - main
+
 jobs:
   release:
     if: github.repository == 'TuentyFaiv/svelte-form'
@@ -33,6 +36,34 @@ jobs:
         run: pnpm publish --filter @tuentyfaiv/svelte-form --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  
+  release-zod:
+    if: github.repository == 'TuentyFaiv/svelte-form'
+    name: Release Zod adapter package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: true
+
+      - name: Build @faivform/zod
+        run: pnpm build --filter @faivform/zod
+
+      - name: Publish zod adapter package
+        run: pnpm publish --filter @faivform/zod --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ZOD_TOKEN }}
 
   release-builtin:
     if: github.repository == 'TuentyFaiv/svelte-form'
@@ -57,7 +88,7 @@ jobs:
       - name: Build @faivform/builtin
         run: pnpm build --filter @faivform/builtin
 
-      - name: Publish main package
+      - name: Publish built-in forms package
         run: pnpm publish --filter @faivform/builtin --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_BUILTIN_TOKEN }}

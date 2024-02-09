@@ -1,33 +1,18 @@
 interface GeneralStyles {
-  field?: string;
-  input?: string;
+  container?: string;
   label?: string;
+  input?: string;
   error?: string;
   icon?: string;
 }
 
-export interface CssVars {
-  space?: string;
-  primary?: string;
-  primaryOpacity?: string;
-  secondary?: string;
-  secondaryOpacity?: string;
-  accent?: string;
-  error?: string;
-  warning?: string;
-  success?: string;
-  shadow?: string;
-  shadowOpacity?: string;
-  shadowSize?: string;
-  shadowColor?: string;
-  border?: string;
-  borderWidth?: string;
-  borderStyle?: string;
-  text?: string;
-  placeholder?: string;
-  radius?: string;
-  texterror?: string;
-  font?: string;
+export interface FieldStyles extends GeneralStyles {
+  area?: string;
+  check?: string;
+  action?: string;
+  checked?: string;
+  hide?: string;
+  show?: string;
 }
 
 export interface SelectStyles extends Omit<GeneralStyles, "input"> {
@@ -39,39 +24,37 @@ export interface SelectStyles extends Omit<GeneralStyles, "input"> {
   item?: string;
   remove?: string;
   searchable?: string;
+  nonsearchable?: string;
   clear?: string;
   empty?: string;
 }
 
-export interface FieldStyles extends GeneralStyles {
-  area?: string;
-  check?: string;
-  action?: string;
-  hide?: string;
-  show?: string;
+export interface OptionStyles extends Omit<GeneralStyles, "icon"> {
+  content?: string;
+  legend?: string;
+  option?: string;
 }
 
-export interface FileStyles extends GeneralStyles {
-  wrapper?: string;
+export interface FileStyles extends Omit<GeneralStyles, "icon"> {
+  content?: string;
   retry?: string;
   cover?: string;
   remove?: string;
+  items?: string;
   item?: string;
 }
 
-export interface OptionStyles extends GeneralStyles {
-  content?: string;
-  options?: string;
-}
-
 export interface ErrorsStyles {
-  list?: string;
+  container?: string;
   item?: string;
 }
 
 export interface Icons {
-  show?: string;
+  checked?: string;
   hide?: string;
+  show?: string;
+  clear?: string;
   arrow?: string;
-  check?: string;
+  remove?: string;
+  retry?: string;
 }
