@@ -1,5 +1,5 @@
 ---
-title: Using Adapters
+title: How it works
 description: To use Yup, Zod you need to install the corresponding adapter.
 ---
 
@@ -8,163 +8,13 @@ import {
   ZodAdapter,
 } from "@organisms";
 
+Adapters are used to convert a schema to a format that `faivform` can understand. This is necessary because each schema validation library has its own format.
 
-Adapters are used to convert a schema to a format that `faivform` can understand. At the moment you can use [`Zod`](https://zod.dev/) or [`Yup`](https://www.npmjs.com/package/yup) schemas to validate your forms. If you want to use another schema validation library, you can create your [own adapter.](/guides/adapters/)
+## Little roadmap
 
-## Zod
+- [x] [`Zod`](https://zod.dev/)
+- [x] [`Yup`](https://www.npmjs.com/package/yup)
+- [ ] [`Joi`](https://joi.dev/api/?v=17.12.0)
+- [ ] [`Superstruct`](https://docs.superstructjs.org)
 
-Zod is a TypeScript-first schema declaration and validation library. It is a library that allows you to define a schema for your data and validate it.
-
-### Installation
-
-<Tabs>
-  <TabItem label="pnpm">
-    ```bash frame="none" 
-    pnpm add @faivform/zod zod
-    ```
-  </TabItem>
-  <TabItem label="npm">
-    ```bash frame="none" 
-    npm install @faivform/zod zod
-    ```
-  </TabItem>
-</Tabs>
-
-### Usage
-
-You need to create a schema using Zod and then pass it through the adapter to the `faivform` function.
-
-<Tabs>
-  <TabItem label="TS">
-    ```svelte
-    <script lang="ts">
-      import { faivform, Field } from "@tuentyfaiv/svelte-form";
-      import { adapter } from "@faivform/zod";
-      import { z } from "zod";
-
-      const schema = z.object({
-        name: z.string(),
-        age: z.number(),
-        email: z.string().email(),
-      });
-
-      type Schema = typeof schema;
-      type Fields = z.infer<Schema>;
-
-      const form = faivform<Schema, Fields>({ fields: adapter(schema) });
-
-      // ... rest of the code
-    </script>
-    ```
-  </TabItem>
-  <TabItem label="JS">
-    ```svelte
-    <script>
-      import { faivform, Field } from "@tuentyfaiv/svelte-form";
-      import { adapter } from "@faivform/zod";
-      import { z } from "zod";
-
-      const schema = z.object({
-        name: z.string(),
-        age: z.number(),
-        email: z.string().email(),
-      });
-
-      const form = faivform({ fields: adapter(schema) });
-
-      // ... rest of the code
-    </script>
-    ```
-  </TabItem>
-</Tabs>
-
-### Example
-
-<Tabs>
-  <TabItem label="Component">
-    <ZodAdapter />
-  </TabItem>
-  <TabItem label="Code">
-    ```svelte
-    ```
-  </TabItem>
-</Tabs>
-
-## Yup
-
-Yup is a JavaScript schema builder for value parsing and validation. It is a library that allows you to define a schema for your data and validate it.
-
-### Installation
-
-<Tabs>
-  <TabItem label="pnpm">
-    ```bash frame="none" 
-    pnpm add @faivform/yup yup
-    ```
-  </TabItem>
-  <TabItem label="npm">
-    ```bash frame="none"
-    npm install @faivform/yup yup
-    ```
-  </TabItem>
-</Tabs>
-
-### Usage
-
-<Tabs>
-  <TabItem label="TS">
-    ```svelte
-    <script>
-      import { faivform, Field } from "@tuentyfaiv/svelte-form";
-      import { adapter } from "@faivform/yup";
-      import * as yup from "yup";
-
-      const schema = yup.object().shape({
-        name: yup.string().required(),
-        age: yup.number().required().positive().integer(),
-        email: yup.string().email(),
-      });
-
-      type Schema = typeof schema;
-      type Fields = yup.InferType<Schema>;
-
-      const form = faivform<Schema, Fields>({ fields: adapter(schema) });
-
-      // ... rest of the code
-    </script>
-    ```
-  </TabItem>
-  <TabItem label="JS">
-    ```svelte
-    <script>
-      import { faivform, Field } from "@tuentyfaiv/svelte-form";
-      import { adapter } from "@faivform/yup";
-      import * as yup from "yup";
-
-      const schema = yup.object().shape({
-        name: yup.string().required(),
-        age: yup.number().required().positive().integer(),
-        email: yup.string().email(),
-      });
-
-      const form = faivform({ fields: adapter(schema) });
-
-      // ... rest of the code
-    </script>
-    ```
-  </TabItem>
-</Tabs>
-
-## Examples
-
-:::note
-  The examples will be available soon.
-:::
-
-{/* ### Zod
-
-### Yup */}
-
-## Built your own adapter
-
-If you want to use another schema validation library, you can create your [own adapter.](/guides/adapters/)
+If you want to use another schema validation library, you can create your [own adapter.](/guides/adapters/). Also you can request a new adapter by creating an issue in the [repository](https://github.com/TuentyFaiv/svelte-form/issues/new).

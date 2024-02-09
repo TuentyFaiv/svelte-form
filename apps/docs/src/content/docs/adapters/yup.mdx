@@ -1,0 +1,69 @@
+---
+title: Yup
+description: An adapter for using Yup with FaivForm
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+Yup is a JavaScript schema builder for value parsing and validation. It is a library that allows you to define a schema for your data and validate it.
+
+### Installation
+
+<Tabs>
+  <TabItem label="pnpm">
+    ```bash frame="none" 
+    pnpm add @faivform/yup yup
+    ```
+  </TabItem>
+  <TabItem label="npm">
+    ```bash frame="none"
+    npm install @faivform/yup yup
+    ```
+  </TabItem>
+</Tabs>
+
+### Usage
+
+<Tabs>
+  <TabItem label="TS">
+    ```svelte
+    <script>
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+      import { adapter } from "@faivform/yup";
+      import * as yup from "yup";
+
+      const schema = yup.object().shape({
+        name: yup.string().required(),
+        age: yup.number().required().positive().integer(),
+        email: yup.string().email(),
+      });
+
+      type Schema = typeof schema;
+      type Fields = yup.InferType<Schema>;
+
+      const form = faivform<Schema, Fields>({ fields: adapter(schema) });
+
+      // ... rest of the code
+    </script>
+    ```
+  </TabItem>
+  <TabItem label="JS">
+    ```svelte
+    <script>
+      import { faivform, Field } from "@tuentyfaiv/svelte-form";
+      import { adapter } from "@faivform/yup";
+      import * as yup from "yup";
+
+      const schema = yup.object().shape({
+        name: yup.string().required(),
+        age: yup.number().required().positive().integer(),
+        email: yup.string().email(),
+      });
+
+      const form = faivform({ fields: adapter(schema) });
+
+      // ... rest of the code
+    </script>
+    ```
+  </TabItem>
+</Tabs>
