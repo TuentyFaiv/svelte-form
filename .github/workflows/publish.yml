@@ -5,6 +5,9 @@ on:
       - v*
       - builtin-v*
       - adapter-*
+    branches:
+      - main
+
 jobs:
   release:
     if: github.repository == 'TuentyFaiv/svelte-form'
