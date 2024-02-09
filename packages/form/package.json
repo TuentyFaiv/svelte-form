@@ -1,7 +1,7 @@
 {
   "name": "@tuentyfaiv/svelte-form",
   "description": "A form library for Svelte. It is built on top of Svelte and Typescript. Inspired by Formik and React Hook Form.",
-  "version": "0.2.18",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev:web": "vite dev",
@@ -72,12 +72,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TuentyFaiv/svelte-form.git"
+    "url": "git+https://github.com/TuentyFaiv/svelte-form/tree/main/packages/form"
   },
   "bugs": {
     "url": "https://github.com/TuentyFaiv/svelte-form/issues"
   },
-  "homepage": "https://github.com/TuentyFaiv/svelte-form#readme",
+  "homepage": "https://forms.tuentyfaiv.com/",
   "directories": {
     "test": "tests"
   }

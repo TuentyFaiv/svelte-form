@@ -1,90 +1,49 @@
-# Svelte Form
+# Faivform
+
+A form library for Svelte. It is built on top of Svelte and Typescript. Inspired by Formik and React Hook Form.
+
+You can check the [documentation](https://forms.tuentyfaiv.com) for more information.
+
+## Installation
 
 `npm install @tuentyfaiv/svelte-form`
 
-## Examples
+## Basic example
 
-- ### Store creation
+- ### Schema
   ```typescript
-  import { string } from "yup";
-  import { faivform } from "@tuentyfaiv/svelte-form";
+  import type { FieldsSchema } from "@tuentyfaiv/svelte-form";
 
-  const fields = {
-    email: string().email("required-email").required("required"),
+  export const signinSchema: = {
+    email: "string",
+    password: "string",
     // ...other fields
-  };
-
-  export const form = faivform({ fields });
+  } satisfies FieldsSchema;
   ```
-- ### Input
-  ```svelte
+- ### Form
+  ```typescript
   <script lang="ts">
     import { Field } from "@tuentyfaiv/svelte-form";
+    import { signinSchema } from "./your-schema/path";
 
-    // From store created
-    const { submit } = $form; // Store created
-    // Or create a new one
-    const form = faivform({ fields });
+    const form = faivform({ fields: signinSchema });
     const { submit } = $form;
-    // If you want reactivity
-    $: form = faivform({ fields });
+    
+    // or
+
+    $: form = faivform({ fields: signinSchema });
     $: ({ submit } = $form);
 
 
     const onSubmit = submit(async (values) => {
-      // ...action
+      // your logic
     });
   </script>
 
   <form on:submit|preventDefault={onSubmit}>
     <Field name="email" type="email" label="Email" />
+    <Field name="password" type="password" label="Password" />
     // ... other inputs
     <button type="submit">Submit</button>
   </form>
-  ```
-
-## Imports
-- ### Store 
-  ```typescript
-  import {
-    faivform,
-    useForm,
-    setConfig
-  } from "@tuentyfaiv/svelte-form";
-  ```
-- ### Components
-  ```typescript
-  import {
-    Field,
-    Select,
-    Option,
-    File,
-    Errors
-  } from "@tuentyfaiv/svelte-form";
-  ```
-- ### Utils
-  ```typescript
-  import { FormError } from "@tuentyfaiv/svelte-form";
-  ```
-- ### Types
-  ```typescript
-  import type {
-    Config,
-    ContextStyles,
-    ContextForm,
-    SelectOption,
-    OptionItem,
-    SharedUIProps,
-    GeneralInputProps,
-    GeneralFieldProps,
-    FormStoreConfig,
-    SubmitOptions,
-    CssVars,
-    ErrorsStyles,
-    Icons,
-    FileStyles,
-    FieldStyles,
-    OptionStyles,
-    SelectStyles,
-  } from "@tuentyfaiv/svelte-form";
   ```
