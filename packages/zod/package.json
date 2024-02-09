@@ -1,7 +1,7 @@
 {
 	"name": "@faivform/zod",
 	"description": "Adapter to use Zod with @tuentyfaiv/svelte-form",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
 		"dev:web": "vite dev",
@@ -75,12 +75,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/TuentyFaiv/svelte-form.git"
+		"url": "git+https://github.com/TuentyFaiv/svelte-form/tree/main/packages/zod"
 	},
 	"bugs": {
 		"url": "https://github.com/TuentyFaiv/svelte-form/issues"
 	},
-	"homepage": "https://github.com/TuentyFaiv/svelte-form#readme",
+	"homepage": "https://forms.tuentyfaiv.com/adapters/zod/",
 	"directories": {
 		"test": "tests"
 	}
