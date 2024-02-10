@@ -30,7 +30,6 @@ npm install @faivform/zod
   const onSubmit = submit(async (values) => {
     // your logic
   });
-
 </script>
 
 <form on:submit|preventDefault={onSubmit}>

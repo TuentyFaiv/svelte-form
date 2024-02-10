@@ -3,12 +3,12 @@ import { ZodError, ZodObject } from "zod";
 
 import type { Writable } from "svelte/store";
 import type { DataErrors } from "@tuentyfaiv/svelte-form";
-import type { ZodRawShape, infer as ZodInfer, ZodTypeAny } from "zod";
+import type { ZodRawShape, infer as ZodInfer } from "zod";
 import type { ZodAdapterConfig } from "./zod.types.js";
 
 class ZodAdapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Schema> = ZodInfer<Schema>> extends Adapter<Data> {
-  #schema: Schema;
-  #resolveDeep: (three: ZodTypeAny) => null | undefined;
+  #schema: ZodAdapterConfig<Schema>["schema"];
+  #resolveDeep: ZodAdapterConfig<Schema>["resolveDeep"];
 
   constructor(config: ZodAdapterConfig<Schema>) {
     super();
@@ -84,9 +84,9 @@ class ZodAdapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Sc
 }
 
 export function adapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Schema> = ZodInfer<Schema>>(schema: Schema) {
-  function resolveDeep(three: ZodTypeAny): null | undefined {
+  const resolveDeep: ZodAdapterConfig<Schema>["resolveDeep"] = (three): null | undefined => {
     if (three instanceof ZodObject) {
-      return Object.entries(three.shape as ZodObject<ZodRawShape>).reduce((acc, [key, value]) => ({
+      return Object.entries(three.shape as Schema).reduce((acc, [key, value]) => ({
         ...acc,
         [key]: resolveDeep(value),
       }), {} as Data[keyof Data]);
@@ -101,10 +101,7 @@ export function adapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodI
     }
 
     return null;
-  }
+  };
 
-  return new ZodAdapter({
-    schema,
-    resolveDeep,
-  });
+  return new ZodAdapter({ schema, resolveDeep });
 }
