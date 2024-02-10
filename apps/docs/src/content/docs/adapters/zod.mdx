@@ -81,6 +81,36 @@ You need to create a schema using Zod and then pass it through the adapter to th
   </TabItem>
   <TabItem label="Code">
     ```svelte
+    <script lang="ts">
+      import { Errors, faivform, Field } from "@tuentyfaiv/svelte-form";
+      import { adapter } from "@faivform/zod";
+      import { z } from "zod";
+
+      const schema = z.object({
+        name: z.string(),
+        age: z.number(),
+        email: z.string().email(),
+      });
+
+      type Schema = typeof schema;
+      type Fields = z.infer<Schema>;
+
+      const form = faivform<Schema, Fields>({
+        fields: adapter(schema)
+      });
+
+      const onSubmit = $form.submit((values) => {
+        console.log(values);
+      });
+    </script>
+
+    <form on:submit|preventDefault={onSubmit}>
+      <Field name="name" label="Name:" />
+      <Field name="age" label="Age:" type="number" />
+      <Field name="email" label="Email:" type="email" />
+      <Errors />
+      <button type="submit"> Submit </button>
+    </form>
     ```
   </TabItem>
 </Tabs>

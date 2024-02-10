@@ -1,23 +1,28 @@
 <script lang="ts">
   import { Errors, faivform, Field } from "@tuentyfaiv/svelte-form";
-  import { adapter } from "@faivform/zod";
-  import { z } from "zod";
+  import { adapter } from "@faivform/yup";
+  import { object, string, number } from "yup";
 
-  const schema = z.object({
-    name: z.string(),
-    age: z.number(),
-    email: z.string().email(),
-    // details: z.object({
-    //   address: z.string(),
-    //   city: z.string(),
-    //   postalCode: z.string(),
+  import type { InferType } from "yup";
+
+  const schema = object({
+    name: string().required("Name is required"),
+    age: number()
+      .required("Age is required")
+      .positive("Age must be positive")
+      .integer("Age must be an integer"),
+    email: string().email().required("Email is required"),
+    // details: object({
+    //   address: string(),
+    //   city: string(),
+    //   postalCode: string(),
     // }),
   });
 
   type Schema = typeof schema;
-  type Fields = z.infer<Schema>;
+  type Fields = InferType<Schema>;
 
-  const context = "adapter-zod";
+  const context = "adapter-yup";
 
   const form = faivform<Schema, Fields>({
     fields: adapter(schema),

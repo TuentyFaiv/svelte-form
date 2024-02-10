@@ -3,3 +3,4 @@ export { default as Usage } from "./Usage/Usage.astro";
 export { default as Palette } from "./Palette/Palette.astro";
 // Adapters examples
 export { default as ZodAdapter } from "./ZodAdapter/ZodAdapter.astro";
+export { default as YupAdapter } from "./YupAdapter/YupAdapter.astro";
