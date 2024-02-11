@@ -1,13 +1,13 @@
 # Faivform zod adapter
 
-This package provides a zod adapter for [faivform](https://www.npmjs.com/package/@tuentyfaiv/svelte-form)
+This package provides a yup adapter for [faivform](https://www.npmjs.com/package/@tuentyfaiv/svelte-form)
 
-You can check the [documentation](https://forms.tuentyfaiv.com/adapters/zod/) for more information.
+You can check the [documentation](https://forms.tuentyfaiv.com/adapters/yup/) for more information.
 
 ## Installation
 
 ```bash
-npm install @faivform/zod
+npm install @faivform/yup
 ```
 
 ## Basic example
@@ -15,7 +15,7 @@ npm install @faivform/zod
 ```svelte
 <script lang="ts">
   import { Field } from "@tuentyfaiv/svelte-form";
-  import { adapter } from "@faivform/zod";
+  import { adapter } from "@faivform/yup";
   import { signinSchema } from "./your-schema/path";
 
   const form = faivform({ fields: adapter(signinSchema) });

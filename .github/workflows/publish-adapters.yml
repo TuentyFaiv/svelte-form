@@ -1,0 +1,64 @@
+name: Publish adapters packages
+on: 
+  push:
+    tags:
+      - adapter-*
+    branches:
+      - main
+
+jobs:
+  release-zod:
+    if: github.repository == 'TuentyFaiv/svelte-form'
+    name: Release Zod adapter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: true
+
+      - name: Build @faivform/zod
+        run: pnpm build --filter @faivform/zod
+
+      - name: Publish zod adapter
+        run: pnpm publish --filter @faivform/zod --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ZOD_TOKEN }}
+  
+  release-yup:
+    if: github.repository == 'TuentyFaiv/svelte-form'
+    name: Release Yup adapter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: true
+
+      - name: Build @faivform/yup
+        run: pnpm build --filter @faivform/yup
+
+      - name: Publish yup adapter
+        run: pnpm publish --filter @faivform/yup --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_YUP_TOKEN }}

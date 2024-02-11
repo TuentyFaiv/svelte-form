@@ -4,6 +4,9 @@ description: An adapter for using Yup with FaivForm
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
+import {
+  YupAdapter,
+} from "@organisms";
 
 Yup is a JavaScript schema builder for value parsing and validation. It is a library that allows you to define a schema for your data and validate it.
 
@@ -24,6 +27,8 @@ Yup is a JavaScript schema builder for value parsing and validation. It is a lib
 
 ### Usage
 
+You need to create a schema using Yup and then pass it through the adapter to the `faivform` function.
+
 <Tabs>
   <TabItem label="TS">
     ```svelte
@@ -34,7 +39,7 @@ Yup is a JavaScript schema builder for value parsing and validation. It is a lib
 
       const schema = yup.object().shape({
         name: yup.string().required(),
-        age: yup.number().required().positive().integer(),
+        age: yup.number().required(),
         email: yup.string().email(),
       });
 
@@ -56,7 +61,7 @@ Yup is a JavaScript schema builder for value parsing and validation. It is a lib
 
       const schema = yup.object().shape({
         name: yup.string().required(),
-        age: yup.number().required().positive().integer(),
+        age: yup.number().required(),
         email: yup.string().email(),
       });
 
@@ -64,6 +69,54 @@ Yup is a JavaScript schema builder for value parsing and validation. It is a lib
 
       // ... rest of the code
     </script>
+    ```
+  </TabItem>
+</Tabs>
+
+
+### Example
+
+<Tabs>
+  <TabItem label="Component">
+    <YupAdapter />
+  </TabItem>
+  <TabItem label="Code">
+    ```svelte
+    <script lang="ts">
+      import { Errors, faivform, Field } from "@tuentyfaiv/svelte-form";
+      import { adapter } from "@faivform/yup";
+      import { object, string, number } from "yup";
+
+      import type { InferType } from "yup";
+
+      const schema = object({
+        name: string().required("Name is required"),
+        age: number()
+          .required("Age is required")
+          .positive("Age must be positive")
+          .integer("Age must be an integer"),
+        email: string().email().required("Email is required"),
+      });
+
+      type Schema = typeof schema;
+      type Fields = InferType<Schema>;
+
+      const form = faivform<Schema, Fields>({
+        fields: adapter(schema),
+      });
+
+      const onSubmit = $form.submit((values) => {
+        console.log(values);
+      });
+    </script>
+
+    <form on:submit|preventDefault={onSubmit}>
+      <Field name="name" label="Name:" />
+      <Field name="age" label="Age:" type="number" />
+      <Field name="email" label="Email:" type="email" />
+      <Errors />
+      <button type="submit"> Submit </button>
+    </form>
     ```
   </TabItem>
 </Tabs>

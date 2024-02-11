@@ -1,15 +1,15 @@
-name: Publish packages
+name: Publish extras packages
 on: 
   push:
     tags:
-      - v*
+      - builtin-v*
     branches:
       - main
 
 jobs:
-  release:
+  release-builtin:
     if: github.repository == 'TuentyFaiv/svelte-form'
-    name: Release core package
+    name: Release Built-in forms package
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,10 +27,10 @@ jobs:
           version: latest
           run_install: true
 
-      - name: Build @tuentyfaiv/svelte-form
-        run: pnpm build --filter @tuentyfaiv/svelte-form
+      - name: Build @faivform/builtin
+        run: pnpm build --filter @faivform/builtin
 
-      - name: Publish main package
-        run: pnpm publish --filter @tuentyfaiv/svelte-form --access public
+      - name: Publish built-in forms package
+        run: pnpm publish --filter @faivform/builtin --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_BUILTIN_TOKEN }}

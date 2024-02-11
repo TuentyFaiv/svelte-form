@@ -1,16 +1,19 @@
 import { Adapter } from "@tuentyfaiv/svelte-form";
-import { ZodError, ZodObject } from "zod";
+import { ObjectSchema, ValidationError } from "yup";
 
-import type { Writable } from "svelte/store";
 import type { DataErrors } from "@tuentyfaiv/svelte-form";
-import type { ZodRawShape, infer as ZodInfer } from "zod";
-import type { ZodAdapterConfig } from "./zod.types.js";
+import type { Writable } from "svelte/store";
+import type { AnyObject, AnySchema, InferType } from "yup";
+import type { YupAdapterConfig } from "./yup.types.js";
 
-class ZodAdapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Schema> = ZodInfer<Schema>> extends Adapter<Data> {
-  #schema: ZodAdapterConfig<Schema>["schema"];
-  #resolveDeep: ZodAdapterConfig<Schema>["resolveDeep"];
+class YupAdapter<
+Schema extends ObjectSchema<AnyObject>,
+Data extends InferType<Schema> = InferType<Schema>,
+> extends Adapter<Data> {
+  #schema: YupAdapterConfig<Schema>["schema"];
+  #resolveDeep: YupAdapterConfig<Schema>["resolveDeep"];
 
-  constructor(config: ZodAdapterConfig<Schema>) {
+  constructor(config: YupAdapterConfig<Schema>) {
     super();
 
     this.#schema = config.schema;
@@ -22,15 +25,15 @@ class ZodAdapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Sc
   // eslint-disable-next-line class-methods-use-this
   #setError = async (field: keyof Data, errros: Writable<DataErrors<Data>>, error?: unknown) => {
     let message: string | null = null;
-    if (error instanceof ZodError) {
-      message = error.issues.reduce((_, issue) => issue.message, "");
+    if (error instanceof ValidationError) {
+      message = error.inner.reduce((_, issue) => issue.message, "");
     }
 
     await errros.update((prev) => ({ ...prev, [field]: message }));
   };
 
   initial = () => {
-    const start = Object.entries(this.#schema.shape).reduce((acc, [key, three]) => ({
+    const start = Object.entries(this.#schema.fields).reduce((acc, [key, three]) => ({
       fields: {
         ...acc.fields,
         [key]: this.#resolveDeep(three),
@@ -48,13 +51,12 @@ class ZodAdapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Sc
   };
 
   validate = async <T = Data>(data: T): Promise<void> => {
-    await this.#schema.parse(data);
+    await this.#schema.validate(data, { abortEarly: false, strict: true });
   };
 
   field = async (field: keyof Data, value: Data[keyof Data], errors: Writable<DataErrors<Data>>): Promise<void> => {
     try {
-      this.#schema.shape[field as string].parse(value);
-
+      await (this.#schema.fields[field as string] as AnySchema).validate(value, { abortEarly: false, strict: true });
       await this.#setError(field, errors);
     } catch (error) {
       await this.#setError(field, errors, error);
@@ -69,13 +71,12 @@ class ZodAdapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Sc
   ): Promise<void> => {
     await handle?.(error);
 
-    if (error instanceof ZodError) {
-      const messages = error.issues.reduce((acc, issue) => ({
+    if (error instanceof ValidationError) {
+      const messages = error.inner.reduce((acc, issue) => ({
         ...acc,
-        [issue.path.join(".")]: issue.message,
-      }), {});
-
-      await errors.update((prev) => ({
+        [String(issue.path)]: issue.message,
+      }), {} as Partial<DataErrors<Data>>);
+      errors.update((prev) => ({
         ...prev,
         ...messages,
       }));
@@ -83,25 +84,20 @@ class ZodAdapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Sc
   };
 }
 
-export function adapter<Schema extends ZodObject<ZodRawShape>, Data extends ZodInfer<Schema> = ZodInfer<Schema>>(schema: Schema) {
-  const resolveDeep: ZodAdapterConfig<Schema>["resolveDeep"] = (three): null | undefined => {
-    if (three instanceof ZodObject) {
-      return Object.entries(three.shape as Schema).reduce((acc, [key, value]) => ({
+export function adapter<
+Schema extends ObjectSchema<AnyObject>,
+Data extends InferType<Schema> = InferType<Schema>,
+>(schema: Schema) {
+  const resolveDeep: YupAdapterConfig<Schema>["resolveDeep"] = (three) => {
+    if (three instanceof ObjectSchema) {
+      return Object.entries(three.fields).reduce((acc, [key, value]) => ({
         ...acc,
         [key]: resolveDeep(value),
       }), {} as Data[keyof Data]);
     }
 
-    if (three.isNullable()) {
-      return null;
-    }
-
-    if (three.isOptional()) {
-      return undefined;
-    }
-
     return null;
   };
 
-  return new ZodAdapter({ schema, resolveDeep });
+  return new YupAdapter({ schema, resolveDeep });
 }
