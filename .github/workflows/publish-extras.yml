@@ -1,4 +1,4 @@
-name: Publish extras packages
+name: Publish extra packages
 on: 
   push:
     tags:
@@ -9,7 +9,7 @@ on:
 jobs:
   release-builtin:
     if: github.repository == 'TuentyFaiv/svelte-form'
-    name: Release Built-in forms package
+    name: Release Built-in forms
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

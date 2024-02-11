@@ -1,4 +1,4 @@
-name: Publish packages
+name: Publish core package
 on: 
   push:
     tags:
@@ -9,7 +9,7 @@ on:
 jobs:
   release:
     if: github.repository == 'TuentyFaiv/svelte-form'
-    name: Release core package
+    name: Release faivform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
