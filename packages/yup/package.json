@@ -1,7 +1,7 @@
 {
 	"name": "@faivform/yup",
 	"description": "Adapter to use Yup with @tuentyfaiv/svelte-form",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
 		"dev:web": "vite dev",
