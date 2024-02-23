@@ -1,6 +1,8 @@
 name: Publish core package
 on: 
   push:
+    branches:
+      - main
     tags:
       - v*
 
