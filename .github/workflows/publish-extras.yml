@@ -3,8 +3,6 @@ on:
   push:
     tags:
       - builtin-v*
-    branches:
-      - main
 
 jobs:
   release-builtin:
