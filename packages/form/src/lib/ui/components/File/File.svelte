@@ -524,7 +524,7 @@
     display: block;
     box-sizing: inherit;
     padding: calc(var(--faivform-space) / 4);
-    background-color: var(--faivform-placeholder-color);
+    background-color: transparent;
     color: var(--faivform-error-color);
     font-size: calc((var(--faivform-space) / 2) + (var(--faivform-space) / 4));
     line-height: calc(

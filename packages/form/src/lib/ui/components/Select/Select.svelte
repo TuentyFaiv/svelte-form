@@ -766,6 +766,7 @@
       width: 100%;
       left: 0;
       bottom: 0;
+      background-color: transparent;
       padding: calc(var(--faivform-space) / 4) 0;
       transform: translateY(calc(100% + var(--faivform-space) / 4));
     }
