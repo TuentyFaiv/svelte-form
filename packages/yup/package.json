@@ -45,7 +45,7 @@
 	"peerDependencies": {
 		"@tuentyfaiv/svelte-form": "workspace:^",
 		"svelte": "^4.0.0",
-		"yup": "^1.2.0"
+		"yup": "^1.0.0"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.41.2",

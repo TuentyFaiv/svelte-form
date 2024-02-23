@@ -1,6 +1,6 @@
 {
 	"name": "@faivform/builtin",
-	"description": "Built-in Svelte forms using @tuentyfaiv/svelte-form",
+	"description": "Built-in forms using @tuentyfaiv/svelte-form",
 	"version": "0.0.2",
 	"type": "module",
 	"scripts": {
@@ -21,7 +21,8 @@
 		"Svelte",
 		"Forms",
 		"UI",
-		"Builtin Forms"
+		"Builtin Forms",
+		"TuentyFaiv"
 	],
 	"author": "Tonalli López <contact@tuentyfaiv.com>",
 	"license": "MIT",
@@ -42,35 +43,30 @@
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"peerDependencies": {
-		"@emotion/css": "^11.11.2",
 		"@tuentyfaiv/svelte-form": "workspace:^",
 		"svelte": "^4.0.0",
-		"yup": "^1.2.0"
+		"yup": "^1.0.0"
 	},
 	"devDependencies": {
-		"@emotion/css": "^11.11.2",
-		"@playwright/test": "^1.36.0",
+		"@playwright/test": "^1.41.2",
 		"@repo/eslint-config": "workspace:*",
-		"@sveltejs/adapter-vercel": "^3.0.2",
-		"@sveltejs/kit": "^1.22.3",
-		"@sveltejs/package": "^2.2.0",
+		"@sveltejs/adapter-auto": "^3.1.1",
+		"@sveltejs/kit": "^2.5.0",
+		"@sveltejs/package": "^2.2.6",
+		"@sveltejs/vite-plugin-svelte": "^3.0.2",
 		"@tuentyfaiv/svelte-form": "workspace:^",
-		"@typescript-eslint/eslint-plugin": "^6.0.0",
-		"@typescript-eslint/parser": "^6.0.0",
-		"eslint": "^8.44.0",
-		"eslint-import-resolver-node": "^0.3.7",
-		"eslint-module-utils": "^2.8.0",
-		"eslint-plugin-import": "^2.27.5",
-		"eslint-scope": "^7.2.0",
-		"eslint-visitor-keys": "^3.4.1",
-		"publint": "^0.1.16",
-		"svelte": "^4.0.5",
-		"svelte-check": "^3.4.6",
-		"tslib": "^2.6.0",
-		"typescript": "^5.1.6",
-		"vite": "^4.5.1",
-		"vitest": "^0.33.0",
-		"yup": "^1.2.0"
+		"@types/eslint": "8.56.2",
+		"@typescript-eslint/eslint-plugin": "^6.21.0",
+		"@typescript-eslint/parser": "^6.21.0",
+		"eslint": "^8.56.0",
+		"publint": "^0.2.7",
+		"svelte": "^4.2.10",
+		"svelte-check": "^3.6.4",
+		"tslib": "^2.6.2",
+		"typescript": "^5.3.3",
+		"vite": "^5.1.1",
+		"vitest": "^1.2.2",
+		"yup": "^1.3.3"
 	},
 	"engines": {
 		"npm": ">=8.0.0",
@@ -79,12 +75,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/TuentyFaiv/svelte-form.git"
+		"url": "git+https://github.com/TuentyFaiv/svelte-form/tree/main/packages/builtin"
 	},
 	"bugs": {
 		"url": "https://github.com/TuentyFaiv/svelte-form/issues"
 	},
-	"homepage": "https://github.com/TuentyFaiv/svelte-form/packages/builtin#readme",
+	"homepage": "https://forms.tuentyfaiv.com/extras/",
 	"directories": {
 		"test": "tests"
 	}
