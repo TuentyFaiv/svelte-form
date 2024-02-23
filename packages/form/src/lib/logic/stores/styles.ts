@@ -238,185 +238,185 @@ export class FaivFormStyles {
     };
 
     const defaultLight: FaivFormTheme = {
-      font: theme.light?.font ?? "system-ui, sans-serif",
-      space: theme.light?.space ?? "1rem",
-      radius: theme.light?.radius ?? `calc(var(${prefix}space) / 4)`,
-      white: theme.light?.white ?? "255 255 255",
-      black: theme.light?.black ?? "0 0 0",
+      font: theme?.light?.font ?? "system-ui, sans-serif",
+      space: theme?.light?.space ?? "1rem",
+      radius: theme?.light?.radius ?? `calc(var(${prefix}space) / 4)`,
+      white: theme?.light?.white ?? "255 255 255",
+      black: theme?.light?.black ?? "0 0 0",
       primary: {
-        50: theme.light?.primary?.["50"] ?? "222 246 238", // #def6ee
-        100: theme.light?.primary?.["100"] ?? "211 242 232", // #d3f2e8
-        200: theme.light?.primary?.["200"] ?? "200 239 226", // #c8efe2
-        300: theme.light?.primary?.["300"] ?? "166 230 209", // #a6e6d1
-        400: theme.light?.primary?.["400"] ?? "100 211 174", // #64d3ae
-        500: theme.light?.primary?.["500"] ?? "33 192 139", // #21C08B
-        600: theme.light?.primary?.["600"] ?? "30 173 125", // #1ead7d
-        700: theme.light?.primary?.["700"] ?? "25 144 104", // #199068
-        800: theme.light?.primary?.["800"] ?? "20 115 83", // #147353
-        900: theme.light?.primary?.["900"] ?? "16 94 68", // #105e44
+        50: theme?.light?.primary?.["50"] ?? "222 246 238", // #def6ee
+        100: theme?.light?.primary?.["100"] ?? "211 242 232", // #d3f2e8
+        200: theme?.light?.primary?.["200"] ?? "200 239 226", // #c8efe2
+        300: theme?.light?.primary?.["300"] ?? "166 230 209", // #a6e6d1
+        400: theme?.light?.primary?.["400"] ?? "100 211 174", // #64d3ae
+        500: theme?.light?.primary?.["500"] ?? "33 192 139", // #21C08B
+        600: theme?.light?.primary?.["600"] ?? "30 173 125", // #1ead7d
+        700: theme?.light?.primary?.["700"] ?? "25 144 104", // #199068
+        800: theme?.light?.primary?.["800"] ?? "20 115 83", // #147353
+        900: theme?.light?.primary?.["900"] ?? "16 94 68", // #105e44
       },
       secondary: {
-        50: theme.light?.secondary?.["50"] ?? "233 223 243", // #e9dff3
-        100: theme.light?.secondary?.["100"] ?? "226 212 240", // #e2d4f0
-        200: theme.light?.secondary?.["200"] ?? "219 202 236", // #dbcaec
-        300: theme.light?.secondary?.["300"] ?? "197 170 224", // #c5aae0
-        400: theme.light?.secondary?.["400"] ?? "154 106 201", // #9a6ac9
-        500: theme.light?.secondary?.["500"] ?? "110 42 178", // #6E2AB2
-        600: theme.light?.secondary?.["600"] ?? "99 38 160", // #6326a0
-        700: theme.light?.secondary?.["700"] ?? "83 32 134", // #532086
-        800: theme.light?.secondary?.["800"] ?? "66 25 107", // #42196b
-        900: theme.light?.secondary?.["900"] ?? "54 21 87", // #361557
+        50: theme?.light?.secondary?.["50"] ?? "233 223 243", // #e9dff3
+        100: theme?.light?.secondary?.["100"] ?? "226 212 240", // #e2d4f0
+        200: theme?.light?.secondary?.["200"] ?? "219 202 236", // #dbcaec
+        300: theme?.light?.secondary?.["300"] ?? "197 170 224", // #c5aae0
+        400: theme?.light?.secondary?.["400"] ?? "154 106 201", // #9a6ac9
+        500: theme?.light?.secondary?.["500"] ?? "110 42 178", // #6E2AB2
+        600: theme?.light?.secondary?.["600"] ?? "99 38 160", // #6326a0
+        700: theme?.light?.secondary?.["700"] ?? "83 32 134", // #532086
+        800: theme?.light?.secondary?.["800"] ?? "66 25 107", // #42196b
+        900: theme?.light?.secondary?.["900"] ?? "54 21 87", // #361557
       },
       accent: {
-        50: theme.light?.accent?.["50"] ?? "252 236 217", // #fcecd9
-        100: theme.light?.accent?.["100"] ?? "251 230 205", // #fbe6cd
-        200: theme.light?.accent?.["200"] ?? "250 223 192", // #fadfc0
-        300: theme.light?.accent?.["300"] ?? "247 204 155", // #f7cc9b
-        400: theme.light?.accent?.["400"] ?? "242 166 79", // #f2a64f
-        500: theme.light?.accent?.["500"] ?? "236 128 4", // #ec8004
-        600: theme.light?.accent?.["600"] ?? "212 115 4", // #d47304
-        700: theme.light?.accent?.["700"] ?? "177 96 3", // #b16003
-        800: theme.light?.accent?.["800"] ?? "142 77 2", // #8e4d02
-        900: theme.light?.accent?.["900"] ?? "116 63 2", // #743f02
+        50: theme?.light?.accent?.["50"] ?? "252 236 217", // #fcecd9
+        100: theme?.light?.accent?.["100"] ?? "251 230 205", // #fbe6cd
+        200: theme?.light?.accent?.["200"] ?? "250 223 192", // #fadfc0
+        300: theme?.light?.accent?.["300"] ?? "247 204 155", // #f7cc9b
+        400: theme?.light?.accent?.["400"] ?? "242 166 79", // #f2a64f
+        500: theme?.light?.accent?.["500"] ?? "236 128 4", // #ec8004
+        600: theme?.light?.accent?.["600"] ?? "212 115 4", // #d47304
+        700: theme?.light?.accent?.["700"] ?? "177 96 3", // #b16003
+        800: theme?.light?.accent?.["800"] ?? "142 77 2", // #8e4d02
+        900: theme?.light?.accent?.["900"] ?? "116 63 2", // #743f02
       },
       success: {
-        50: theme.light?.success?.["50"] ?? "225 245 225", // #e1f5e1
-        100: theme.light?.success?.["100"] ?? "215 242 215", // #d7f2d7
-        200: theme.light?.success?.["200"] ?? "205 239 206", // #cdefce
-        300: theme.light?.success?.["300"] ?? "175 229 176", // #afe5b0
-        400: theme.light?.success?.["400"] ?? "115 210 116", // #73d274
-        500: theme.light?.success?.["500"] ?? "55 190 57", // #37be39
-        600: theme.light?.success?.["600"] ?? "50 171 51", // #32ab33
-        700: theme.light?.success?.["700"] ?? "41 143 43", // #298f2b
-        800: theme.light?.success?.["800"] ?? "33 114 34", // #217222
-        900: theme.light?.success?.["900"] ?? "27 93 28", // #1b5d1c
+        50: theme?.light?.success?.["50"] ?? "225 245 225", // #e1f5e1
+        100: theme?.light?.success?.["100"] ?? "215 242 215", // #d7f2d7
+        200: theme?.light?.success?.["200"] ?? "205 239 206", // #cdefce
+        300: theme?.light?.success?.["300"] ?? "175 229 176", // #afe5b0
+        400: theme?.light?.success?.["400"] ?? "115 210 116", // #73d274
+        500: theme?.light?.success?.["500"] ?? "55 190 57", // #37be39
+        600: theme?.light?.success?.["600"] ?? "50 171 51", // #32ab33
+        700: theme?.light?.success?.["700"] ?? "41 143 43", // #298f2b
+        800: theme?.light?.success?.["800"] ?? "33 114 34", // #217222
+        900: theme?.light?.success?.["900"] ?? "27 93 28", // #1b5d1c
       },
       warning: {
-        50: theme.light?.warning?.["50"] ?? "255 244 217", // #fff4d9
-        100: theme.light?.warning?.["100"] ?? "255 241 204", // #fff1cc
-        200: theme.light?.warning?.["200"] ?? "255 237 191", // #ffedbf
-        300: theme.light?.warning?.["300"] ?? "255 227 153", // #ffe399
-        400: theme.light?.warning?.["400"] ?? "255 205 77", // #ffcd4d
-        500: theme.light?.warning?.["500"] ?? "255 184 0", // #FFB800
-        600: theme.light?.warning?.["600"] ?? "230 166 0", // #e6a600
-        700: theme.light?.warning?.["700"] ?? "191 138 0", // #bf8a00
-        800: theme.light?.warning?.["800"] ?? "153 110 0", // #996e00
-        900: theme.light?.warning?.["900"] ?? "125 90 0", // #7d5a00
+        50: theme?.light?.warning?.["50"] ?? "255 244 217", // #fff4d9
+        100: theme?.light?.warning?.["100"] ?? "255 241 204", // #fff1cc
+        200: theme?.light?.warning?.["200"] ?? "255 237 191", // #ffedbf
+        300: theme?.light?.warning?.["300"] ?? "255 227 153", // #ffe399
+        400: theme?.light?.warning?.["400"] ?? "255 205 77", // #ffcd4d
+        500: theme?.light?.warning?.["500"] ?? "255 184 0", // #FFB800
+        600: theme?.light?.warning?.["600"] ?? "230 166 0", // #e6a600
+        700: theme?.light?.warning?.["700"] ?? "191 138 0", // #bf8a00
+        800: theme?.light?.warning?.["800"] ?? "153 110 0", // #996e00
+        900: theme?.light?.warning?.["900"] ?? "125 90 0", // #7d5a00
       },
       error: {
-        50: theme.dark?.error?.["100"] ?? "242 216 216", // #f2d8d8
-        100: theme.dark?.error?.["200"] ?? "239 206 206", // #efcece
-        200: theme.dark?.error?.["300"] ?? "229 176 176", // #e5b0b0
-        300: theme.dark?.error?.["400"] ?? "210 117 117", // #d27575
-        400: theme.dark?.error?.["300"] ?? "250 142 142", // #fa8e8e
-        500: theme.dark?.error?.["500"] ?? "191 58 58", // #BF3A3A
-        600: theme.dark?.error?.["600"] ?? "172 52 52", // #ac3434
-        700: theme.dark?.error?.["700"] ?? "143 44 44", // #8f2c2c
-        800: theme.dark?.error?.["800"] ?? "115 35 35", // #732323
-        900: theme.dark?.error?.["900"] ?? "94 28 28", // #5e1c1c
+        50: theme?.light?.error?.["100"] ?? "242 216 216", // #f2d8d8
+        100: theme?.light?.error?.["200"] ?? "239 206 206", // #efcece
+        200: theme?.light?.error?.["300"] ?? "229 176 176", // #e5b0b0
+        300: theme?.light?.error?.["400"] ?? "210 117 117", // #d27575
+        400: theme?.light?.error?.["300"] ?? "250 142 142", // #fa8e8e
+        500: theme?.light?.error?.["500"] ?? "191 58 58", // #BF3A3A
+        600: theme?.light?.error?.["600"] ?? "172 52 52", // #ac3434
+        700: theme?.light?.error?.["700"] ?? "143 44 44", // #8f2c2c
+        800: theme?.light?.error?.["800"] ?? "115 35 35", // #732323
+        900: theme?.light?.error?.["900"] ?? "94 28 28", // #5e1c1c
       },
       placeholder: {
-        50: theme.light?.placeholder?.["50"] ?? "225 225 228", // #e1e1e4
-        100: theme.light?.placeholder?.["100"] ?? "215 215 219", // #d7d7db
-        200: theme.light?.placeholder?.["200"] ?? "205 205 210", // #cdcdd2
-        300: theme.light?.placeholder?.["300"] ?? "174 175 183", // #aeafb7
-        400: theme.light?.placeholder?.["400"] ?? "114 116 129", // #727481
-        500: theme.light?.placeholder?.["500"] ?? "53 56 75", // #35384B
-        600: theme.light?.placeholder?.["600"] ?? "48 50 68", // #303244
-        700: theme.light?.placeholder?.["700"] ?? "40 42 56", // #282a38
-        800: theme.light?.placeholder?.["800"] ?? "32 34 45", // #20222d
-        900: theme.light?.placeholder?.["900"] ?? "26 27 37", // #1a1b25
+        50: theme?.light?.placeholder?.["50"] ?? "225 225 228", // #e1e1e4
+        100: theme?.light?.placeholder?.["100"] ?? "215 215 219", // #d7d7db
+        200: theme?.light?.placeholder?.["200"] ?? "205 205 210", // #cdcdd2
+        300: theme?.light?.placeholder?.["300"] ?? "174 175 183", // #aeafb7
+        400: theme?.light?.placeholder?.["400"] ?? "114 116 129", // #727481
+        500: theme?.light?.placeholder?.["500"] ?? "53 56 75", // #35384B
+        600: theme?.light?.placeholder?.["600"] ?? "48 50 68", // #303244
+        700: theme?.light?.placeholder?.["700"] ?? "40 42 56", // #282a38
+        800: theme?.light?.placeholder?.["800"] ?? "32 34 45", // #20222d
+        900: theme?.light?.placeholder?.["900"] ?? "26 27 37", // #1a1b25
       },
     };
     const defaultDark: FaivFormTheme = {
-      font: theme.dark?.font ?? "system-ui, sans-serif",
-      space: theme.dark?.space ?? "1rem",
-      radius: theme.dark?.radius ?? `calc(var(${prefix}space) / 4)`,
-      white: theme.dark?.white ?? "255 255 255",
-      black: theme.dark?.black ?? "0 0 0",
+      font: theme?.dark?.font ?? "system-ui, sans-serif",
+      space: theme?.dark?.space ?? "1rem",
+      radius: theme?.dark?.radius ?? `calc(var(${prefix}space) / 4)`,
+      white: theme?.dark?.white ?? "255 255 255",
+      black: theme?.dark?.black ?? "0 0 0",
       primary: {
-        50: theme.dark?.primary?.["50"] ?? "222 246 238", // #def6ee
-        100: theme.dark?.primary?.["100"] ?? "211 242 232", // #d3f2e8
-        200: theme.dark?.primary?.["200"] ?? "200 239 226", // #c8efe2
-        300: theme.dark?.primary?.["300"] ?? "166 230 209", // #a6e6d1
-        400: theme.dark?.primary?.["400"] ?? "100 211 174", // #64d3ae
-        500: theme.dark?.primary?.["500"] ?? "33 192 139", // #21C08B
-        600: theme.dark?.primary?.["600"] ?? "30 173 125", // #1ead7d
-        700: theme.dark?.primary?.["700"] ?? "25 144 104", // #199068
-        800: theme.dark?.primary?.["800"] ?? "20 115 83", // #147353
-        900: theme.dark?.primary?.["900"] ?? "16 94 68", // #105e44
+        50: theme?.dark?.primary?.["50"] ?? "222 246 238", // #def6ee
+        100: theme?.dark?.primary?.["100"] ?? "211 242 232", // #d3f2e8
+        200: theme?.dark?.primary?.["200"] ?? "200 239 226", // #c8efe2
+        300: theme?.dark?.primary?.["300"] ?? "166 230 209", // #a6e6d1
+        400: theme?.dark?.primary?.["400"] ?? "100 211 174", // #64d3ae
+        500: theme?.dark?.primary?.["500"] ?? "33 192 139", // #21C08B
+        600: theme?.dark?.primary?.["600"] ?? "30 173 125", // #1ead7d
+        700: theme?.dark?.primary?.["700"] ?? "25 144 104", // #199068
+        800: theme?.dark?.primary?.["800"] ?? "20 115 83", // #147353
+        900: theme?.dark?.primary?.["900"] ?? "16 94 68", // #105e44
       },
       secondary: {
-        50: theme.dark?.secondary?.["50"] ?? "233 223 243", // #e9dff3
-        100: theme.dark?.secondary?.["100"] ?? "226 212 240", // #e2d4f0
-        200: theme.dark?.secondary?.["200"] ?? "219 202 236", // #dbcaec
-        300: theme.dark?.secondary?.["300"] ?? "197 170 224", // #c5aae0
-        400: theme.dark?.secondary?.["400"] ?? "154 106 201", // #9a6ac9
-        500: theme.dark?.secondary?.["500"] ?? "110 42 178", // #6E2AB2
-        600: theme.dark?.secondary?.["600"] ?? "99 38 160", // #6326a0
-        700: theme.dark?.secondary?.["700"] ?? "83 32 134", // #532086
-        800: theme.dark?.secondary?.["800"] ?? "66 25 107", // #42196b
-        900: theme.dark?.secondary?.["900"] ?? "54 21 87", // #361557
+        50: theme?.dark?.secondary?.["50"] ?? "233 223 243", // #e9dff3
+        100: theme?.dark?.secondary?.["100"] ?? "226 212 240", // #e2d4f0
+        200: theme?.dark?.secondary?.["200"] ?? "219 202 236", // #dbcaec
+        300: theme?.dark?.secondary?.["300"] ?? "197 170 224", // #c5aae0
+        400: theme?.dark?.secondary?.["400"] ?? "154 106 201", // #9a6ac9
+        500: theme?.dark?.secondary?.["500"] ?? "110 42 178", // #6E2AB2
+        600: theme?.dark?.secondary?.["600"] ?? "99 38 160", // #6326a0
+        700: theme?.dark?.secondary?.["700"] ?? "83 32 134", // #532086
+        800: theme?.dark?.secondary?.["800"] ?? "66 25 107", // #42196b
+        900: theme?.dark?.secondary?.["900"] ?? "54 21 87", // #361557
       },
       accent: {
-        50: theme.dark?.accent?.["50"] ?? "252 236 217", // #fcecd9
-        100: theme.dark?.accent?.["100"] ?? "251 230 205", // #fbe6cd
-        200: theme.dark?.accent?.["200"] ?? "250 223 192", // #fadfc0
-        300: theme.dark?.accent?.["300"] ?? "247 204 155", // #f7cc9b
-        400: theme.dark?.accent?.["400"] ?? "242 166 79", // #f2a64f
-        500: theme.dark?.accent?.["500"] ?? "236 128 4", // #ec8004
-        600: theme.dark?.accent?.["600"] ?? "212 115 4", // #d47304
-        700: theme.dark?.accent?.["700"] ?? "177 96 3", // #b16003
-        800: theme.dark?.accent?.["800"] ?? "142 77 2", // #8e4d02
-        900: theme.dark?.accent?.["900"] ?? "116 63 2", // #743f02
+        50: theme?.dark?.accent?.["50"] ?? "252 236 217", // #fcecd9
+        100: theme?.dark?.accent?.["100"] ?? "251 230 205", // #fbe6cd
+        200: theme?.dark?.accent?.["200"] ?? "250 223 192", // #fadfc0
+        300: theme?.dark?.accent?.["300"] ?? "247 204 155", // #f7cc9b
+        400: theme?.dark?.accent?.["400"] ?? "242 166 79", // #f2a64f
+        500: theme?.dark?.accent?.["500"] ?? "236 128 4", // #ec8004
+        600: theme?.dark?.accent?.["600"] ?? "212 115 4", // #d47304
+        700: theme?.dark?.accent?.["700"] ?? "177 96 3", // #b16003
+        800: theme?.dark?.accent?.["800"] ?? "142 77 2", // #8e4d02
+        900: theme?.dark?.accent?.["900"] ?? "116 63 2", // #743f02
       },
       success: {
-        50: theme.dark?.success?.["50"] ?? "225 245 225", // #e1f5e1
-        100: theme.dark?.success?.["100"] ?? "215 242 215", // #d7f2d7
-        200: theme.dark?.success?.["200"] ?? "205 239 206", // #cdefce
-        300: theme.dark?.success?.["300"] ?? "175 229 176", // #afe5b0
-        400: theme.dark?.success?.["400"] ?? "115 210 116", // #73d274
-        500: theme.dark?.success?.["500"] ?? "55 190 57", // #37be39
-        600: theme.dark?.success?.["600"] ?? "50 171 51", // #32ab33
-        700: theme.dark?.success?.["700"] ?? "41 143 43", // #298f2b
-        800: theme.dark?.success?.["800"] ?? "33 114 34", // #217222
-        900: theme.dark?.success?.["900"] ?? "27 93 28", // #1b5d1c
+        50: theme?.dark?.success?.["50"] ?? "225 245 225", // #e1f5e1
+        100: theme?.dark?.success?.["100"] ?? "215 242 215", // #d7f2d7
+        200: theme?.dark?.success?.["200"] ?? "205 239 206", // #cdefce
+        300: theme?.dark?.success?.["300"] ?? "175 229 176", // #afe5b0
+        400: theme?.dark?.success?.["400"] ?? "115 210 116", // #73d274
+        500: theme?.dark?.success?.["500"] ?? "55 190 57", // #37be39
+        600: theme?.dark?.success?.["600"] ?? "50 171 51", // #32ab33
+        700: theme?.dark?.success?.["700"] ?? "41 143 43", // #298f2b
+        800: theme?.dark?.success?.["800"] ?? "33 114 34", // #217222
+        900: theme?.dark?.success?.["900"] ?? "27 93 28", // #1b5d1c
       },
       warning: {
-        50: theme.dark?.warning?.["50"] ?? "255 244 217", // #fff4d9
-        100: theme.dark?.warning?.["100"] ?? "255 241 204", // #fff1cc
-        200: theme.dark?.warning?.["200"] ?? "255 237 191", // #ffedbf
-        300: theme.dark?.warning?.["300"] ?? "255 227 153", // #ffe399
-        400: theme.dark?.warning?.["400"] ?? "255 205 77", // #ffcd4d
-        500: theme.dark?.warning?.["500"] ?? "255 184 0", // #FFB800
-        600: theme.dark?.warning?.["600"] ?? "230 166 0", // #e6a600
-        700: theme.dark?.warning?.["700"] ?? "191 138 0", // #bf8a00
-        800: theme.dark?.warning?.["800"] ?? "153 110 0", // #996e00
-        900: theme.dark?.warning?.["900"] ?? "125 90 0", // #7d5a00
+        50: theme?.dark?.warning?.["50"] ?? "255 244 217", // #fff4d9
+        100: theme?.dark?.warning?.["100"] ?? "255 241 204", // #fff1cc
+        200: theme?.dark?.warning?.["200"] ?? "255 237 191", // #ffedbf
+        300: theme?.dark?.warning?.["300"] ?? "255 227 153", // #ffe399
+        400: theme?.dark?.warning?.["400"] ?? "255 205 77", // #ffcd4d
+        500: theme?.dark?.warning?.["500"] ?? "255 184 0", // #FFB800
+        600: theme?.dark?.warning?.["600"] ?? "230 166 0", // #e6a600
+        700: theme?.dark?.warning?.["700"] ?? "191 138 0", // #bf8a00
+        800: theme?.dark?.warning?.["800"] ?? "153 110 0", // #996e00
+        900: theme?.dark?.warning?.["900"] ?? "125 90 0", // #7d5a00
       },
       error: {
-        50: theme.dark?.error?.["100"] ?? "242 216 216", // #f2d8d8
-        100: theme.dark?.error?.["200"] ?? "239 206 206", // #efcece
-        200: theme.dark?.error?.["300"] ?? "229 176 176", // #e5b0b0
-        300: theme.dark?.error?.["400"] ?? "210 117 117", // #d27575
-        400: theme.dark?.error?.["300"] ?? "250 142 142", // #fa8e8e
-        500: theme.dark?.error?.["500"] ?? "191 58 58", // #BF3A3A
-        600: theme.dark?.error?.["600"] ?? "172 52 52", // #ac3434
-        700: theme.dark?.error?.["700"] ?? "143 44 44", // #8f2c2c
-        800: theme.dark?.error?.["800"] ?? "115 35 35", // #732323
-        900: theme.dark?.error?.["900"] ?? "94 28 28", // #5e1c1c
+        50: theme?.dark?.error?.["100"] ?? "242 216 216", // #f2d8d8
+        100: theme?.dark?.error?.["200"] ?? "239 206 206", // #efcece
+        200: theme?.dark?.error?.["300"] ?? "229 176 176", // #e5b0b0
+        300: theme?.dark?.error?.["400"] ?? "210 117 117", // #d27575
+        400: theme?.dark?.error?.["300"] ?? "250 142 142", // #fa8e8e
+        500: theme?.dark?.error?.["500"] ?? "191 58 58", // #BF3A3A
+        600: theme?.dark?.error?.["600"] ?? "172 52 52", // #ac3434
+        700: theme?.dark?.error?.["700"] ?? "143 44 44", // #8f2c2c
+        800: theme?.dark?.error?.["800"] ?? "115 35 35", // #732323
+        900: theme?.dark?.error?.["900"] ?? "94 28 28", // #5e1c1c
       },
       placeholder: {
-        50: theme.dark?.placeholder?.["50"] ?? "225 225 228", // #e1e1e4
-        100: theme.dark?.placeholder?.["100"] ?? "215 215 219", // #d7d7db
-        200: theme.dark?.placeholder?.["200"] ?? "205 205 210", // #cdcdd2
-        300: theme.dark?.placeholder?.["300"] ?? "174 175 183", // #aeafb7
-        400: theme.dark?.placeholder?.["400"] ?? "114 116 129", // #727481
-        500: theme.dark?.placeholder?.["500"] ?? "53 56 75", // #35384B
-        600: theme.dark?.placeholder?.["600"] ?? "48 50 68", // #303244
-        700: theme.dark?.placeholder?.["700"] ?? "40 42 56", // #282a38
-        800: theme.dark?.placeholder?.["800"] ?? "32 34 45", // #20222d
-        900: theme.dark?.placeholder?.["900"] ?? "26 27 37", // #1a1b25
+        50: theme?.dark?.placeholder?.["50"] ?? "225 225 228", // #e1e1e4
+        100: theme?.dark?.placeholder?.["100"] ?? "215 215 219", // #d7d7db
+        200: theme?.dark?.placeholder?.["200"] ?? "205 205 210", // #cdcdd2
+        300: theme?.dark?.placeholder?.["300"] ?? "174 175 183", // #aeafb7
+        400: theme?.dark?.placeholder?.["400"] ?? "114 116 129", // #727481
+        500: theme?.dark?.placeholder?.["500"] ?? "53 56 75", // #35384B
+        600: theme?.dark?.placeholder?.["600"] ?? "48 50 68", // #303244
+        700: theme?.dark?.placeholder?.["700"] ?? "40 42 56", // #282a38
+        800: theme?.dark?.placeholder?.["800"] ?? "32 34 45", // #20222d
+        900: theme?.dark?.placeholder?.["900"] ?? "26 27 37", // #1a1b25
       },
     };
 
@@ -442,11 +442,18 @@ export class FaivFormStyles {
     return this.instance;
   }
 
-  #root = (theme: Omit<Config, "fields">): string => (
-    `:root {${this.#parseVars(theme.onLight)}${this.#parseTheme(theme.light)}}
-    :root:is(.dark, [data-theme="dark"]) {${this.#parseVars(theme.onDark)}${this.#parseTheme(theme.dark)}
-    `
-  );
+  #root = (theme: Omit<Config, "fields">): string => {
+    let styles = "";
+
+    if (theme.light || theme.onLight) {
+      styles += `:root {${this.#parseVars(theme.onLight)}${this.#parseTheme(theme.light)}}`;
+    }
+    if (theme.dark || theme.onDark) {
+      styles += `:root:is(.dark, [data-theme="dark"]) {${this.#parseVars(theme.onDark)}${this.#parseTheme(theme.dark)}}`;
+    }
+
+    return styles;
+  };
 
   // eslint-disable-next-line class-methods-use-this
   #parseVars = (vars?: FaivCSSVars): string => (vars ? Object.entries(vars).reduce((acc, [key, options]) => {
@@ -465,15 +472,16 @@ export class FaivFormStyles {
 
     const { font, space, radius, white, black, ...toParse } = theme;
 
-    const themeFont = `${prefix}font: ${font};`;
-    const themeSpace = `${prefix}space: ${space};`;
-    const themeRadius = `${prefix}radius: ${radius};`;
-    const themeWhite = `${prefix}white: ${white};`;
-    const themeBlack = `${prefix}black: ${black};`;
-    const themeVars = `${themeFont}${themeSpace}${themeRadius}${themeWhite}${themeBlack}`;
+    const themeVars = {
+      font, space, radius, white, black,
+    };
+
+    const themeStyles = Object.entries(themeVars).reduce((acc, [key, value]) => (
+      value ? `${acc}${prefix}${key}: ${value};` : acc
+    ), "");
 
     return Object.keys(toParse).reduce((acc, key) => {
-      type ThemeColors = Omit<FaivFormTheme, "font" | "space" | "radius">;
+      type ThemeColors = Omit<FaivFormTheme, "font" | "space" | "radius" | "black" | "white">;
       const colors = (toParse as ThemeColors)[key as keyof ThemeColors];
 
       if (!colors) return acc;
@@ -483,7 +491,7 @@ export class FaivFormStyles {
       ), "");
 
       return `${acc}${colorVars}`;
-    }, themeVars);
+    }, themeStyles);
   };
 
   #update(theme: Omit<Config, "fields">): void {
