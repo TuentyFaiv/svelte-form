@@ -11,6 +11,12 @@ module.exports = {
 		"dot-notation": "off",
 		"@typescript-eslint/dot-notation": 0,
 		"padded-blocks": 0,
+		"max-len": [
+			"error",
+			{
+				"code": 150
+			}
+		],
 		"lines-between-class-members": "off",
 		"@typescript-eslint/lines-between-class-members": [
 			"error",

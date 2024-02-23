@@ -100,139 +100,139 @@ import type { Config, FaivCSSVars, FaivFormTheme } from "../typing/stores/styles
 //   "--color-surface-900": "26 27 37", // #1a1b25
 // };
 
-const prefix = "--faivform-";
 export class FaivFormStyles {
   static instance: FaivFormStyles | null = null;
+  #prefix = "--faivform-";
   #hasDocument: boolean = typeof document !== "undefined";
 
   private constructor(theme: Omit<Config, "fields"> = {}) {
     const defaultOnLight: FaivCSSVars = {
       primary: {
-        color: theme?.onLight?.primary?.color ?? `rgb(var(${prefix}primary-500) / var(${prefix}primary-opacity))`,
+        color: theme?.onLight?.primary?.color ?? `rgb(var(${this.#prefix}primary-500) / var(${this.#prefix}primary-opacity))`,
         opacity: theme?.onLight?.primary?.opacity ?? "1",
-        text: theme?.onLight?.primary?.text ?? `rgb(var(${prefix}placeholder-900) / var(${prefix}primary-text-opacity))`,
+        text: theme?.onLight?.primary?.text ?? `rgb(var(${this.#prefix}placeholder-900) / var(${this.#prefix}primary-text-opacity))`,
         "text-opacity": theme?.onLight?.primary?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.primary?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.primary?.font ?? `var(${this.#prefix}font)`,
       },
       secondary: {
-        color: theme?.onLight?.secondary?.color ?? `rgb(var(${prefix}secondary-500) / var(${prefix}secondary-opacity))`,
+        color: theme?.onLight?.secondary?.color ?? `rgb(var(${this.#prefix}secondary-500) / var(${this.#prefix}secondary-opacity))`,
         opacity: theme?.onLight?.secondary?.opacity ?? "1",
-        text: theme?.onLight?.secondary?.text ?? `rgb(var(${prefix}white) / var(${prefix}secondary-text-opacity))`,
+        text: theme?.onLight?.secondary?.text ?? `rgb(var(${this.#prefix}white) / var(${this.#prefix}secondary-text-opacity))`,
         "text-opacity": theme?.onLight?.secondary?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.secondary?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.secondary?.font ?? `var(${this.#prefix}font)`,
       },
       accent: {
-        color: theme?.onLight?.accent?.color ?? `rgb(var(${prefix}accent-500) / var(${prefix}accent-opacity))`,
+        color: theme?.onLight?.accent?.color ?? `rgb(var(${this.#prefix}accent-500) / var(${this.#prefix}accent-opacity))`,
         opacity: theme?.onLight?.accent?.opacity ?? "1",
-        text: theme?.onLight?.accent?.text ?? `rgb(var(${prefix}black) / var(${prefix}accent-text-opacity))`,
+        text: theme?.onLight?.accent?.text ?? `rgb(var(${this.#prefix}black) / var(${this.#prefix}accent-text-opacity))`,
         "text-opacity": theme?.onLight?.accent?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.accent?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.accent?.font ?? `var(${this.#prefix}font)`,
       },
       success: {
-        color: theme?.onLight?.success?.color ?? `rgb(var(${prefix}success-500) / var(${prefix}success-opacity))`,
+        color: theme?.onLight?.success?.color ?? `rgb(var(${this.#prefix}success-500) / var(${this.#prefix}success-opacity))`,
         opacity: theme?.onLight?.success?.opacity ?? "1",
-        text: theme?.onLight?.success?.text ?? `rgb(var(${prefix}black) / var(${prefix}success-text-opacity))`,
+        text: theme?.onLight?.success?.text ?? `rgb(var(${this.#prefix}black) / var(${this.#prefix}success-text-opacity))`,
         "text-opacity": theme?.onLight?.success?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.success?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.success?.font ?? `var(${this.#prefix}font)`,
       },
       warning: {
-        color: theme?.onLight?.warning?.color ?? `rgb(var(${prefix}warning-500) / var(${prefix}warning-opacity))`,
+        color: theme?.onLight?.warning?.color ?? `rgb(var(${this.#prefix}warning-500) / var(${this.#prefix}warning-opacity))`,
         opacity: theme?.onLight?.warning?.opacity ?? "1",
-        text: theme?.onLight?.warning?.text ?? `rgb(var(${prefix}placeholder-900) / var(${prefix}warning-text-opacity))`,
+        text: theme?.onLight?.warning?.text ?? `rgb(var(${this.#prefix}placeholder-900) / var(${this.#prefix}warning-text-opacity))`,
         "text-opacity": theme?.onLight?.warning?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.warning?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.warning?.font ?? `var(${this.#prefix}font)`,
       },
       error: {
-        color: theme?.onLight?.error?.color ?? `rgb(var(${prefix}error-500) / var(${prefix}error-opacity))`,
+        color: theme?.onLight?.error?.color ?? `rgb(var(${this.#prefix}error-500) / var(${this.#prefix}error-opacity))`,
         opacity: theme?.onLight?.error?.opacity ?? "1",
-        text: theme?.onLight?.error?.text ?? `rgb(var(${prefix}white) / var(${prefix}error-text-opacity))`,
+        text: theme?.onLight?.error?.text ?? `rgb(var(${this.#prefix}white) / var(${this.#prefix}error-text-opacity))`,
         "text-opacity": theme?.onLight?.error?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.error?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.error?.font ?? `var(${this.#prefix}font)`,
       },
       placeholder: {
-        color: theme?.onLight?.placeholder?.color ?? `rgb(var(${prefix}white) / var(${prefix}placeholder-opacity))`,
+        color: theme?.onLight?.placeholder?.color ?? `rgb(var(${this.#prefix}white) / var(${this.#prefix}placeholder-opacity))`,
         opacity: theme?.onLight?.placeholder?.opacity ?? "1",
-        text: theme?.onLight?.placeholder?.text ?? `rgb(var(${prefix}placeholder-300) / var(${prefix}placeholder-text-opacity))`,
+        text: theme?.onLight?.placeholder?.text ?? `rgb(var(${this.#prefix}placeholder-300) / var(${this.#prefix}placeholder-text-opacity))`,
         "text-opacity": theme?.onLight?.placeholder?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.placeholder?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.placeholder?.font ?? `var(${this.#prefix}font)`,
       },
       shadow: {
-        base: theme?.onLight?.shadow?.base ?? `var(${prefix}shadow-size) var(${prefix}shadow-color)`,
+        base: theme?.onLight?.shadow?.base ?? `var(${this.#prefix}shadow-size) var(${this.#prefix}shadow-color)`,
         // eslint-disable-next-line max-len
-        size: theme?.onLight?.shadow?.size ?? `0 calc(var(${prefix}space) / 4) calc((var(${prefix}space) / 4) + (calc(var(${prefix}space) / 2)))`,
-        color: theme?.onLight?.shadow?.color ?? `rgb(var(${prefix}placeholder-600) / var(${prefix}shadow-opacity))`,
+        size: theme?.onLight?.shadow?.size ?? `0 calc(var(${this.#prefix}space) / 4) calc((var(${this.#prefix}space) / 4) + (calc(var(${this.#prefix}space) / 2)))`,
+        color: theme?.onLight?.shadow?.color ?? `rgb(var(${this.#prefix}placeholder-600) / var(${this.#prefix}shadow-opacity))`,
         opacity: theme?.onLight?.shadow?.opacity ?? "0.25",
       },
       border: {
-        base: theme?.onLight?.border?.base ?? `var(${prefix}border-width) var(${prefix}border-style) var(${prefix}border-color)`,
+        base: theme?.onLight?.border?.base ?? `var(${this.#prefix}border-width) var(${this.#prefix}border-style) var(${this.#prefix}border-color)`,
         width: theme?.onLight?.border?.width ?? "1px",
         style: theme?.onLight?.border?.style ?? "solid",
-        color: theme?.onLight?.border?.color ?? `rgb(var(${prefix}primary-500) / var(${prefix}border-opacity))`,
+        color: theme?.onLight?.border?.color ?? `rgb(var(${this.#prefix}primary-500) / var(${this.#prefix}border-opacity))`,
         opacity: theme?.onLight?.border?.opacity ?? "1",
       },
     };
     const defaultOnDark: FaivCSSVars = {
       primary: {
-        color: theme?.onLight?.primary?.color ?? `rgb(var(${prefix}primary-300) / var(${prefix}primary-opacity))`,
+        color: theme?.onLight?.primary?.color ?? `rgb(var(${this.#prefix}primary-300) / var(${this.#prefix}primary-opacity))`,
         opacity: theme?.onLight?.primary?.opacity ?? "1",
-        text: theme?.onLight?.primary?.text ?? `rgb(var(${prefix}placeholder-50) / var(${prefix}primary-text-opacity))`,
+        text: theme?.onLight?.primary?.text ?? `rgb(var(${this.#prefix}placeholder-50) / var(${this.#prefix}primary-text-opacity))`,
         "text-opacity": theme?.onLight?.primary?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.primary?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.primary?.font ?? `var(${this.#prefix}font)`,
       },
       secondary: {
-        color: theme?.onLight?.secondary?.color ?? `rgb(var(${prefix}secondary-300) / var(${prefix}secondary-opacity))`,
+        color: theme?.onLight?.secondary?.color ?? `rgb(var(${this.#prefix}secondary-300) / var(${this.#prefix}secondary-opacity))`,
         opacity: theme?.onLight?.secondary?.opacity ?? "1",
-        text: theme?.onLight?.secondary?.text ?? `rgb(var(${prefix}placeholder-900) / var(${prefix}secondary-text-opacity))`,
+        text: theme?.onLight?.secondary?.text ?? `rgb(var(${this.#prefix}placeholder-900) / var(${this.#prefix}secondary-text-opacity))`,
         "text-opacity": theme?.onLight?.secondary?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.secondary?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.secondary?.font ?? `var(${this.#prefix}font)`,
       },
       accent: {
-        color: theme?.onLight?.accent?.color ?? `rgb(var(${prefix}accent-300) / var(${prefix}accent-opacity))`,
+        color: theme?.onLight?.accent?.color ?? `rgb(var(${this.#prefix}accent-300) / var(${this.#prefix}accent-opacity))`,
         opacity: theme?.onLight?.accent?.opacity ?? "1",
-        text: theme?.onLight?.accent?.text ?? `rgb(var(${prefix}black) / var(${prefix}accent-text-opacity))`,
+        text: theme?.onLight?.accent?.text ?? `rgb(var(${this.#prefix}black) / var(${this.#prefix}accent-text-opacity))`,
         "text-opacity": theme?.onLight?.accent?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.accent?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.accent?.font ?? `var(${this.#prefix}font)`,
       },
       success: {
-        color: theme?.onLight?.success?.color ?? `rgb(var(${prefix}success-400) / var(${prefix}success-opacity))`,
+        color: theme?.onLight?.success?.color ?? `rgb(var(${this.#prefix}success-400) / var(${this.#prefix}success-opacity))`,
         opacity: theme?.onLight?.success?.opacity ?? "1",
-        text: theme?.onLight?.success?.text ?? `rgb(var(${prefix}black) / var(${prefix}success-text-opacity))`,
+        text: theme?.onLight?.success?.text ?? `rgb(var(${this.#prefix}black) / var(${this.#prefix}success-text-opacity))`,
         "text-opacity": theme?.onLight?.success?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.success?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.success?.font ?? `var(${this.#prefix}font)`,
       },
       warning: {
-        color: theme?.onLight?.warning?.color ?? `rgb(var(${prefix}warning-400) / var(${prefix}warning-opacity))`,
+        color: theme?.onLight?.warning?.color ?? `rgb(var(${this.#prefix}warning-400) / var(${this.#prefix}warning-opacity))`,
         opacity: theme?.onLight?.warning?.opacity ?? "1",
-        text: theme?.onLight?.warning?.text ?? `rgb(var(${prefix}placeholder-900) / var(${prefix}warning-text-opacity))`,
+        text: theme?.onLight?.warning?.text ?? `rgb(var(${this.#prefix}placeholder-900) / var(${this.#prefix}warning-text-opacity))`,
         "text-opacity": theme?.onLight?.warning?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.warning?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.warning?.font ?? `var(${this.#prefix}font)`,
       },
       error: {
-        color: theme?.onLight?.error?.color ?? `rgb(var(${prefix}error-400) / var(${prefix}error-opacity))`,
+        color: theme?.onLight?.error?.color ?? `rgb(var(${this.#prefix}error-400) / var(${this.#prefix}error-opacity))`,
         opacity: theme?.onLight?.error?.opacity ?? "1",
-        text: theme?.onLight?.error?.text ?? `rgb(var(${prefix}white) / var(${prefix}error-text-opacity))`,
+        text: theme?.onLight?.error?.text ?? `rgb(var(${this.#prefix}white) / var(${this.#prefix}error-text-opacity))`,
         "text-opacity": theme?.onLight?.error?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.error?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.error?.font ?? `var(${this.#prefix}font)`,
       },
       placeholder: {
-        color: theme?.onLight?.placeholder?.color ?? `rgb(var(${prefix}placeholder-900) / var(${prefix}placeholder-opacity))`,
+        color: theme?.onLight?.placeholder?.color ?? `rgb(var(${this.#prefix}placeholder-900) / var(${this.#prefix}placeholder-opacity))`,
         opacity: theme?.onLight?.placeholder?.opacity ?? "1",
-        text: theme?.onLight?.placeholder?.text ?? `rgb(var(${prefix}placeholder-400) / var(${prefix}placeholder-text-opacity))`,
+        text: theme?.onLight?.placeholder?.text ?? `rgb(var(${this.#prefix}placeholder-400) / var(${this.#prefix}placeholder-text-opacity))`,
         "text-opacity": theme?.onLight?.placeholder?.["text-opacity"] ?? "1",
-        font: theme?.onLight?.placeholder?.font ?? `var(${prefix}font)`,
+        font: theme?.onLight?.placeholder?.font ?? `var(${this.#prefix}font)`,
       },
       shadow: {
-        base: theme?.onLight?.shadow?.base ?? `var(${prefix}shadow-size) var(${prefix}shadow-color)`,
+        base: theme?.onLight?.shadow?.base ?? `var(${this.#prefix}shadow-size) var(${this.#prefix}shadow-color)`,
         // eslint-disable-next-line max-len
-        size: theme?.onLight?.shadow?.size ?? `0 calc(var(${prefix}space) / 4) calc((var(${prefix}space) / 4) + (calc(var(${prefix}space) / 2)))`,
-        color: theme?.onLight?.shadow?.color ?? `rgb(var(${prefix}primary-300) / var(${prefix}shadow-opacity))`,
+        size: theme?.onLight?.shadow?.size ?? `0 calc(var(${this.#prefix}space) / 4) calc((var(${this.#prefix}space) / 4) + (calc(var(${this.#prefix}space) / 2)))`,
+        color: theme?.onLight?.shadow?.color ?? `rgb(var(${this.#prefix}primary-300) / var(${this.#prefix}shadow-opacity))`,
         opacity: theme?.onLight?.shadow?.opacity ?? "0.25",
       },
       border: {
-        base: theme?.onLight?.border?.base ?? `var(${prefix}border-width) var(${prefix}border-style) var(${prefix}border-color)`,
+        base: theme?.onLight?.border?.base ?? `var(${this.#prefix}border-width) var(${this.#prefix}border-style) var(${this.#prefix}border-color)`,
         width: theme?.onLight?.border?.width ?? "1px",
         style: theme?.onLight?.border?.style ?? "solid",
-        color: theme?.onLight?.border?.color ?? `rgb(var(${prefix}primary-300) / var(${prefix}border-opacity))`,
+        color: theme?.onLight?.border?.color ?? `rgb(var(${this.#prefix}primary-300) / var(${this.#prefix}border-opacity))`,
         opacity: theme?.onLight?.border?.opacity ?? "1",
       },
     };
@@ -240,7 +240,7 @@ export class FaivFormStyles {
     const defaultLight: FaivFormTheme = {
       font: theme?.light?.font ?? "system-ui, sans-serif",
       space: theme?.light?.space ?? "1rem",
-      radius: theme?.light?.radius ?? `calc(var(${prefix}space) / 4)`,
+      radius: theme?.light?.radius ?? `calc(var(${this.#prefix}space) / 4)`,
       white: theme?.light?.white ?? "255 255 255",
       black: theme?.light?.black ?? "0 0 0",
       primary: {
@@ -331,7 +331,7 @@ export class FaivFormStyles {
     const defaultDark: FaivFormTheme = {
       font: theme?.dark?.font ?? "system-ui, sans-serif",
       space: theme?.dark?.space ?? "1rem",
-      radius: theme?.dark?.radius ?? `calc(var(${prefix}space) / 4)`,
+      radius: theme?.dark?.radius ?? `calc(var(${this.#prefix}space) / 4)`,
       white: theme?.dark?.white ?? "255 255 255",
       black: theme?.dark?.black ?? "0 0 0",
       primary: {
@@ -455,18 +455,16 @@ export class FaivFormStyles {
     return styles;
   };
 
-  // eslint-disable-next-line class-methods-use-this
   #parseVars = (vars?: FaivCSSVars): string => (vars ? Object.entries(vars).reduce((acc, [key, options]) => {
     if (!options) return acc;
 
     const parsed = Object.entries(options).reduce((prev, [option, value]) => (
-      value ? `${prev}${prefix}${key}-${option}: ${value};` : acc
+      value ? `${prev}${this.#prefix}${key}-${option}: ${value};` : acc
     ), "");
 
     return `${acc}${parsed}`;
   }, "") : "");
 
-  // eslint-disable-next-line class-methods-use-this
   #parseTheme = (theme?: FaivFormTheme): string => {
     if (!theme) return "";
 
@@ -477,7 +475,7 @@ export class FaivFormStyles {
     };
 
     const themeStyles = Object.entries(themeVars).reduce((acc, [key, value]) => (
-      value ? `${acc}${prefix}${key}: ${value};` : acc
+      value ? `${acc}${this.#prefix}${key}: ${value};` : acc
     ), "");
 
     return Object.keys(toParse).reduce((acc, key) => {
@@ -487,7 +485,7 @@ export class FaivFormStyles {
       if (!colors) return acc;
 
       const colorVars = Object.entries(colors).reduce((prev, [color, value]) => (
-        value ? `${prev}${prefix}${key}-${color}: ${value};` : prev
+        value ? `${prev}${this.#prefix}${key}-${color}: ${value};` : prev
       ), "");
 
       return `${acc}${colorVars}`;
@@ -505,7 +503,7 @@ export class FaivFormStyles {
 }
 
 export function setConfig({ fields, ...theme }: Config = {}) {
-  FaivFormStyles.create(theme, true);
+  FaivFormStyles.create(theme, Object.keys(theme).length > 0);
   const {
     field = {},
     option = {},
