@@ -387,18 +387,18 @@
       </div>
     {/if}
   </div>
-  <slot name="error" error={$errors[name]}>
-    {#if $errors[name]}
-      <span
-        bind:this={errorElement}
-        class="svform-error-childs {styls.error}"
-        role="presentation"
-        transition:fade={{ duration: 200 }}
-      >
+  {#if $errors[name]}
+    <span
+      bind:this={errorElement}
+      class="svform-error-childs {styls.error}"
+      role="presentation"
+      transition:fade={{ duration: 200 }}
+    >
+      <slot name="error" error={$errors[name]}>
         {$errors[name]}
-      </span>
-    {/if}
-  </slot>
+      </slot>
+    </span>
+  {/if}
 </div>
 
 <style>

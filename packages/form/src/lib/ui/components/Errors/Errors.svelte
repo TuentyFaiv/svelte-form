@@ -34,13 +34,13 @@
 {#if show}
   <ul class={styls.container} {...datas} {id}>
     {#each Object.entries($errors) as [field, error], index (`${field}-list-${index}`)}
-      <slot {error} {field}>
-        {#if error !== null}
-          <li class={styls.item} transition:fade={{ duration: 200 }}>
+      {#if error !== null}
+        <li class={styls.item} transition:fade={{ duration: 200 }}>
+          <slot {error} {field}>
             {`${field}: ${error}`}
-          </li>
-        {/if}
-      </slot>
+          </slot>
+        </li>
+      {/if}
     {/each}
   </ul>
 {/if}

@@ -69,27 +69,19 @@
 </script>
 
 <Field label="Username:" name="username" {context}>
-  <svelte:fragment slot="error">
-    <small>Username is required</small>
-  </svelte:fragment>
+  <svelte:fragment slot="error">Username is required</svelte:fragment>
 </Field>
 
 <Field label="Email:" name="email" type="email" {context}>
-  <svelte:fragment slot="error">
-    <small>Email is required</small>
-  </svelte:fragment>
+  <svelte:fragment slot="error">Email is required</svelte:fragment>
 </Field>
 
 <File name="avatar" {context}>
-  <svelte:fragment slot="error">
-    <small>Avatar is required</small>
-  </svelte:fragment>
+  <svelte:fragment slot="error">Avatar is required</svelte:fragment>
 </File>
 
 <Field label="Details:" name="details" type="textarea" {context}>
-  <svelte:fragment slot="error">
-    <small>Details is required</small>
-  </svelte:fragment>
+  <svelte:fragment slot="error">Details is required</svelte:fragment>
 </Field>
 
 <Select
@@ -99,9 +91,7 @@
   {context}
   multiple
 >
-  <svelte:fragment slot="error">
-    <small>Choose at least 2 permission</small>
-  </svelte:fragment>
+  <svelte:fragment slot="error">Choose at least 2 permission</svelte:fragment>
 </Select>
 
 <Option
@@ -111,9 +101,7 @@
   {context}
   multiple
 >
-  <svelte:fragment slot="error">
-    <small>Choose at least 3 categories</small>
-  </svelte:fragment>
+  <svelte:fragment slot="error">Choose at least 3 categories</svelte:fragment>
 </Option>
 
 <Errors {context} />

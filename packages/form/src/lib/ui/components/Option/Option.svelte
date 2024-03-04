@@ -157,13 +157,13 @@
       {/if}
     </label>
   {/each}
-  <slot name="error" error={$errors[name]}>
-    {#if $errors[name]}
-      <span class={styls.error} transition:fade={{ duration: 200 }}>
+  {#if $errors[name]}
+    <span class={styls.error} transition:fade={{ duration: 200 }}>
+      <slot name="error" error={$errors[name]}>
         {$errors[name]}
-      </span>
-    {/if}
-  </slot>
+      </slot>
+    </span>
+  {/if}
 </fieldset>
 
 <style>
