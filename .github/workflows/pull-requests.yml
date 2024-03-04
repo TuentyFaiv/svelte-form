@@ -1,5 +1,6 @@
 name: Review
 on: [pull_request]
+
 jobs:
   eslint:
     name: ESLint check
@@ -8,15 +9,23 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: "16"
-      - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
-      - run: pnpm install
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: true
+
       - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.REVIEW_TOKEN }}
           reporter: github-pr-review
-          eslint_flags: "src/lib/"
+          eslint_flags: "src/"
