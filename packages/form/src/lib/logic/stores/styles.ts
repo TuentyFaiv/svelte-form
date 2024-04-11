@@ -422,12 +422,14 @@ export class FaivFormStyles {
 
     const sheet = this.#hasDocument ? new CSSStyleSheet() : null;
     if (sheet && this.#hasDocument && sheet instanceof CSSStyleSheet) {
-      sheet.replace(this.#root({
+      const [light, dark] = this.#root({
         light: defaultLight,
         dark: defaultDark,
         onLight: defaultOnLight,
         onDark: defaultOnDark,
-      }));
+      })
+      const themes = `${light ?? ""}${dark ?? ""}`
+      sheet.replace(themes);
       document.adoptedStyleSheets = [sheet];
     }
   }
@@ -442,17 +444,18 @@ export class FaivFormStyles {
     return this.instance;
   }
 
-  #root = (theme: Omit<Config, "fields">): string => {
-    let styles = "";
+  #root = (theme: Omit<Config, "fields">): [(string | undefined), (string | undefined)] => {
+    let light: string | undefined;
+    let dark: string | undefined;
 
     if (theme.light || theme.onLight) {
-      styles += `:root {${this.#parseVars(theme.onLight)}${this.#parseTheme(theme.light)}}`;
+      light = `:root {${this.#parseVars(theme.onLight)}${this.#parseTheme(theme.light)}}`;
     }
     if (theme.dark || theme.onDark) {
-      styles += `:root:is(.dark, [data-theme="dark"]) {${this.#parseVars(theme.onDark)}${this.#parseTheme(theme.dark)}}`;
+      dark = `:root:is(.dark, [data-theme="dark"]) {${this.#parseVars(theme.onDark)}${this.#parseTheme(theme.dark)}}`;
     }
 
-    return styles;
+    return [light, dark];
   };
 
   #parseVars = (vars?: FaivCSSVars): string => (vars ? Object.entries(vars).reduce((acc, [key, options]) => {
@@ -496,7 +499,9 @@ export class FaivFormStyles {
     const sheet = this.#hasDocument ? new CSSStyleSheet() : null;
 
     if (sheet && this.#hasDocument && sheet instanceof CSSStyleSheet) {
-      sheet.insertRule(this.#root(theme));
+      const [light, dark] = this.#root(theme);
+      if (light) sheet.insertRule(light);
+      if (dark) sheet.insertRule(dark);
       document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
     }
   }
