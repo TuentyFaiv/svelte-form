@@ -205,7 +205,8 @@
     will-change: background-color;
     z-index: 0;
   }
-  :global(:root:is(.dark, [data-theme="dark"]) .faivform-option-item) {
+  :global(.dark .faivform-option-item),
+  :global([data-theme="dark"] .faivform-option-item) {
     border-color: rgb(var(--faivform-placeholder-50) / 1);
   }
   :global(.faivform-option-item:not([data-checked="true"]):is(:hover)) {
@@ -225,7 +226,12 @@
     font-weight: 500;
   }
   :global(
-      :root:is(.dark, [data-theme="dark"])
+      .dark
+        .faivform-option-item:is([data-checked="true"])
+        .faivform-option-label
+    ),
+  :global(
+      [data-theme="dark"]
         .faivform-option-item:is([data-checked="true"])
         .faivform-option-label
     ) {

@@ -330,7 +330,8 @@
     right: calc(var(--faivform-space) / 2);
     z-index: 0;
   }
-  :global(:root:is(.dark, [data-theme="dark"]) .faivform-field-action) {
+  :global(.dark .faivform-field-action),
+  :global([data-theme="dark"] .faivform-field-action) {
     filter: invert(1);
   }
   :global(.faivform-field-action:hover) {

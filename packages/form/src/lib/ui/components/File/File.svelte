@@ -309,7 +309,8 @@
     background-color: rgb(var(--faivform-placeholder-200) / 1);
     border-radius: var(--faivform-radius);
   }
-  :global(:root:is(.dark, [data-theme="dark"]) .faivform-file-cover) {
+  :global(.dark .faivform-file-cover),
+  :global([data-theme="dark"] .faivform-file-cover) {
     background-color: rgb(var(--faivform-placeholder-400) / 1);
   }
   :global(.faivform-file-cover:is([data-text])) {

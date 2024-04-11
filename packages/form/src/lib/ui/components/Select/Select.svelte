@@ -546,13 +546,12 @@
     font-family: var(--faivform-placeholder-font);
     border-radius: calc(var(--faivform-radius) / 2);
   }
-  :global(:root:is(.dark, [data-theme="dark"]) .faivform-select-item) {
+  :global(.dark .faivform-select-item),
+  :global([data-theme="dark"] .faivform-select-item) {
     background-color: rgb(var(--faivform-placeholder-400) / 1);
   }
-  :global(
-      :root:is(.dark, [data-theme="dark"])
-        .faivform-select-item:is([data-fixed="true"])
-    ),
+  :global(.dark .faivform-select-item:is([data-fixed="true"])),
+  :global([data-theme="dark"] .faivform-select-item:is([data-fixed="true"])),
   :global(.faivform-select-item:is([data-fixed="true"])) {
     background-color: var(--faivform-secondary-color);
     color: var(--faivform-secondary-text);
@@ -662,7 +661,8 @@
     right: calc(var(--faivform-space) / 2);
     z-index: 0;
   }
-  :global(:root:is(.dark, [data-theme="dark"]) .faivform-select-icon) {
+  :global(.dark .faivform-select-icon),
+  :global([data-theme="dark"] .faivform-select-icon) {
     filter: invert(1);
   }
 
@@ -720,8 +720,9 @@
     outline: 0;
     background-color: var(--faivform-primary-color);
   }
+  :global(.dark .faivform-select-option:is(:hover, :focus, :focus-visible)),
   :global(
-      :root:is(.dark, [data-theme="dark"])
+      [data-theme="dark"]
         .faivform-select-option:is(:hover, :focus, :focus-visible)
     ) {
     color: rgb(var(--faivform-primary-900) / 1);
