@@ -143,13 +143,13 @@ A extends Adapter<F> = Adapter<F>>({
       const globalStyle = value as ContextStyles[keyof ContextStyles];
       const formStyle = formStyles[keyStyle];
 
-      if (typeof globalStyle === "undefined" || globalStyle === null) return acc;
+      if (typeof globalStyle === "undefined" || globalStyle === null || Object.keys(globalStyle ?? {}).length === 0) return acc;
 
       if (keyStyle === "replace" || typeof globalStyle === "boolean") {
         return {
           ...acc,
           [keyStyle]: formStyle || globalStyle,
-        } as ContextStyles;
+        };
       }
 
       const updated = Object.entries(globalStyle).reduce((prev, [element, style]) => {
@@ -166,8 +166,8 @@ A extends Adapter<F> = Adapter<F>>({
       return {
         ...acc,
         [keyStyle]: updated,
-      } as ContextStyles;
-    }, {} as ContextStyles);
+      };
+    }, {});
 
     ctxStyles.update((prev) => ({ ...prev, ...updatedStyles }));
   }

@@ -1,7 +1,7 @@
 import { setContext } from "svelte";
 import { readable } from "svelte/store";
 
-import type { Config, FaivCSSVars, FaivFormTheme } from "../typing/stores/styles.js";
+import type { Config, FaivBaseTheme, FaivCSSVars, FaivFormTheme } from "../typing/stores/styles.js";
 
 // const faivtheme = {
 //   // =~= Theme Properties =~=
@@ -237,12 +237,15 @@ export class FaivFormStyles {
       },
     };
 
+    const defaulBase: FaivBaseTheme = {
+      font: theme?.base?.font ?? "system-ui, sans-serif",
+      space: theme?.base?.space ?? "1rem",
+      radius: theme?.base?.radius ?? `calc(var(${this.#prefix}space) / 4)`,
+      white: theme?.base?.white ?? "255 255 255",
+      black: theme?.base?.black ?? "0 0 0",
+    };
+
     const defaultLight: FaivFormTheme = {
-      font: theme?.light?.font ?? "system-ui, sans-serif",
-      space: theme?.light?.space ?? "1rem",
-      radius: theme?.light?.radius ?? `calc(var(${this.#prefix}space) / 4)`,
-      white: theme?.light?.white ?? "255 255 255",
-      black: theme?.light?.black ?? "0 0 0",
       primary: {
         50: theme?.light?.primary?.["50"] ?? "222 246 238", // #def6ee
         100: theme?.light?.primary?.["100"] ?? "211 242 232", // #d3f2e8
@@ -329,11 +332,6 @@ export class FaivFormStyles {
       },
     };
     const defaultDark: FaivFormTheme = {
-      font: theme?.dark?.font ?? "system-ui, sans-serif",
-      space: theme?.dark?.space ?? "1rem",
-      radius: theme?.dark?.radius ?? `calc(var(${this.#prefix}space) / 4)`,
-      white: theme?.dark?.white ?? "255 255 255",
-      black: theme?.dark?.black ?? "0 0 0",
       primary: {
         50: theme?.dark?.primary?.["50"] ?? "222 246 238", // #def6ee
         100: theme?.dark?.primary?.["100"] ?? "211 242 232", // #d3f2e8
@@ -423,12 +421,13 @@ export class FaivFormStyles {
     const sheet = this.#hasDocument ? new CSSStyleSheet() : null;
     if (sheet && this.#hasDocument && sheet instanceof CSSStyleSheet) {
       const [light, dark] = this.#root({
+        base: defaulBase,
         light: defaultLight,
         dark: defaultDark,
         onLight: defaultOnLight,
         onDark: defaultOnDark,
-      })
-      const themes = `${light ?? ""}${dark ?? ""}`
+      });
+      const themes = `${light ?? ""}${dark ?? ""}`;
       sheet.replace(themes);
       document.adoptedStyleSheets = [sheet];
     }
@@ -444,46 +443,40 @@ export class FaivFormStyles {
     return this.instance;
   }
 
-  #root = (theme: Omit<Config, "fields">): [(string | undefined), (string | undefined)] => {
-    let light: string | undefined;
-    let dark: string | undefined;
-
-    if (theme.light || theme.onLight) {
-      light = `:root {${this.#parseVars(theme.onLight)}${this.#parseTheme(theme.light)}}`;
-    }
-    if (theme.dark || theme.onDark) {
-      dark = `:root:is(.dark, [data-theme="dark"]) {${this.#parseVars(theme.onDark)}${this.#parseTheme(theme.dark)}}`;
-    }
+  #root = (theme: Omit<Config, "fields">): [string, string] => {
+    const light = `:root {${this.#parseBase(theme.base)}${this.#parseVars(theme.onLight)}${this.#parseTheme(theme.light)}}`;
+    const dark = `:root:is(.dark, [data-theme="dark"]) {${this.#parseVars(theme.onDark)}${this.#parseTheme(theme.dark)}}`;
 
     return [light, dark];
   };
 
-  #parseVars = (vars?: FaivCSSVars): string => (vars ? Object.entries(vars).reduce((acc, [key, options]) => {
-    if (!options) return acc;
+  #parseVars = (vars?: FaivCSSVars): string => {
+    if (!vars) return "";
 
-    const parsed = Object.entries(options).reduce((prev, [option, value]) => (
-      value ? `${prev}${this.#prefix}${key}-${option}: ${value};` : acc
+    return Object.entries(vars).reduce((acc, [key, options]) => {
+      if (!options) return acc;
+
+      const parsed = Object.entries(options).reduce((prev, [option, value]) => (
+        value ? `${prev}${this.#prefix}${key}-${option}: ${value};` : acc
+      ), "");
+
+      return `${acc}${parsed}`;
+    }, "");
+  };
+
+  #parseBase = (base?: FaivBaseTheme): string => {
+    if (!base) return "";
+
+    return Object.entries(base).reduce((acc, [key, value]) => (
+      value ? `${acc}${this.#prefix}${key}: ${value};` : acc
     ), "");
-
-    return `${acc}${parsed}`;
-  }, "") : "");
+  };
 
   #parseTheme = (theme?: FaivFormTheme): string => {
     if (!theme) return "";
 
-    const { font, space, radius, white, black, ...toParse } = theme;
-
-    const themeVars = {
-      font, space, radius, white, black,
-    };
-
-    const themeStyles = Object.entries(themeVars).reduce((acc, [key, value]) => (
-      value ? `${acc}${this.#prefix}${key}: ${value};` : acc
-    ), "");
-
-    return Object.keys(toParse).reduce((acc, key) => {
-      type ThemeColors = Omit<FaivFormTheme, "font" | "space" | "radius" | "black" | "white">;
-      const colors = (toParse as ThemeColors)[key as keyof ThemeColors];
+    return Object.keys(theme).reduce((acc, key) => {
+      const colors = theme[key as keyof FaivFormTheme];
 
       if (!colors) return acc;
 
@@ -492,7 +485,7 @@ export class FaivFormStyles {
       ), "");
 
       return `${acc}${colorVars}`;
-    }, themeStyles);
+    }, "");
   };
 
   #update(theme: Omit<Config, "fields">): void {

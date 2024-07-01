@@ -9,6 +9,7 @@ import type {
 
 export interface Config {
   fields?: ContextStyles;
+  base?: FaivBaseTheme;
   light?: FaivFormTheme;
   dark?: FaivFormTheme;
   onLight?: FaivCSSVars;
@@ -39,14 +40,16 @@ export type FaivFormThemePalette = {
   [key in ThemePalette]?: string;
 };
 export type FaivFormTheme = {
+  [key in ThemeColors]?: FaivFormThemePalette;
+};
+
+export interface FaivBaseTheme {
   font?: string;
   space?: string;
   radius?: string;
   white?: string;
   black?: string;
-} & {
-  [key in ThemeColors]?: FaivFormThemePalette;
-};
+}
 
 export interface FaivColorVars {
   color?: string;

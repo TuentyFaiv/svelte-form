@@ -21,6 +21,7 @@ export type {
   ContextStyles,
   FaivCSSVars,
   FaivFormTheme,
+  FaivBaseTheme,
 } from "./logic/typing/stores/styles.js";
 
 // Faivform types
