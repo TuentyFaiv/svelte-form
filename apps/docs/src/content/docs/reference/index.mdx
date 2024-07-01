@@ -21,6 +21,7 @@ All types and interfaces that you have to know to use the `useConfig`, and the F
     | Property | Type | Description |
     | -------- | ---- | ----------- |
     | fields | [`ContextStyles`](/reference/#contextstyles) \| `undefined` | Global built-in componets styles. |
+    | base | [`FaivBaseTheme`](/reference/#faivbasetheme) \| `undefined` | Global base CSS variables shared between light and dark themes. |
     | light | [`FaivFormTheme`](/reference/#faivformtheme) \| `undefined` | Global light theme. |
     | dark | [`FaivFormTheme`](/reference/#faivformtheme) \| `undefined` | Global dark theme. |
     | onLight | [`FaivCSSVars`](/reference/#faivcssvars) \| `undefined` | Global faivform CSS variables for light theme. |
@@ -105,6 +106,31 @@ An interface that defines the field styles.
   </TabItem>
 </Tabs>
 
+### FaivBaseTheme
+
+An interface that defines the base theme.
+
+<Tabs>
+  <TabItem label="Definition">
+    | Property | Type | Description |
+    | -------- | ---- | ----------- |
+    | font | `string \| undefined` | The font family of the fields. |
+    | space | `string \| undefined` | The space of the fields. |
+    | radius | `string \| undefined` | The border radius of the fields. |
+    | white | `string \| undefined` | White color used in the fields. |
+    | black | `string \| undefined` | Black color used in the fields. |
+  </TabItem>
+  <TabItem label="Usage">
+    ```typescript
+    import type { FaivBaseTheme } from "@tuentyfaiv/svelte-form";
+
+    const base: FaivBaseTheme = {
+      // ... base
+    };
+    ```
+  </TabItem>
+</Tabs>
+
 ### FaivFormTheme
 
 An type that defines the faivform theme.
@@ -113,11 +139,6 @@ An type that defines the faivform theme.
   <TabItem label="Definition">
     | Property | Type | Description |
     | -------- | ---- | ----------- |
-    | font | `string \| undefined` | The font of the form. |
-    | space | `string \| undefined` | The space of the form. |
-    | radius | `string \| undefined` | The radius of the form. |
-    | white | `string \| undefined` | The white color of the form. |
-    | black | `string \| undefined` | The black color of the form. |
     | primary | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The primary theme. |
     | secondary | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The secondary theme. |
     | accent | [`FaivFormThemePalette`](/reference/#faivformthemepalette) \| `undefined` | The accent theme. |

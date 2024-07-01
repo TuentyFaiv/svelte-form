@@ -1,6 +1,8 @@
 ---
-title: Customize
+title: Global
 description: Customize the look and feel of the fields.
+sidebar:
+  order: 1
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
@@ -8,11 +10,9 @@ import { Palette } from "@organisms";
 
 The built-in components comes with a default look and feel, you can customize it using `setConfig` or the `styles` property in each built-in component and the [`faivform`](/reference/#faivformconfig) function. Also Faivform library comes with a light and dark theme that you can customize too.
 
-## Global
+To customize globally you must use the `setConfig` in the root component of you application. You can check the [`Config`](/reference/#global-config) to see all the options.
 
-You must use the `setConfig` in the root component of you application. You can check the [`Config`](/reference/#global-config) to see all the options.
-
-### Classes
+## Classes
 
 In the `fields` option you can customize the class names of the built-in components. You can check the [`ContextStyles`](/reference/#contextstyles).
 
@@ -22,14 +22,25 @@ In the `fields` option you can customize the class names of the built-in compone
 
   setConfig({
     fields: {},
-    // ... themes
+    // ... theme
   });
 </script>
 ```
 
-### Theme light
+## Theme
 
-To customize the light theme you must use the `light` and `onLight` options. You can check the [`FaivFormTheme`](/reference/#faivformtheme).
+To customize the theme you must use the following options: `base`, `light`, `onLight`, `dark`, `onDark`. The `base` option are CSS variables that are used in both themes. The `light` and `dark` options are the themes that you can customize. The `onLight` and `onDark` options are CSS variables that are used in each theme.
+
+You can check the values of each property here:
+
+- `base`: [`FaivBaseTheme`](/reference/#faivbasetheme)
+- `light` and `dark` [`FaivFormTheme`](/reference/#faivformtheme)
+- `onLight` and `onDark` [`FaivCSSVars`](/reference/#faivcssvars)
+
+:::note
+Faivform use `.dark` class or `data-theme="dark"` in the `html` element to detect when the dark mode is active.
+:::
+
 
 ```svelte
 <script lang="ts">
@@ -37,34 +48,20 @@ To customize the light theme you must use the `light` and `onLight` options. You
 
   setConfig({
     // ... classes
+    base: {},
     light: {},
     onLight: {},
-    // ... theme dark
-  });
-</script>
-```
-
-### Theme dark
-
-To customize the dark theme you must use the `dark` and `onDark` options. You can check the [`FaivFormTheme`](/reference/#faivformtheme). To detect the dark mode you must use `.dark` class or `data-theme="dark"` in the `html` element.
-
-```svelte
-<script lang="ts">
-  import { setConfig } from "@tuentyfaiv/svelte-form";
-
-  setConfig({
-    // ... classes
-    // ... theme light
     dark: {},
     onDark: {},
   });
 </script>
 ```
 
-### Default theme
+## Default
 
-Here is the default theme of the light and dark mode.
+Here is the default styles configuration
 
+### Base
 **Font:**
 ```bash frame="none"
 system-ui, sans-serif
@@ -84,6 +81,7 @@ calc(var(--faivform-space) / 4)
 
 **Black:** <Palette color="rgb(0, 0, 0)" />
 
+### Theme
 **Primary:**
 - <Palette value={50} color="rgb(222, 246, 238)" />
 - <Palette value={100} color="rgb(211, 242, 232)" />
@@ -167,43 +165,3 @@ calc(var(--faivform-space) / 4)
 - <Palette value={700} color="rgb(40, 42, 56)" />
 - <Palette value={800} color="rgb(32, 34, 45)" />
 - <Palette value={900} color="rgb(26, 27, 37)" />
-
-## Per form
-
-Here is an example of how to customize the look and feel of all the fields per form. You must use the [`styles`](/reference/#faivformconfig) option in the `faivform` function.
-
-```svelte
-<script lang="ts">
-  import { faivform } from "@tuentyfaiv/svelte-form";
-
-  const form = faivform({
-    // ... schema or adapter and context name
-    styles: {},
-  });
-</script>
-
-```
-## Per field
-
-Also you can customize the look and feel of a specific field by using the `styles` property in each built-in component. Depending on the component you must use the styles options according to the component. You can check the [`styles definition`](/reference/#styles) of each component.
-
-For example, if you want to customize the look and feel of the `Field` and `Select` components you can do it like this:
-
-```svelte
-<script lang="ts">
-  import { Field, Select } from "@tuentyfaiv/svelte-form";
-
-  import type { FieldStyles, SelectStyles } from "@tuentyfaiv/svelte-form";
-
-  const fieldStyles: FieldStyles = {
-    // ... class names
-  };
-
-  const selectStyles: SelectStyles = {
-    // ... class names
-  };
-</script>
-
-<Field styles={fieldStyles} name="some-field" />
-<Select styles={selectStyles} name="other-field" />
-```

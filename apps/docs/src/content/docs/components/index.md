@@ -1,5 +1,5 @@
 ---
-title: Built-in components
+title: Built-in
 description: These are the components that come with this library
 sidebar:
   order: 1
