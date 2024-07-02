@@ -27,6 +27,7 @@
   export let clearable: Props["clearable"] = true;
   export let multiple: Props["multiple"] = false;
   export let disabled: Props["disabled"] = false;
+  export let clearOnDestroy: Props["clearOnDestroy"] = false;
   export let options: Props["options"] = [];
   export let styles: Props["styles"] = {};
   export let datas: Props["datas"] = {};
@@ -258,9 +259,29 @@
       arrow: icons?.arrow,
     },
   });
+  let toTop = false;
+
+  const onIntersect = ([entry]: IntersectionObserverEntry[]) => {
+    if (!entry.isIntersecting) {
+      toTop = entry.boundingClientRect.bottom > window.innerHeight;
+    }
+  };
+
+  const observer =
+    typeof window !== "undefined"
+      ? new IntersectionObserver(onIntersect, {
+          threshold: 1,
+        })
+      : undefined;
+
+  $: if (optionsElement) {
+    observer?.unobserve(optionsElement);
+    observer?.observe(optionsElement);
+  }
 
   onDestroy(() => {
-    setField(name, undefined, false);
+    if (clearOnDestroy) setField(name, undefined, false);
+    observer?.disconnect();
   });
 </script>
 
@@ -268,6 +289,7 @@
   {id}
   bind:this={container}
   class={styls.container}
+  class:top={toTop}
   role="presentation"
   data-disabled={disabled}
   on:click|stopPropagation={!disabled ? handleSelect : undefined}
@@ -360,6 +382,7 @@
       <div
         role="presentation"
         class={styls.options}
+        class:top={toTop}
         bind:this={optionsElement}
         on:keydown|stopPropagation={onChooseByKey}
         in:slide={{ duration: 200 }}
@@ -421,6 +444,10 @@
     top: 100%;
     left: 50%;
     z-index: 0;
+  }
+  :global(.faivform-select-container.top::after) {
+    top: auto;
+    bottom: calc(var(--faivform-space) / 4 * 9);
   }
   :global(.faivform-select-container:is([data-disabled="true"])) {
     cursor: not-allowed;
@@ -684,6 +711,10 @@
     top: calc(100% + (var(--faivform-space) / 2));
     left: 50%;
     z-index: 1;
+  }
+  :global(.faivform-select-options.top) {
+    top: auto;
+    bottom: calc(100% + (var(--faivform-space) / 2));
   }
   :global(.faivform-select-options::-webkit-scrollbar:vertical) {
     width: calc((var(--faivform-space) / 2));

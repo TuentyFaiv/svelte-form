@@ -20,6 +20,7 @@
   export let context: Props["context"] = "form";
   export let multiple: Props["multiple"] = false;
   export let disabled: Props["disabled"] = false;
+  export let clearOnDestroy: Props["clearOnDestroy"] = false;
   export let options: Props["options"] = [];
   export let styles: Props["styles"] = {};
   export let datas: Props["datas"] = {};
@@ -93,7 +94,7 @@
   });
 
   onDestroy(() => {
-    setField(name, undefined, false);
+    if (clearOnDestroy) setField(name, undefined, false);
   });
 </script>
 

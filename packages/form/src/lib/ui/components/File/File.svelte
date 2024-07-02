@@ -21,6 +21,7 @@
   export let dragable: Props["dragable"] = true;
   export let multiple: Props["multiple"] = false;
   export let disabled: Props["disabled"] = false;
+  export let clearOnDestroy: Props["clearOnDestroy"] = false;
   export let accept: Props["accept"] = "image/*";
   export let max: Props["max"] = Infinity;
   export let styles: Props["styles"] = {};
@@ -154,7 +155,7 @@
   });
 
   onDestroy(() => {
-    onClear();
+    if (clearOnDestroy) onClear();
   });
 </script>
 

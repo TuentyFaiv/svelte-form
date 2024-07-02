@@ -1,4 +1,4 @@
-import { hasArray } from "./parse";
+import { hasArray } from "./parse.js";
 
 export function generateDatas(datas: Record<string, string | number | boolean> = {}) {
   return Object.keys(datas).reduce(

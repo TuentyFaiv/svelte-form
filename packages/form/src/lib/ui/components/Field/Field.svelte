@@ -23,6 +23,7 @@
   export let name: Props["name"];
   export let id: Props["id"] = null;
   export let label: Props["label"] = null;
+  export let clearOnDestroy: Props["clearOnDestroy"] = false;
   export let context: Props["context"] = "form";
   export let type: Props["type"] = "text";
   export let styles: Props["styles"] = {};
@@ -83,7 +84,7 @@
   });
 
   onDestroy(() => {
-    setField(name, undefined, false);
+    if (clearOnDestroy) setField(name, undefined, false);
   });
 </script>
 

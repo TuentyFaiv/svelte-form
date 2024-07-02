@@ -8,4 +8,5 @@ export interface GeneralFieldProps extends SharedUIProps {
   label?: string | null;
   id?: string | null;
   datas?: Record<string, string | boolean | number>;
+  clearOnDestroy?: boolean;
 }
