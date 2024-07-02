@@ -31,6 +31,6 @@ jobs:
         run: pnpm build --filter @tuentyfaiv/svelte-form
 
       - name: Publish main package
-        run: pnpm publish --filter @tuentyfaiv/svelte-form --access public
+        run: pnpm publish --filter @tuentyfaiv/svelte-form --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
