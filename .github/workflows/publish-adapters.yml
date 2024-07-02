@@ -31,7 +31,7 @@ jobs:
         run: pnpm build --filter @faivform/zod
 
       - name: Publish zod adapter
-        run: pnpm publish --filter @faivform/zod --access public
+        run: pnpm publish --filter @faivform/zod --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ZOD_TOKEN }}
   
@@ -59,6 +59,6 @@ jobs:
         run: pnpm build --filter @faivform/yup
 
       - name: Publish yup adapter
-        run: pnpm publish --filter @faivform/yup --access public
+        run: pnpm publish --filter @faivform/yup --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_YUP_TOKEN }}

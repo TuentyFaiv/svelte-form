@@ -31,6 +31,6 @@ jobs:
         run: pnpm build --filter @faivform/builtin
 
       - name: Publish built-in forms package
-        run: pnpm publish --filter @faivform/builtin --access public
+        run: pnpm publish --filter @faivform/builtin --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_BUILTIN_TOKEN }}
