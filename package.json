@@ -1,18 +1,19 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "test": "turbo run test"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "eslint": "^8.56.0",
-    "turbo": "latest"
+    "turbo": "^2.0.6"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
     "node": ">=18"
-  }
+  },
+  "name": "faivform"
 }
