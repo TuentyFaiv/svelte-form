@@ -28,6 +28,7 @@
   export let multiple: Props["multiple"] = false;
   export let disabled: Props["disabled"] = false;
   export let clearOnDestroy: Props["clearOnDestroy"] = false;
+  export let parent: Props["parent"] = undefined;
   export let options: Props["options"] = [];
   export let styles: Props["styles"] = {};
   export let datas: Props["datas"] = {};
@@ -261,13 +262,21 @@
   });
   let toTop = false;
 
-  const onIntersect = ([entry]: IntersectionObserverEntry[]) => {
-    if (!entry.isIntersecting) {
-      toTop = entry.boundingClientRect.bottom > window.innerHeight;
+  $: onIntersect = ([entry]: IntersectionObserverEntry[]) => {
+    const bottom = entry.boundingClientRect.bottom;
+    const onWindow = bottom > window.innerHeight;
+
+    if (!entry.isIntersecting && !parent) {
+      toTop = onWindow;
+    }
+
+    if (!entry.isIntersecting && parent) {
+      const client = parent.getBoundingClientRect();
+      toTop = bottom > client.bottom || onWindow;
     }
   };
 
-  const observer =
+  $: observer =
     typeof window !== "undefined"
       ? new IntersectionObserver(onIntersect, {
           threshold: 1,

@@ -11,6 +11,7 @@ export interface Props extends Omit<GeneralFieldProps, "type"> {
   placeholder?: string | null;
   autoselect?: boolean;
   clearable?: boolean;
+  parent?: HTMLElement;
 }
 
 export interface Events {
