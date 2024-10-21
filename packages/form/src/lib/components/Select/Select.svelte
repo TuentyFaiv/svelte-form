@@ -13,7 +13,7 @@
   import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
   import type { Props, Events, Target } from "./Select.proptypes.js";
 
-  import { Icon, IconArrow } from "$lib/ui/assets/icons/index.js";
+  import { Icon, IconArrow } from "$lib/icons/index.js";
 
   type $$Props = Props;
 
@@ -91,7 +91,7 @@
         : selection.value;
 
       if (searchable) {
-        search = multiple ? "" : selection.label ?? "";
+        search = multiple ? "" : (selection.label ?? "");
       }
 
       setField(name, updated);
@@ -167,7 +167,7 @@
   }
 
   function onClear() {
-    const value = multiple ? fixed?.map(({ value }) => value) ?? null : null;
+    const value = multiple ? (fixed?.map(({ value }) => value) ?? null) : null;
     setField(name, value);
     search = "";
     dispatch("clear");
@@ -365,7 +365,7 @@
           data-placeholder={items?.length === 0 || !items}
           role="presentation"
         >
-          {items && items.length > 0 ? items ?? placeholder : placeholder}
+          {items && items.length > 0 ? (items ?? placeholder) : placeholder}
         </span>
       {/if}
     </div>

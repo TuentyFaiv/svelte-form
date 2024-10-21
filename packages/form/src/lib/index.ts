@@ -1,5 +1,5 @@
 export { faivform, useForm, setConfig } from "./logic/stores/index.js";
-export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
+export { Field, Select, Option, File, Errors } from "./components/index.js";
 export { FormError, SchemaError, SchemaErrorList } from "./logic/utils/errors.js";
 export { Adapter } from "./logic/typing/stores/form.js";
 

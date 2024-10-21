@@ -8,12 +8,7 @@
   import { keys } from "$lib/logic/utils/keys.js";
   import { getStyles } from "$lib/logic/utils/styles.js";
 
-  import {
-    Icon,
-    IconHide,
-    IconShow,
-    IconChecked,
-  } from "$lib/ui/assets/icons/index.js";
+  import { Icon, IconHide, IconShow, IconChecked } from "$lib/icons/index.js";
 
   import type { UserEvent } from "$lib/logic/typing/globals/types.js";
   import type { Input, Props } from "./Field.proptypes.js";
