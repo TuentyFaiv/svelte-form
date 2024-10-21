@@ -11,8 +11,6 @@ export interface FieldStyles extends GeneralStyles {
   check?: string;
   action?: string;
   checked?: string;
-  hide?: string;
-  show?: string;
 }
 
 export interface SelectStyles extends Omit<GeneralStyles, "input"> {
@@ -51,8 +49,6 @@ export interface ErrorsStyles {
 
 export interface Icons {
   checked?: string;
-  hide?: string;
-  show?: string;
   clear?: string;
   arrow?: string;
   remove?: string;

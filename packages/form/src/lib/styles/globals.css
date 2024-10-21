@@ -3,7 +3,7 @@
 
   --svorm-space: .25rem;
 
-  --svorm-radius: .25rem;
+  --svorm-radius: var(--svorm-space);
 
   --svorm-border: var(--svorm-border-width) var(--svorm-border-style) rgb(var(--svorm-primary) / var(--svorm-primary-opacity));
   --svorm-border-width: 1px;
@@ -22,32 +22,26 @@
   --svorm-primary: 33 192 139;
   --svorm-primary-opacity: 1;
   --svorm-primary-text: 26 27 37;
-  --svorm-primary-font: var(--svorm-font);
 
   --svorm-secondary: 110 42 178;
   --svorm-secondary-opacity: 1;
   --svorm-secondary-text: var(----svorm-white);
-  --svorm-secondary-font: var(--svorm-font);
 
   --svorm-placeholder: var(--svorm-white);
   --svorm-placeholder-opacity: 1;
   --svorm-placeholder-text: 174 175 183;
-  --svorm-placeholder-font: var(--svorm-font);
 
   --svorm-success: 55 190 57;
   --svorm-success-opacity: 1;
   --svorm-success-text: var(--svorm-black);
-  --svorm-success-font: var(--svorm-font);
 
   --svorm-warning: 255 184 0;
   --svorm-warning-opacity: 1;
   --svorm-warning-text: 26 27 37;
-  --svorm-warning-font: var(--svorm-font);
 
   --svorm-error: 191 58 58;
   --svorm-error-opacity: 1;
   --svorm-error-text: var(--svorm-white);
-  --svorm-error-font: var(--svorm-font);
 }
 
 :root:is(.dark, [data-theme="dark"]) {
