@@ -1,8 +1,5 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/naming-convention */
-export { default as IconShow } from "./IconShow.svelte";
-export { default as IconHide } from "./IconHide.svelte";
-// export { default as IconChecked } from "./IconChecked.svelte";
 export { default as IconArrow } from "./IconArrow.svelte";
 export { default as Icon } from "./Icon.svelte";
 

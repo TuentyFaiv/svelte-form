@@ -25,7 +25,7 @@
 
   --svorm-secondary: 110 42 178;
   --svorm-secondary-opacity: 1;
-  --svorm-secondary-text: var(----svorm-white);
+  --svorm-secondary-text: var(--svorm-white);
 
   --svorm-placeholder: var(--svorm-white);
   --svorm-placeholder-opacity: 1;

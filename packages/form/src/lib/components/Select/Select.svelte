@@ -15,6 +15,8 @@
 
   import { Icon, IconArrow } from "$lib/icons/index.js";
 
+  import "./Select.css";
+
   type $$Props = Props;
 
   export let name: Props["name"];
@@ -31,7 +33,6 @@
   export let parent: Props["parent"] = undefined;
   export let options: Props["options"] = [];
   export let styles: Props["styles"] = {};
-  export let datas: Props["datas"] = {};
 
   let container: HTMLDivElement | null = null;
   let select: HTMLDivElement | null = null;
@@ -173,8 +174,6 @@
     dispatch("clear");
   }
 
-  $: datasets = generateDatas(datas);
-
   $: if (
     autoselect &&
     options.length === 1 &&
@@ -225,20 +224,20 @@
   $: styls = getStyles<Exclude<Props["styles"], undefined>>({
     replace,
     internals: {
-      container: "faivform-select-container",
-      label: "faivform-select-label",
-      select: "faivform-select-menu",
-      value: "faivform-select-value",
-      item: "faivform-select-item",
-      remove: "faivform-select-remove",
-      searchable: "faivform-select-searchable",
-      nonsearchable: "faivform-select-nonsearchable",
-      clear: "faivform-select-clear",
-      icon: "faivform-select-icon",
-      options: "faivform-select-options",
-      option: "faivform-select-option",
-      error: "faivform-select-error",
-      empty: "faivform-select-empty",
+      container: "svorm-select-container",
+      label: "svorm-select-label",
+      select: "svorm-select-menu",
+      value: "svorm-select-value",
+      item: "svorm-select-item",
+      remove: "svorm-select-remove",
+      searchable: "svorm-select-searchable",
+      nonsearchable: "svorm-select-nonsearchable",
+      clear: "svorm-select-clear",
+      icon: "svorm-select-icon",
+      options: "svorm-select-options",
+      option: "svorm-select-option",
+      error: "svorm-select-error",
+      empty: "svorm-select-empty",
     },
     externals: {
       container: styles?.container ?? ctxSelectStyles?.container,
@@ -304,7 +303,6 @@
   on:click|stopPropagation={!disabled ? handleSelect : undefined}
   on:keydown|stopPropagation={!disabled ? onOpenByKey : undefined}
   on:mouseleave|stopPropagation={active ? onHide : undefined}
-  {...datasets}
 >
   <slot>
     {#if label}
@@ -432,384 +430,3 @@
     </span>
   {/if}
 </div>
-
-<style>
-  :global(.faivform-select-container) {
-    position: relative;
-    container: select / inline-size;
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    z-index: 1;
-  }
-  :global(.faivform-select-container::after) {
-    position: absolute;
-    box-sizing: inherit;
-    display: block;
-    content: "";
-    width: 100%;
-    height: calc(var(--faivform-space) / 2);
-    transform: translateX(-50%);
-    top: 100%;
-    left: 50%;
-    z-index: 0;
-  }
-  :global(.faivform-select-container.top::after) {
-    top: auto;
-    bottom: calc(var(--faivform-space) / 4 * 9);
-  }
-  :global(.faivform-select-container:is([data-disabled="true"])) {
-    cursor: not-allowed;
-    filter: grayscale(1) opacity(0.5);
-  }
-
-  :global(.faivform-select-label) {
-    display: block;
-    box-sizing: inherit;
-    width: 100%;
-    margin-bottom: calc(var(--faivform-space) / 4);
-    color: var(--faivform-primary-text);
-    font-size: var(--faivform-space);
-    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
-    font-family: var(--faivform-primary-font);
-  }
-
-  :global(.faivform-select-menu) {
-    position: relative;
-    box-sizing: inherit;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    gap: calc(var(--faivform-space) / 2);
-    padding-right: calc(
-      (var(--faivform-space) * 2) + (var(--faivform-space) / 4)
-    );
-    color: var(--faivform-primary-text);
-    background-color: var(--faivform-placeholder-color);
-    border: var(--faivform-border-base);
-    border-radius: var(--faivform-radius);
-    z-index: 0;
-  }
-  :global(.faivform-select-menu:is([aria-disabled="true"])) {
-    outline: 0;
-  }
-  :global(.faivform-select-menu:is([aria-disabled="true"]) > *) {
-    pointer-events: none;
-  }
-  :global(.faivform-select-menu:is([data-multiple="true"])) {
-    padding-left: calc(var(--faivform-space) / 1.5);
-  }
-  :global(
-      .faivform-select-menu:is([data-multiple="true"])
-        .faivform-select-searchable
-    ),
-  :global(
-      .faivform-select-menu:is([data-multiple="true"])
-        .faivform-select-nonsearchable
-    ) {
-    padding-left: 0;
-  }
-  :global(.faivform-select-menu:not([aria-disabled="true"]):is(:hover)) {
-    cursor: pointer;
-  }
-  :global(
-      .faivform-select-menu:not([aria-disabled="true"]):is(
-          :focus,
-          :focus-visible
-        )
-    ) {
-    outline: var(--faivform-border-base);
-    outline-color: var(--faivform-secondary-color);
-    border-color: var(--faivform-secondary-color);
-  }
-  :global(
-      .faivform-select-menu:not([aria-disabled="true"]):is([data-error="true"])
-    ),
-  :global(
-      .faivform-select-menu:not([aria-disabled="true"]):is(
-          [data-error="true"]
-        ):is(:focus, :focus-visible)
-    ) {
-    outline-color: var(--faivform-error-color);
-    border-color: var(--faivform-error-color);
-  }
-  :global(
-      .faivform-select-menu:is(:focus, :focus-visible)
-        > .faivform-select-searchable
-    ) {
-    outline: 0;
-  }
-  :global(
-      .faivform-select-menu:is(:focus, :focus-visible).active
-        > .faivform-select-options
-    ) {
-    width: calc(100% + (var(--faivform-border-width) * 4));
-    border-width: calc(var(--faivform-border-width) * 2);
-    border-color: var(--faivform-secondary-color);
-  }
-  :global(.faivform-select-menu.active > .faivform-select-icon) {
-    transform: translateY(-50%) rotateX(180deg);
-  }
-
-  :global(.faivform-select-value) {
-    position: relative;
-    box-sizing: inherit;
-    display: flex;
-    width: 100%;
-    min-height: calc(var(--faivform-space) - (var(--faivform-space) / 8));
-    margin: 0;
-    padding: calc(var(--faivform-space) / 2) 0;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: calc(var(--faivform-space) / 4);
-    flex-wrap: wrap;
-    z-index: 0;
-  }
-
-  :global(.faivform-select-item) {
-    box-sizing: inherit;
-    display: flex;
-    width: max-content;
-    align-items: center;
-    justify-content: flex-start;
-    gap: calc(var(--faivform-space) / 4);
-    padding-left: calc(var(--faivform-space) / 4);
-    background-color: rgb(var(--faivform-placeholder-200) / 1);
-    color: var(--faivform-primary-text);
-    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
-    line-height: calc(var(--faivform-space));
-    font-family: var(--faivform-placeholder-font);
-    border-radius: calc(var(--faivform-radius) / 2);
-  }
-  :global(.dark .faivform-select-item),
-  :global([data-theme="dark"] .faivform-select-item) {
-    background-color: rgb(var(--faivform-placeholder-400) / 1);
-  }
-  :global(.dark .faivform-select-item:is([data-fixed="true"])),
-  :global([data-theme="dark"] .faivform-select-item:is([data-fixed="true"])),
-  :global(.faivform-select-item:is([data-fixed="true"])) {
-    background-color: var(--faivform-secondary-color);
-    color: var(--faivform-secondary-text);
-    padding: 0 calc(var(--faivform-space) / 4);
-  }
-
-  :global(.faivform-select-remove) {
-    display: block;
-    box-sizing: inherit;
-    width: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    height: 100%;
-    min-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    margin: 0;
-    padding: 0;
-    padding-bottom: calc((var(--faivform-space) / 8));
-    background-color: transparent;
-    color: var(--faivform-primary-text);
-    font-size: calc(var(--faivform-space));
-    line-height: calc(var(--faivform-space));
-    font-family: var(--faivform-placeholder-font);
-    font-weight: 500;
-    border: 0;
-    border-left-color: var(--faivform-placeholder-color);
-    border-radius: 0 calc(var(--faivform-radius) / 2)
-      calc(var(--faivform-radius) / 2) 0;
-    transition: background-color 200ms linear;
-    will-change: background-color;
-  }
-  :global(.faivform-select-remove:is(:hover)) {
-    cursor: pointer;
-  }
-  :global(.faivform-select-remove:is(:hover, :focus, :focus-visible)) {
-    color: var(--faivform-error-text);
-    outline: 0;
-    background-color: var(--faivform-error-color);
-  }
-
-  :global(.faivform-select-searchable),
-  :global(.faivform-select-nonsearchable) {
-    display: block;
-    box-sizing: inherit;
-    flex: 1;
-    width: 100%;
-    min-width: 100px;
-    min-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    padding: 0 calc(var(--faivform-space) / 1.5);
-    color: var(--faivform-primary-text);
-    background-color: var(--faivform-placeholder-color);
-    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
-    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    font-family: var(--faivform-primary-font);
-    border-top-left-radius: var(--faivform-radius);
-    border-bottom-left-radius: var(--faivform-radius);
-    border: 0;
-  }
-  :global(.faivform-select-searchable:is(:focus, :focus-visible)) {
-    outline: 0;
-  }
-  :global(.faivform-select-nonsearchable:is([data-placeholder="true"])),
-  :global(.faivform-select-searchable::placeholder) {
-    color: var(--faivform-placeholder-text);
-    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
-    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    font-family: var(--faivform-placeholder-font);
-  }
-
-  :global(.faivform-select-clear) {
-    display: block;
-    box-sizing: inherit;
-    width: calc(var(--faivform-space) + (var(--faivform-space) / 4));
-    min-width: calc(var(--faivform-space) + (var(--faivform-space) / 4));
-    height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
-    min-height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
-    margin: 0;
-    padding: 0;
-    background-color: transparent;
-    color: var(--faivform-primary-text);
-    font-size: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    font-weight: 500;
-    font-family: var(--faivform-error-font);
-    border: 0;
-    border-radius: calc(var(--faivform-radius) / 2);
-    transition: background-color 200ms linear;
-    will-change: background-color;
-  }
-  :global(.faivform-select-clear:is(:hover)) {
-    cursor: pointer;
-  }
-  :global(.faivform-select-clear:is(:hover, :focus, :focus-visible)) {
-    color: var(--faivform-error-text);
-    outline: 0;
-    background-color: var(--faivform-error-color);
-  }
-
-  :global(.faivform-select-icon) {
-    position: absolute;
-    display: block;
-    box-sizing: inherit;
-    width: calc(var(--faivform-space) + (var(--faivform-space) / 4));
-    height: calc(var(--faivform-space) + (var(--faivform-space) / 4));
-    object-fit: contain;
-    transform: translateY(-50%);
-    transition: transform 200ms linear;
-    pointer-events: none;
-    top: 50%;
-    right: calc(var(--faivform-space) / 2);
-    z-index: 0;
-  }
-  :global(.dark .faivform-select-icon),
-  :global([data-theme="dark"] .faivform-select-icon) {
-    filter: invert(1);
-  }
-
-  :global(.faivform-select-options) {
-    position: absolute;
-    display: flex;
-    box-sizing: inherit;
-    width: calc(100% + (var(--faivform-border-width) * 2));
-    max-height: 150px;
-    background-color: var(--faivform-placeholder-color);
-    border: var(--faivform-border-base);
-    border-radius: var(--faivform-radius);
-    box-shadow: var(--faivform-shadow-base);
-    overflow-y: auto;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    transform: translateX(-50%);
-    top: calc(100% + (var(--faivform-space) / 2));
-    left: 50%;
-    z-index: 1;
-  }
-  :global(.faivform-select-options.top) {
-    top: auto;
-    bottom: calc(100% + (var(--faivform-space) / 2));
-  }
-  :global(.faivform-select-options::-webkit-scrollbar:vertical) {
-    width: calc((var(--faivform-space) / 2));
-    height: 100%;
-    background-color: transparent;
-  }
-  :global(.faivform-select-options::-webkit-scrollbar-thumb) {
-    background-color: rgb(var(--faivform-placeholder-700) / 1);
-    border-radius: var(--faivform-radius);
-  }
-
-  :global(.faivform-select-remove-childs > *),
-  :global(.faivform-select-clear-childs > *),
-  :global(.faivform-select-error-childs > *),
-  :global(.faivform-select-option-childs > *) {
-    pointer-events: none;
-  }
-
-  :global(.faivform-select-option) {
-    display: block;
-    box-sizing: inherit;
-    width: 100%;
-    padding: calc(var(--faivform-space) / 2) calc(var(--faivform-space) / 1.5);
-    color: var(--faivform-primary-text);
-    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
-    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    font-family: var(--faivform-primary-font);
-  }
-  :global(.faivform-select-option:is([aria-disabled="true"])) {
-    pointer-events: none;
-  }
-  :global(.faivform-select-option:is(:hover, :focus, :focus-visible)) {
-    color: var(--faivform-primary-text);
-    outline: 0;
-    background-color: var(--faivform-primary-color);
-  }
-  :global(.dark .faivform-select-option:is(:hover, :focus, :focus-visible)),
-  :global(
-      [data-theme="dark"]
-        .faivform-select-option:is(:hover, :focus, :focus-visible)
-    ) {
-    color: rgb(var(--faivform-primary-900) / 1);
-  }
-
-  :global(.faivform-select-empty) {
-    display: block;
-    box-sizing: inherit;
-    width: 100%;
-    color: var(--faivform-placeholder-text);
-    padding: calc(var(--faivform-space) / 2) calc(var(--faivform-space) / 1.5);
-    font-size: calc(var(--faivform-space) - (var(--faivform-space) / 8));
-    line-height: calc(var(--faivform-space) + (var(--faivform-space) / 8));
-    font-family: var(--faivform-primary-font);
-    text-align: center;
-  }
-
-  :global(.faivform-select-error) {
-    position: absolute;
-    display: block;
-    box-sizing: inherit;
-    padding: calc(var(--faivform-space) / 4);
-    background-color: var(--faivform-placeholder-color);
-    color: var(--faivform-error-color);
-    font-size: calc((var(--faivform-space) / 2) + (var(--faivform-space) / 4));
-    line-height: calc(
-      (var(--faivform-space) / 2) + (var(--faivform-space) / 4)
-    );
-    font-weight: 500;
-    font-family: var(--faivform-error-font);
-    border-radius: calc(var(--faivform-radius) / 1.5);
-    transform: translateY(50%);
-    bottom: calc(
-      ((var(--faivform-space) * 2) + (var(--faivform-space) / 4)) / 2
-    );
-    right: calc((var(--faivform-space) * 2) + (var(--faivform-space) / 4));
-    z-index: 0;
-  }
-
-  @container select (max-width: 450px) {
-    :global(.faivform-select-error) {
-      width: 100%;
-      left: 0;
-      bottom: 0;
-      background-color: transparent;
-      padding: calc(var(--faivform-space) / 4) 0;
-      transform: translateY(calc(100% + var(--faivform-space) / 4));
-    }
-  }
-</style>
