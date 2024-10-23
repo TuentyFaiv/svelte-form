@@ -154,10 +154,6 @@ importers:
         version: 2.35.1(eslint@8.57.0)
 
   packages/form:
-    dependencies:
-      lucide-svelte:
-        specifier: ^0.453.0
-        version: 0.453.0(svelte@4.2.10)
     devDependencies:
       '@playwright/test':
         specifier: ^1.41.2
@@ -189,6 +185,9 @@ importers:
       eslint:
         specifier: ^8.56.0
         version: 8.56.0
+      lucide-svelte:
+        specifier: ^0.453.0
+        version: 0.453.0(svelte@4.2.10)
       publint:
         specifier: ^0.2.7
         version: 0.2.7
@@ -2830,6 +2829,7 @@ packages:
     resolution: {integrity: sha512-+60uv1hiVFhHZeO+Lz0RYzsVHy5Wr1ayX0mwda9KPDVLNJgZ1T9Ny7VmFbLDzxsH0D87I86vgj3gFrjTJUYznw==}
     dependencies:
       dequal: 2.0.3
+    dev: true
 
   /b4a@1.6.4:
     resolution: {integrity: sha512-fpWrvyVHEKyeEvbKZTVOeZF3VSKKWtJxFIxX/jaVPf+cLbGUSitjb49pHLqPV2BUNNZ0LcoeEGfE/YCpyDYHIw==}
@@ -5355,7 +5355,7 @@ packages:
       svelte: ^3 || ^4 || ^5.0.0-next.42
     dependencies:
       svelte: 4.2.10
-    dev: false
+    dev: true
 
   /magic-string@0.30.10:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
@@ -7778,6 +7778,7 @@ packages:
       locate-character: 3.0.0
       magic-string: 0.30.7
       periscopic: 3.1.0
+    dev: true
 
   /svelte@4.2.8:
     resolution: {integrity: sha512-hU6dh1MPl8gh6klQZwK/n73GiAHiR95IkFsesLPbMeEZi36ydaXL/ZAb4g9sayT0MXzpxyZjR28yderJHxcmYA==}

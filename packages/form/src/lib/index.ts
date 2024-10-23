@@ -16,13 +16,7 @@ export type { SelectOption, OptionItem } from "./logic/typing/globals/interfaces
 export type { SharedUIProps, GeneralFieldProps } from "./logic/typing/globals/proptypes.js";
 
 // Styles types
-export type {
-  Config,
-  ContextStyles,
-  FaivCSSVars,
-  FaivFormTheme,
-  FaivBaseTheme,
-} from "./logic/typing/stores/styles.js";
+export type { ContextStyles } from "./logic/typing/stores/styles.js";
 
 // Faivform types
 export type {

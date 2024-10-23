@@ -1,7 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/naming-convention */
-export { default as IconArrow } from "./IconArrow.svelte";
-export { default as Icon } from "./Icon.svelte";
 
 export const IconChecked = `<svg
   width="24"

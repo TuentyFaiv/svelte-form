@@ -1,6 +1,5 @@
 import { getContext, hasContext, setContext } from "svelte";
 import { derived, get, readable, writable } from "svelte/store";
-// import { FaivFormStyles } from "./styles.js";
 import { FormError } from "../utils/errors.js";
 import { parseValue } from "../utils/parse.js";
 import { bridge } from "../utils/validation.js";
@@ -42,7 +41,6 @@ A extends Adapter<F> = Adapter<F>>({
     errors: styles.errors ?? {},
     icons: styles.icons ?? null,
   });
-  // FaivFormStyles.create();
 
   const adapter = fields instanceof Adapter ? fields : bridge<S, F>(fields);
   const initial = adapter.initial();
