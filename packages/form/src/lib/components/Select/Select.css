@@ -53,12 +53,6 @@
   border-radius: var(--svorm-radius);
   z-index: 0;
 }
-.svorm-select-menu:is([aria-disabled="true"]) {
-  outline: 0;
-}
-.svorm-select-menu:is([aria-disabled="true"]) > * {
-  pointer-events: none;
-}
 .svorm-select-menu:is([data-multiple="true"]) {
   padding-left: calc(var(--svorm-space) * 2.5);
 }
@@ -66,21 +60,6 @@
 .svorm-select-menu:is([data-multiple="true"]) .svorm-select-searchable,
 .svorm-select-menu:is([data-multiple="true"]) .svorm-select-nonsearchable {
   padding-left: 0;
-}
-.svorm-select-menu:not([aria-disabled="true"]):is(:hover) {
-  cursor: pointer;
-}
-
-.svorm-select-menu:not([aria-disabled="true"]):is(:focus, :focus-visible) {
-  outline: var(--svorm-border);
-  outline-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
-  border-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
-}
-
-.svorm-select-menu:not([aria-disabled="true"]):is([data-error="true"]),
-.svorm-select-menu:not([aria-disabled="true"]):is([data-error="true"]):is(:focus, :focus-visible) {
-  outline-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
-  border-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
 }
 
 .svorm-select-menu:is(:focus, :focus-visible) > .svorm-select-searchable {
@@ -92,12 +71,22 @@
   border-width: calc(var(--svorm-border-width) * 2);
   border-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
 }
-.svorm-select-menu.active > .svorm-select-icon {
+.svorm-select-menu.active > .svorm-select-arrow {
   transform: translateY(-50%) rotateX(180deg);
 }
 
+.svorm-select-menu:has(> .svorm-select-value[role="combobox"]:not([aria-disabled="true"]):is(:focus, :focus-visible),  .svorm-select-searchable:not(:disabled):is(:focus, :focus-visible)) {
+  outline: var(--svorm-border);
+  outline-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
+  border-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
+}
+
+.svorm-select-menu:is([data-error="true"]):has(> .svorm-select-value[role="combobox"]:not([aria-disabled="true"]), > .svorm-select-value[role="combobox"]:not([aria-disabled="true"]):is(:focus, :focus-visible),  .svorm-select-searchable:not(:disabled),  .svorm-select-searchable:not(:disabled):is(:focus, :focus-visible)) {
+  outline-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+  border-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+}
+
 .svorm-select-value {
-  position: relative;
   box-sizing: inherit;
   display: flex;
   width: 100%;
@@ -108,7 +97,10 @@
   justify-content: flex-start;
   gap: var(--svorm-space);
   flex-wrap: wrap;
-  z-index: 0;
+}
+
+.svorm-select-value:is(:focus, :focus-visible) {
+  outline: 0;
 }
 
 .svorm-select-item {
@@ -141,12 +133,11 @@
 .svorm-select-remove {
   display: block;
   box-sizing: inherit;
-  width: calc(var(--svorm-space) * 5);
+  width: calc(var(--svorm-space) * 4.5);
   height: 100%;
-  min-height: calc(var(--svorm-space) * 5);
+  min-height: calc(var(--svorm-space) * 4.5);
   margin: 0;
   padding: 0;
-  padding-bottom: calc((var(--svorm-space) / 2));
   background-color: transparent;
   color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
   font-size: calc(var(--svorm-space) * 4);
@@ -158,6 +149,10 @@
   border-radius: 0 calc(var(--svorm-radius) / 2) calc(var(--svorm-radius) / 2) 0;
   transition: background-color 200ms linear;
   will-change: background-color;
+}
+.svorm-select-remove svg {
+  width: 100%;
+  height: 100%;
 }
 .svorm-select-remove:is(:hover) {
   cursor: pointer;
@@ -186,6 +181,9 @@
   border-bottom-left-radius: var(--svorm-radius);
   border: 0;
 }
+.svorm-select-searchable:disabled {
+  cursor: not-allowed;
+}
 .svorm-select-searchable:is(:focus, :focus-visible) {
   outline: 0;
 }
@@ -205,7 +203,7 @@
   height: calc(var(--svorm-space) * 5);
   min-height: calc(var(--svorm-space) * 5);
   margin: 0;
-  padding: 0;
+  padding: 1px;
   background-color: transparent;
   color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
   font-size: calc(var(--svorm-space) * 5);
@@ -221,48 +219,56 @@
   cursor: pointer;
 }
 .svorm-select-clear:is(:hover, :focus, :focus-visible) {
-  color: rgb(var(--svorm-error-text) / var(--svorm-error-opacity));
+  color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
   outline: 0;
-  background-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
 }
 
-.svorm-select-icon {
+.svorm-select-arrow {
   position: absolute;
   display: block;
   box-sizing: inherit;
-  width: calc(var(--svorm-space) * 5);
-  height: calc(var(--svorm-space) * 5);
-  object-fit: contain;
+  width: calc(var(--svorm-space) * 6);
+  min-width: calc(var(--svorm-space) * 6);
+  height: calc(var(--svorm-space) * 6);
+  min-height: calc(var(--svorm-space) * 6);
+  padding: 1px;
+  background-color: transparent;
+  border: 0;
   transform: translateY(-50%);
   transition: transform 200ms linear;
-  pointer-events: none;
   top: 50%;
   right: calc(var(--svorm-space) * 2);
   z-index: 0;
 }
-.dark .svorm-select-icon,
-[data-theme="dark"] .svorm-select-icon {
-  filter: invert(1);
+.svorm-select-arrow:disabled {
+  cursor: not-allowed;
 }
+
+.svorm-select-icon {}
 
 .svorm-select-options {
   position: absolute;
-  display: flex;
+  display: none;
   box-sizing: inherit;
   width: calc(100% + (var(--svorm-border-width) * 2));
   max-height: 150px;
+  padding: 0;
+  margin: 0;
   background-color: rgb(var(--svorm-placeholder) / var(--svorm-placeholder-opacity));
   border: var(--svorm-border);
   border-radius: var(--svorm-radius);
   box-shadow: var(--svorm-shadow);
-  overflow-y: auto;
+  overflow-y: scroll;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   transform: translateX(-50%);
-  top: calc(100% + (var(--svorm-space) * 2));
+  top: calc(100% + (var(--svorm-space) * 1.5));
   left: 50%;
   z-index: 1;
+}
+.svorm-select-arrow:is([aria-expanded="true"]) + .svorm-select-options {
+  display: flex;
 }
 .svorm-select-options.top {
   top: auto;
@@ -278,17 +284,13 @@
   border-radius: var(--svorm-radius);
 }
 
-.svorm-select-remove-childs > *,
-.svorm-select-clear-childs > *,
-.svorm-select-error-childs > *,
-.svorm-select-option-childs > * {
-  pointer-events: none;
-}
-
 .svorm-select-option {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   box-sizing: inherit;
   width: 100%;
+  margin: 0;
   padding: calc(var(--svorm-space) * 2) calc(var(--svorm-space) * 2.5);
   color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
   font-size: calc(var(--svorm-space) * 3.5);
@@ -298,14 +300,14 @@
 .svorm-select-option:is([aria-disabled="true"]) {
   pointer-events: none;
 }
-.svorm-select-option:is(:hover, :focus, :focus-visible) {
+.svorm-select-option:is(.focus, :hover) {
   color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
   outline: 0;
   background-color: rgb(var(--svorm-primary) / var(--svorm-primary-opacity));
 }
-.dark .svorm-select-option:is(:hover, :focus, :focus-visible),
-[data-theme="dark"] .svorm-select-option:is(:hover, :focus, :focus-visible) {
-  color: rgb(var(--svorm-primary-900) / 1);
+.dark .svorm-select-option:is(.focus, :hover),
+[data-theme="dark"] .svorm-select-option:is(.focus, :hover) {
+  color: rgb(16 94 68 / 1);
 }
 
 .svorm-select-empty {

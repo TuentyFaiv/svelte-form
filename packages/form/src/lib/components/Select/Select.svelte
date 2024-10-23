@@ -1,19 +1,18 @@
 <svelte:options immutable />
 
 <script lang="ts">
-  import { createEventDispatcher, onDestroy } from "svelte";
+  import { onDestroy } from "svelte";
   import { fade, slide } from "svelte/transition";
+  import { Trash2, X, ChevronDown, Check } from "lucide-svelte";
   import { useForm } from "$lib/logic/stores/form.js";
-  import { keys, tags } from "$lib/logic/utils/keys.js";
-  import { generateDatas, isSelected } from "$lib/logic/utils/objects.js";
+  import { keys } from "$lib/logic/utils/keys.js";
+  import { isSelected } from "$lib/logic/utils/objects.js";
   import { hasArray } from "$lib/logic/utils/parse.js";
   import { getStyles } from "$lib/logic/utils/styles.js";
 
   import type { UserEvent } from "$lib/logic/typing/globals/types.js";
   import type { SelectOption } from "$lib/logic/typing/globals/interfaces.js";
-  import type { Props, Events, Target } from "./Select.proptypes.js";
-
-  import { Icon, IconArrow } from "$lib/icons/index.js";
+  import type { Props } from "./Select.proptypes.js";
 
   import "./Select.css";
 
@@ -33,29 +32,22 @@
   export let parent: Props["parent"] = undefined;
   export let options: Props["options"] = [];
   export let styles: Props["styles"] = {};
+  // events prepare for svelte 5
+  export let onchoose: Props["onchoose"] = undefined;
+  export let onremove: Props["onremove"] = undefined;
+  export let onclear: Props["onclear"] = undefined;
 
-  let container: HTMLDivElement | null = null;
-  let select: HTMLDivElement | null = null;
-  let labelElement: HTMLParagraphElement | null = null;
-  let valueBoxElement: HTMLDivElement | null = null;
-  let searchableElement: HTMLInputElement | null = null;
-  let nonsearchableElement: HTMLSpanElement | null = null;
-  let arrowElement: HTMLImageElement | null = null;
-  let errorElement: HTMLSpanElement | null = null;
-  let optionsElement: HTMLDivElement | null = null;
+  let combobox: HTMLInputElement | HTMLDivElement | null = null;
+  let listbox: HTMLUListElement | null = null;
+  let nextOption: HTMLLIElement | null = null;
 
   let active = false;
   let search = "";
   let fixed: SelectOption[] | null = null;
 
-  const dispatch = createEventDispatcher<Events>();
   $: form = useForm(context);
   $: ({ data, errors, styles: ctxStyles, setField, setError } = $form);
-  $: ({ select: ctxSelectStyles, icons, replace } = $ctxStyles);
-
-  function onChoose(value: SelectOption) {
-    dispatch("choose", value);
-  }
+  $: ({ select: ctxSelectStyles, replace } = $ctxStyles);
 
   function onToggle(open?: unknown) {
     if (typeof open === "boolean") {
@@ -72,91 +64,11 @@
     }
   }
 
-  function handleChoose(element: HTMLElement) {
-    const isOptions = element === optionsElement;
-    const optionElement = isOptions
-      ? (element.firstElementChild as HTMLElement)
-      : element;
-    const { value } = optionElement.dataset;
-
-    if (value) {
-      const selection = options.find((option) => option.value === value);
-
-      if (!selection) {
-        setError(name, "Invalid option, this option does not exist");
-        return;
-      }
-
-      const updated: string | string[] = multiple
-        ? [...hasArray<string>($data[name]), selection.value]
-        : selection.value;
-
-      if (searchable) {
-        search = multiple ? "" : (selection.label ?? "");
-      }
-
-      setField(name, updated);
-      onChoose(selection);
-    }
-
-    onToggle(multiple);
-  }
-
-  function handleSelect({ target }: UserEvent<Target, MouseEvent>) {
-    const element = target as Target;
-
-    const isContainer = element === container;
-    const isSelect = element === select;
-    const isLabel = element === labelElement;
-    const isValueBox = element === valueBoxElement;
-    const isSearchable = element === searchableElement;
-    const isNonsearchable = element === nonsearchableElement;
-    const isArrow = element === arrowElement;
-    const isError = element === errorElement;
-    const isOptions = element === optionsElement;
-
-    const isMenu =
-      isContainer ||
-      isSelect ||
-      isLabel ||
-      isValueBox ||
-      isSearchable ||
-      isNonsearchable ||
-      isArrow ||
-      isError ||
-      isOptions;
-    const isOption =
-      element.tagName === tags.span &&
-      JSON.parse(element.dataset.option ?? "false") &&
-      !isMenu;
-
-    if (isOption) {
-      handleChoose(element);
-    } else if (isMenu) {
-      onToggle();
-      if (container) container.lastElementChild?.scrollTo(0, 0);
-    }
-  }
-
-  function onOpenByKey({ code }: UserEvent<HTMLDivElement, KeyboardEvent>) {
-    if (code === keys.enter) {
-      onToggle();
-    }
-  }
-
-  function onChooseByKey({
-    code,
-    target,
-  }: UserEvent<HTMLDivElement, KeyboardEvent>) {
-    if (code === keys.enter) {
-      handleChoose(target as HTMLElement);
-    }
-  }
-
   function onHide() {
-    onToggle();
+    onToggle(false);
     onHasValue();
     setField(name, $data[name] ?? null);
+    onBlurOption();
   }
 
   function onRemove(option: SelectOption) {
@@ -164,14 +76,14 @@
       (value) => value !== option.value,
     );
     setField(name, newSelection);
-    dispatch("remove", option);
+    onremove?.(option);
   }
 
   function onClear() {
     const value = multiple ? (fixed?.map(({ value }) => value) ?? null) : null;
     setField(name, value);
     search = "";
-    dispatch("clear");
+    onclear?.();
   }
 
   $: if (
@@ -181,7 +93,7 @@
   ) {
     const value = options[0].value;
     setField(name, multiple ? [value] : value);
-    onChoose(options[0]);
+    onchoose?.(options[0]);
     onHasValue();
   }
 
@@ -206,7 +118,9 @@
 
   $: items = (
     multiple
-      ? options.filter(({ value }) => isSelected($data[name], value))
+      ? hasArray<string>($data[name]).flatMap(
+          (value) => options.find((option) => option.value === value) ?? [],
+        )
       : options.find(({ value }) => value === $data[name])?.label ||
         ($data[name] ?? null)
   ) as SelectOption[] | string | null;
@@ -221,6 +135,134 @@
     onHasValue();
   }
 
+  function onChoose(option: HTMLLIElement) {
+    const { value } = option.dataset;
+    if (!value) return;
+
+    const selection = options.find((option) => option.value === value);
+
+    if (!selection) {
+      setError(name, "Invalid option, this option does not exist");
+      return;
+    }
+
+    const updated: string | string[] = multiple
+      ? [...hasArray<string>($data[name]), selection.value]
+      : selection.value;
+
+    if (searchable) {
+      if (multiple) {
+        search = optionsToShow.length > 1 ? search : "";
+      } else {
+        search = selection.label ?? "";
+      }
+    }
+
+    setField(name, updated);
+    onchoose?.(selection);
+  }
+
+  function getOption(option: Element | null, direction: "up" | "down") {
+    const options = Array.from(listbox?.children ?? []);
+    if (!option) {
+      return direction === "down"
+        ? (listbox?.firstElementChild as HTMLLIElement)
+        : (listbox?.lastElementChild as HTMLLIElement);
+    }
+
+    const index = options.indexOf(option);
+
+    if (direction === "down") {
+      if (option !== listbox?.lastElementChild) {
+        return options[index + 1] as HTMLLIElement;
+      } else {
+        return listbox?.firstElementChild as HTMLLIElement;
+      }
+    }
+
+    if (option !== listbox?.firstElementChild) {
+      return options[index - 1] as HTMLLIElement;
+    }
+
+    return listbox?.lastElementChild as HTMLLIElement;
+  }
+
+  function onFocusOption(code: string) {
+    if (listbox?.children.length) {
+      const current = getOption(nextOption, code === keys.up ? "up" : "down");
+      nextOption = current;
+
+      combobox?.setAttribute("aria-activedescendant", current.id);
+      current.classList.add("focus");
+      current.scrollIntoView({ block: "nearest", behavior: "smooth" });
+
+      if (listbox?.children && listbox.children.length > 1) {
+        const prevOption = getOption(
+          current,
+          code === keys.down ? "up" : "down",
+        );
+        prevOption.classList.remove("focus");
+      }
+    }
+  }
+
+  function onBlurOption() {
+    nextOption?.classList.remove("focus");
+    nextOption = null;
+    combobox?.setAttribute("aria-activedescendant", "");
+  }
+
+  function onKeyDown(
+    event: UserEvent<HTMLInputElement | HTMLDivElement, KeyboardEvent>,
+  ) {
+    if (event.code === keys.down || event.code === keys.up) {
+      if (!searchable) event.preventDefault();
+      onToggle(true);
+      onFocusOption(event.code);
+    }
+    if (event.code === keys.tab) {
+      onHide();
+    }
+    if (event.code === keys.enter && nextOption) {
+      if (!searchable) event.preventDefault();
+      onChoose(nextOption);
+      if (multiple) {
+        onBlurOption();
+        onFocusOption(keys.down);
+      }
+    }
+    if (
+      event.code === keys.backspace &&
+      multiple &&
+      Array.isArray(toClear) &&
+      toClear.length > 0
+    ) {
+      if (!searchable) event.preventDefault();
+      onRemove(toClear[toClear.length - 1]);
+    }
+  }
+
+  function onKeyUp(
+    event: UserEvent<HTMLInputElement | HTMLDivElement, KeyboardEvent>,
+  ) {
+    if (!searchable) event.preventDefault();
+    if (event.code === keys.esc) {
+      onHide();
+    }
+  }
+
+  function onClickOpen() {
+    if (multiple) {
+      if (!active) {
+        return onToggle();
+      }
+
+      return;
+    }
+
+    return onToggle();
+  }
+
   $: styls = getStyles<Exclude<Props["styles"], undefined>>({
     replace,
     internals: {
@@ -233,6 +275,7 @@
       searchable: "svorm-select-searchable",
       nonsearchable: "svorm-select-nonsearchable",
       clear: "svorm-select-clear",
+      arrow: "svorm-select-arrow",
       icon: "svorm-select-icon",
       options: "svorm-select-options",
       option: "svorm-select-option",
@@ -254,9 +297,6 @@
       option: styles?.option ?? ctxSelectStyles?.option,
       error: styles?.error ?? ctxSelectStyles?.error,
       empty: styles?.empty ?? ctxSelectStyles?.empty,
-    },
-    icons: {
-      arrow: icons?.arrow,
     },
   });
   let toTop = false;
@@ -282,9 +322,9 @@
         })
       : undefined;
 
-  $: if (optionsElement) {
-    observer?.unobserve(optionsElement);
-    observer?.observe(optionsElement);
+  $: if (listbox) {
+    observer?.unobserve(listbox);
+    observer?.observe(listbox);
   }
 
   onDestroy(() => {
@@ -293,140 +333,212 @@
   });
 </script>
 
-<div
-  {id}
-  bind:this={container}
-  class={styls.container}
-  class:top={toTop}
-  role="presentation"
-  data-disabled={disabled}
-  on:click|stopPropagation={!disabled ? handleSelect : undefined}
-  on:keydown|stopPropagation={!disabled ? onOpenByKey : undefined}
-  on:mouseleave|stopPropagation={active ? onHide : undefined}
->
-  <slot>
-    {#if label}
-      <p bind:this={labelElement} class={styls.label} role="presentation">
-        {label}
-      </p>
-    {/if}
-  </slot>
-  <div
-    bind:this={select}
-    class={styls.select}
-    class:active
-    data-multiple={multiple}
-    data-error={!!$errors[name]}
-    aria-disabled={disabled}
-    role="menu"
-    {...disabled ? {} : { tabindex: 0 }}
+{#key form}
+  <label
+    for={id ?? name}
+    class={styls.container}
+    class:top={toTop}
+    data-disabled={disabled}
+    on:mouseleave|stopPropagation={active ? onHide : undefined}
   >
-    <div role="presentation" class={styls.value} bind:this={valueBoxElement}>
-      {#if multiple && Array.isArray(items)}
-        {#each items as item (item.key ?? item.value)}
-          <span
-            role="presentation"
-            class={styls.item}
-            data-fixed={item.fixed}
-            in:fade={{ duration: 200 }}
-            out:slide={{ duration: 250, axis: "x" }}
-          >
-            <slot name="item" {item}>
-              {item.label}
-            </slot>
-            {#if !item.fixed}
-              <button
-                type="button"
-                class="svform-remove-childs {styls.remove}"
-                on:click|stopPropagation={() => onRemove(item)}
-              >
-                <slot name="remove">x</slot>
-              </button>
-            {/if}
-          </span>
-        {/each}
-      {/if}
-      {#if searchable}
-        <input
-          type="text"
-          class={styls.searchable}
-          bind:this={searchableElement}
-          bind:value={search}
-          on:input={!active ? onToggle : undefined}
-          {placeholder}
-          {disabled}
-        />
-      {:else if (!searchable && !multiple) || (!searchable && Array.isArray(items) && items.length === 0)}
+    <slot>
+      {#if label}
         <span
-          bind:this={nonsearchableElement}
-          class={styls.nonsearchable}
-          data-placeholder={items?.length === 0 || !items}
-          role="presentation"
+          class={styls.label}
+          id={!searchable ? `${id ?? name}-label` : undefined}
         >
-          {items && items.length > 0 ? (items ?? placeholder) : placeholder}
+          {label}
         </span>
       {/if}
-    </div>
-    {#if showClear}
+    </slot>
+    <div
+      class={styls.select}
+      class:active
+      data-multiple={multiple}
+      data-error={!!$errors[name]}
+      role="presentation"
+    >
+      {#if searchable}
+        <div role="presentation" class={styls.value}>
+          {#if multiple && Array.isArray(items)}
+            {#each items as item (item.key ?? item.value)}
+              <span
+                role="presentation"
+                class={styls.item}
+                data-fixed={item.fixed}
+                in:fade={{ duration: 200 }}
+                out:slide={{ duration: 250, axis: "x" }}
+              >
+                <slot name="item" {item}>
+                  {item.label}
+                </slot>
+                {#if !item.fixed}
+                  <button
+                    type="button"
+                    class={styls.remove}
+                    on:click|stopPropagation={() => onRemove(item)}
+                  >
+                    <slot name="remove">
+                      <X size={18} />
+                    </slot>
+                  </button>
+                {/if}
+              </span>
+            {/each}
+          {/if}
+          <input
+            id={id ?? name}
+            type="text"
+            class={styls.searchable}
+            role="combobox"
+            aria-autocomplete="both"
+            aria-expanded={active}
+            aria-controls="{id ?? name}-listbox"
+            aria-activedescendant=""
+            bind:this={combobox}
+            bind:value={search}
+            on:input={!active ? onToggle : undefined}
+            on:click={!disabled ? onClickOpen : undefined}
+            on:keydown={!disabled ? onKeyDown : undefined}
+            on:keyup={!disabled ? onKeyUp : undefined}
+            {placeholder}
+            {disabled}
+          />
+        </div>
+      {:else}
+        <div
+          id={id ?? name}
+          role="combobox"
+          class={styls.value}
+          aria-controls="{id ?? name}-listbox"
+          aria-expanded={active}
+          aria-haspopup="listbox"
+          aria-labelledby="{id ?? name}-label"
+          aria-activedescendant=""
+          tabindex={0}
+          aria-disabled={disabled}
+          bind:this={combobox}
+          on:click={!disabled ? onClickOpen : undefined}
+          on:keydown={!disabled ? onKeyDown : undefined}
+          on:keyup={!disabled ? onKeyUp : undefined}
+        >
+          {#if multiple && Array.isArray(items)}
+            {#each items as item (item.key ?? item.value)}
+              <span
+                role="presentation"
+                class={styls.item}
+                data-fixed={item.fixed}
+                in:fade={{ duration: 200 }}
+                out:slide={{ duration: 250, axis: "x" }}
+              >
+                <slot name="item" {item}>
+                  {item.label}
+                </slot>
+                {#if !item.fixed}
+                  <button
+                    type="button"
+                    class={styls.remove}
+                    on:click|stopPropagation={() => onRemove(item)}
+                  >
+                    <slot name="remove">
+                      <X size={18} />
+                    </slot>
+                  </button>
+                {/if}
+              </span>
+            {/each}
+          {/if}
+          {#if !multiple || (Array.isArray(items) && items.length === 0)}
+            <span
+              class={styls.nonsearchable}
+              data-placeholder={items?.length === 0 || !items}
+              role="presentation"
+            >
+              {items && items.length > 0 ? (items ?? placeholder) : placeholder}
+            </span>
+          {/if}
+        </div>
+      {/if}
+      {#if showClear}
+        <button
+          id="{id ?? name}-clear"
+          type="button"
+          class={styls.clear}
+          tabindex={-1}
+          on:click|stopPropagation={onClear}
+        >
+          <slot name="clear">
+            <Trash2 size={18} />
+          </slot>
+        </button>
+      {/if}
       <button
         type="button"
-        class="svform-clear-childs {styls.clear}"
-        on:click|stopPropagation={onClear}
+        id="{id ?? name}-button"
+        class={styls.arrow}
+        aria-label={label}
+        aria-expanded={active}
+        aria-controls="{id ?? name}-listbox"
+        tabindex={-1}
+        {disabled}
       >
-        <slot name="clear">X</slot>
+        <slot name="arrow">
+          <ChevronDown
+            class={styls.icon}
+            size={22}
+            aria-hidden="true"
+            focusable="false"
+          />
+        </slot>
       </button>
-    {/if}
-    <slot name="arrow">
-      <Icon
-        style={styls.icon}
-        src={styls.arrow}
-        alt={placeholder ?? ""}
-        bind:element={arrowElement}
-        component={IconArrow}
-      />
-    </slot>
-    {#if active}
-      <div
-        role="presentation"
+      <ul
+        id="{id ?? name}-listbox"
+        role="listbox"
+        aria-label={label}
+        aria-multiselectable={multiple}
         class={styls.options}
         class:top={toTop}
-        bind:this={optionsElement}
-        on:keydown|stopPropagation={onChooseByKey}
-        in:slide={{ duration: 200 }}
-        out:fade={{ duration: 180 }}
+        bind:this={listbox}
       >
         {#each optionsToShow as option (option.key ?? option.value)}
-          <span
-            role="menuitem"
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          {@const selected = multiple
+            ? isSelected($data[name], option.value)
+            : $data[name] === option.value}
+          <li
+            id="{id ?? name}-option-{option.key ?? option.value}"
+            role="option"
             aria-disabled={!!option.disabled}
-            tabindex={0}
-            class="svform-option-childs {styls.option}"
+            aria-selected={selected}
+            class={styls.option}
             data-value={option.value}
-            data-option={true}
+            on:click|stopPropagation={(event) => onChoose(event.currentTarget)}
           >
-            <slot name="option" {option}>
+            <slot name="option" {option} {selected}>
               {option.label}
+              {#if selected}
+                <Check size={18} style={"margin: 0"} />
+              {/if}
             </slot>
-          </span>
+          </li>
         {/each}
         {#if optionsToShow.length === 0}
-          <span class={styls.empty}>
+          <li class={styls.empty} role="presentation">
             <slot name="empty">No options</slot>
-          </span>
+          </li>
         {/if}
-      </div>
+      </ul>
+    </div>
+    {#if $errors[name]}
+      <span
+        class={styls.error}
+        role="presentation"
+        transition:fade={{ duration: 200 }}
+      >
+        <slot name="error" error={$errors[name]}>
+          {$errors[name]}
+        </slot>
+      </span>
     {/if}
-  </div>
-  {#if $errors[name]}
-    <span
-      bind:this={errorElement}
-      class="svform-error-childs {styls.error}"
-      role="presentation"
-      transition:fade={{ duration: 200 }}
-    >
-      <slot name="error" error={$errors[name]}>
-        {$errors[name]}
-      </slot>
-    </span>
-  {/if}
-</div>
+  </label>
+{/key}

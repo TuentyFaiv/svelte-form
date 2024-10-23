@@ -1,4 +1,6 @@
 <script lang="ts">
+  import "../lib/styles/globals.css";
+
   import { setConfig } from "../lib/index.js";
 
   let dark = false;
@@ -9,20 +11,20 @@
     fields: {
       // replace: true,
       field: {
-        field: "form__field",
+        container: "form__field",
       },
       select: {
-        field: "form__field form__field--select",
+        container: "form__field form__field--select",
         item: "form__field__item",
         searchable: "form__field__searchable",
         remove: "form__field__remove",
         clear: "form__field__clear",
       },
     },
-    vars: {
-      // primary,
-      // secondary,
-    },
+    // vars: {
+    // primary,
+    // secondary,
+    // },
   });
 </script>
 

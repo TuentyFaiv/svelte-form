@@ -49,8 +49,5 @@ export interface ErrorsStyles {
 
 export interface Icons {
   checked?: string;
-  clear?: string;
-  arrow?: string;
-  remove?: string;
   retry?: string;
 }

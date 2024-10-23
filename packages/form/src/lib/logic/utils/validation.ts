@@ -388,7 +388,7 @@ export function bridge<T extends FieldsSchema = FieldsSchema, Data = Infer<T>>(s
       if (Object.values(validateSelf).some((item) => (item instanceof SchemaError || item instanceof SchemaErrorList))) {
         const errors = Object.values(validateSelf)
           .filter((item) => (item instanceof SchemaError || item instanceof SchemaErrorList))
-          .flatMap((item) => (item instanceof SchemaErrorList ? item.errors : item as SchemaError[]));
+          .flatMap((item) => (item instanceof SchemaErrorList ? item.errors : item));
 
         return new SchemaErrorList(errors);
       }

@@ -25,6 +25,7 @@
 </script>
 
 <Select
+  id="tool-disabled"
   name="tool"
   label="Tool:"
   placeholder="Choose a tool"
@@ -34,9 +35,9 @@
 />
 
 <style>
-  :global(div > div),
-  :global(div > div > button),
-  :global(div > div > svg) {
+  :global(label > div),
+  :global(label > div > button),
+  :global(label > div > svg) {
     margin-top: 0 !important;
   }
 </style>

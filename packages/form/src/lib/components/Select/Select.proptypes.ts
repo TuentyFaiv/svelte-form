@@ -12,12 +12,9 @@ export interface Props extends Omit<GeneralFieldProps, "type"> {
   autoselect?: boolean;
   clearable?: boolean;
   parent?: HTMLElement;
-}
-
-export interface Events {
-  choose: SelectOption;
-  remove: SelectOption;
-  clear: void;
+  onchoose?: (option: SelectOption) => void;
+  onremove?: (option: SelectOption) => void;
+  onclear?: () => void;
 }
 
 export type Target = HTMLDivElement | HTMLParagraphElement | HTMLSpanElement;

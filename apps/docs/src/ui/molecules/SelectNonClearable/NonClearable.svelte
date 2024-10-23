@@ -25,6 +25,7 @@
 </script>
 
 <Select
+  id="tool-non-clearable"
   name="tool"
   label="Tool:"
   placeholder="Choose a tool"
@@ -34,9 +35,10 @@
 />
 
 <style>
-  :global(div > div),
-  :global(div > div > button),
-  :global(div > div > svg) {
+  :global(label > div),
+  :global(label > div > button),
+  :global(label > div > ul),
+  :global(label > div > ul > li) {
     margin-top: 0 !important;
   }
 </style>

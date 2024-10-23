@@ -1,4 +1,4 @@
-import type { Icons } from "../globals/styles";
+import type { Icons } from "../globals/styles.js";
 
 export interface GetStyleConfig {
   replace?: boolean;
