@@ -31,12 +31,11 @@ You can use the `Errors` component to display the errors of the form.
     | context | `string` | "form" | The context of the form. |
     | id | `string \| undefined \| null` | `null` | The id of list errors. |
     | styles | [`ErrorStyles`](/reference/#errorsstyles) | `{}` | The styles of the errors. |
-    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets for the container. |
   </TabItem>
   <TabItem label="Slots">
     | Slot | Prop | Description | Available to |
     |------|------|-------------|--------------|
-    | default | `{ error: string \| null; field: string; }` | 
+    | default | `{ error: string \| null; field: string; }` | Show an error message for each field. | all |
   </TabItem>
   <TabItem label="Events">
     > This component has no events.
