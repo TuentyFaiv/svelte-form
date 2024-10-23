@@ -33,10 +33,12 @@ The `Field` component by default renders a text field. You can change the type o
     <!-- Or -->
     <Field name="name" label="Name:">
       This is a custom label
-      <img src="/icon.svg" alt="hide/show" slot="icon" />
-      <span slot="error" let:error>
+      <svelte:fragment let:show slot="icon">
+        <i class="icon">{show ? "👀" : "🙈"}</i>
+      </svelte:fragment>
+      <svelte:fragment slot="error" let:error>
         {formatError(error)}
-      </span>
+      </svelte:fragment>
     </Field>
     ```
   </TabItem>
@@ -49,18 +51,21 @@ The `Field` component by default renders a text field. You can change the type o
     | context | `string` | "form" | The context of the form. |
     | id | `string \| undefined \| null` | `null` | The id of the field. |
     | styles | [`FieldStyles`](/reference/#fieldstyles) | `{}` | The styles of the field. |
-    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
+    | clearOnDestroy | `boolean \| undefined` | `false` | Clear the field value when the component is destroyed. |
   </TabItem>
   <TabItem label="Slots">
     | Slot | Prop | Description | Available to |
     |------|------|-------------| ------------|
     | default | - | Customize the label of the field. | all |
     | error | `{ error: string \| null }` | Show an error message. | all |
-    | icon | - | Icon of the field action  | password |
+    | icon | `{ show: boolean }` | Customize the icons of the field. | password |
   </TabItem>
   <TabItem label="Events">
-    > This component has no events.
-
+    | Name | Type | Description |
+    |------|------|-------------|
+    | input | `(event: InputEvent) => void` | Triggered when the field value changes. |
+    | blur | `(event: FocusEvent) => void` | Triggered when the field loses focus. |
+    | focus | `(event: FocusEvent) => void` | Triggered when the field gains focus. |
   </TabItem>
 </Tabs>
 

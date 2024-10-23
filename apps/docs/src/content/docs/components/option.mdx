@@ -32,17 +32,17 @@ The `Option` component is a field to select an option from a list of options. It
     <Option name="name" label="Options" {options} />
     <!-- Or -->
     <Option name="name" label="Options" {options} >
-      Custom label, Options
-      <p slot="option" let:option>
+      This is a custom label
+      <span slot="option" let:option>
         Customized option label
         {option.label}
-      </p>
+      </span>
       <span slot="content">
         Add some content
       </span>
-      <span slot="error" let:error>
+      <svelte:fragment slot="error" let:error>
         {formatError(error)}
-      </span>
+      </svelte:fragment>
     </Option>
     ```
   </TabItem>
@@ -57,7 +57,7 @@ The `Option` component is a field to select an option from a list of options. It
     | disabled | `boolean \| undefined` | `false` | Enable or disable the field. |
     | options | [`OptionItem`](/reference/#optionitem)`[]` | `[]` | The options of the field. |
     | styles | [`OptionStyles`](/reference/#optionstyles) | `{}` | The styles of the field. |
-    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
+    | clearOnDestroy | `boolean \| undefined` | `false` | Clear the field value when the component is destroyed. |
   </TabItem>
   <TabItem label="Slots">
     | Slot | Prop | Description | Available to |
@@ -70,7 +70,7 @@ The `Option` component is a field to select an option from a list of options. It
   <TabItem label="Events">
     | Name | Type | Description |
     |------|------|-------------|
-    | choose | `CustomEvent<`[`OptionItem`](/reference/#optionitem)`> ` | The event emitted when the user choose an option. |
+    | choose | `(option: `[`OptionItem`](/reference/#optionitem)`) => void` | The event emitted when the user choose or unchoose an option. |
   </TabItem>
 </Tabs>
 

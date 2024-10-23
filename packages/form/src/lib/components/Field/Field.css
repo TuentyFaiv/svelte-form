@@ -1,0 +1,192 @@
+.svorm-field-container {
+  position: relative;
+  display: block;
+  container: field / inline-size;
+  box-sizing: border-box;
+  width: 100%;
+  z-index: 0;
+}
+
+.svorm-field-container[data-type="password"] > .svorm-field-error {
+  right: calc(var(--svorm-space) * 10);
+}
+.svorm-field-container[data-type="checkbox"] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: calc(var(--svorm-space) * 2);
+}
+
+.svorm-field-label {
+  display: block;
+  box-sizing: inherit;
+  width: 100%;
+  margin-bottom: var(--svorm-space);
+  color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
+  font-size: calc(var(--svorm-space) * 4);
+  line-height: calc(var(--svorm-space) * 5);
+  font-family: var(--svorm-font);
+}
+
+.svorm-field-shared {
+  box-sizing: inherit;
+  display: block;
+  width: 100%;
+  padding: calc(var(--svorm-space) * 2) calc(var(--svorm-space) * 2.5);
+  color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
+  background-color: rgb(var(--svorm-placeholder) / var(--svorm-placeholder-opacity));
+  font-size: calc(var(--svorm-space) * 3.5);
+  line-height: calc(var(--svorm-space) * 4.5);
+  font-family: var(--svorm-font);
+  border: var(--svorm-border);
+  border-radius: var(--svorm-radius);
+  transition:
+    border 200ms linear,
+    outline 200ms linear;
+  will-change: auto;
+}
+.svorm-field-shared::placeholder {
+  color: rgb(var(--svorm-placeholder-text) / var(--svorm-placeholder-opacity));
+  font-size: calc(var(--svorm-space) * 3.5);
+  line-height: calc(var(--svorm-space) * 4.5);
+  font-family: var(--svorm-font);
+}
+.svorm-field-shared:has([data-error="true"]),
+.svorm-field-shared:invalid {
+  border-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+}
+.svorm-field-shared:focus,
+.svorm-field-shared:focus-visible {
+  outline: var(--svorm-border);
+  outline-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
+  border-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
+}
+.svorm-field-shared[data-error="true"],
+.svorm-field-shared:focus-visible:invalid {
+  outline-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+  border-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+}
+
+.svorm-field-input[type="number"] {
+  appearance: none;
+  -moz-appearance: textfield;
+}
+.svorm-field-input[type="number"]::-webkit-inner-spin-button,
+.svorm-field-input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.svorm-field-textarea {
+  padding: calc(var(--svorm-space) * 2);
+  min-height: 100px;
+  resize: vertical;
+  appearance: none;
+}
+
+.svorm-field-checkbox {
+  display: block;
+  cursor: pointer;
+  appearance: none;
+  width: calc(var(--svorm-space) * 4);
+  min-width: calc(var(--svorm-space) * 4);
+  height: calc(var(--svorm-space) * 4);
+  min-height: calc(var(--svorm-space) * 4);
+  border: var(--svorm-border);
+  border-radius: var(--svorm-radius);
+  transition:
+    box-shadow 200ms linear,
+    background-color 200ms linear;
+  will-change: auto;
+}
+.svorm-field-checkbox:focus-visible {
+  outline: 0;
+  box-shadow: var(--svorm-shadow);
+}
+.svorm-field-checkbox:checked {
+  background-color: rgb(var(--svorm-primary) / var(--svorm-primary-opacity));
+  background-image: var(--checked-img);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.svorm-field-checkbox[data-error="true"] {
+  border-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+}
+.svorm-field-checkbox + p {
+  margin-bottom: 0;
+}
+.svorm-field-checkbox ~ .svorm-field-error {
+  transform: translateY(120%);
+  left: 0;
+  right: auto;
+  bottom: 0;
+  cursor: default;
+}
+
+.svorm-field-action {
+  position: absolute;
+  display: block;
+  box-sizing: inherit;
+  width: calc(var(--svorm-space) * 5);
+  min-width: calc(var(--svorm-space) * 5);
+  height: calc(var(--svorm-space) * 5);
+  padding: 0;
+  background-color: transparent;
+  color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
+  font-size: calc(var(--svorm-space) * 3);
+  line-height: calc(var(--svorm-space) * 3);
+  font-family: var(--svorm-font);
+  transform: translateY(50%);
+  border: 0;
+  bottom: calc(var(--svorm-space) * 4.5);
+  right: calc(var(--svorm-space) * 2);
+  z-index: 1;
+}
+.svorm-field-action:hover {
+  cursor: pointer;
+}
+
+.svorm-field-icon {
+  display: block;
+  box-sizing: inherit;
+  width: 100%;
+  min-height: 100%;
+  width: 100%;
+  min-height: 100%;
+  object-fit: contain;
+  stroke: currentColor;
+}
+
+.svorm-field-error {
+  position: absolute;
+  display: block;
+  box-sizing: inherit;
+  padding: var(--svorm-space);
+  background-color: rgb(var(--svorm-placeholder) / var(--svorm-placeholder-opacity));
+  color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+  font-size: calc(var(--svorm-space) * 3);
+  line-height: calc(var(--svorm-space) * 3);
+  font-weight: 500;
+  font-family: var(--svorm-font);
+  border-radius: calc(var(--svorm-radius) / 1.5);
+  transform: translateY(50%);
+  bottom: calc(var(--svorm-space) * 4.5);
+  right: calc(var(--svorm-space) * 2);
+  z-index: 0;
+}
+
+@container field (max-width: 450px) {
+  .svorm-field-container[data-type="password"] > .svorm-field-error {
+    right: 0;
+  }
+  .svorm-field-error {
+    width: 100%;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: transparent;
+    padding: var(--svorm-space) 0;
+    transform: translateY(calc(100% + var(--svorm-space)));
+  }
+}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { array, boolean, mixed, string } from "yup";
+  // import { array, boolean, mixed, string } from "zod";
   import {
     Errors,
     Field,
@@ -7,20 +7,58 @@
     Option,
     Select,
     faivform,
+    type FieldsSchema,
     type SelectOption,
   } from "../lib/index.js";
 
+  // const fields = {
+  //   name: string().required(),
+  //   accept: boolean(),
+  //   message: string(),
+  //   type: string().required(),
+  //   types: array().of(string().required()).required(),
+  //   option: string().required(),
+  //   details: string(),
+  //   asset: mixed().required(),
+  //   assets: array().of(mixed().required()).required(),
+  // };
   const fields = {
-    name: string().required(),
-    accept: boolean(),
-    message: string(),
-    type: string().required(),
-    types: array().of(string().required()).required(),
-    option: string().required(),
-    details: string(),
-    asset: mixed().required(),
-    assets: array().of(mixed().required()).required(),
-  };
+    name: {
+      type: "string",
+      required: true,
+    },
+    accept: "boolean",
+    message: "string",
+    type: {
+      type: "string",
+      required: true,
+    },
+    types: {
+      type: "array",
+      item: {
+        type: "string",
+        required: true,
+      },
+      required: true,
+    },
+    option: {
+      type: "string",
+      required: true,
+    },
+    details: "string",
+    asset: {
+      type: "file",
+      required: true,
+    },
+    assets: {
+      type: "array",
+      item: {
+        type: "file",
+        required: true,
+      },
+      required: true,
+    },
+  } satisfies FieldsSchema;
   const form = faivform({ fields });
   const { submit, data, errors, setField, setError } = $form;
 
@@ -83,7 +121,8 @@
   </div>
 </form>
 <button form="test" type="submit">Submit</button>
-<Errors />
+
+<!-- <Errors /> -->
 
 <style>
   .form {

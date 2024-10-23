@@ -7,10 +7,7 @@ export interface Props extends Omit<GeneralFieldProps, "type"> {
   styles?: OptionStyles;
   multiple?: boolean;
   disabled?: boolean;
-}
-
-export interface Events {
-  choose: string;
+  onchoose?: (option: OptionItem) => void;
 }
 
 export type Option = HTMLInputElement | null;

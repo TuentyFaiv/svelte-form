@@ -27,15 +27,16 @@ You can use the `File` to handle file inputs. It supports single and multiple fi
     <!-- Or -->
     <File name="cover">
       Custom label
-      <p slot="preview">
+      <svelte:fragment slot="preview" let:cover>
         Custom preview
-      </p>
-      <span slot="retry">
+        <img src={cover.src} alt={cover.alt} />
+      </svelte:fragment>
+      <svelte:fragment slot="retry">
         Retry
-      </span>
-      <span slot="error" let:error>
+      </svelte:fragment>
+      <svelte:fragment slot="error" let:error>
         {formatError(error)}
-      </span>
+      </svelte:fragment>
     </File>
     ```
   </TabItem>
@@ -52,23 +53,22 @@ You can use the `File` to handle file inputs. It supports single and multiple fi
     | accept | `string` | "image/*" | The accept of the field. |
     | max | `number` | `Infinity` | The max size of each file. |
     | styles | [`FileStyles`](/reference/#filestyles) | `{}` | The styles of the field. |
-    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
+    | clearOnDestroy | `boolean` | `false` | Clear the field value when the component is destroyed. |
   </TabItem>
   <TabItem label="Slots">
     | Slot | Prop | Description | Available to |
     |------|------|-------------|--------------|
     | default | - | Customize the label of the field. | all |
-    | preview | `{ cover: \{ src: string; alt: string; \} \| null; file: File; }` | Customize the preview of the field. | all |
-    | remove | - | Customize the remove action. | all |
+    | preview | `{ cover: { src: string; alt: string; } \| null; file: File; }` | Customize the preview of the field. | all |
+    | remove | - | Customize the remove icon. | all |
     | retry | - | Customize the retry action. | all |
     | error | `{ error: string \| null }` | Show an error message. | all |
   </TabItem>
   <TabItem label="Events">
     | Name | Type | Description |
     |------|------|-------------|
-    | choose | `CustomEvent<File \| File[]>` | The event emitted when the user choose a file. |
-    | remove | `CustomEvent<void>` | The event emitted when the user remove a file. |
-    | retry | `CustomEvent<void>` | The event emitted when the user retry a file. |
+    | choose | `(file: File \| File[]) => void` | The event emitted when the user choose a file. |
+    | remove | `() => void` | The event emitted when the user remove a file. |
   </TabItem>
 </Tabs>
 

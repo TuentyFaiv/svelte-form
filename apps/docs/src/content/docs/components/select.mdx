@@ -39,19 +39,25 @@ By default has enabled `searchable`, `clearable` and `autoselect` options.
     <Select name="name" label="Options" {options} />
     <!-- Or -->
     <Select name="name" label="Options" {options} >
-      Custom label, Options
-      <img src="/icon-clear.svg" alt="clear options" slot="clear" />
-      <img src="/icon-arrow.svg" alt="show/hide options" slot="arrow" />
-      <p slot="option" let:option>
+      This is a custom label
+      <svelte:fragment let:iten slot="item">
+        Customized item
+        {item.label}
+      </svelte:fragment>
+      <i class="icon" slot="remove">🧨</i>
+      <i class="icon" slot="clear">🗑</i>
+      <i class="icon" slot="arrow">🔽</i>
+      <svelte:fragment slot="option" let:option let:selected>
         Customized option
         {option.label}
-      </p>
+        {selected && " (selected)"}
+      </svelte:fragment>
       <span slot="empty">
         Customized empty
       </span>
-      <span slot="error" let:error>
+      <svelte:fragment slot="error" let:error>
         {formatError(error)}
-      </span>
+      </svelte:fragment>
     </Select>
     ```
   </TabItem>
@@ -70,26 +76,26 @@ By default has enabled `searchable`, `clearable` and `autoselect` options.
     | disabled | `boolean \| undefined` | `false` | Enable or disable the field. |
     | options | [`SelectOption`](/reference/#selectoption)`[]` | `[]` | The options of the field. |
     | styles | [`SelectStyles`](/reference/#selectstyles) | `{}` | The styles of the field. |
-    | datas | `Record<string, string \| boolean \| number> \| undefined` | `{}` | Datasets of the field container. |
+    | clearOnDestroy | `boolean \| undefined` | `false` | Clear the field value when the component is destroyed. |
   </TabItem>
   <TabItem label="Slots">
     | Slot | Prop | Description | Available to |
     |------|------|-------------|--------------|
     | default | - | Customize the label of the field. | all |
-    | clear | - | Customize the clear action. | all |
-    | arrow | - | Customize the arrow action. | all |
     | item | `{ item: `[`SelectOption`](/reference/#selectoption)` }` | Customize the item selected. | multiple |
-    | remove | - | Customize the item remove action. | multiple |
-    | option | `{ option: `[`SelectOption`](/reference/#selectoption)` }` | Customize the option of the field. | all |
+    | remove | - | Customize the remove icon. | multiple |
+    | clear | - | Customize the clear icon. | all |
+    | arrow | - | Customize the arrow icon. | all |
+    | option | `{ option: `[`SelectOption`](/reference/#selectoption)`; selected: boolean; }` | Customize the option of the field. | all |
     | empty | - | Customize the empty message. | all |
     | error | `{ error: string \| null }` | Show an error message. | all |
   </TabItem>
   <TabItem label="Events">
   | Name | Type | Description |
   |------|------|-------------|
-  | choose | `CustomEvent<`[`SelectOption`](/reference/#selectoption)`> ` | The event emitted when the user selects an option. |
-  | remove | `CustomEvent<`[`SelectOption`](/reference/#selectoption)`> ` | The event emitted when the user removes an item. |
-  | clear | `CustomEvent<void>` | The event emitted when the user clears the field. |
+  | choose | `(option: `[`SelectOption`](/reference/#selectoption)`) => void ` | The event emitted when the user selects an option. |
+  | remove | `(option: `[`SelectOption`](/reference/#selectoption)`) => void ` | The event emitted when the user removes an item. |
+  | clear | `() => void` | The event emitted when the user clears the field. |
   </TabItem>
 </Tabs>
 

@@ -23,7 +23,12 @@
 
 <style>
   :global(div > label),
-  :global(div > button) {
+  :global(div > button),
+  :global(div > div) {
     margin-top: 0 !important;
+  }
+
+  :global(div > img) {
+    height: 100%;
   }
 </style>

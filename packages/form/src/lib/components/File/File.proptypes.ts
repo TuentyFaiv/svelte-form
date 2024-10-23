@@ -8,11 +8,9 @@ export interface Props extends Omit<GeneralFieldProps, "type"> {
   dragable?: boolean;
   styles?: FileStyles;
   disabled?: boolean;
-}
-export interface Events {
-  choose: File | File[];
-  retry: void;
-  remove: void;
+  onchoose?: (files: File | File[]) => void;
+  onretry?: () => void;
+  onremove?: () => void;
 }
 
 export type Input = HTMLInputElement | null;

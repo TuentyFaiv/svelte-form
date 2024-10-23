@@ -1,5 +1,5 @@
 export { faivform, useForm, setConfig } from "./logic/stores/index.js";
-export { Field, Select, Option, File, Errors } from "./ui/components/index.js";
+export { Field, Select, Option, File, Errors } from "./components/index.js";
 export { FormError, SchemaError, SchemaErrorList } from "./logic/utils/errors.js";
 export { Adapter } from "./logic/typing/stores/form.js";
 
@@ -16,13 +16,7 @@ export type { SelectOption, OptionItem } from "./logic/typing/globals/interfaces
 export type { SharedUIProps, GeneralFieldProps } from "./logic/typing/globals/proptypes.js";
 
 // Styles types
-export type {
-  Config,
-  ContextStyles,
-  FaivCSSVars,
-  FaivFormTheme,
-  FaivBaseTheme,
-} from "./logic/typing/stores/styles.js";
+export type { ContextStyles } from "./logic/typing/stores/styles.js";
 
 // Faivform types
 export type {

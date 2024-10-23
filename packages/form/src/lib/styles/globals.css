@@ -1,0 +1,64 @@
+:root {
+  --svorm-font: system-ui, sans-serif;
+
+  --svorm-space: .25rem;
+
+  --svorm-radius: var(--svorm-space);
+
+  --svorm-border: var(--svorm-border-width) var(--svorm-border-style) rgb(var(--svorm-primary) / var(--svorm-primary-opacity));
+  --svorm-border-width: 1px;
+  --svorm-border-style: solid;
+
+  --svorm-white: 255 255 255;
+  --svorm-white-opacity: 1;
+
+  --svorm-black: 0 0 0;
+  --svorm-black-opacity: 1;
+
+  --svorm-shadow: var(--svorm-shadow-size) rgb(var(--svorm-shadow-color) / .25);
+  --svorm-shadow-size: 0 var(--svorm-space) calc(var(--svorm-space) + (calc(var(--svorm-space) * 2)));
+  --svorm-shadow-color: 48 50 68;
+
+  --svorm-primary: 33 192 139;
+  --svorm-primary-opacity: 1;
+  --svorm-primary-text: 26 27 37;
+
+  --svorm-secondary: 110 42 178;
+  --svorm-secondary-opacity: 1;
+  --svorm-secondary-text: var(--svorm-white);
+
+  --svorm-placeholder: var(--svorm-white);
+  --svorm-placeholder-opacity: 1;
+  --svorm-placeholder-text: 174 175 183;
+
+  --svorm-success: 55 190 57;
+  --svorm-success-opacity: 1;
+  --svorm-success-text: var(--svorm-black);
+
+  --svorm-warning: 255 184 0;
+  --svorm-warning-opacity: 1;
+  --svorm-warning-text: 26 27 37;
+
+  --svorm-error: 191 58 58;
+  --svorm-error-opacity: 1;
+  --svorm-error-text: var(--svorm-white);
+}
+
+:root:is(.dark, [data-theme="dark"]) {
+  --svorm-shadow-color: var(--svorm-primary);
+
+  --svorm-primary: 166 230 209;
+  --svorm-primary-text: 225 225 228;
+
+  --svorm-secondary: 197 170 224;
+  --svorm-secondary-text: 26 27 37;
+
+  --svorm-placeholder: 26 27 37;
+  --svorm-placeholder-text: 114 116 129;
+
+  --svorm-success: 115 210 116;
+
+  --svorm-warning: 255 205 77;
+
+  --svorm-error: 210 117 117;
+}

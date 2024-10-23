@@ -1,0 +1,241 @@
+.svorm-file-container {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  container: file / inline-size;
+  width: 100%;
+  gap: calc(var(--svorm-space) * 1.5);
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  z-index: 0;
+}
+
+.svorm-file-cover {
+  display: block;
+  box-sizing: inherit;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  object-fit: cover;
+  background-color: rgb(205 205 210 / var(--svorm-placeholder-opacity));
+  border-radius: var(--svorm-radius);
+}
+.dark .svorm-file-cover,
+[data-theme="dark"] .svorm-file-cover {
+  background-color: rgb(114 116 129 / var(--svorm-placeholder-opacity));
+}
+.svorm-file-cover:is([data-text]) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: calc(var(--svorm-space) * 10) calc(var(--svorm-space) * 6);
+  aspect-ratio: 16 / 9;
+  color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
+  font-size: calc(var(--svorm-space) * 3.5);
+  line-height: calc(var(--svorm-space) * 4.5);
+  font-family: var(--svorm-font);
+}
+.svorm-file-cover:is([data-text]) > span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.svorm-file-remove {
+  display: block;
+  box-sizing: inherit;
+  position: absolute;
+  aspect-ratio: 1 / 1;
+  width: 8%;
+  min-width: calc(var(--svorm-space) * 6);
+  max-width: calc(var(--svorm-space) * 10);
+  margin: 0;
+  padding: 3px;
+  background-color: rgb(var(--svorm-placeholder) / var(--svorm-placeholder-opacity));
+  color: rgb(var(--svorm-placholder-text) / var(--svorm-placeholder-opacity));
+  font-size: calc(var(--svorm-space) * 3);
+  line-height: calc(var(--svorm-space) * 3);
+  font-weight: 500;
+  font-family: var(--svorm-font);
+  border-radius: 50%;
+  border: 0;
+  outline: 0;
+  top: calc(var(--svorm-space) * 2);
+  right: calc(var(--svorm-space) * 2);
+  z-index: 0;
+  transition:
+    background-color 0.2s linear,
+    color 0.2s linear;
+  will-change: background-color, color;
+}
+.svorm-file-remove:is(:hover) {
+  cursor: pointer;
+}
+.svorm-file-remove:is(:hover, :focus, :focus-visible) {
+  background-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+  color: rgb(var(--svorm-error-text) / var(--svorm-error-opacity));
+}
+
+.svorm-file-retry {
+  display: block;
+  width: 100%;
+  box-sizing: inherit;
+  padding: calc(var(--svorm-space) * 2) calc(var(--svorm-space) * 2.5);
+  color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
+  background-color: rgb(var(--svorm-placeholder) / var(--svorm-placeholder-opacity));
+  font-size: calc(var(--svorm-space) * 3.5);
+  line-height: calc(var(--svorm-space) * 4.5);
+  font-family: var(--svorm-font);
+  border-radius: var(--svorm-radius);
+  border: 0;
+  outline: 0;
+}
+.svorm-file-retry:is(:hover) {
+  cursor: pointer;
+}
+
+.svorm-file-items {
+  display: flex;
+  width: 100%;
+  box-sizing: inherit;
+  gap: calc(var(--svorm-space) * 1.5);
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+
+.svorm-file-item {
+  box-sizing: inherit;
+  display: block;
+  position: relative;
+  width: 100%;
+  min-width: 220px;
+  max-width: 250px;
+  max-height: 450px;
+  scroll-snap-align: start;
+  z-index: 0;
+}
+
+.svorm-file-content {
+  position: relative;
+  width: 100%;
+  display: block;
+  box-sizing: inherit;
+  padding: calc(var(--svorm-space) * 4);
+  border: var(--svorm-border);
+  border-radius: var(--svorm-radius);
+  transition: border 200ms linear;
+  will-change: border;
+  z-index: 0;
+}
+.svorm-file-content:is([aria-disabled="true"]) {
+  cursor: not-allowed;
+  filter: grayscale(1) opacity(0.5);
+}
+.svorm-file-content:not([aria-disabled="true"]):is(:hover) {
+  cursor: pointer;
+}
+.svorm-file-content.draged,
+.svorm-file-content:not([data-error="true"], [aria-disabled="true"]):is(:hover) {
+  border-style: dashed;
+  border-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
+}
+.svorm-file-content.draged > .svorm-file-label,
+.svorm-file-content:not([data-error="true"], [aria-disabled="true"]):is(:hover) > .svorm-file-label,
+.svorm-file-input:is(:focus) + .svorm-file-label {
+  background-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
+  color: rgb(var(--svorm-secondary-text) / var(--svorm-secondary-opacity));
+}
+.svorm-file-content:is([data-error="true"]) {
+  border-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+}
+
+.svorm-file-content:is([data-error="true"]) > .svorm-file-label {
+  color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+}
+
+.svorm-file-content:is([data-error="true"]):is(:hover) > .svorm-file-label {
+  background-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+  color: rgb(var(--svorm-error-text) / var(--svorm-error-opacity));
+}
+
+.svorm-file-content:is([data-error="true"]) > .svorm-file-input:is(:focus) {
+  outline-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+}
+
+.svorm-file-input {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  color: transparent;
+  z-index: -1;
+  border-radius: var(--svorm-radius);
+}
+.svorm-file-input::file-selector-button {
+  display: none;
+}
+.svorm-file-input:is(:disabled) {
+  display: none;
+}
+.svorm-file-input:not(:disabled):is(:hover) {
+  cursor: pointer;
+}
+.svorm-file-input:is(:focus) {
+  outline: var(--svorm-border);
+  outline-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
+  outline-width: calc(var(--svorm-border-width) * 2);
+}
+
+.svorm-file-label {
+  position: relative;
+  display: block;
+  box-sizing: inherit;
+  width: 100%;
+  margin: 0;
+  padding: calc(var(--svorm-space) * 6) calc(var(--svorm-space) * 4);
+  color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
+  font-size: calc(var(--svorm-space) * 4);
+  line-height: calc(var(--svorm-space) * 5);
+  font-family: var(--svorm-font);
+  text-align: center;
+  border-radius: calc(var(--svorm-radius) / 2);
+  transition:
+    background-color 200ms linear,
+    color 200ms linear;
+  will-change: background-color, color;
+  z-index: 0;
+}
+
+.svorm-file-error {
+  position: absolute;
+  display: block;
+  box-sizing: inherit;
+  padding: var(--svorm-space);
+  background-color: transparent;
+  color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+  font-size: calc(var(--svorm-space) * 3);
+  line-height: calc(var(--svorm-space) * 3);
+  font-weight: 500;
+  font-family: var(--svorm-font);
+  border-radius: calc(var(--svorm-radius) * 2.5);
+  top: calc(100% + var(--svorm-space));
+  left: 0;
+  z-index: 0;
+}
+
+@container file (max-width: 450px) {
+  .svorm-file-item:is([data-single]) {
+    min-width: 100%;
+    max-width: 100%;
+    max-height: none;
+  }
+}

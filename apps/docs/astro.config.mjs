@@ -8,7 +8,7 @@ import vercel from "@astrojs/vercel/static";
 export default defineConfig({
   site: "https://forms.tuentyfaiv.com",
   integrations: [starlight({
-    title: "Faivform",
+    title: "5form",
     social: {
       github: "https://github.com/TuentyFaiv/svelte-form"
     },
