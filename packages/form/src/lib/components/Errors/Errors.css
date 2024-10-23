@@ -1,0 +1,25 @@
+.svorm-errors-container {
+  box-sizing: border-box;
+  display: flex;
+  margin: calc(var(--svorm-space) * 4) 0 0;
+  padding: 0;
+  gap: var(--svorm-space);
+  list-style: none;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.svorm-errors-item {
+  box-sizing: inherit;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: calc(var(--svorm-space) * 2) calc(var(--svorm-space) * 2.5);
+  background-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
+  color: rgb(var(--svorm-error-text) / var(--svorm-error-opacity));
+  font-size: calc(var(--svorm-space) * 3.5);
+  line-height: calc(var(--svorm-space) * 4.5);
+  font-family: var(--svorm-font);
+  border-radius: var(--svorm-radius);
+}
