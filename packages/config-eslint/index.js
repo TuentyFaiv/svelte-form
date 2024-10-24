@@ -37,6 +37,8 @@ module.exports = {
       "error",
       "double"
     ],
+    "@typescript-eslint/indent": "off",
+    "import/no-mutable-exports": "off",
     "comma-dangle": "off",
     "@typescript-eslint/comma-dangle": [
       "error",
@@ -48,7 +50,16 @@ module.exports = {
         "code": 130
       }
     ],
+    "no-undef-init": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": 1,
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "variable",
+        "format": ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
+      }
+    ],
+    "operator-linebreak": "off"
   }
 };

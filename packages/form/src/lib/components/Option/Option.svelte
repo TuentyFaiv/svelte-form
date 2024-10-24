@@ -27,6 +27,7 @@
   // events prepare for svelte 5
   export let onchoose: Props["onchoose"] = undefined;
 
+  // eslint-disable-next-line prefer-const
   let inputs: Record<string, Option> = {};
   let single: string | undefined | null = null;
   let notSingle: string[] = [];

@@ -84,7 +84,7 @@
 
     setField(name, updated);
 
-    if (updated.length == 0 && input) input.value = "";
+    if (updated.length === 0 && input) input.value = "";
   }
 
   function onDrag(value?: unknown) {
@@ -199,19 +199,19 @@
     {#if many && many.length > 0}
       <div class={styls.items}>
         {#each many as file, index (index)}
-          {@const cover = file.type.includes("image")
+          {@const coverItem = file.type.includes("image")
             ? {
                 src: URL.createObjectURL(file),
                 alt: file.name,
               }
             : null}
           <div class={styls.item}>
-            <slot name="preview" {cover} {file}>
-              {#if cover}
+            <slot name="preview" cover={coverItem} {file}>
+              {#if coverItem}
                 <img
                   class={styls.cover}
-                  src={cover.src}
-                  alt={cover.alt}
+                  src={coverItem.src}
+                  alt={coverItem.alt}
                   loading="lazy"
                   decoding="async"
                 />

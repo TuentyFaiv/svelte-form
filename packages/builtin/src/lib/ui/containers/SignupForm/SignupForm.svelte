@@ -7,6 +7,7 @@
     Select,
     faivform,
   } from "@tuentyfaiv/svelte-form";
+  import { cx } from "@emotion/css";
   import { getTexts } from "$lib/logic/utils/objects.js";
   import { fieldsSignup } from "$lib/logic/schemas/index.js";
   import { useGlobalFormStyles } from "$lib/logic/stores/config.js";
@@ -16,7 +17,6 @@
   import type { Props, SignupFields } from "./SignupForm.proptypes.js";
 
   import * as stylesinternal from "./SignupForm.styles.js";
-  import { cx } from "@emotion/css";
 
   export let submit: Props["submit"];
   export let context: Props["context"] = "form";
@@ -87,7 +87,7 @@
         dispatch("finish");
       },
       context,
-    }
+    },
   );
 
   $: fields = (

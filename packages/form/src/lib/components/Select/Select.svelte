@@ -51,6 +51,12 @@
   $: ({ data, errors, styles: ctxStyles, setField, setError } = $form);
   $: ({ select: ctxSelectStyles, replace } = $ctxStyles);
 
+  function onBlurOption() {
+    nextOption?.classList.remove("focus");
+    nextOption = null;
+    combobox?.setAttribute("aria-activedescendant", "");
+  }
+
   function onToggle(open?: unknown) {
     if (typeof open === "boolean") {
       active = open;
@@ -82,7 +88,9 @@
   }
 
   function onClear() {
-    const value = multiple ? (fixed?.map(({ value }) => value) ?? null) : null;
+    const value = multiple
+      ? (fixed?.map(({ value: valueFixed }) => valueFixed) ?? null)
+      : null;
     setField(name, value);
     search = "";
     onclear?.();
@@ -93,7 +101,7 @@
     options.length === 1 &&
     $data[name] !== options[0].value
   ) {
-    const value = options[0].value;
+    const { value } = options[0];
     setField(name, multiple ? [value] : value);
     onchoose?.(options[0]);
     onHasValue();
@@ -112,8 +120,11 @@
 
   $: optionsToShow = (
     searchable && search.toLowerCase() !== $data[name]
-      ? options.filter(({ label }) =>
-          label.toLowerCase().includes(search.toLowerCase()),
+      ? options.filter(
+          (option) =>
+            // eslint-disable-next-line implicit-arrow-linebreak
+            option.label.toLowerCase().includes(search.toLowerCase()),
+          // eslint-disable-next-line function-paren-newline
         )
       : options
   ).filter(({ value }) => (multiple ? !isSelected($data[name], value) : true));
@@ -137,8 +148,8 @@
     onHasValue();
   }
 
-  function onChoose(option: HTMLLIElement) {
-    const { value } = option.dataset;
+  function onChoose(element: HTMLLIElement) {
+    const { value } = element.dataset;
     if (!value) return;
 
     const selection = options.find((option) => option.value === value);
@@ -165,25 +176,24 @@
   }
 
   function getOption(option: Element | null, direction: "up" | "down") {
-    const options = Array.from(listbox?.children ?? []);
+    const optionsList = Array.from(listbox?.children ?? []);
     if (!option) {
       return direction === "down"
         ? (listbox?.firstElementChild as HTMLLIElement)
         : (listbox?.lastElementChild as HTMLLIElement);
     }
 
-    const index = options.indexOf(option);
+    const index = optionsList.indexOf(option);
 
     if (direction === "down") {
       if (option !== listbox?.lastElementChild) {
-        return options[index + 1] as HTMLLIElement;
-      } else {
-        return listbox?.firstElementChild as HTMLLIElement;
+        return optionsList[index + 1] as HTMLLIElement;
       }
+      return listbox?.firstElementChild as HTMLLIElement;
     }
 
     if (option !== listbox?.firstElementChild) {
-      return options[index - 1] as HTMLLIElement;
+      return optionsList[index - 1] as HTMLLIElement;
     }
 
     return listbox?.lastElementChild as HTMLLIElement;
@@ -206,12 +216,6 @@
         prevOption.classList.remove("focus");
       }
     }
-  }
-
-  function onBlurOption() {
-    nextOption?.classList.remove("focus");
-    nextOption = null;
-    combobox?.setAttribute("aria-activedescendant", "");
   }
 
   function onKeyDown(
@@ -259,6 +263,7 @@
         return onToggle();
       }
 
+      // eslint-disable-next-line consistent-return
       return;
     }
 
@@ -304,7 +309,7 @@
   let toTop = false;
 
   $: onIntersect = ([entry]: IntersectionObserverEntry[]) => {
-    const bottom = entry.boundingClientRect.bottom;
+    const { bottom } = entry.boundingClientRect;
     const onWindow = bottom > window.innerHeight;
 
     if (!entry.isIntersecting && !parent) {
@@ -503,10 +508,10 @@
         bind:this={listbox}
       >
         {#each optionsToShow as option (option.key ?? option.value)}
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
           {@const selected = multiple
             ? isSelected($data[name], option.value)
             : $data[name] === option.value}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
           <li
             id="{id ?? name}-option-{option.key ?? option.value}"
             role="option"

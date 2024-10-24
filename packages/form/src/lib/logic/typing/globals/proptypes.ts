@@ -10,4 +10,4 @@ export type GeneralFieldProps = SharedUIProps & {
   clearOnDestroy?: boolean;
 } & {
   [key: `data-${string}`]: string | number | boolean | null | undefined;
-}
+};
