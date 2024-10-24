@@ -25,13 +25,6 @@ module.exports = {
 				"exceptAfterSingleLine": true
 			}
 		],
-		"@typescript-eslint/naming-convention": [
-			"error",
-			{
-				"selector": "variable",
-				"format": ["camelCase", "UPPER_CASE", "snake_case"],
-			}
-		],
 		"object-shorthand": 0,
 		"object-curly-newline": 0,
 		"no-useless-return": 0,

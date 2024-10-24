@@ -1,14 +1,14 @@
 name: Publish adapters packages
 on: 
-  push:
+  pull_request:
     branches:
       - main
-    tags:
-      - adapter-*
+    types:
+      - closed
 
 jobs:
   release-zod:
-    if: github.repository == 'TuentyFaiv/svelte-form'
+    if: github.repository == 'TuentyFaiv/svelte-form' && contains(github.event.pull_request.head.ref, 'adapter-') && github.event.pull_request.merged == true
     name: Release Zod adapter
     runs-on: ubuntu-latest
     steps:
@@ -24,19 +24,19 @@ jobs:
       - name: Install dependencies
         uses: pnpm/action-setup@v2
         with:
-          version: latest
+          version: 8
           run_install: true
 
       - name: Build @faivform/zod
         run: pnpm build --filter @faivform/zod
 
       - name: Publish zod adapter
-        run: pnpm publish --filter @faivform/zod --access public --no-git-checks
+        run: pnpm publish --filter @faivform/zod --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ZOD_TOKEN }}
   
   release-yup:
-    if: github.repository == 'TuentyFaiv/svelte-form'
+    if: github.repository == 'TuentyFaiv/svelte-form' && contains(github.event.pull_request.head.ref, 'adapter-') && github.event.pull_request.merged == true
     name: Release Yup adapter
     runs-on: ubuntu-latest
     steps:
@@ -52,13 +52,13 @@ jobs:
       - name: Install dependencies
         uses: pnpm/action-setup@v2
         with:
-          version: latest
+          version: 8
           run_install: true
 
       - name: Build @faivform/yup
         run: pnpm build --filter @faivform/yup
 
       - name: Publish yup adapter
-        run: pnpm publish --filter @faivform/yup --access public --no-git-checks
+        run: pnpm publish --filter @faivform/yup --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_YUP_TOKEN }}

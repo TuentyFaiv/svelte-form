@@ -1,5 +1,5 @@
 import { getContext, hasContext, setContext } from "svelte";
-import { derived, get, readable, writable } from "svelte/store";
+import { get, readable, writable } from "svelte/store";
 import { FormError } from "../utils/errors.js";
 import { parseValue } from "../utils/parse.js";
 import { bridge } from "../utils/validation.js";
