@@ -10,7 +10,6 @@ export function setConfig(fields: ContextStyles = {}) {
     select = {},
     file = {},
     errors = {},
-    icons = null,
     replace = false,
   } = fields;
   const styles = readable<ContextStyles>({
@@ -20,7 +19,6 @@ export function setConfig(fields: ContextStyles = {}) {
     select,
     file,
     errors,
-    icons,
   });
 
   setContext("faivform-styles", styles);

@@ -10,7 +10,6 @@ export type {
   OptionStyles,
   FileStyles,
   ErrorsStyles,
-  Icons,
 } from "./logic/typing/globals/styles.js";
 export type { SelectOption, OptionItem } from "./logic/typing/globals/interfaces.js";
 export type { SharedUIProps, GeneralFieldProps } from "./logic/typing/globals/proptypes.js";
@@ -28,7 +27,6 @@ export type {
   // Faivform config
   FaivFormConfig,
   FaivFormStore,
-  Context,
   ContextForm,
   // Submit config
   Submit,

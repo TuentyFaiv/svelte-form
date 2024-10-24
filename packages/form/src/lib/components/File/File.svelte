@@ -35,7 +35,9 @@
   let input: Input;
   let draged = false;
 
-  $: form = useForm(context);
+  $: form = useForm<{
+    [k: string]: File | Blob | File[] | Blob[] | undefined | null;
+  }>(context);
   $: ({ data, errors, styles: ctxStyles, setField, setError } = $form);
   $: ({ file: ctxFileStyles, replace } = $ctxStyles);
 
@@ -138,6 +140,7 @@
       item: "svorm-file-item",
       error: "svorm-file-error",
       // retry: "svorm-file-retry",
+      icon: "svorm-file-icon",
       content: "svorm-file-content",
       label: "svorm-file-label",
       input: "svorm-file-input",
@@ -189,7 +192,7 @@
           }}
           class={styls.remove}
         >
-          <slot name="remove"><X size={18} /></slot>
+          <slot name="remove"><X size={18} class={styls.icon} /></slot>
         </button>
       </div>
     {/if}
@@ -226,7 +229,7 @@
                 onRemove(file, index);
               }}
             >
-              <slot name="remove"><X size={18} /></slot>
+              <slot name="remove"><X size={18} class={styls.icon} /></slot>
             </button>
           </div>
         {/each}

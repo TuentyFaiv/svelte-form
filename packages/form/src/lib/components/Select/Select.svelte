@@ -45,7 +45,9 @@
   let search = "";
   let fixed: SelectOption[] | null = null;
 
-  $: form = useForm(context);
+  $: form = useForm<{ [k: string]: string | string[] | undefined | null }>(
+    context,
+  );
   $: ({ data, errors, styles: ctxStyles, setField, setError } = $form);
   $: ({ select: ctxSelectStyles, replace } = $ctxStyles);
 
@@ -441,7 +443,7 @@
                     on:click|stopPropagation={() => onRemove(item)}
                   >
                     <slot name="remove">
-                      <X size={18} />
+                      <X size={18} class={styls.icon} />
                     </slot>
                   </button>
                 {/if}
@@ -468,7 +470,7 @@
           on:click|stopPropagation={onClear}
         >
           <slot name="clear">
-            <Trash2 size={18} />
+            <Trash2 size={18} class={styls.icon} />
           </slot>
         </button>
       {/if}
@@ -517,7 +519,7 @@
             <slot name="option" {option} {selected}>
               {option.label}
               {#if selected}
-                <Check size={18} style={"margin: 0"} />
+                <Check size={18} class={styls.icon} />
               {/if}
             </slot>
           </li>

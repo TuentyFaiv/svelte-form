@@ -1,7 +1,6 @@
 import type {
   ErrorsStyles,
   FileStyles,
-  Icons,
   FieldStyles,
   OptionStyles,
   SelectStyles,
@@ -11,15 +10,13 @@ export interface ContextStyles {
   /** Set to true to replace the default styles  @default false */
   replace?: boolean;
   /** Styles for the field component */
-  field?: FieldStyles;
+  field?: FieldStyles | null;
   /** Styles for the file component */
-  file?: FileStyles;
+  file?: FileStyles | null;
   /** Styles for the select component */
-  select?: SelectStyles;
+  select?: SelectStyles | null;
   /** Styles for the option component */
-  option?: OptionStyles;
-  /** Component icons paths */
-  icons?: Icons | null;
+  option?: OptionStyles | null;
   /** Styles for the errors component */
-  errors?: ErrorsStyles;
+  errors?: ErrorsStyles | null;
 }

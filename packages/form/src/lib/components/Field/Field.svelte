@@ -32,9 +32,11 @@
   let input: Input;
   let show = false;
 
-  $: form = useForm(context);
+  $: form = useForm<{
+    [k: string]: string | number | boolean | undefined | null;
+  }>(context);
   $: ({ data, errors, styles: ctxStyles, setField, check } = $form);
-  $: ({ field: ctxFieldStyles, icons, replace } = $ctxStyles);
+  $: ({ field: ctxFieldStyles, replace } = $ctxStyles);
 
   function toggleShow() {
     show = !show;
@@ -58,6 +60,10 @@
       action: "svorm-field-action",
       icon: "svorm-field-icon",
       error: "svorm-field-error",
+      checked:
+        styles?.checked ??
+        ctxFieldStyles?.checked ??
+        `data:image/svg+xml,${encodeURIComponent(IconChecked)}`,
     },
     externals: {
       container: styles?.container ?? ctxFieldStyles?.container,
@@ -68,13 +74,6 @@
       action: styles?.action ?? ctxFieldStyles?.action,
       icon: styles?.icon ?? ctxFieldStyles?.icon,
       error: styles?.error ?? ctxFieldStyles?.error,
-    },
-    icons: {
-      checked:
-        styles?.checked ??
-        ctxFieldStyles?.checked ??
-        icons?.checked ??
-        `data:image/svg+xml,${encodeURIComponent(IconChecked)}`,
     },
   });
 
@@ -96,9 +95,9 @@
     {#if type !== "checkbox"}
       <slot>
         {#if label}
-          <p class={styls.label}>
+          <span class={styls.label}>
             {label}
-          </p>
+          </span>
         {/if}
       </slot>
     {/if}
@@ -117,7 +116,7 @@
         }}
         on:focus={(event) => onfocus?.(event)}
         data-error={!!$errors[name]}
-        value={$data[name] ?? ""}
+        value={`${$data[name] ?? ""}`}
         {name}
         {...$$restProps}
       />
@@ -127,7 +126,7 @@
         id={id ?? name}
         type="checkbox"
         bind:this={input}
-        checked={$data[name] ?? false}
+        checked={Boolean($data[name])}
         data-error={!!$errors[name]}
         on:change={check}
         on:keydown={onChecked}
@@ -136,9 +135,9 @@
       />
       <slot>
         {#if label}
-          <p class={styls.label}>
+          <span class={styls.label}>
             {label}
-          </p>
+          </span>
         {/if}
       </slot>
     {:else}

@@ -31,7 +31,9 @@
   let single: string | undefined | null = null;
   let notSingle: string[] = [];
 
-  $: form = useForm(context);
+  $: form = useForm<{ [k: string]: string | string[] | undefined | null }>(
+    context,
+  );
   $: ({ data, errors, styles: ctxStyles, setField } = $form);
   $: ({ option: ctxOptionStyles, replace } = $ctxStyles);
 

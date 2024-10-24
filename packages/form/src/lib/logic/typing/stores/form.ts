@@ -46,7 +46,7 @@ export interface FaivFormConfig<F, T extends FieldsSchema | Adapter<F>> {
   context?: string;
 }
 
-export type Submit = (event: UserEvent<HTMLFormElement, SubmitEvent>) => Promise<void>;
+export type Submit = (event?: UserEvent<HTMLFormElement, SubmitEvent>) => Promise<void>;
 export type SubmitAction<T> = (values: T) => (Promise<void> | void);
 
 export interface SubmitConfig<T extends Fields> {
@@ -70,9 +70,7 @@ export interface FaivFormStore<Values extends Fields, Keys extends keyof Values 
   setError(field: Keys, error?: string | null): Promise<void>;
   setField(field: Keys, value: Values[Keys], validate?: boolean): Promise<void>;
   check(event: UserEvent<HTMLInputElement | HTMLTextAreaElement, FocusEvent | Event>): Promise<void>;
-  submit<T extends Fields = Values>(action: SubmitAction<T>, config?: SubmitConfig<T>): Submit;
+  submit<T extends Values = Values>(action: SubmitAction<T>, config?: SubmitConfig<T>): Submit;
 }
 
-export type Context<T extends Fields, K extends keyof T = keyof T> = Omit<FaivFormStore<T, K>, "submit">;
-
-export type ContextForm<T extends Fields, K extends keyof T = keyof T> = Readable<Context<T, K>>;
+export type ContextForm<T extends Fields, K extends keyof T = keyof T> = Readable<FaivFormStore<T, K>>;

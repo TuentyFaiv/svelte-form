@@ -92,6 +92,7 @@
   min-width: calc(var(--svorm-space) * 4);
   height: calc(var(--svorm-space) * 4);
   min-height: calc(var(--svorm-space) * 4);
+  margin: 0;
   border: var(--svorm-border);
   border-radius: var(--svorm-radius);
   transition:
@@ -99,6 +100,10 @@
     background-color 200ms linear;
   will-change: auto;
 }
+.svorm-field-checkbox + .svorm-field-label {
+  margin-bottom: 0;
+}
+
 .svorm-field-checkbox:focus-visible {
   outline: 0;
   box-shadow: var(--svorm-shadow);

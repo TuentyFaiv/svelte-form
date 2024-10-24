@@ -33,7 +33,7 @@ export interface OptionStyles extends Omit<GeneralStyles, "icon"> {
   option?: string;
 }
 
-export interface FileStyles extends Omit<GeneralStyles, "icon"> {
+export interface FileStyles extends GeneralStyles {
   content?: string;
   // retry?: string;
   cover?: string;
@@ -45,8 +45,4 @@ export interface FileStyles extends Omit<GeneralStyles, "icon"> {
 export interface ErrorsStyles {
   container?: string;
   item?: string;
-}
-
-export interface Icons {
-  checked?: string;
 }

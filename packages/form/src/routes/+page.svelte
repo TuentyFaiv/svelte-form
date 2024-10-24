@@ -66,6 +66,10 @@
     console.log(values);
   });
 
+  function forceSubmit() {
+    onSubmit();
+  }
+
   const options: SelectOption[] = [
     { fixed: true, value: "1", label: "One" },
     { value: "2", label: "Two" },
@@ -86,8 +90,8 @@
     name="types"
     {options}
     placeholder="Choose an option"
-    on:choose={({ detail }) => {
-      console.log({ detail });
+    onchoose={(choosed) => {
+      console.log({ choosed });
     }}
   />
   <Option name="option" {options} />
@@ -102,6 +106,7 @@
     >
       set type value
     </button>
+    <button type="button" on:click={forceSubmit}> Force Submit </button>
     <button
       type="button"
       on:click={() => {

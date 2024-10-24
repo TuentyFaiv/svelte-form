@@ -39,7 +39,6 @@ A extends Adapter<F> = Adapter<F>>({
     select: styles.select ?? {},
     file: styles.file ?? {},
     errors: styles.errors ?? {},
-    icons: styles.icons ?? null,
   });
 
   const adapter = fields instanceof Adapter ? fields : bridge<S, F>(fields);
@@ -93,14 +92,7 @@ A extends Adapter<F> = Adapter<F>>({
   }
 
   async function validation<T = Values>(): Promise<T> {
-    if (!form) {
-      throw new FormError({
-        title: "Form not found",
-        message: "Error to get form element.",
-        reason: "The form element is null. Check if you are the on:submit event in a form element.",
-      });
-    }
-    const formData = Object.fromEntries(new FormData(form).entries());
+    const formData = form ? Object.fromEntries(new FormData(form).entries()) : {};
 
     const allData = { ...formData, ...get(data) } as T;
 
@@ -119,7 +111,31 @@ A extends Adapter<F> = Adapter<F>>({
     }
   }
 
-  const contextform = readable<Omit<Form, "submit">>({
+  function submit<T extends Values = Values>(action: SubmitAction<T>, { reset = true, ...config }: SubmitConfig<T> = {}): Submit {
+    if (config.initial) data.set(config.initial);
+
+    async function onSubmit(event?: UserEvent<HTMLFormElement, SubmitEvent>) {
+      try {
+        toggleLoading(true);
+
+        if (event) form = event.currentTarget;
+        const values = await validation<T>();
+
+        await action(values);
+
+        if (reset) resetForm(true, config.initial);
+      } catch (error) {
+        setErrors({ error, handle: config.error });
+      } finally {
+        toggleLoading(false);
+        config.finish?.();
+      }
+    }
+
+    return onSubmit;
+  }
+
+  const contextform = readable<Form>({
     loading,
     errors,
     data,
@@ -128,6 +144,7 @@ A extends Adapter<F> = Adapter<F>>({
     setError,
     setField,
     check,
+    submit,
   });
 
   setContext(context, contextform);
@@ -143,7 +160,7 @@ A extends Adapter<F> = Adapter<F>>({
 
       if (typeof globalStyle === "undefined" || globalStyle === null || Object.keys(globalStyle ?? {}).length === 0) return acc;
 
-      if (keyStyle === "replace" || typeof globalStyle === "boolean") {
+      if (keyStyle === "replace" || typeof globalStyle === "boolean" || typeof formStyle === "boolean") {
         return {
           ...acc,
           [keyStyle]: formStyle || globalStyle,
@@ -170,36 +187,7 @@ A extends Adapter<F> = Adapter<F>>({
     ctxStyles.update((prev) => ({ ...prev, ...updatedStyles }));
   }
 
-  function submit<T extends Values = Values>(action: SubmitAction<T>, { reset = true, ...config }: SubmitConfig<T> = {}): Submit {
-    if (config.initial) data.set(config.initial);
-
-    async function onSubmit(event: UserEvent<HTMLFormElement, SubmitEvent>) {
-      try {
-        toggleLoading(true);
-
-        form = event.currentTarget;
-        const values = await validation<T>();
-
-        await action(values);
-
-        if (reset) resetForm(true, config.initial);
-      } catch (error) {
-        setErrors({ error, handle: config.error });
-      } finally {
-        toggleLoading(false);
-        config.finish?.();
-      }
-    }
-
-    return onSubmit;
-  }
-
-  setContext(`root-${context}`, derived(contextform, ($ctx) => ({
-    ...$ctx,
-    submit,
-  })));
-
-  return getContext<Readable<Form>>(`root-${context}`);
+  return getContext<Readable<Form>>(context);
 }
 
 export function useForm<Values extends Fields = Fields, Keys extends keyof Values = keyof Values>(context = "form") {
