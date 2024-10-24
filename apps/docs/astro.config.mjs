@@ -21,6 +21,14 @@ export default defineConfig({
         directory: "quick-start"
       },
     }, {
+      label: "Context",
+      translations: {
+        es: "Contexto"
+      },
+      autogenerate: {
+        directory: "context"
+      }
+    }, {
       label: "Components",
       translations: {
         es: "Componentes"

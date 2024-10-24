@@ -1,0 +1,48 @@
+---
+title: styles
+description: Form store for custom classnames
+sidebar:
+  order: 4
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+The styles is a writable store that contains the custom classnames that you set for the form or globally.
+
+## Example
+
+<Tabs>
+  <TabItem label="Set styles">
+    ```svelte {9} {11}
+    <script lang="ts">
+      import { faviform, setConfig } from '@tuentyfaiv/svelte-form';
+      import type { ContextStyles } from '@tuentyfaiv/svelte-form';
+
+      const styles: ContextStyles = {
+        // ...classnames
+      };
+
+      const form = faviform<Data>({ styles });
+      // or globally
+      setConfig(styles);
+    </script>
+    ```
+  </TabItem>
+  <TabItem label="Use styles">
+    ```svelte {6}
+    // Custom component
+    <script lang="ts">
+      import { useForm } from '@tuentyfaiv/svelte-form';
+
+      const form = faviform<Data>();
+      const { styles } = form;
+    </script>
+
+    <label class={$styles.container}>
+      <span class={$styles.label}>
+      <input class={$styles.input} />
+    </label>
+    ```
+  </TabItem>
+</Tabs>
+

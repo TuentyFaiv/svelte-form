@@ -1,0 +1,59 @@
+---
+title: submit
+description: Function to submit the form
+sidebar:
+  order: 8
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+The `submit` function is usefull to submit the form. It's a higher order function that receives an action and a config object and return a [`Submit`](/reference/#submit). The action is a function that receives the form data and returns a promise. The config object is an object that contains the options to submit the form.
+
+:::tip
+You can use the returned `Submit` programmatically, for example, when you want to submit the form from a button click, or somethig else.
+:::
+
+## Example
+
+<Tabs>
+  <TabItem label="Submit using form element">
+    ```svelte {9} {14}
+    <script lang="ts">
+      import { faviform } from '@tuentyfaiv/svelte-form';
+
+      const form = faviform<Data>({
+        // ...config
+      });
+      const { submit } = $form;
+
+      const onSubmit = submit(async (data) => {
+        // ...submit logic
+      });
+    </script>
+
+    <form on:submit|preventDefault={onSubmit}>
+      <!-- ...fields -->
+      <button type="submit">Submit</button>
+    </form>
+    ```
+  </TabItem>
+  <TabItem label="Submit without form element">
+    ```svelte {9} {14}
+    <script lang="ts">
+      import { faviform } from '@tuentyfaiv/svelte-form';
+
+      const form = faviform<Data>({
+        // ...config
+      });
+      const { submit } = $form;
+
+      const onSubmit = submit(async (data) => {
+        // ...submit logic
+      });
+    </script>
+
+    <button on:click={() => onSubmit()}>Submit</button>
+    ```
+  </TabItem>
+</Tabs>
+

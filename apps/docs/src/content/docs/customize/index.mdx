@@ -8,160 +8,146 @@ sidebar:
 import { Tabs, TabItem } from "@astrojs/starlight/components";
 import { Palette } from "@organisms";
 
-The built-in components comes with a default look and feel, you can customize it using `setConfig` or the `styles` property in each built-in component and the [`faivform`](/reference/#faivformconfig) function. Also Faivform library comes with a light and dark theme that you can customize too.
-
-To customize globally you must use the `setConfig` in the root component of you application. You can check the [`Config`](/reference/#global-config) to see all the options.
+The built-in components comes with a default look and feel, you can customize it using `setConfig` or the `styles` property in each built-in component and the [`faivform`](/reference/#faivformconfig) function to change the classes names. Or you can change the CSS variables in your global css to change the theme.
 
 ## Classes
 
-In the `fields` option you can customize the class names of the built-in components. You can check the [`ContextStyles`](/reference/#contextstyles).
+The `setConfig` function allows you to customize the class names of the built-in components. You can check the [`ContextStyles`](/reference/#contextstyles).
 
 ```svelte
 <script lang="ts">
   import { setConfig } from "@tuentyfaiv/svelte-form";
+  import type { ContextStyles } from "@tuentyfaiv/svelte-form";
 
-  setConfig({
-    fields: {},
-    // ... theme
-  });
+  const styles: ContextStyles = {
+    // ... classes
+  };
+
+  setConfig(styles);
 </script>
 ```
 
 ## Theme
 
-To customize the theme you must use the following options: `base`, `light`, `onLight`, `dark`, `onDark`. The `base` option are CSS variables that are used in both themes. The `light` and `dark` options are the themes that you can customize. The `onLight` and `onDark` options are CSS variables that are used in each theme.
-
-You can check the values of each property here:
-
-- `base`: [`FaivBaseTheme`](/reference/#faivbasetheme)
-- `light` and `dark` [`FaivFormTheme`](/reference/#faivformtheme)
-- `onLight` and `onDark` [`FaivCSSVars`](/reference/#faivcssvars)
+To use the default theme you must import the `globals.css` in your global css file or root application. And to customize the theme you must set in your global css the CSS variables that are used in the built-in components, with your custom values.
 
 :::note
-Faivform use `.dark` class or `data-theme="dark"` in the `html` element to detect when the dark mode is active.
+Faivform expect `.dark` class or `data-theme="dark"` attribute in the `html` element to detect when the dark mode is active.
 :::
-
 
 ```svelte
 <script lang="ts">
-  import { setConfig } from "@tuentyfaiv/svelte-form";
-
-  setConfig({
-    // ... classes
-    base: {},
-    light: {},
-    onLight: {},
-    dark: {},
-    onDark: {},
-  });
+  import "@tuentyfaiv/svelte-form/globals.css";
 </script>
 ```
 
 ## Default
 
-Here is the default styles configuration
+Here is the default CSS variables values.
 
-### Base
-**Font:**
+```css
+:root {
+  --svorm-font: system-ui, sans-serif;
+
+  --svorm-space: .25rem;
+
+  --svorm-radius: var(--svorm-space);
+
+  --svorm-border: var(--svorm-border-width) var(--svorm-border-style) rgb(var(--svorm-primary) / var(--svorm-primary-opacity));
+  --svorm-border-width: 1px;
+  --svorm-border-style: solid;
+
+  --svorm-white: 255 255 255;
+  --svorm-white-opacity: 1;
+
+  --svorm-black: 0 0 0;
+  --svorm-black-opacity: 1;
+
+  --svorm-shadow: var(--svorm-shadow-size) rgb(var(--svorm-shadow-color) / .25);
+  --svorm-shadow-size: 0 var(--svorm-space) calc(var(--svorm-space) + (calc(var(--svorm-space) * 2)));
+  --svorm-shadow-color: 48 50 68;
+
+  --svorm-primary: 33 192 139;
+  --svorm-primary-opacity: 1;
+  --svorm-primary-text: 26 27 37;
+
+  --svorm-secondary: 110 42 178;
+  --svorm-secondary-opacity: 1;
+  --svorm-secondary-text: var(--svorm-white);
+
+  --svorm-placeholder: var(--svorm-white);
+  --svorm-placeholder-opacity: 1;
+  --svorm-placeholder-text: 174 175 183;
+
+  --svorm-success: 55 190 57;
+  --svorm-success-opacity: 1;
+  --svorm-success-text: var(--svorm-black);
+
+  --svorm-warning: 255 184 0;
+  --svorm-warning-opacity: 1;
+  --svorm-warning-text: 26 27 37;
+
+  --svorm-error: 191 58 58;
+  --svorm-error-opacity: 1;
+  --svorm-error-text: var(--svorm-white);
+}
+
+:root:is(.dark, [data-theme="dark"]) {
+  --svorm-shadow-color: var(--svorm-primary);
+
+  --svorm-primary: 166 230 209;
+  --svorm-primary-text: 225 225 228;
+
+  --svorm-secondary: 197 170 224;
+  --svorm-secondary-text: 26 27 37;
+
+  --svorm-placeholder: 26 27 37;
+  --svorm-placeholder-text: 114 116 129;
+
+  --svorm-success: 115 210 116;
+
+  --svorm-warning: 255 205 77;
+
+  --svorm-error: 210 117 117;
+}
+```
+
+### Font
+
 ```bash frame="none"
 system-ui, sans-serif
 ```
 
-**Space:**
+### Space
+
 ```bash frame="none"
 1rem
 ```
 
-**Radius:**
-```bash frame="none"
-calc(var(--faivform-space) / 4)
-```
+### Colors
 
-**White:** <Palette color="rgb(255, 255, 255)" border />
+| White | Black |
+| ----- | ----- |
+| <Palette color="rgb(255, 255, 255)" border /> | <Palette color="rgb(0, 0, 0)" /> |
 
-**Black:** <Palette color="rgb(0, 0, 0)" />
+**On light theme:**
 
-### Theme
-**Primary:**
-- <Palette value={50} color="rgb(222, 246, 238)" />
-- <Palette value={100} color="rgb(211, 242, 232)" />
-- <Palette value={200} color="rgb(200, 239, 226)" />
-- <Palette value={300} color="rgb(166, 230, 209)" />
-- <Palette value={400} color="rgb(100, 211, 174)" />
-- <Palette value={500} color="rgb(33, 192, 139)" />
-- <Palette value={600} color="rgb(30, 173, 125)" />
-- <Palette value={700} color="rgb(25, 144, 104)" />
-- <Palette value={800} color="rgb(20, 115, 83)" />
-- <Palette value={900} color="rgb(16, 94, 68)" />
+| Name | Background | Text |
+| ---- | ---------- | ---- |
+| Primary | <Palette color="rgb(33, 192, 139)" /> | <Palette color="rgb(26, 27, 37)" /> |
+| Secondary | <Palette color="rgb(110, 42, 178)" /> | <Palette color="rgb(255, 255, 255)" /> |
+| Placeholder | <Palette color="rgb(255, 255, 255)" /> | <Palette color="rgb(174, 175, 183)" /> |
+| Success | <Palette color="rgb(55, 190, 57)" /> | <Palette color="rgb(0, 0, 0)" /> |
+| Warning | <Palette color="rgb(255, 184, 0)" /> | <Palette color="rgb(26, 27, 37)" /> |
+| Error | <Palette color="rgb(191, 58, 58)" /> | <Palette color="rgb(255, 255, 255)" /> |
 
-**Secondary:**
-- <Palette value={50} color="rgb(233, 223, 243)" />
-- <Palette value={100} color="rgb(226, 212, 240)" />
-- <Palette value={200} color="rgb(219, 202, 236)" />
-- <Palette value={300} color="rgb(197, 170, 224)" />
-- <Palette value={400} color="rgb(154, 106, 201)" />
-- <Palette value={500} color="rgb(110, 42, 178)" />
-- <Palette value={600} color="rgb(99, 38, 160)" />
-- <Palette value={700} color="rgb(83, 32, 134)" />
-- <Palette value={800} color="rgb(66, 25, 107)" />
-- <Palette value={900} color="rgb(54, 21, 87)" />
+**On dark theme:**
 
-**Accent:**
-- <Palette value={50} color="rgb(252, 236, 217)" />
-- <Palette value={100} color="rgb(251, 230, 205)" />
-- <Palette value={200} color="rgb(250, 223, 192)" />
-- <Palette value={300} color="rgb(247, 204, 155)" />
-- <Palette value={400} color="rgb(242, 166, 79)" />
-- <Palette value={500} color="rgb(236, 128, 4)" />
-- <Palette value={600} color="rgb(212, 115, 4)" />
-- <Palette value={700} color="rgb(177, 96, 3)" />
-- <Palette value={800} color="rgb(142, 77, 2)" />
-- <Palette value={900} color="rgb(116, 63, 2)" />
-
-**Success:**
-- <Palette value={50} color="rgb(225, 245, 225)" />
-- <Palette value={100} color="rgb(215, 242, 215)" />
-- <Palette value={200} color="rgb(205, 239, 206)" />
-- <Palette value={300} color="rgb(175, 229, 176)" />
-- <Palette value={400} color="rgb(115, 210, 116)" />
-- <Palette value={500} color="rgb(55, 190, 57)" />
-- <Palette value={600} color="rgb(50, 171, 51)" />
-- <Palette value={700} color="rgb(41, 143, 43)" />
-- <Palette value={800} color="rgb(33, 114, 34)" />
-- <Palette value={900} color="rgb(27, 93, 28)" />
-
-**Warning:**
-- <Palette value={50} color="rgb(255, 244, 217)" />
-- <Palette value={100} color="rgb(255, 241, 204)" />
-- <Palette value={200} color="rgb(255, 237, 191)" />
-- <Palette value={300} color="rgb(255, 227, 153)" />
-- <Palette value={400} color="rgb(255, 205, 77)" />
-- <Palette value={500} color="rgb(255, 184, 0)" />
-- <Palette value={600} color="rgb(230, 166, 0)" />
-- <Palette value={700} color="rgb(191, 138, 0)" />
-- <Palette value={800} color="rgb(153, 110, 0)" />
-- <Palette value={900} color="rgb(125, 90, 0)" />
-
-**Error:**
-- <Palette value={50} color="rgb(242, 216, 216)" />
-- <Palette value={100} color="rgb(239, 206, 206)" />
-- <Palette value={200} color="rgb(229, 176, 176)" />
-- <Palette value={300} color="rgb(210, 117, 117)" />
-- <Palette value={400} color="rgb(250, 142, 142)" />
-- <Palette value={500} color="rgb(191, 58, 58)" />
-- <Palette value={600} color="rgb(172, 52, 52)" />
-- <Palette value={700} color="rgb(143, 44, 44)" />
-- <Palette value={800} color="rgb(115, 35, 35)" />
-- <Palette value={900} color="rgb(94, 28, 28)" />
-
-**Placeholder:**
-- <Palette value={50} color="rgb(225, 225, 228)" />
-- <Palette value={100} color="rgb(215, 215, 219)" />
-- <Palette value={200} color="rgb(205, 205, 210)" />
-- <Palette value={300} color="rgb(174, 175, 183)" />
-- <Palette value={400} color="rgb(114, 116, 129)" />
-- <Palette value={500} color="rgb(53, 56, 75)" />
-- <Palette value={600} color="rgb(48, 50, 68)" />
-- <Palette value={700} color="rgb(40, 42, 56)" />
-- <Palette value={800} color="rgb(32, 34, 45)" />
-- <Palette value={900} color="rgb(26, 27, 37)" />
+| Name | Background | Text |
+| ---- | ---------- | ---- |
+| Primary | <Palette color="rgb(166, 230, 209)" /> | <Palette color="rgb(225, 225, 228)" /> |
+| Secondary | <Palette color="rgb(197, 170, 224)" /> | <Palette color="rgb(26, 27, 37)" /> |
+| Placeholder | <Palette color="rgb(26, 27, 37)" /> | <Palette color="rgb(114, 116, 129)" /> |
+| Success | <Palette color="rgb(115, 210, 116)" /> | <Palette color="rgb(0, 0, 0)" /> |
+| Warning | <Palette color="rgb(255, 205, 77)" /> | <Palette color="rgb(26, 27, 37)" /> |
+| Error | <Palette color="rgb(210, 117, 117)" /> | <Palette color="rgb(255, 255, 255)" /> |

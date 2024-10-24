@@ -1,0 +1,54 @@
+---
+title: Accessing the form context
+description: Function available to access the form context
+sidebar:
+  order: 2
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+There are two function to access the form context, `faviform` and `useForm`.
+
+- **`faviform`**: Which is the function to create a form context and return the form store.
+- **`useForm`**: With this function you can access the form store in a component.
+
+## Example
+
+<Tabs>
+  <TabItem label="Create a form">
+    ```svelte
+    <script lang="ts">
+      import { faviform } from '@tuentyfaiv/svelte-form';
+
+      const form = faviform<Data>({
+        // ...config
+      });
+      const { ...methodsAndStores } = form;
+    </script>
+    ```
+  </TabItem>
+  <TabItem label="Use the form">
+    ```svelte
+    <script lang="ts">
+      import { useForm } from '@tuentyfaiv/svelte-form';
+
+      const form = faviform<Data>();
+      const { ...methodsAndStores } = form;
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+## Store
+
+The form store is a readable store that contains the following stores and methods.
+
+- [data](/context/data): The values of the form.
+- [errors](/context/errors): The errors of each field.
+- [loading](/context/loading): Loading state of the form.
+- [styles](/context/loading): Contains the custom classnames of the form.
+- [setField](/context/setfield): Modify the value of a field.
+- [setError](/context/seterror): Change the error of a field.
+- [check](/context/check): An event to validate a field in a custom component.
+- [submit](/context/submit): Submit the form.
+- [reset](/context/reset): Reset the form.
