@@ -1,0 +1,87 @@
+name: Review
+on: [pull_request]
+
+jobs:
+  eslint-core:
+    name: Linter core package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: true
+
+      - uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.REVIEW_TOKEN }}
+          reporter: github-pr-review
+          eslint_flags: "packages/form/src/"
+  
+  eslint-adapters:
+    name: Linter adapters packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: true
+
+      - uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.REVIEW_TOKEN }}
+          reporter: github-pr-review
+          eslint_flags: "packages/zod/src/ packages/yup/src/"
+
+  eslint-extras:
+    name: Linter extra packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: true
+
+      - uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.REVIEW_TOKEN }}
+          reporter: github-pr-review
+          eslint_flags: "packages/builtin/src/"

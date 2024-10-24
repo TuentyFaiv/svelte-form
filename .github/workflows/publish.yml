@@ -1,14 +1,14 @@
 name: Publish core package
 on: 
-  push:
+  pull_request:
     branches:
       - main
-    tags:
-      - v*
+    types:
+      - closed
 
 jobs:
   release:
-    if: github.repository == 'TuentyFaiv/svelte-form'
+    if: github.repository == 'TuentyFaiv/svelte-form' && contains(github.event.pull_request.head.ref, 'v') && github.event.pull_request.merged == true
     name: Release faivform
     runs-on: ubuntu-latest
     steps:
@@ -24,13 +24,13 @@ jobs:
       - name: Install dependencies
         uses: pnpm/action-setup@v2
         with:
-          version: latest
+          version: 8
           run_install: true
 
       - name: Build @tuentyfaiv/svelte-form
         run: pnpm build --filter @tuentyfaiv/svelte-form
 
       - name: Publish main package
-        run: pnpm publish --filter @tuentyfaiv/svelte-form --access public --no-git-checks
+        run: pnpm publish --filter @tuentyfaiv/svelte-form --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

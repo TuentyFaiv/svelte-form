@@ -1,14 +1,14 @@
 name: Publish extra packages
 on: 
-  push:
+  pull_request:
     branches:
       - main
-    tags:
-      - builtin-v*
+    types:
+      - closed
 
 jobs:
   release-builtin:
-    if: github.repository == 'TuentyFaiv/svelte-form'
+    if: github.repository == 'TuentyFaiv/svelte-form' && contains(github.event.pull_request.head.ref, 'builtin-v') && github.event.pull_request.merged == true
     name: Release Built-in forms
     runs-on: ubuntu-latest
     steps:
@@ -24,13 +24,13 @@ jobs:
       - name: Install dependencies
         uses: pnpm/action-setup@v2
         with:
-          version: latest
+          version: 8
           run_install: true
 
       - name: Build @faivform/builtin
         run: pnpm build --filter @faivform/builtin
 
       - name: Publish built-in forms package
-        run: pnpm publish --filter @faivform/builtin --access public --no-git-checks
+        run: pnpm publish --filter @faivform/builtin --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_BUILTIN_TOKEN }}
