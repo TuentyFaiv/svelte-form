@@ -170,7 +170,11 @@
         title={a11y?.icon}
       >
         <slot name="icon" {show}>
-          <svelte:component this={show ? EyeClosed : Eye} class={styls.icon} />
+          <svelte:component
+            this={show ? EyeClosed : Eye}
+            size={20}
+            class={styls.icon}
+          />
         </slot>
       </button>
     {/if}

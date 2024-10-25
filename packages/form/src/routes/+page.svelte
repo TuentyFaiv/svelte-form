@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { page } from "$app/stores";
+  import { onMount } from "svelte";
   // import { array, boolean, mixed, string } from "zod";
   import {
     Errors,
@@ -41,6 +43,18 @@
       },
       required: true,
     },
+    typenon: {
+      type: "string",
+      required: true,
+    },
+    typesnon: {
+      type: "array",
+      item: {
+        type: "string",
+        required: true,
+      },
+      required: true,
+    },
     option: {
       type: "string",
       required: true,
@@ -62,6 +76,8 @@
   const form = faivform({ fields });
   const { submit, data, errors, setField, setError } = $form;
 
+  let type = null;
+
   const onSubmit = submit(async (values) => {
     console.log(values);
   });
@@ -70,21 +86,58 @@
     onSubmit();
   }
 
-  const options: SelectOption[] = [
-    { fixed: true, value: "1", label: "One" },
-    { value: "2", label: "Two" },
-    { value: "3", label: "Three" },
-  ];
+  let options: SelectOption[] = [];
+  // let options: SelectOption[] = [
+  //   { fixed: true, value: "1", label: "One" },
+  //   { value: "2", label: "Two" },
+  //   { value: "3", label: "Three" },
+  // ];
+
+  let optionsType: SelectOption[] = [];
+  // let optionsType: SelectOption[] = [
+  //   // { value: "1", label: "One" },
+  //   // { value: "2", label: "Two" },
+  //   { value: "3", label: "Three" },
+  // ];
+
+  // $: if ($page.data.type) {
+  //   setField("type", $page.data.type);
+  //   setField("typenon", $page.data.type);
+  // }
+  $: if ($page.data.types) {
+    setField("types", $page.data.types);
+    // setField("typesnon", $page.data.types);
+  }
 
   $: console.log("data: ", $data);
   $: console.log("errors: ", $errors);
+
+  onMount(() => {
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 2000);
+    }).then(() => {
+      optionsType = [
+        // { value: "1", label: "One" },
+        // { value: "2", label: "Two" },
+        { value: "3", label: "Three" },
+      ];
+
+      options = [
+        { fixed: true, value: "1", label: "One" },
+        { value: "2", label: "Two" },
+        { value: "3", label: "Three" },
+      ];
+    });
+  });
 </script>
 
 <form on:submit|preventDefault={onSubmit} class="form" id="test">
   <Field name="name" />
   <Field name="details" type="textarea" />
   <Field label="You accept?" name="accept" type="checkbox" />
-  <Select name="type" {options} placeholder="Choose an option" />
+  <!-- <Select name="type" options={optionsType} placeholder="Choose an option" /> -->
   <Select
     multiple
     name="types"
@@ -94,6 +147,22 @@
       console.log({ choosed });
     }}
   />
+  <!-- <Select
+    searchable={false}
+    name="typenon"
+    options={optionsType}
+    placeholder="Choose an option"
+  />
+  <Select
+    multiple
+    searchable={false}
+    name="typesnon"
+    {options}
+    placeholder="Choose an option"
+    onchoose={(choosed) => {
+      console.log({ choosed });
+    }}
+  /> -->
   <Option name="option" {options} />
   <File name="asset" />
   <File multiple name="assets" />

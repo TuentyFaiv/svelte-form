@@ -118,9 +118,6 @@
 .svorm-field-checkbox[data-error="true"] {
   border-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
 }
-.svorm-field-checkbox + p {
-  margin-bottom: 0;
-}
 .svorm-field-checkbox ~ .svorm-field-error {
   transform: translateY(120%);
   left: 0;
@@ -139,8 +136,8 @@
   padding: 0;
   background-color: transparent;
   color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
-  font-size: calc(var(--svorm-space) * 3);
-  line-height: calc(var(--svorm-space) * 3);
+  font-size: calc(var(--svorm-space) * 5);
+  line-height: calc(var(--svorm-space) * 5);
   font-family: var(--svorm-font);
   transform: translateY(50%);
   border: 0;
@@ -156,11 +153,7 @@
   display: block;
   box-sizing: inherit;
   width: 100%;
-  min-height: 100%;
   width: 100%;
-  min-height: 100%;
-  object-fit: contain;
-  stroke: currentColor;
 }
 
 .svorm-field-error {

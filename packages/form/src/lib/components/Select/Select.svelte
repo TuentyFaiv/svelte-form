@@ -65,17 +65,32 @@
     }
   }
 
-  function onHasValue() {
-    if (!multiple && $data[name]) {
-      const selection = options.find(({ value }) => value === $data[name]);
-      search = selection?.label ?? "";
+  function onHasValue(validate = true) {
+    if (!multiple) {
+      if (!$data[name]) return;
+
+      const selected = options.find(({ value }) => value === $data[name]);
+
+      search = selected?.label ?? "";
+      if (!selected) setField(name, null, validate);
+    } else {
+      fixed = options.filter((option) => option.fixed);
+
+      const selected = [
+        ...fixed,
+        ...options.filter(({ value }) => isSelected($data[name], value)),
+      ];
+      const selectedSet = [...new Set(selected.map(({ value }) => value))];
+
+      const value = selectedSet.length > 0 ? selectedSet : null;
+
+      setField(name, value, validate);
     }
   }
 
   function onHide() {
     onToggle(false);
     onHasValue();
-    setField(name, $data[name] ?? null);
     onBlurOption();
   }
 
@@ -96,26 +111,15 @@
     onclear?.();
   }
 
-  $: if (
-    autoselect &&
-    options.length === 1 &&
-    $data[name] !== options[0].value
-  ) {
-    const { value } = options[0];
-    setField(name, multiple ? [value] : value);
-    onchoose?.(options[0]);
-    onHasValue();
+  $: if (options.length > 0) {
+    onHasValue(false);
   }
 
-  $: if (multiple) {
-    fixed = options.filter((option) => option.fixed);
-
-    if (fixed.length > 0) {
-      setField(
-        name,
-        fixed.map(({ value }) => value),
-      );
-    }
+  $: if (autoselect && options.length === 1) {
+    const { value } = options[0];
+    setField(name, multiple ? [value] : value, false);
+    onHasValue();
+    onchoose?.(options[0]);
   }
 
   $: optionsToShow = (
@@ -143,10 +147,6 @@
       ? items.filter((option) => !option.fixed)
       : items;
   $: showClear = clearable && toClear && toClear.length > 0;
-
-  $: if ($data[name]) {
-    onHasValue();
-  }
 
   function onChoose(element: HTMLLIElement) {
     const { value } = element.dataset;
@@ -230,7 +230,7 @@
       onHide();
     }
     if (event.code === keys.enter && nextOption) {
-      if (!searchable) event.preventDefault();
+      event.preventDefault();
       onChoose(nextOption);
       if (multiple) {
         onBlurOption();
@@ -386,7 +386,7 @@
                     on:click|stopPropagation={() => onRemove(item)}
                   >
                     <slot name="remove">
-                      <X size={18} />
+                      <X size={18} class={styls.icon} />
                     </slot>
                   </button>
                 {/if}
