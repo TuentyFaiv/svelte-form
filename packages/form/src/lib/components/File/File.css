@@ -26,7 +26,7 @@
 [data-theme="dark"] .svorm-file-cover {
   background-color: rgb(114 116 129 / var(--svorm-placeholder-opacity));
 }
-.svorm-file-cover:is([data-text]) {
+.svorm-file-cover[data-text] {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +37,7 @@
   line-height: calc(var(--svorm-space) * 4.5);
   font-family: var(--svorm-font);
 }
-.svorm-file-cover:is([data-text]) > span {
+.svorm-file-cover[data-text] > span {
   display: block;
   width: 100%;
   text-align: center;
@@ -52,10 +52,11 @@
   position: absolute;
   aspect-ratio: 1 / 1;
   width: 8%;
+  height: auto;
   min-width: calc(var(--svorm-space) * 6);
   max-width: calc(var(--svorm-space) * 10);
   margin: 0;
-  padding: 3px;
+  padding: calc(var(--svorm-space) / 2);
   background-color: rgb(var(--svorm-placeholder) / var(--svorm-placeholder-opacity));
   color: rgb(var(--svorm-placholder-text) / var(--svorm-placeholder-opacity));
   font-size: calc(var(--svorm-space) * 3);
@@ -73,12 +74,19 @@
     color 0.2s linear;
   will-change: background-color, color;
 }
-.svorm-file-remove:is(:hover) {
+.svorm-file-remove:hover {
   cursor: pointer;
 }
 .svorm-file-remove:is(:hover, :focus, :focus-visible) {
   background-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
   color: rgb(var(--svorm-error-text) / var(--svorm-error-opacity));
+}
+
+.svorm-file-icon {
+  display: block;
+  box-sizing: inherit;
+  width: 100%;
+  height: 100%;
 }
 
 .svorm-file-retry {
@@ -95,7 +103,7 @@
   border: 0;
   outline: 0;
 }
-.svorm-file-retry:is(:hover) {
+.svorm-file-retry:hover {
   cursor: pointer;
 }
 
@@ -135,38 +143,39 @@
   will-change: border;
   z-index: 0;
 }
-.svorm-file-content:is([aria-disabled="true"]) {
+.svorm-file-content[aria-disabled="true"] {
   cursor: not-allowed;
   filter: grayscale(1) opacity(0.5);
 }
-.svorm-file-content:not([aria-disabled="true"]):is(:hover) {
+.svorm-file-content:not([aria-disabled="true"]):hover {
   cursor: pointer;
 }
 .svorm-file-content.draged,
-.svorm-file-content:not([data-error="true"], [aria-disabled="true"]):is(:hover) {
+.svorm-file-content:not([data-error="true"], [aria-disabled="true"]):hover {
   border-style: dashed;
   border-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
 }
 .svorm-file-content.draged > .svorm-file-label,
-.svorm-file-content:not([data-error="true"], [aria-disabled="true"]):is(:hover) > .svorm-file-label,
-.svorm-file-input:is(:focus) + .svorm-file-label {
+.svorm-file-content:not([data-error="true"], [aria-disabled="true"]):hover > .svorm-file-label,
+.svorm-file-input:focus + .svorm-file-label {
   background-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
   color: rgb(var(--svorm-secondary-text) / var(--svorm-secondary-opacity));
 }
-.svorm-file-content:is([data-error="true"]) {
+.svorm-file-content[data-error="true"] {
   border-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
 }
 
-.svorm-file-content:is([data-error="true"]) > .svorm-file-label {
+.svorm-file-content[data-error="true"] > .svorm-file-label {
   color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
 }
 
-.svorm-file-content:is([data-error="true"]):is(:hover) > .svorm-file-label {
+.svorm-file-content[data-error="true"]:hover > .svorm-file-label,
+.svorm-file-content[data-error="true"]:has( .svorm-file-input:focus) > .svorm-file-label {
   background-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
   color: rgb(var(--svorm-error-text) / var(--svorm-error-opacity));
 }
 
-.svorm-file-content:is([data-error="true"]) > .svorm-file-input:is(:focus) {
+.svorm-file-content:is([data-error="true"]) > .svorm-file-input:focus {
   outline-color: rgb(var(--svorm-error) / var(--svorm-error-opacity));
 }
 
@@ -183,13 +192,13 @@
 .svorm-file-input::file-selector-button {
   display: none;
 }
-.svorm-file-input:is(:disabled) {
+.svorm-file-input:disabled {
   display: none;
 }
-.svorm-file-input:not(:disabled):is(:hover) {
+.svorm-file-input:not(:disabled):hover {
   cursor: pointer;
 }
-.svorm-file-input:is(:focus) {
+.svorm-file-input:focus {
   outline: var(--svorm-border);
   outline-color: rgb(var(--svorm-secondary) / var(--svorm-secondary-opacity));
   outline-width: calc(var(--svorm-border-width) * 2);
@@ -233,7 +242,7 @@
 }
 
 @container file (max-width: 450px) {
-  .svorm-file-item:is([data-single]) {
+  .svorm-file-item[data-single] {
     min-width: 100%;
     max-width: 100%;
     max-height: none;

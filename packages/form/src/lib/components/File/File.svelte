@@ -192,7 +192,7 @@
           }}
           class={styls.remove}
         >
-          <slot name="remove"><X size={18} class={styls.icon} /></slot>
+          <slot name="remove"><X size={20} class={styls.icon} /></slot>
         </button>
       </div>
     {/if}
@@ -229,7 +229,7 @@
                 onRemove(file, index);
               }}
             >
-              <slot name="remove"><X size={18} class={styls.icon} /></slot>
+              <slot name="remove"><X size={20} class={styls.icon} /></slot>
             </button>
           </div>
         {/each}

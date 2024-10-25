@@ -135,13 +135,12 @@
   box-sizing: inherit;
   width: calc(var(--svorm-space) * 4.5);
   height: 100%;
-  min-height: calc(var(--svorm-space) * 4.5);
   margin: 0;
   padding: 0;
   background-color: transparent;
   color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
-  font-size: calc(var(--svorm-space) * 4);
-  line-height: calc(var(--svorm-space) * 4);
+  font-size: calc(var(--svorm-space) * 4.5);
+  line-height: calc(var(--svorm-space) * 4.5);
   font-family: var(--svorm-font);
   font-weight: 500;
   border: 0;
@@ -149,10 +148,6 @@
   border-radius: 0 calc(var(--svorm-radius) / 2) calc(var(--svorm-radius) / 2) 0;
   transition: background-color 200ms linear;
   will-change: background-color;
-}
-.svorm-select-remove svg {
-  width: 100%;
-  height: 100%;
 }
 .svorm-select-remove:is(:hover) {
   cursor: pointer;
@@ -233,6 +228,8 @@
   min-height: calc(var(--svorm-space) * 6);
   padding: 1px;
   background-color: transparent;
+  font-size: calc(var(--svorm-space) * 6);
+  line-height: calc(var(--svorm-space) * 6);
   border: 0;
   transform: translateY(-50%);
   transition: transform 200ms linear;
@@ -245,6 +242,10 @@
 }
 
 .svorm-select-icon {
+  display: block;
+  box-sizing: inherit;
+  width: 100%;
+  height: 100%;
   margin: 0;
 }
 
