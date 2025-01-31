@@ -67,8 +67,6 @@
 
   function onHasValue(validate = true) {
     if (!multiple) {
-      if (!$data[name]) return;
-
       const selected = options.find(({ value }) => value === $data[name]);
 
       search = selected?.label ?? "";
@@ -111,7 +109,7 @@
     onclear?.();
   }
 
-  $: if (options.length > 0) {
+  $: if (options.length > 0 || $data[name]) {
     onHasValue(false);
   }
 
@@ -487,6 +485,7 @@
         aria-expanded={active}
         aria-controls="{id ?? name}-listbox"
         tabindex={-1}
+        on:click={!disabled ? onClickOpen : undefined}
         {disabled}
       >
         <slot name="arrow">

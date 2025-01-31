@@ -300,14 +300,19 @@
   line-height: calc(var(--svorm-space) * 4.5);
   font-family: var(--svorm-font);
 }
-.svorm-select-option:is([aria-disabled="true"]) {
+.svorm-select-option[aria-disabled="true"] {
   pointer-events: none;
 }
 .svorm-select-option:is(.focus, :hover) {
-  color: rgb(var(--svorm-primary-text) / var(--svorm-primary-opacity));
+  color: rgb(var(--svorm-white) / var(--svorm-white-opacity));
   outline: 0;
   background-color: rgb(var(--svorm-primary) / var(--svorm-primary-opacity));
 }
+.svorm-select-option > .svorm-select-icon {
+  max-width: calc(var(--svorm-space) * 4.5);
+  max-height: calc(var(--svorm-space) * 4.5);
+}
+
 .dark .svorm-select-option:is(.focus, :hover),
 [data-theme="dark"] .svorm-select-option:is(.focus, :hover) {
   color: rgb(16 94 68 / 1);
