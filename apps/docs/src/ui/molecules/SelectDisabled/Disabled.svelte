@@ -40,4 +40,7 @@
   :global(label > div > svg) {
     margin-top: 0 !important;
   }
+  :global(li > svg) {
+    margin-bottom: 0 !important;
+  }
 </style>

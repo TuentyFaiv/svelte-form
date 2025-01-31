@@ -105,6 +105,7 @@
   //   setField("typenon", $page.data.type);
   // }
   $: if ($page.data.types) {
+    console.log("types: ", $page.data.types);
     setField("types", $page.data.types);
     // setField("typesnon", $page.data.types);
   }
@@ -171,6 +172,14 @@
       type="button"
       on:click={() => {
         setField("type", "2");
+      }}
+    >
+      set type value
+    </button>
+    <button
+      type="button"
+      on:click={() => {
+        setField("types", ["2"]);
       }}
     >
       set type value
